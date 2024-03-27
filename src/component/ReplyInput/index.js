@@ -10,14 +10,14 @@ import {
   IonToolbar,
   useIonToast
 } from "@ionic/react"
-import RichTextInput from "component/Input/RichTextInput"
-import { ThreadHeader } from "component/thread/organism"
-import { AddComment, GetCommentList } from "graphql/user"
+import RichTextInput from "../Input/RichTextInput"
+import { AddComment, GetCommentList } from "../../graphql/user"
 import { sendOutline } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { USER_SERVICE_GQL } from "servers/types"
 import "./index.css"
+import {ThreadHeader} from "../thread/organism"
 
 function ReplyInput({
   setReply,

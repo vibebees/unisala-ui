@@ -18,8 +18,8 @@ import { Link } from "react-router-dom"
 import ProfilePop from "./profilePop"
 import { useSelector } from "react-redux"
 import { SearchBar } from "./searchBox"
-import CustomTrackingLink from "features/analytics/LinkTrack"
-import { ButtonTrack } from "features/analytics/ButtonTrack"
+import CustomTrackingLink from "../features/analytics/LinkTrack"
+import { ButtonTrack } from "../features/analytics/ButtonTrack"
 
 const Nav = ({ allProps }) => {
   const {

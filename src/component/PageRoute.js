@@ -1,8 +1,8 @@
 import {lazy, Suspense} from "react"
 import {Route, Switch} from "react-router"
 
-import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
-import ProtectedRoute from "utils/lib/protectedRoute"
+import SpaceIndex from "../features/org/SpaceIndex/SpaceIndex"
+import ProtectedRoute from "../utils/lib/protectedRoute"
 import PreLoader from "./preloader"
 
 const ProfilePage = lazy(() => import("../pages/user.profile"))
@@ -10,7 +10,7 @@ const Messages = lazy(() => import("../pages/message"))
 const MyNetwork = lazy(() => import("../pages/network"))
 const Notifications = lazy(() => import("../pages/notification"))
 // Assuming StudyAbroadRoadmapInput is a component, if it's not, you can't lazy load it
-const StudyAbroadRoadmapInput = lazy(() => import("features/roadmap/template"))
+const StudyAbroadRoadmapInput = lazy(() => import("../features/roadmap/template"))
 const Search = lazy(() => import("../pages/search"))
 const SpacePage = lazy(() => import("../pages/space"))
 const Org = lazy(() => import("../pages/org"))

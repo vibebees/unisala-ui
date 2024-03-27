@@ -6,7 +6,7 @@ import Authentication from "../authentication/AuthModal"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Avatar } from "../Avatar"
-import CustomTrackingLink from "features/analytics/LinkTrack"
+import CustomTrackingLink from "../../features/analytics/LinkTrack"
 
 export const ProfilePop = ({ allProps }) => {
   const {

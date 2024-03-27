@@ -1,0 +1,147 @@
+.container {
+  position: relative;
+  /* width: 900px; */
+  display: flex;
+  justify-content: space-around;
+}
+
+.card {
+  position: relative;
+  /* width: 250px; */
+  /* background: linear-gradient(0deg, #1b1b1b, #222, #1b1b1b); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 300px; */
+  border-radius: 4px;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+  transition: 0.5s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); */
+}
+
+.card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  /* background: rgba(255, 255, 255, 0.03); */
+  pointer-events: none;
+  z-index: 1;
+
+}
+
+.percent {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+.percent .number {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  background-color: #3880ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.percent .number h2 {
+  color: white;
+  font-weight: 50;
+  font-size: 30px;
+  transition: 0.5s;
+}
+
+.card:hover .percent .number h2 {
+  font-size: 35px;
+}
+
+.percent .number h2 span {
+  font-size: 16px;
+  color: white;
+}
+
+.card:hover .percent .number h2 span {
+  transition: 0.5s;
+}
+
+.text {
+  position: relative;
+  color: #3880ff;
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.5s;
+}
+
+.card:hover .text {
+  color: #fff;
+}
+
+.percent svg {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  z-index: 1000;
+}
+
+svg circle {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgb(211, 211, 211);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transform: translate(5px, 5px);
+}
+
+svg circle:nth-child(2) {
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+}
+
+.card:nth-child(1) svg circle:nth-child(2) {
+  stroke-dashoffset: calc(440 - (440 * 90) / 100);
+  stroke: #3880ff;
+}
+
+.card:nth-child(2) svg circle:nth-child(2) {
+  stroke-dashoffset: calc(440 - (440 * 85) / 100);
+  stroke: #3880ff;
+}
+
+.card:nth-child(3) svg circle:nth-child(2) {
+  stroke-dashoffset: calc(440 - (440 * 60) / 100);
+  stroke: #3880ff;
+}
+
+@media (max-width: 991px) {
+  .container {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .container .card {
+    margin: 20px auto;
+  }
+}

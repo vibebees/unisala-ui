@@ -1,0 +1,22 @@
+.profile-drop-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.profile-drop-btn {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.profile-drop-div {
+    margin: 10px;
+}
+
+.profile-pop {
+    position: relative;
+}
+  
+ion-popover::part(backdrop) {
+    background-color: transparent;
+}

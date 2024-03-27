@@ -1,0 +1,9 @@
+.card-image{
+    position: relative;
+}
+.card-recommend{
+    position: absolute;
+    top:1px;
+    left: 1px;
+    background-color: white;
+}

@@ -1,0 +1,36 @@
+{
+    "data": {
+      "getStudentChargeInformationByUUID": {
+        "UnitID": 228884,
+        "InstitutionName": "Texas College",
+        "In_districtaveragetuitionforfull_timeundergraduatesIC2019_AY": 8208,
+        "In_districtpercredithourchargeforpart_timeundergraduatesIC2019_AY": 342,
+        "In_districtaveragetuitionfull_timegraduatesIC2019_AY": null,
+        "In_districtpercredithourchargepart_timegraduatesIC2019_AY": null,
+        "In_stateaveragetuitionforfull_timeundergraduatesIC2019_AY": 8208,
+        "In_statepercredithourchargeforpart_timeundergraduatesIC2019_AY": 342,
+        "In_stateaveragetuitionfull_timegraduatesIC2019_AY": null,
+        "In_statepercredithourchargepart_timegraduatesIC2019_AY": null,
+        "Out_of_stateaveragetuitionforfull_timeundergraduatesIC2019_AY": 8208,
+        "Out_of_statepercredithourchargeforpart_timeundergraduatesIC2019_AY": 342,
+        "Out_of_stateaveragetuitionfull_timegraduatesIC2019_AY": null,
+        "Out_of_statepercredithourchargepart_timegraduatesIC2019_AY": null,
+        "UndergraduateapplicationfeeIC2019": 20,
+        "GraduateapplicationfeeIC2019": null,
+        "TotaldormitorycapacityIC2019": 602,
+        "Totalpriceforin_districtstudentslivingoncampus2019_20DRVIC2019": 21800,
+        "Totalpriceforin_statestudentslivingoncampus2019_20DRVIC2019": 21800,
+        "Totalpriceforout_of_statestudentslivingoncampus2019_20DRVIC2019": 21800,
+        "Totalpriceforin_districtstudentslivingoffcampusnotwithfamily2019_20DRVIC2019": 22950,
+        "Totalpriceforin_statestudentslivingoffcampusnotwithfamily2019_20DRVIC2019": 22950,
+        "Totalpriceforout_of_statestudentslivingoffcampusnotwithfamily2019_20DRVIC2019": 22950,
+        "Totalpriceforin_districtstudentslivingoffcampuswithfamily2019_20DRVIC2019": 13800,
+        "Totalpriceforin_statestudentslivingoffcampuswithfamily2019_20DRVIC2019": 13800,
+        "Totalpriceforout_of_statestudentslivingoffcampuswithfamily2019_20DRVIC2019": 13800,
+        "Publishedin_districttuitionandfees2019_20IC2019_AY": 10000,
+        "Publishedout_of_statetuitionandfees2019_20IC2019_AY": 10000,
+        "Booksandsupplies2019_20IC2019_AY": 2300,
+        "Oncampusroomandboard2019_20IC2019_AY": 8000
+      }
+    }
+  }

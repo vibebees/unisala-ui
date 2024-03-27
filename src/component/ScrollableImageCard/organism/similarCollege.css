@@ -1,0 +1,13 @@
+.similarcollegeContainer::-webkit-scrollbar-thumb {
+    background: #ff000000;
+    border-radius: 10px;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+
+
+.similarcollegeContainer::-webkit-scrollbar {
+    width: 5px;
+
+}

@@ -1,0 +1,177 @@
+.searchInput {
+    background: #e8f1fa;
+    height: 45px;
+    border-radius: 10px;
+    cursor: pointer !important;
+    width: 100%;
+    margin: 5px;
+    color: #000;
+    border: none;
+    padding-left: 10px;
+}
+
+.searchInput::placeholder {
+    color: #7e7d7d !important;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.post-button {
+    cursor: pointer;
+    border-radius: 100%;
+    height: 45px !important;
+    width: 45px !important;
+
+    transition: 500ms;
+}
+
+.post-button:hover {
+    background-color: #e8f1fa;
+}
+
+
+.notification-drop {
+    position: absolute;
+    top: 100%;
+    right: 0px;
+    z-index: 999;
+    width: 20vw;
+    outline: none;
+    overflow: hidden;
+}
+
+.feed-sort {
+    display: flex;
+    gap: 15px;
+    overflow: auto;
+}
+
+.feed-sort div {
+    padding: 5px 15px;
+    border-radius: 5px;
+    background: #e8f1fa;
+    color: #4595D0;
+    cursor: pointer;
+}
+
+.aside-profile {
+    width: 250px;
+    height: 70px;
+    margin-bottom: 30px;
+    position: relative;
+    background-image: linear-gradient(135deg, #516472 50%, #97b0c7 50%);
+    display: flex;
+    justify-content: center;
+}
+
+.aside-profile div {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    bottom: -30px;
+    margin: 0px auto;
+    background: #e8f1fa;
+}
+
+.aside-profile-details {
+    margin-top: 40px;
+    text-align: center;
+    line-height: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.aside-profile-details h6 {
+    font-weight: 500;
+}
+
+.aside-profile-details p {
+    font-size: 14px;
+}
+
+.post-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.badges-card {
+    max-width: 250px;
+}
+
+.user-profile-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin: 0px auto;
+    background: #e8f1fa;
+    overflow: hidden;
+}
+
+
+.wobble-hor-bottom {
+    animation: wobble-hor-bottom 3s ease-in-out infinite;
+}
+
+@keyframes wobble-hor-bottom {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+}
+
+
+.progress-ring {
+    position: absolute;
+    top: -28px;
+    left: 45px;
+
+}
+
+.famousUniList::-webkit-scrollbar-thumb {
+    background: #ff000000;
+    border-radius: 10px;
+    cursor: pointer;
+    pointer-events: none;
+
+}
+
+.famousUniList::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+
+}
+
+
+.profileCard {
+    margin-top: 3px;
+    overflow: auto;
+
+}
+
+.profileCard::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #d5d5d5;
+    cursor: grab;
+}
+
+.profileCard::-webkit-scrollbar {
+    width: 7px;
+    background-color: #665a5a00;
+}

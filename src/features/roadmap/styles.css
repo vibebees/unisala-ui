@@ -1,0 +1,189 @@
+.roadmap-background {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f9fd;
+}
+
+.roadmap-container {
+    max-width: 600px;
+    width: 100%;
+}
+
+.roadmap-motion-div {
+    margin-bottom: 20px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.roadmap-step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 8px;
+}
+
+.roadmap-step:hover {
+    background-color: #f5f5f5;
+}
+
+.step-icon-container {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.step-icon {
+    font-size: 24px;
+    color: rgb(0, 68, 254);
+    /* You can change this to any color you prefer */
+}
+
+.toggle-icon {
+    margin-left: 10px;
+    font-size: 20px;
+    color: gray;
+    transition: transform 0.3s;
+}
+
+.step-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.step-title {
+    flex: 1;
+    text-align: left;
+}
+
+.step-card {
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.expandable-content {
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.content-center {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    text-align: left;
+    /* ensures text inside is centered */
+}
+
+.step-card {
+    background-color: #ffffff;
+    /* Adjust this if needed */
+}
+
+.content-list {
+    font-size: 16px;
+    /* Adjust font-size as needed */
+    line-height: 1.5;
+    /* Adjust line-height for better spacing between lines */
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.content-list li {
+    margin-bottom: 10px;
+    /* Space between list items */
+}
+
+
+.content-list {
+    list-style-type: disc;
+    padding-left: 20px;
+    /* Adjust based on your design preference */
+}
+
+.content-list-item {
+    margin-bottom: 8px;
+    /* Adjust based on your design preference */
+    line-height: 1.5;
+    /* Improves readability */
+}
+
+/* Optional: For added aesthetics */
+.content-list-item::before {
+    content: "•";
+    /* bullet point */
+    color: #007AFF;
+    /* blue color, can be changed based on your theme */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    /* Move bullet to the left to align with text */
+}
+
+
+.step-icon-container {
+    display: flex;
+    align-items: center;
+    /* vertically center items */
+}
+
+.step-number {
+    margin-right: 10px;
+    /* adjust this value to get desired spacing between number and icon */
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.step-icon {
+    margin-right: 10px;
+    /* adjust this value to get desired spacing between icon and title */
+}
+
+.roadmap-background1 {
+    background-color: #f6f6f6;
+    /* This is just a suggestion. */
+}
+
+.roadmap-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.roadmap-heading {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+.roadmap-description {
+    margin-top: 10px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.roadmap-banner {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+    width: 128px;
+    height: 128px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}

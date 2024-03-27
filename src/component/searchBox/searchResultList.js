@@ -1,7 +1,7 @@
 import {IonAvatar, IonItem, IonLabel} from "@ionic/react"
 import {useEffect, useState} from "react"
 import {Link} from "react-router-dom"
-import {universityDefaultImage} from "servers/s3.configs"
+import {universityDefaultImage} from "../../servers/s3.configs"
 
 export const SearchBarResultList = ({item, key, setDropDownOptions}) => {
   const [profileImage, setProfileImage] = useState(item?.pictures?.[0] || item?.picture || universityDefaultImage)

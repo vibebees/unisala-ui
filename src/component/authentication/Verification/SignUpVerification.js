@@ -4,8 +4,8 @@ import axios from "axios"
 import { useDispatch } from "react-redux"
 import "../auth.css"
 import VerificationCode from "./VerificationCode"
-import { USER_LOGIN } from "store/action/types"
-import { userServer } from "servers/endpoints"
+import { USER_LOGIN } from "../../../store/action/types"
+import { userServer } from "../../../servers/endpoints"
 
 const SignUpVerification = ({ auth, setauth }) => {
   const [present, dismiss] = useIonToast()

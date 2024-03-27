@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { IonInput } from "@ionic/react"
 import { useLazyQuery } from "@apollo/client"
-import { UniSearchDataList } from "graphql/uni"
+import { UniSearchDataList } from "../../graphql/uni"
 
 import { SearchBarResultList } from "./searchResultList"
 import "./index.css"

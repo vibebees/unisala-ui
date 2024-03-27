@@ -7,7 +7,7 @@ import {
 } from "@apollo/client"
 import {setContext} from "@apollo/client/link/context"
 import {onError} from "@apollo/client/link/error"
-import {getNewToken} from "api/authentication"
+import {getNewToken} from "../api/authentication"
 import {io} from "socket.io-client"
 import urls from "."
 import {

@@ -1,7 +1,7 @@
 import axios from "axios"
 import jwtDecode from "jwt-decode"
-import {userServer} from "servers/endpoints"
-import {getUserProfile} from "store/action/userProfile"
+import {userServer} from "../servers/endpoints"
+import {getUserProfile} from "../store/action/userProfile"
 
 export const getNewToken = async (dispatch = () => {}) => {
   let prevRefreshToken = localStorage.getItem("refreshToken")

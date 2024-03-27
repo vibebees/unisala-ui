@@ -1,7 +1,7 @@
-import ExploreIcon from "Icons/ExploreIcon"
-import HomeIcon from "Icons/HomeIcon"
-import MessageIcon from "Icons/MessageIcon"
-import PeopleIcon from "Icons/PeopleIcon"
+import ExploreIcon from "./Icons/ExploreIcon"
+import HomeIcon from "./Icons/HomeIcon"
+import MessageIcon from "./Icons/MessageIcon"
+import PeopleIcon from "./Icons/PeopleIcon"
 const { default: useWindowWidth } = require("hooks/useWindowWidth")
 const {
   home,

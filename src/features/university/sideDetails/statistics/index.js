@@ -2,9 +2,9 @@ import React from "react"
 import Chart from "component/BarChart/atoms/Chart"
 import { useSelector } from "react-redux"
 import statistics from "./statistics.css"
-import CircularCardTemplate from "component/circularCardImage/template/CircularCardTemplate"
+import CircularCardTemplate from "../../../../../component/Reusable/CircularCardTemplate"
 import { IonCard, IonText } from "@ionic/react"
-import {CardHeader} from "component/Reusable/cardHeader"
+import {CardHeader} from "../../../../component/Reusable/cardHeader"
 
 const index = () => {
   const { uniData } = useSelector((store) => store?.university)

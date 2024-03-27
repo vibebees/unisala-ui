@@ -1,6 +1,6 @@
 import {IonGrid, IonRow} from "@ionic/react"
 import clsx from "clsx"
-import useWindowWidth from "hooks/useWindowWidth"
+import useWindowWidth from "../../hooks/useWindowWidth"
 import {useState} from "react"
 import Card from "../ui/Card"
 import LoginText from "./LoginText"

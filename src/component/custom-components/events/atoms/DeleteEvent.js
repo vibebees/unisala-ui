@@ -3,7 +3,7 @@ import { IonIcon, useIonToast } from "@ionic/react"
 import { closeOutline } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
 import { USER_SERVICE_GQL } from "servers/types"
-import { DeleteEventById } from "graphql/user"
+import { DeleteEventById } from "@graphql/user"
 
 const DeleteEvent = ({ id }) => {
   const [present, dismiss] = useIonToast()

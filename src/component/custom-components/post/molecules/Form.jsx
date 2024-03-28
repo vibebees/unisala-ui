@@ -18,7 +18,7 @@ import {
   GetAllPostBySpaceCategoryID,
   GetSpaceEvents,
   getNewsFeed
-} from "graphql/user"
+} from "@graphql/user"
 import {useState} from "react"
 import "react-quill/dist/quill.snow.css"
 import {useSelector} from "react-redux"

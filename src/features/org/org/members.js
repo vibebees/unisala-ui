@@ -14,8 +14,8 @@ import {URLgetter, URLupdate} from "utils/lib/URLupdate"
 import {OrgContext} from ".."
 import Tabs from "../../../component/tabs"
 import UserCard from "../../../component/userCard"
-import {GetAllMembersBySpaceID} from "../../../graphql/user"
-import {USER_SERVICE_GQL} from "../../../servers/types"
+import {GetAllMembersBySpaceID} from "@graphql/user"
+import {USER_SERVICE_GQL} from "servers/types"
 import "./members.css"
 
 export const Members = () => {

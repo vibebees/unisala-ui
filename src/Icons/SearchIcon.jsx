@@ -1,5 +1,5 @@
 import * as React from "react"
-const SearchIcon = ({ width = 25, height = 25, fill = "#747372", ...rest }) => (
+export const SearchIcon = ({ width = 25, height = 25, fill = "#747372", ...rest }) => (
   <svg
     width={width}
     height={height}
@@ -17,4 +17,3 @@ const SearchIcon = ({ width = 25, height = 25, fill = "#747372", ...rest }) => (
     />
   </svg>
 )
-export default SearchIcon

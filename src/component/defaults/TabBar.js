@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react";
 import { IonTabBar } from "@ionic/react";
-import { cn } from "utils";
 
 const CustomTabBar = forwardRef(({ className, ...rest }, ref) => {
   return (

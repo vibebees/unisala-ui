@@ -15,11 +15,11 @@ import {
   personCircle
 } from "ionicons/icons"
 import { Link } from "react-router-dom"
-import ProfilePop from "./profilePop"
+import ProfilePop from "./custom-components/profilePop"
 import { useSelector } from "react-redux"
-import { SearchBar } from "./searchBox"
 import CustomTrackingLink from "../features/analytics/LinkTrack"
 import { ButtonTrack } from "../features/analytics/ButtonTrack"
+import { SearchBar } from './custom-components/searchBox'
 
 const Nav = ({ allProps }) => {
   const {
@@ -90,7 +90,7 @@ const Nav = ({ allProps }) => {
             />
           </Link>
           <div style={{ width: "100%" }}>
-            <SearchBar />
+            <SearchBar/>
           </div>
         </div>
         <IonRow

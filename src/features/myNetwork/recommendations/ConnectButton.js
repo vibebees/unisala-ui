@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { IonButton } from "@ionic/react"
 import { useMutation } from "@apollo/client"
-import { SendConnectRequest, RemoveConnectRequest } from "graphql/user"
+import { SendConnectRequest, RemoveConnectRequest } from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 function ConnectButton({ user }) {
   const [connect, setConnect] = useState(false)

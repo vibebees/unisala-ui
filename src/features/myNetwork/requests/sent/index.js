@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client"
-import { PendingConnectionList } from "graphql/user/"
+import { PendingConnectionList } from "@graphql/user/"
 import UserCard from "component/userCard"
 import StateMessage from "component/stateMessage"
 import emptyState from "assets/emptyState.png"

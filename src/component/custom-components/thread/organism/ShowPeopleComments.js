@@ -3,8 +3,8 @@ import { IonButton, IonSpinner } from "@ionic/react"
 import { useLazyQuery, useQuery } from "@apollo/client"
 import { Link } from "react-router-dom"
 import Comment from "../Comment"
-import { USER_SERVICE_GQL } from "servers/types"
-import { GetCommentList } from "graphql/user"
+import { USER_SERVICE_GQL } from "../../../../servers/types"
+import { GetCommentList } from "@graphql/user"
 
 function ShowOtherComments({
   postId = "",

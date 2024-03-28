@@ -3,7 +3,7 @@ import { IonCard, IonCardContent, IonText, IonIcon } from "@ionic/react"
 import { people } from "ionicons/icons"
 import { useQuery } from "@apollo/client"
 import { useSelector } from "react-redux"
-import { ConnectedList } from "graphql/user/"
+import { ConnectedList } from "@graphql/user/"
 import { USER_SERVICE_GQL } from "servers/types"
 import ConnectedListModal from "./ConnectedList"
 

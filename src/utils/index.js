@@ -1,5 +1,5 @@
 /* eslint-disable no-unreachable */
-import { getMessagesByIdGql } from "../graphql/user"
+import { getMessagesByIdGql } from "@graphql/user"
 import {
   removeIdFromUnreadMessages,
   updateUnreadMessages

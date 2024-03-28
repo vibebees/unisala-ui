@@ -4,7 +4,7 @@ import { getAllPropsHome } from "./getAllProps"
 import { useSelector } from "react-redux"
  import { useQuery } from "@apollo/client"
 import {USER_SERVICE_GQL} from "servers/types"
-import {getUserProfile} from "graphql/user"
+import {getUserProfile} from "@graphql/user"
 import {callSocket} from "servers/endpoints"
 
 export default function HomePage({ propsall }) {

@@ -2,16 +2,16 @@ import React, { useState, useRef } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { IonInput } from "@ionic/react"
 import { useLazyQuery } from "@apollo/client"
-import { UniSearchDataList } from "../../graphql/uni"
-import { useSelector } from "react-redux"
+ import { useSelector } from "react-redux"
 
 import { SearchBarResultList } from "./searchResultList"
 import "./index.css"
-import { searchUniFromBar } from "../../store/action/userActivity"
-import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from "../../servers/types"
-import { userSearch } from "../../graphql/user"
-import { useDebouncedEffect } from "../../hooks/useDebouncedEffect"
-import SearchIcon from "../../Icons/SearchIcon"
+ import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from 'servers/types'
+import { useDebouncedEffect } from 'hooks/useDebouncedEffect'
+import { UniSearchDataList } from '@graphql/uni'
+import { searchUniFromBar } from 'store/action/userActivity'
+import { userSearch } from '@graphql/user'
+import { SearchIcon } from 'Icons/SearchIcon'
 
 export const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("")

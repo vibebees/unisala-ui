@@ -8,7 +8,7 @@ import {
 } from "@ionic/react"
 import { TimeLine } from "component/timeline"
 import { OrgContext } from "features/org"
-import { GetAllHistoryYear } from "graphql/user"
+import { GetAllHistoryYear } from "@graphql/user"
 import { useContext, useEffect, useRef } from "react"
 import { USER_SERVICE_GQL } from "servers/types"
 import "./index.css"

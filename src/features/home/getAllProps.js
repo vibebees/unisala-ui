@@ -17,7 +17,7 @@ import { useQuery } from "@apollo/client"
 import { useHistory, useLocation } from "react-router"
 import ProfilePop from "component/profilePop"
 import { USER_SERVICE_GQL } from "servers/types"
-import { GetTopActiveSpaces, GetTopOrgs } from "graphql/user"
+import { GetTopActiveSpaces, GetTopOrgs } from "@graphql/user"
 import useWindowWidth from "hooks/useWindowWidth"
 
 export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {

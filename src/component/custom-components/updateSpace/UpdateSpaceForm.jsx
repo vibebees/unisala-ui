@@ -9,7 +9,7 @@ import {
   IonText,
   useIonToast
 } from "@ionic/react"
-import {EditSpace} from "graphql/user"
+import {EditSpace} from "@graphql/user"
 import React, { useEffect, useRef, useState } from "react"
   import { useHistory } from "react-router"
 import {USER_SERVICE_GQL} from "servers/types"

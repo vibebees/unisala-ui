@@ -4,7 +4,7 @@ import { arrowUpCircle } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
 import clsx from "clsx"
 import { USER_SERVICE_GQL } from "servers/types"
-import { UpVote } from "graphql/user"
+import { UpVote } from "@graphql/user"
 
 function Upvote({ upVoteCount, postId, upVoted, isReply }) {
   const [present, dismiss] = useIonToast()

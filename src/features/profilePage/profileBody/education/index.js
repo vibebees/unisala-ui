@@ -13,7 +13,7 @@ import {
 import { create, eyeOff, add, eye, trash } from "ionicons/icons"
 import EducationPop from "./EducationPop"
 import { useMutation } from "@apollo/client"
-import { ToggleView, DeleteEducation, getUserGql } from "graphql/user"
+import { ToggleView, DeleteEducation, getUserGql } from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 
 function Education({ education, myProfile, username }) {

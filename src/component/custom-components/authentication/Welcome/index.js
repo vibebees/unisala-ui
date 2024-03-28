@@ -3,11 +3,11 @@ import { IonRow, IonCol, IonModal } from "@ionic/react"
 import Indicators from "./Steps/Indicators"
 import StepsButtons from "./Steps/StepsButtons"
 import clsx from "clsx"
-import PreLoader from "../../../preloader"
 import "./index.css"
 import { authInstance } from "api/axiosInstance"
 import { userServer } from "servers/endpoints"
 import Step from "./Steps/Step"
+import { PreLoader } from 'component/custom-components/preloader'
 
 export const WelcomeData = createContext()
 

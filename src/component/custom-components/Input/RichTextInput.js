@@ -1,6 +1,6 @@
 import {lazy, useState} from "react"
 import ReactQuill from "react-quill"
-const UniversityList = lazy(() => import("component/thread/UniversityList"))
+const UniversityList = lazy(() => import("../../custom-components/thread/UniversityList"))
 
 const RichTextInput = ({
   value,

@@ -14,7 +14,7 @@ import {
 } from "@ionic/react"
 import SpaceHeaderImg from "assets/space-header.jpg"
 import UpdateSpaceForm from "component/updateSpace/UpdateSpaceForm"
-import { DeleteSpace } from "graphql/user"
+import { DeleteSpace } from "@graphql/user"
 import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useState } from "react"
 import { useSelector } from "react-redux"

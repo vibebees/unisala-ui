@@ -1,6 +1,5 @@
 import {IonToast} from "@ionic/react"
 import {forwardRef} from "react"
-import {cn} from "utils"
 
 const Toast = forwardRef(({ children, className, ...rest }, ref) => {
   return (

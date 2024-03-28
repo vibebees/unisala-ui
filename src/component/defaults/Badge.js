@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react";
 import { IonBadge } from "@ionic/react";
-import { cn } from "utils";
 
 const CustomBadge = forwardRef(({ className, ...rest }, ref) => {
   return (

@@ -3,7 +3,7 @@ import {
   GetSpaceCategory,
   GetTopActiveSpaces,
   getUserProfile
-} from "graphql/user"
+} from "@graphql/user"
 import {useSelector} from "react-redux"
 import {useParams} from "react-router"
 import {USER_SERVICE_GQL} from "servers/types"

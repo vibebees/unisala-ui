@@ -12,7 +12,7 @@ import {
   useIonToast
 } from "@ionic/react"
 import "./index.css"
- import {sendGuestbookMessage} from "graphql/user"
+ import {sendGuestbookMessage} from "@graphql/user"
 import {USER_SERVICE_GQL} from "servers/types"
 
 const AddGuestBookPop = ({ isOpen, setIsOpen, userId, refetch }) => {

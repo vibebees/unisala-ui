@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react"
 import { IonGrid } from "@ionic/react"
-import { cn } from "utils"
 
 const Grid = forwardRef(({ children, className, ...rest }, ref) => {
   return (

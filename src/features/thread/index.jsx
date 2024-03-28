@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams, useLocation } from "react-router"
-import { GetPostById } from "graphql/user"
+import { GetPostById } from "@graphql/user"
 import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "servers/types"
 import { IonSpinner, IonContent, IonSkeletonText, IonPage } from "@ionic/react"

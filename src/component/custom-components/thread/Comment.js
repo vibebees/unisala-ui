@@ -10,7 +10,7 @@ import "./index.css"
 import ShowMore from "./organism/ShowPeopleComments"
 import ThreadHeader from "./organism/ThreadHeader"
 
-import {DeleteComment, EditComment} from "graphql/user"
+import {DeleteComment, EditComment} from "@graphql/user"
 import ReactQuill from "react-quill"
 import {useSelector} from "react-redux"
 import {USER_SERVICE_GQL} from "servers/types"

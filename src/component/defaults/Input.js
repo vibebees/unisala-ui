@@ -1,6 +1,5 @@
 import { IonInput } from "@ionic/react";
 import { forwardRef } from "react";
-import { cn } from "utils";
 
 const Input = forwardRef(({ className, ...rest }, ref) => {
   return (

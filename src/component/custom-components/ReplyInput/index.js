@@ -11,7 +11,7 @@ import {
   useIonToast
 } from "@ionic/react"
 import RichTextInput from "../Input/RichTextInput"
-import { AddComment, GetCommentList } from "../../graphql/user"
+import { AddComment, GetCommentList } from "@graphql/user"
 import { sendOutline } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"

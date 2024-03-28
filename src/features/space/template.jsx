@@ -1,10 +1,10 @@
 import { IonCol, IonContent, IonGrid, IonIcon, IonRow } from "@ionic/react"
+import { PreLoader } from 'component/custom-components/preloader'
 import InfiniteFeed from "component/feed/Feed"
 import { arrowUpOutline } from "ionicons/icons"
 import { useEffect } from "react"
 import { SpaceNotFound } from "../../component/PageNotFound"
 import CreateAPostCard from "../../component/post/template"
-import PreLoader from "../../component/preloader"
 import "./Space.css"
 import SpaceHeader from "./SpaceHeader"
 import UnisalaIntro from "./UnisalaIntro"

@@ -14,7 +14,7 @@ import {
   GetAllPostBySpaceCategoryID,
   GetSpaceEvents,
   GetUserPost
-} from "graphql/user"
+} from "@graphql/user"
 import { userServer } from "servers/endpoints"
 import emptyState from "assets/emptyState.png"
 import clsx from "clsx"

@@ -4,8 +4,8 @@ import { UniversityTemplate } from "./templates/university"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client"
-import { getUpdatedSchoolInfo } from "../../../graphql/uni"
-import { UNIVERSITY_SERVICE_GQL } from "../../../servers/types"
+import { getUpdatedSchoolInfo } from "@graphql/uni"
+import { UNIVERSITY_SERVICE_GQL } from "servers/types"
 
 export const UniversityPage = () => {
   const { id } = useParams()

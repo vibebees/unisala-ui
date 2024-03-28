@@ -10,7 +10,7 @@ import {
 import {
   RemoveConnectRequest,
   SendConnectRequest
-} from "graphql/user/"
+} from "@graphql/user/"
 import { USER_SERVICE_GQL } from "servers/types"
 import { Avatar } from "component/Avatar"
 import { useMutation } from "@apollo/client"

@@ -15,7 +15,7 @@ import {
   AddEducation,
   EditEducation,
   getUserGql
-} from "graphql/user"
+} from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 
 const EducationPop = ({

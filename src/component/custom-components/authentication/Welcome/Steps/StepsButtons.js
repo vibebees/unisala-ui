@@ -1,7 +1,7 @@
 import {useMutation} from "@apollo/client"
 import {IonButton, IonCard, useIonToast} from "@ionic/react"
 import clsx from "clsx"
-import {EditProfile, getUserGql} from "graphql/user"
+import {EditProfile, getUserGql} from "@graphql/user"
 import jwtDecode from "jwt-decode"
 import {useContext, useState} from "react"
 import {useDispatch, useSelector} from "react-redux"

@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client"
 import { IonIcon, useIonToast } from "@ionic/react"
-import { DeletePost, getNewsFeed } from "graphql/user"
+import { DeletePost, getNewsFeed } from "@graphql/user"
 import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"

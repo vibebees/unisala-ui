@@ -2,7 +2,7 @@
 import { useQuery } from "@apollo/client"
 import { Grid } from "component/defaults"
 import { OrgContext } from "features/org"
-import { GetAllHistory } from "graphql/user"
+import { GetAllHistory } from "@graphql/user"
 import { useContext } from "react"
 import { USER_SERVICE_GQL } from "servers/types"
 import SingleTimeline from "./organism/SingleTimeline"

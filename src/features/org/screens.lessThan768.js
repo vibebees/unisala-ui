@@ -1,6 +1,6 @@
-import { IonHeader, IonIcon } from "@ionic/react"
+import { IonHeader, IonIcon } from "../../component/defaults"
 import { Link } from "react-router-dom"
-import { SearchBar } from "../../component/searchBox"
+import { SearchBar } from "../../component/custom-components/searchBox"
 import Authentication from "../../component/custom-components/authentication/AuthModal"
 
 export const screenLessThan768 = ({

@@ -1,5 +1,5 @@
 import {useQuery} from "@apollo/client"
-import {GetOrgSpace, GetTopOrgs, getUserProfile} from "graphql/user"
+import {GetOrgSpace, GetTopOrgs, getUserProfile} from "@graphql/user"
 import {createContext} from "react"
 import {useSelector} from "react-redux"
 import {useParams} from "react-router"

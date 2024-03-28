@@ -5,7 +5,7 @@ import {
   IonCardSubtitle
 } from "@ionic/react"
 import { useQuery } from "@apollo/client"
-import { userSearch } from "graphql/user"
+import { userSearch } from "@graphql/user"
 import UserCard from "component/userCard"
 import noResultsFound from "assets/no-results.jpg"
 import { USER_SERVICE_GQL } from "servers/types"

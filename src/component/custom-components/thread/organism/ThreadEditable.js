@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client"
 import { IonButton, useIonToast } from "@ionic/react"
-import { EditPost } from "graphql/user"
+import { EditPost } from "@graphql/user"
 import { useState } from "react"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"

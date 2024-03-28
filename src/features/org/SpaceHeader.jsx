@@ -15,7 +15,7 @@ import {
 } from "@ionic/react"
 import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useSelector } from "react-redux"
-import { DeleteSpace } from "graphql/user"
+import { DeleteSpace } from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 import { useMutation } from "@apollo/client"
 import { useHistory } from "react-router"

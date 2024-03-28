@@ -9,7 +9,7 @@ import {
   useIonToast
 } from "@ionic/react"
 import axios from "axios"
-import { AddSpaceCategory, CreateOrgSpace } from "graphql/user"
+import { AddSpaceCategory, CreateOrgSpace } from "@graphql/user"
 import { usePathName } from "hooks/usePathname"
 import { closeOutline, imageOutline } from "ionicons/icons"
 import { useRef, useState } from "react"

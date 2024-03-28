@@ -1,6 +1,6 @@
 import { execute, useQuery } from "@apollo/client"
 import axios from "axios"
-import { getUpdatedSchoolInfo } from "../../graphql/uni"
+import { getUpdatedSchoolInfo } from "@graphql/uni"
 import urls from "../../servers"
 import { universityServer } from "../../servers/endpoints"
 import {

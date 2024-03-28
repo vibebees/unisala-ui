@@ -4,7 +4,7 @@ import {
   GenerateSpaceNewsFeed,
   GetOwnSpace,
   GetTopActiveSpaces
-} from "../../../graphql/user"
+} from "@graphql/user"
 import { personCircle } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"

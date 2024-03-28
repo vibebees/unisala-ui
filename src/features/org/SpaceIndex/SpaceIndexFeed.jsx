@@ -1,4 +1,4 @@
-import Thread from "../../../component/thread"
+import Thread from "../../../component/custom-components/thread"
 
 const SpaceIndexFeed = ({ posts }) => {
   return (

@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import { SpaceNotFound } from "../../component/PageNotFound"
 import InfiniteFeed from "../../component/feed/Feed"
 import CreateAPostCard from "../../component/post/template"
-import PreLoader from "../../component/preloader"
 import Tabs from "../../component/tabs"
 import Invitation from "./Invitation/Invitations"
 import NotJoinedWrapper from "./NotJoinedWrapper"
@@ -13,6 +12,7 @@ import SpaceHeader from "./SpaceHeader"
 import { History } from "./org/history"
 import { InvitationRequest } from "./org/invitationRequest"
 import { Members } from "./org/members"
+import { PreLoader } from 'component/custom-components/preloader'
 export const Spaces = ({ allProps }) => {
   const {
     handleResize,

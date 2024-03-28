@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { IonButton, useIonToast } from "@ionic/react"
 import { useMutation } from "@apollo/client"
-import { getUserGql, RemoveConnectRequest } from "graphql/user/"
+import { getUserGql, RemoveConnectRequest } from "@graphql/user/"
 import { USER_SERVICE_GQL } from "servers/types"
 
 function PendingRequestButton({ user }) {

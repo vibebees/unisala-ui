@@ -3,7 +3,7 @@ import { bookmark } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
 import { useSelector } from "react-redux"
 import { USER_SERVICE_GQL } from "servers/types"
-import { GetSavedList, SavePost, UnSavePost } from "graphql/user"
+import { GetSavedList, SavePost, UnSavePost } from "@graphql/user"
 
 function Save({ postId, saved, thread }) {
   const userId = useSelector((state) => state.userProfile.user._id)

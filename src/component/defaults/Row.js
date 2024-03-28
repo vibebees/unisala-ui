@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react"
 import { IonRow } from "@ionic/react"
-import { cn } from "utils"
 
 const Row = forwardRef(({ children, className, ...rest }, ref) => {
   return (

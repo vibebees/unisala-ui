@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client"
-import { ReceivedConnectionList } from "graphql/user/"
+import { ReceivedConnectionList } from "@graphql/user/"
 import UserCard from "component/userCard"
 import RequestReceivedButton from "./RequestReceivedButton"
 import StateMessage from "component/stateMessage"

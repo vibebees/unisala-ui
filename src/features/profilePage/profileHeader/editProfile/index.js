@@ -14,7 +14,7 @@ import {
 } from "@ionic/react"
 import { create } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
-import { EditProfile, getUserGql } from "graphql/user"
+import { EditProfile, getUserGql } from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 import useWindowWidth from "hooks/useWindowWidth"
 import { awsBucket, bucketName } from "servers/s3.configs"

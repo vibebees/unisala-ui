@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react"
 import { IonText } from "@ionic/react"
-import { cn } from "utils"
+
 
 const Typography = forwardRef(
   ({ variant = "h2", children, className, ...rest }, ref) => {

@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import {useQuery} from "@apollo/client"
  import {useSelector} from "react-redux"
 import {USER_SERVICE_GQL} from "servers/types"
-import {getNewsFeed} from "graphql/user"
+import {getNewsFeed} from "@graphql/user"
 
 const HomeFeed = ({userInfo}) => {
   const {user} = useSelector((store) => store?.userProfile)

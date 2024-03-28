@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import ScholarshipCard from "features/search/atoms/ScholarshipCard"
 import { UNIVERSITY_SERVICE_GQL } from "servers/types"
-import { ScholarshipResults } from "graphql/uni"
+import { ScholarshipResults } from "@graphql/uni"
 import { useQuery, useLazyQuery } from "@apollo/client"
 import { URLgetter } from "utils/lib/URLupdate"
 import { useHistory } from "react-router-dom"

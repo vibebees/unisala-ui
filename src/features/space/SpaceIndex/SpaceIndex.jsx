@@ -8,7 +8,7 @@ import {
   GenerateSpaceNewsFeed,
   GetOwnSpace,
   GetTopActiveSpaces
-} from "graphql/user"
+} from "@graphql/user"
 import UnisalaIntro from "../UnisalaIntro"
 import { screenLessThan768 } from "../screens.lessThan768"
 import { screenGreaterThan1000 } from "../screens.greater.1000"

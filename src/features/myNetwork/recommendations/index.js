@@ -2,7 +2,7 @@ import { IonCard, IonCardContent } from "@ionic/react"
 import UserCard from "../../../component/userCard"
 import ConnectButton from "./ConnectButton"
 import { useQuery } from "@apollo/client"
-import { RecommendedConnectionList } from "graphql/user"
+import { RecommendedConnectionList } from "@graphql/user"
 import { USER_SERVICE_GQL } from "servers/types"
 
 function index() {

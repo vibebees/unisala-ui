@@ -5,7 +5,7 @@ import {
   AcceptConnectRequest,
   getUserGql,
   RemoveConnectRequest
-} from "graphql/user/"
+} from "@graphql/user/"
 import { USER_SERVICE_GQL } from "servers/types"
 
 function RequestReceivedButton({ reqUserId, reqUsername }) {

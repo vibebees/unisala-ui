@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { IonCol, IonInput, IonRow, useIonToast } from "@ionic/react"
 import { OrgContext } from "features/org"
-import { AddNewHistory } from "graphql/user"
+import { AddNewHistory } from "@graphql/user"
 import moment from "moment"
 import { useContext, useState } from "react"
 import { USER_SERVICE_GQL } from "servers/types"

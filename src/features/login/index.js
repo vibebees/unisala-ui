@@ -1,13 +1,13 @@
 import { useState } from "react"
 import { IonCol, IonGrid, IonRow, IonContent, IonCard } from "@ionic/react"
-import SignIn from "../../component/authentication/SignIn/Index"
-import SignUp from "../../component/authentication/SignUp/Index"
-import EmailVerify from "../../component/authentication/Verification/ForgotPassword/EmailVerify"
-import SignUpVerification from "../../component/authentication/Verification/SignUpVerification"
-import ForgotPasswordVerification from "../../component/authentication/Verification/ForgotPassword/ForgotPasswordVerification"
-import ResetPassword from "../../component/authentication/Verification/ForgotPassword/ResetPassword"
-import UserNotVerified from "../../component/authentication/Verification/UserNotVerified"
-import WelcomSteps from "../../component/authentication/Welcome"
+import SignIn from "../../component/custom-components/authentication/SignIn/Index"
+import SignUp from "../../component/custom-components/authentication/SignUp/Index"
+import EmailVerify from "../../component/custom-components/authentication/Verification/ForgotPassword/EmailVerify"
+import SignUpVerification from "../../component/custom-components/authentication/Verification/SignUpVerification"
+import ForgotPasswordVerification from "../../component/custom-components/authentication/Verification/ForgotPassword/ForgotPasswordVerification"
+import ResetPassword from "../../component/custom-components/authentication/Verification/ForgotPassword/ResetPassword"
+import UserNotVerified from "../../component/custom-components/authentication/Verification/UserNotVerified"
+import WelcomSteps from "../../component/custom-components/authentication/Welcome"
 
 export const Login = ({ allProps }) => {
   const [auth, setauth] = useState({

@@ -1,7 +1,7 @@
 import { IonAvatar, IonItem } from "@ionic/react"
 import React from "react"
 import { Link } from "react-router-dom"
-import { Typography } from "component/ui"
+import { Typography } from "component/defaults"
 
 const TopOrgs = ({ topOrgs }) => {
   return (

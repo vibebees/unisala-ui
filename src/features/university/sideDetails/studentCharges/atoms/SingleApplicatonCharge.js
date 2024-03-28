@@ -1,5 +1,5 @@
 import React from "react"
-import Typography from "component/ui/Typography"
+import Typography from "component/defaults/Typography"
 
 const SingleApplicatonCharge = ({ data }) => {
   return (

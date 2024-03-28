@@ -4,7 +4,7 @@ import { IonButton, IonCard, IonText } from "@ionic/react"
 import IonWebPop from "./IonWebPop"
 import { useSelector } from "react-redux"
 import { CardHeader } from "component/Reusable/cardHeader"
-import { Typography, Button } from "component/ui"
+import { Typography, Button } from "component/defaults"
 
 const VisitWebsite = () => {
   const [popup, setPopup] = React.useState(false)

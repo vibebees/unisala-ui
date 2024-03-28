@@ -15,7 +15,7 @@ import Modal from "component/Reusable/Modal"
 import SeeMoreButton from "component/Reusable/Buttons/SeeMoreButton"
 import ListItemValue from "component/Reusable/ListValueItem"
 import ShareButton from "component/Share"
-import Typography from "component/ui/Typography"
+import Typography from "component/defaults/Typography"
 
 export const BioDetails = ({ allProps }) => {
   const { width, uniData, handleResize } = allProps

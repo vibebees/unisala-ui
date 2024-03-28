@@ -1,4 +1,4 @@
-import { Typography } from "component/ui"
+import { Typography } from "component/defaults"
 import { StarFilled } from "./StarFilled"
 import { StarUnfilled } from "./StarUnfilled"
 

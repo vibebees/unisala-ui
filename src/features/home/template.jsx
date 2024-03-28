@@ -7,11 +7,11 @@ import { fetchFamousUniversities } from "graphql/user"
 import useDocTitle from "hooks/useDocTitile"
 import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from "servers/types"
 import { UnisalaLandingPage } from "./UnisalaIntro"
-import { Card, Col, Grid, Row } from "component/ui"
+import { Card, Col, Grid, Row } from "component/defaults"
 const FloatingButton = lazy(() => import("../../component/FloatingButton"))
 const CreateAPostCard = lazy(() => import("../../component/post/template"))
 const WelcomeSteps = lazy(() =>
-  import("../../component/authentication/Welcome")
+  import("../../component/custom-components/authentication/Welcome")
 )
 const InfiniteFeed = lazy(() => import("../../component/feed/Feed"))
 const ScrollableCard = lazy(() =>

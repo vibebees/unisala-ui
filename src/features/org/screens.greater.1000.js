@@ -1,7 +1,7 @@
 import { IonCard, IonCol, IonText } from "@ionic/react"
 import CreateSpace from "../../component/createSpace/CreateSpace"
 import TopOrgs from "./TopOrgs"
-import { Typography } from "component/ui"
+import { Typography } from "component/defaults"
 
 export const screenGreaterThan1000 = ({ title, topOrgs }) => {
   console.log({ topOrgs })

@@ -1,7 +1,7 @@
 import { IonHeader, IonIcon } from "@ionic/react"
 import { Link } from "react-router-dom"
 import { SearchBar } from "../../component/searchBox"
-import Authentication from "../../component/authentication/AuthModal"
+import Authentication from "../../component/custom-components/authentication/AuthModal"
 
 export const screenLessThan768 = ({
   setActiveProfile,

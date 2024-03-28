@@ -1,6 +1,6 @@
 import React from "react"
 import { useHistory } from "react-router"
-import { Button } from "component/ui"
+import { Button } from "component/defaults"
 
 const Tabs = () => {
   const params = new URLSearchParams(window.location.search)

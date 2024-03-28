@@ -1,6 +1,6 @@
 import {IonSpinner} from "@ionic/react"
 import clsx from "clsx"
-import Button from "../../../../component/ui/Button"
+import Button from "../../../../component/defaults/Button"
 
 const SendButton = ({ loading = false, label = "Submit", onclick }) => {
   return (

@@ -1,6 +1,6 @@
 import React from "react"
 import Table from "component/TableCard/template/Table"
-import Typography from "component/ui/Typography"
+import Typography from "component/defaults/Typography"
 
 const ChargeTable = ({ allProps }) => {
   const { level } = allProps

@@ -1,6 +1,6 @@
 import {IonCard} from "@ionic/react"
 import {CardHeader} from "component/Reusable/cardHeader"
-import Typography from "component/ui/Typography"
+import Typography from "component/defaults/Typography"
 import {useSelector} from "react-redux"
 import ApplicationCharge from "./template/ApplicationCharge"
 import TableOne from "./template/TableOne"

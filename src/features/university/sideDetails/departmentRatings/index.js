@@ -1,6 +1,6 @@
 import { IonCardContent } from "@ionic/react"
 import { CardHeader } from "component/Reusable/cardHeader"
-import { Button, Card, Typography } from "component/ui"
+import { Button, Card, Typography } from "component/defaults"
 import { useRef, useState } from "react"
 import { Rating } from "./atoms/Rating"
 import { Search } from "./atoms/Search"

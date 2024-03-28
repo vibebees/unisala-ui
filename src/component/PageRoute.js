@@ -67,10 +67,10 @@ const orgRoutes = () => (
 export const PageRoute = ({ allProps }) => (
   <Switch>
     <Suspense fallback={<PreLoader />}>
-      <Route path="/roadmap" exact>
+      {/* <Route path="/roadmap" exact>
         <StudyAbroadRoadmap />
-      </Route>
-      <Route exact path="/thread/:id">
+      </Route> */}
+      {/* <Route exact path="/thread/:id">
         <ThreadDetail />
       </Route>
 
@@ -80,12 +80,12 @@ export const PageRoute = ({ allProps }) => (
 
       <Route exact path="/university/:id">
         <UniversityPage />
-      </Route>
+      </Route> */}
 
-      {messagingRoutes()}
+      {/* {messagingRoutes()}
       {spaceRoutes()}
-      {orgRoutes()}
-      <Route path="/mynetwork" exact>
+      {orgRoutes()} */}
+      {/* <Route path="/mynetwork" exact>
         <ProtectedRoute>
           <MyNetwork />
         </ProtectedRoute>
@@ -110,7 +110,7 @@ export const PageRoute = ({ allProps }) => (
 
       <Route exact path="/home">
         <HomePage />
-      </Route>
+      </Route> */}
 
       <Route exact path="/">
         <HomePage propsall={allProps} />

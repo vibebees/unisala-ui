@@ -1,5 +1,5 @@
 import { IonInput } from "@ionic/react"
-import { Button } from "component/ui"
+import { Button } from "component/defaults"
 
 export const Search = ({ inputRef, setSearch, resetSearch }) => {
   return (

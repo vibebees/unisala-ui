@@ -1,5 +1,5 @@
 import axios from "axios"
-import jwtDecode from "jwt-decode"
+import {jwtDecode} from "jwt-decode"
 import {userServer} from "../servers/endpoints"
 import {getUserProfile} from "../store/action/userProfile"
 

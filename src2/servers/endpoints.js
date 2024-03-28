@@ -9,21 +9,23 @@ import {setContext} from "@apollo/client/link/context"
 import {onError} from "@apollo/client/link/error"
 import {getNewToken} from "../api/authentication"
 import {io} from "socket.io-client"
-import urls from "."
 import {
   MESSAGE_SERVICE_GQL,
   UNIVERSITY_SERVICE_GQL,
   USER_SERVICE_GQL
 } from "./types"
 
-const config = require("./config"),
-  {
-    messagingServiceAddress,
-    universityServiceAddress,
-    messageSocketAddress,
-    userServiceAddress,
-    callSocketAddress
-  } = urls,
+const urls = require("./index"); 
+
+const config = require("./config");
+
+const {
+  messagingServiceAddress,
+  universityServiceAddress,
+  messageSocketAddress,
+  userServiceAddress,
+  callSocketAddress
+} = urls; // Removed parentheses here
 
 
   errorLink = onError(({graphQLErrors, networkError, operation, forward}) => {

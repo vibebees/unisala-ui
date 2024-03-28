@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 import Authentication from "../authentication/AuthModal"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Avatar } from "../Avatar"
-import CustomTrackingLink from "../../features/analytics/LinkTrack"
+ import CustomTrackingLink from "features/analytics/LinkTrack"
+import { Avatar } from 'component/Avatar'
 
 export const ProfilePop = ({ allProps }) => {
   const {

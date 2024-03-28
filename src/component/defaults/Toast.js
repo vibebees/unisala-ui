@@ -2,7 +2,7 @@ import {IonToast} from "@ionic/react"
 import {forwardRef} from "react"
 import {cn} from "utils"
 
-const Card = forwardRef(({ children, className, ...rest }, ref) => {
+const Toast = forwardRef(({ children, className, ...rest }, ref) => {
   return (
     <IonToast ref={ref} className={cn("block ", className)} {...rest}>
       {children}
@@ -10,6 +10,6 @@ const Card = forwardRef(({ children, className, ...rest }, ref) => {
   )
 })
 
-Card.displayName = "Toast"
+Toast.displayName = "Toast"
 
-export default Card
+export default Toast

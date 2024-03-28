@@ -1,12 +1,4 @@
-import {
-  IonRouterOutlet,
-  IonTabs,
-  IonTabBar,
-  IonTabButton,
-  IonIcon,
-  IonLabel,
-  IonBadge
-} from "@ionic/react"
+
 import {
   home,
   people,
@@ -20,7 +12,18 @@ import { PageRoute } from "./PageRoute"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router"
+import {
+  IonRouterOutlet,
+  IonTabs,
+  IonTabBar,
+  IonTabButton,
+  IonIcon,
+  IonLabel,
+  IonBadge
+} from './defaults';
 
+ 
+ 
 export default function MobileNav({ setCreateAPostPopUp, allProps }) {
   const { loggedIn } = useSelector((store) => store?.userProfile)
   const [activeTab, setActiveTab] = useState("")

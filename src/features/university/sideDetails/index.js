@@ -22,8 +22,8 @@ import {
 } from "ionicons/icons"
 import React from "react"
 
-import StatCardTemplate from "component/DataStatCard/template/StatCardTemplate"
-import StatCardTemplateTwo from "component/DataStatCard/template/StatCardTemplateTwo"
+import StatCardTemplate from "component/custom-components/DataStatCard/template/StatCardTemplate"
+import StatCardTemplateTwo from "component/custom-components/DataStatCard/template/StatCardTemplateTwo"
 import RectangularCard from "component/RectangularCardGrid/template/RectangularCard"
 import ImageCard from "component/ScrollableImageCard/template/ImageCard"
 import { CardWithCircularGrid } from "component/cardWithCircularGrid"

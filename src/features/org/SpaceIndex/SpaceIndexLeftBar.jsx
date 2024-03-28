@@ -1,7 +1,7 @@
-import { IonCard, IonCol, IonText } from "@ionic/react"
+import { IonCard, IonCol, IonText } from "../../../component/defaults"
 import { Avatar } from "../../../component/Avatar"
-import YourSpaces from "../../../component/YourSpaces/YourSpaces"
-
+import YourSpaces from '../../../component/custom-components/YourSpaces/YourSpaces'
+ 
 const SpaceIndexLeftBar = ({ user, data }) => {
   return (
     <IonCol

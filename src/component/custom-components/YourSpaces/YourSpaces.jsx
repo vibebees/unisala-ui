@@ -1,4 +1,4 @@
-import { IonAvatar, IonCard, IonItem, IonLabel, IonText } from "@ionic/react"
+import { IonAvatar, IonItem, IonLabel, IonText } from "../../../component/defaults"
 import React from "react"
 import { Link } from "react-router-dom"
 

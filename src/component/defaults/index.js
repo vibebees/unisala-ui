@@ -14,8 +14,10 @@ import Label from './Label'
 import Icon from './Icon'
 import TabButton from './TabButton'
 import RouterOutlet from './RouterOutlet'
-
-
+import Text from './Text'
+import Spinner from './Spinner'
+import useCustomToast from './apis/toast.api'
+import Item from './Item'
 
 
 export {
@@ -34,5 +36,14 @@ export {
     Label as IonLabel,
     Icon as IonIcon,
     TabButton as IonTabButton,
-    RouterOutlet as IonRouterOutlet
+    RouterOutlet as IonRouterOutlet,
+    Text as IonText,
+    Spinner as IonSpinner,
+    Item as IonItem,
+
+
+
+
+
+    useCustomToast as useIonToast
 };

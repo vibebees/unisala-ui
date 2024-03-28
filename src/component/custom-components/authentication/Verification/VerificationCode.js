@@ -1,4 +1,4 @@
-import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react"
+import { IonButton, IonText, IonSpinner, useIonToast } from "../../../defaults"
 import axios from "axios"
 
 import AuthInput from "../AuthInput"

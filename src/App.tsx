@@ -1,10 +1,28 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { Link, Redirect, Route } from 'react-router-dom';
+import {
+  IonApp,
+  IonCol,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonRow,
+  IonSearchbar,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonTitle,
+  IonToolbar,
+  setupIonicReact
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { PersistGate } from "redux-persist/integration/react"
-import { persistor, store } from "./datasource/store/store"
-import { useDispatch, Provider, useSelector } from "react-redux"
+import { ellipse, square, triangle } from 'ionicons/icons';
+import Tab1 from './pages2/Tab1';
+import Tab2 from './pages2/Tab2';
+import Tab3 from './pages2/Tab3';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -20,38 +38,20 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import appProps from "./appProps"
 
 /* Theme variables */
 import './theme/variables.css';
-import { PageRoute } from './navigation/PageRoute';
+import { NavBar, } from './navigation';
+import { SearchBar } from './components/packages/searchBox';
 
 setupIonicReact();
 
-const App: React.FC = () => {
-  const allProps = appProps(),
-    { accessToken, refreshToken, width, setCreateAPostPopUp, dispatch } =
-      allProps
-
-  return ((
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            {/* <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route> */}
-            <PageRoute allProps={allProps} />
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
-    </PersistGate>
-    </Provider >
-  ))
-}
+const App: React.FC = () => (
+  <IonApp>
+    <IonReactRouter>
+      <NavBar />
+    </IonReactRouter>
+  </IonApp>
+);
 
 export default App;

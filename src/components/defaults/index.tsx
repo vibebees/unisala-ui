@@ -72,11 +72,14 @@ import {
   IonToast,
   IonToggle,
   IonToolbar,
+  IonRow
 } from '@ionic/react';
 import { IonReactRouter as OriginalIonReactRouter } from '@ionic/react-router';
 
 import { CustomWrapper } from './wrapper';
-
+import { forwardRef } from 'react';
+import { cn } from '../../utils';
+import useCustomToast from './apis/toast.api';
 
 // Wrap and export Ionic components
 export const Alert = CustomWrapper(IonAlert);
@@ -152,4 +155,26 @@ export const Title = CustomWrapper(IonTitle);
 export const Toast = CustomWrapper(IonToast);
 export const Toggle = CustomWrapper(IonToggle);
 export const Toolbar = CustomWrapper(IonToolbar);
+export const Row = CustomWrapper(IonRow);
+export const useIonToast = useCustomToast
+export  const Typography = forwardRef(
+  ({ variant = "h2", children, className, ...rest }, ref) => {
+    return (
+      <IonText ref={ref} {...rest}>
+        {variant === "h1" && (
+          <h1 className={cn("text-xl", className)}>{children}</h1>
+        )}
+        {variant === "h2" && <h2 className={className}>{children}</h2>}
+        {variant === "h3" && <h3 className={className}>{children}</h3>}
+        {variant === "h4" && <h4 className={className}>{children}</h4>}
+        {variant === "h5" && <h5 className={className}>{children}</h5>}
+        {variant === "h6" && <h6 className={className}>{children}</h6>}
+        {variant === "p" && <p className={className}>{children}</p>}
+      </IonText>
+    )
+  }
+)
+
+Typography.displayName = "Typography"
+
 export const ReactRouter = CustomWrapper(OriginalIonReactRouter);

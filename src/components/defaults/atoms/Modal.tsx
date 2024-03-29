@@ -1,15 +1,16 @@
+import React from "react"
 import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar
-} from "@ionic/react"
+  Buttons,
+  Content,
+  Header,
+  Modal,
+  Title,
+  Toolbar
+} from "../index"
 import { useState } from "react"
 import Button from "./Button"
 
-const Modal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
+const CustomModal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -18,31 +19,31 @@ const Modal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
         <div onClick={() => setIsOpen(true)} className="cursor-pointer p-0">
           {ModalButton}
         </div>
-        <IonModal
+        <Modal
           mode="ios"
           onDidDismiss={() => {
             setIsOpen(false)
           }}
           isOpen={isOpen}
         >
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>{header}</IonTitle>
-              <IonButtons slot="end">
+          <Header>
+            <Toolbar>
+              <Title>{header}</Title>
+              <Buttons slot="end">
                 <Button
                   className="modal-close-btn"
                   onClick={() => setIsOpen(false)}
                 >
                   close
                 </Button>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">{ModalData}</IonContent>
-        </IonModal>
+              </Buttons>
+            </Toolbar>
+          </Header>
+          <Content className="ion-padding">{ModalData}</Content>
+        </Modal>
       </div>
     </>
   )
 }
 
-export default Modal
+export default CustomModal

@@ -2,7 +2,9 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-
+import { PersistGate } from "redux-persist/integration/react"
+import { persistor, store } from "./datasource/store/store"
+import { useDispatch, Provider, useSelector } from "react-redux"
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -22,29 +24,33 @@ import appProps from "./appProps"
 
 /* Theme variables */
 import './theme/variables.css';
-import { PageRoute } from './PageRoute';
+import { PageRoute } from './navigation/PageRoute';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const allProps = appProps(),
-  { accessToken, refreshToken, width, setCreateAPostPopUp, dispatch } =
-    allProps
+    { accessToken, refreshToken, width, setCreateAPostPopUp, dispatch } =
+      allProps
 
   return ((
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          {/* <Route exact path="/home">
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            {/* <Route exact path="/home">
             <Home />
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route> */}
-             <PageRoute allProps={allProps} />
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+            <PageRoute allProps={allProps} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </PersistGate>
+    </Provider >
   ))
 }
 

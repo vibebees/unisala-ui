@@ -1,15 +1,5 @@
-import { ExploreIcon } from './components/customComponents/Icons/ExploreIcon';
-import { HomeIcon } from './components/customComponents/Icons/HomeIcon';
-import { MessageIcon } from './components/customComponents/Icons/MessageIcon';
-import { PeopleIcon } from './components/customComponents/Icons/PeopleIcon';
+import { ExploreIcon, HomeIcon, MessageIcon, PeopleIcon } from './components/packages/icons/index';
 
-import {
-  home,
-  people,
-  chatbubbles,
-  notifications,
-  navigateCircle
-} from "ionicons/icons"
 import { jwtDecode } from "jwt-decode"
 import { useRef, useState } from "react"
 // import { useSelector, useDispatch } from "react-redux"

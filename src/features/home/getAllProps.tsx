@@ -19,11 +19,12 @@ import ProfilePop from "components/packages/profilePop"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { GetTopActiveSpaces, GetTopOrgs } from "../../datasource/graphql/user"
 import useWindowWidth from "../../hooks/useWindowWidth"
+import { getCache } from "../../utils/cache"
 const unisalaImg = ""
 export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
   const [activeProfile, setActiveProfile] = useState({ profile: false }),
     [activeTab, setActiveTab] = useState(0),
-    [newUser, setNewUser] = useState(localStorage.getItem("newUser") || false),
+    [newUser, setNewUser] = useState(getCache("newUser") || false),
     { data: topSpaceData } = useQuery(GetTopActiveSpaces, {
       variables: { limit: 4 },
       context: { server: USER_SERVICE_GQL }

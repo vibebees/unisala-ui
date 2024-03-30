@@ -7,6 +7,7 @@ import {useHistory} from "react-router"
 import {userServer} from "../../../../datasource/servers/endpoints"
 import {PostCardForClick} from "../organisim/PostCardForClick"
 import {PostModalOnClick} from "../organisim/PostModalOnClick"
+import { getCache, setCache } from "../../../../utils/cache"
 const CreateAPostCard = ({ allProps }) => {
   const { user } = useSelector((state) => state.userProfile)
   const { setCreateAPostPopUp } = allProps
@@ -17,7 +18,7 @@ const CreateAPostCard = ({ allProps }) => {
 
   useEffect(() => {
     const cacheKey = `metadata-${pathname}`
-    const cachedMeta = localStorage.getItem(cacheKey)
+    const cachedMeta = getCache(cacheKey)
 
     const fn = async () => {
       if (cachedMeta) {
@@ -29,7 +30,7 @@ const CreateAPostCard = ({ allProps }) => {
             userServer + "/getMetadataTags",
             {
               headers: {
-                authorization: localStorage.getItem("accessToken")
+                authorization: getCache("accessToken")
               }
             }
           )
@@ -39,7 +40,7 @@ const CreateAPostCard = ({ allProps }) => {
           const { addAPost } = getCurrentPageMetaData || {}
 
           setMeta(addAPost)
-          localStorage.setItem(cacheKey, JSON.stringify(addAPost))
+          setCache(cacheKey, JSON.stringify(addAPost))
         } catch (error) {
           console.error("Failed to fetch metadata", error)
         }

@@ -7,12 +7,13 @@ import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { getUserProfile } from "../../datasource/graphql/user"
 import { callSocket } from "../../datasource/servers/endpoints"
+import { getCache } from "../../utils/cache"
 
 export default function HomePage({ propsall }) {
   const socket = useRef<ReturnType<typeof callSocket> | null>(null);
   const user = {
     username: "prashantbasnet17"
-  }, loggedIn = localStorage?.getItem("accessToken")?.length ?? 0 > 0
+  }, loggedIn = getCache("accessToken")?.length ?? 0 > 0
   const { loading, error, data, refetch } = useQuery(getUserProfile, {
     context: { server: USER_SERVICE_GQL },
     variables: {

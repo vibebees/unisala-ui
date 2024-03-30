@@ -1,12 +1,13 @@
 import axios from "axios"
 import urls from "../servers/index"
+import { getCache, setCache } from "../../utils/cache"
 
 const authBaseURL = urls["base"]
 export const authInstance = axios.create({
   baseURL: authBaseURL,
   headers: {
-    Authorization: localStorage.getItem("accessToken")
-      ? "Bearer " + localStorage.getItem("accessToken")
+    Authorization: getCache("accessToken")
+      ? "Bearer " + getCache("accessToken")
       : null,
     "Content-Type": "application/json",
     accept: "application/json"
@@ -45,7 +46,7 @@ authInstance.interceptors.response.use(
       error.response.status === 401 &&
       error.response.statusText === "Unauthorized"
     ) {
-      const refreshToken = localStorage.getItem("refreshToken")
+      const refreshToken = getCache("refreshToken")
 
       if (refreshToken) {
         const tokenParts = JSON.parse(atob(refreshToken.split(".")[1]))
@@ -58,8 +59,8 @@ authInstance.interceptors.response.use(
               token: refreshToken
             })
             .then((response) => {
-              localStorage.setItem("accessToken", response.data.accessToken)
-              localStorage.setItem("refreshToken", response.data.refreshToken)
+              setCache("accessToken", response.data.accessToken)
+              setCache("refreshToken", response.data.refreshToken)
 
               authInstance.defaults.headers["Authorization"] =
                 "JWT " + response.data.access

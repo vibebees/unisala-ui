@@ -5,6 +5,7 @@ import {
   UNI_SERV_SIGNED_URL,
   USER_SERV_SIGNED_URL
 } from "../types/userActivity"
+import { setCache } from "../../../utils/cache"
 
 export const loginUser = ({
   input,
@@ -22,10 +23,8 @@ export const loginUser = ({
       .then((res) => {
         setLoading(false)
         if (res.data.success) {
-          res?.data?.accessToken &&
-            localStorage.setItem("accessToken", res?.data?.accessToken)
-          res?.data?.refreshToken &&
-            localStorage.setItem("refreshToken", res?.data?.refreshToken)
+          res?.data?.accessToken && setCache("accessToken", res?.data?.accessToken)
+          res?.data?.refreshToken && setCache("refreshToken", res?.data?.refreshToken)
           setActiveNavDrop({ profile: false })
 
           dispatch({
@@ -134,11 +133,11 @@ export const googleAuthAction = ({
   return (dispatch) =>
     axios.post(userServer + `/auth/google`, payload).then((res) => {
       if (res.data.success) {
-        localStorage.setItem("accessToken", res?.data?.accessToken)
-        localStorage.setItem("refreshToken", res?.data?.refreshToken)
+        setCache("accessToken", res?.data?.accessToken)
+        setCache("refreshToken", res?.data?.refreshToken)
 
         if (res?.data.isFirstLogin) {
-          localStorage.setItem("newUser", "true")
+          setCache("newUser", "true")
         }
         dispatch({
           type: USER_LOGIN,

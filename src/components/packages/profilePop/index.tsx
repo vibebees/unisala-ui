@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import Authentication from "../authentication/AuthModal"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
+import { clearCache } from "../../../utils/cache"
 
 export const ProfilePop = ({ allProps }) => {
   const {
@@ -59,7 +60,7 @@ export const ProfilePop = ({ allProps }) => {
       <div className="profile-drop-div">
         <Buttons
           onClick={() => {
-            localStorage.clear()
+            clearCache()
             window.location.reload()
           }}
           className="profile-drop-btn"

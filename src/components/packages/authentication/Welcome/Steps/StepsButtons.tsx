@@ -9,6 +9,7 @@ import {useHistory} from "react-router"
 import {USER_SERVICE_GQL} from "servers/types"
 import {WelcomeData} from ".."
 import {getUserProfile} from "../../../../store/action/userProfile"
+import { getCache, removeCache } from "../../../../../utils/cache"
 
 const StepsButtons = ({ allProps }) => {
   const { welcomeFormdata } = useContext(WelcomeData),
@@ -71,7 +72,7 @@ const StepsButtons = ({ allProps }) => {
     onCompleted: (data) => {
       // update uesr details in redux
       if (data?.editProfile?.status?.success) {
-        localStorage.removeItem("newUser")
+        removeCache("newUser")
         modalRef.current.dismiss()
         present({
           duration: 3000,
@@ -136,11 +137,12 @@ const StepsButtons = ({ allProps }) => {
         getUserProfile({ user: { ...decode }, loggedIn: Boolean(decode) })
       )
       editProfile()
-      const spaceOrg = localStorage.getItem("org")
+      const spaceOrg = getCache("org")
+
       if (spaceOrg) {
         window.location.replace("/org/" + spaceOrg)
       }
-      localStorage.removeItem("org")
+      removeCache("org")
     } catch (error) {
       console.log(error)
     }

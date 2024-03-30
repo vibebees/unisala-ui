@@ -11,22 +11,23 @@ import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from "../../../datasource/se
 import { userSearch } from "../../../datasource/graphql/user"
 import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect"
 import { SearchIcon } from "../icons"
+import { getCache } from "../../../utils/cache"
 
 export const SearchBar = () => {
-  const [searchValue, setSearchValue] = useState("")
-  const [dropDownOptions, setDropDownOptions] = useState(false)
+  const [ searchValue, setSearchValue ] = useState("")
+  const [ dropDownOptions, setDropDownOptions ] = useState(false)
   const history = useHistory()
-  const [options, setOptions] = useState([])
-  const [GetUni, unidata] = useLazyQuery(UniSearchDataList, {
+  const [ options, setOptions ] = useState([])
+  const [ GetUni, unidata ] = useLazyQuery(UniSearchDataList, {
     context: { server: UNIVERSITY_SERVICE_GQL },
     skip: true
   })
-  const [GetUser, searchUser] = useLazyQuery(userSearch(), {
+  const [ GetUser, searchUser ] = useLazyQuery(userSearch(), {
     context: { server: USER_SERVICE_GQL },
     skip: true
   })
   const dropdownRef = useRef(null)
-  const token = localStorage.getItem('accessToken')
+  const token = getCache('accessToken')
 
   const handleSearch = () => {
     if (searchValue) {
@@ -37,7 +38,7 @@ export const SearchBar = () => {
 
   useDebouncedEffect(
     searchUniFromBar(searchValue, 5, setOptions, token),
-    [searchValue],
+    [ searchValue ],
     300
   )
 

@@ -6,6 +6,7 @@ import { registerUser } from "../../../../datasource/store/action/authentication
 import { validateSignup } from "../../../../utils/components/validate"
 import AuthInput from "../AuthInput"
 import "../auth.css"
+import { setCache } from "../../../../utils/cache"
 export const SignUpForm = ({ setauth, setShowSignup = null }) => {
   const [errors, seterrors] = useState({})
   const [present, dismiss] = useIonToast()
@@ -54,7 +55,7 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
   useEffect(() => {
     if (Object.keys(errors).length === 0 && datacheck) {
       setsave(true)
-      localStorage.setItem("email", input.email)
+      setCache("email", input.email)
       dispatch(
         registerUser({
           userServer: userServer,
@@ -67,7 +68,7 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
         })
       )
       if (spaceOrgName) {
-        localStorage.setItem("org", spaceOrgName)
+        setCache("org", spaceOrgName)
       }
     }
   }, [errors])

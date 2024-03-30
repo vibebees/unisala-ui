@@ -6,6 +6,7 @@ import "../auth.css"
 import VerificationCode from "./VerificationCode"
 import { USER_LOGIN } from "../../../../datasource/store/action/types"
 import { userServer } from "../../../../datasource/servers/endpoints"
+import { getCache, removeCache, setCache } from "../../../../utils/cache"
 
 const SignUpVerification = ({ auth, setauth }) => {
   const [present, dismiss] = useIonToast()
@@ -35,8 +36,8 @@ const SignUpVerification = ({ auth, setauth }) => {
     }
 
     setLoading(true)
-    const emailInput = localStorage.getItem("email") || ""
-    localStorage.removeItem("email")
+    const emailInput = getCache("email")
+    removeCache("email")
 
     axios
       .post(userServer + `/verifyEmail`, {
@@ -46,8 +47,8 @@ const SignUpVerification = ({ auth, setauth }) => {
       .then((res) => {
         setLoading(false)
         if (res.data.success === true) {
-          localStorage.setItem("accessToken", res?.data?.accessToken)
-          localStorage.setItem("refreshToken", res?.data?.refreshToken)
+          setCache("accessToken", res?.data?.accessToken)
+          setCache("refreshToken", res?.data?.refreshToken)
           dispatch({
             type: USER_LOGIN,
             payload: {
@@ -55,8 +56,7 @@ const SignUpVerification = ({ auth, setauth }) => {
               refreshToken: res?.data?.refreshToken
             }
           })
-          localStorage.setItem("newUser", "true")
-
+          setCache("newUser", "true")
           window.innerWidth < 768
             ? window.location.replace("/home")
             : window.location.replace("/")

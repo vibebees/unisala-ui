@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IonBadge, IonCol, IonIcon, IonLabel, IonRouterOutlet, IonRow, IonTabBar, IonTabButton, IonTabs, IonText } from '@ionic/react';
 import { personCircle } from 'ionicons/icons';
-import { Link, Redirect, Route, useParams } from 'react-router-dom';
+import { Link, Redirect, Route, useHistory, useLocation, useParams } from 'react-router-dom';
 import Tab1 from '../pages2/Tab1';
 import Tab2 from '../pages2/Tab2';
 import Tab3 from '../pages2/Tab3';
@@ -48,26 +48,9 @@ const SearchBar = () => {
 
     return (
         // <IonSearchbar></IonSearchbar>
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "30px"
-            }}
-        >
-            <Link to="/">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
-                    alt="logo"
-                    style={{
-                        width: "45px"
-                    }}
-                />
-            </Link>
-            <div style={{ width: "100%" }}>
-                <SearchBar />
-            </div>
-        </div>
+        <div style={{ width: "100%" }}>
+        <SearchBar />
+    </div>
     )
 }
 export const NavBar: React.FC<NavBarProps> = () => {
@@ -129,6 +112,15 @@ export const NavBar: React.FC<NavBarProps> = () => {
 
     const { width } = useWindowSize();
     const isMobile = width <= 768; // You can adjust this value
+    const history = useHistory();
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState<string>("");
+    const handleTabClick = (path: string) => {
+        history.push(path);
+      };
+      useEffect(() => {
+        setActiveTab(location.pathname);
+      }, [location]);
 
     return (
         <IonTabs>
@@ -164,12 +156,19 @@ export const NavBar: React.FC<NavBarProps> = () => {
                          style={{ width: "45px" }}
                      />
                  </IonTabButton>
-               )}
+                )}
 
-                {navigation.map((item, index) => (
-                    <IonTabButton key={index} tab={item.name} href={'/' + item.name}>
-                        <item.Icon fill={active === item.link ? "blue" : "#747372"} />
-                        <IonLabel>{item.name}</IonLabel>
+                <IonTabBar>
+                 <SearchBar/>
+                    </IonTabBar>
+
+                {navigation.map(({name, Icon, link}) => (
+                    <IonTabButton key={name} tab={name}
+                        onClick={() => handleTabClick(link)} selected={activeTab === link}
+                        className={activeTab === link ? 'tab-button-active' : 'tab-button-inactive'}
+                    >
+                        <Icon />
+                        <IonLabel>{name}</IonLabel>
                     </IonTabButton>
                 ))}
             </IonTabBar>

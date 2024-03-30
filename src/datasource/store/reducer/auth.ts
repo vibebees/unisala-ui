@@ -1,3 +1,4 @@
+import { removeCache } from "../../../utils/cache"
 import {BEFORE_AUTH_TRACK_PATH, CLEAR_AUTH_ERROR, EMAIL_VERIFICATION_RESENT, LOGOUT, OAUTH, PASSWORD_RESET_ASK_EMAIL, PASSWORD_RESET_ASK_PASSWORD, SHOW_ALERT, USER_LOGIN, USER_LOGIN_ERROR, USER_REGISTRATION} from "../action/types"
 import {UNI_SERV_SIGNED_URL, USER_SERV_SIGNED_URL} from "../types/userActivity"
 
@@ -32,8 +33,8 @@ const authentication = (state = AUTH_INITIAL_STATE, action) => {
             }
             return state
         case LOGOUT:
-            localStorage.removeItem("username")
-            localStorage.removeItem("token")
+            removeCache("username")
+            removeCache("token")
             state = {
                 ...state,
                 beforeAuthPath: null,

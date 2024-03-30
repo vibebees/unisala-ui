@@ -1,7 +1,8 @@
 import { Redirect, useLocation } from "react-router-dom"
+import { getCache } from "../cache"
 
 export const ProtectedRoute = ({ children: any })  => {
-  const accessToken = localStorage.getItem("accessToken")
+  const accessToken = getCache("accessToken")
   const location = useLocation()
 
   const [_, route, id] = location.pathname.split("/")

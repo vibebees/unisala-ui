@@ -1,9 +1,10 @@
+import { getCache } from "../../../utils/cache"
 import { PRE_LOADING } from "../action/types"
 
 export const initial = {
     test: [],
     loading: false,
-    accessToken: localStorage.getItem("accessToken")
+    accessToken:  getCache("accessToken")
 }
 const intro = (state = initial, action) => {
     switch (action.type) {

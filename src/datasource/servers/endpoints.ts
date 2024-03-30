@@ -15,6 +15,7 @@ import {
   USER_SERVICE_GQL
 } from "./types"
 import getServiceConfig from "./index"
+import { getCache, removeCache } from "../../utils/cache"
 const
   {
     messagingServiceAddress,
@@ -29,8 +30,8 @@ const
     if (graphQLErrors) {
       graphQLErrors.forEach(({message, locations, path}) => {
         if (message === "You are not logged in. Please login") {
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("refreshToken")
+          removeCache("accessToken")
+          removeCache("refreshToken")
           window.location.href = "/login"
         }
       }
@@ -89,7 +90,7 @@ const
     server: USER_SERVICE_GQL
   }),
   authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem("accessToken")
+    const token = getCache("accessToken")
     return {
       headers: {
         ...headers,
@@ -113,7 +114,7 @@ const
 export const client = new ApolloClient({
     link: errorLink.concat(authLink.concat(httpLink)),
     headers: {
-      authorization: localStorage?.getItem("accessToken") || ""
+      authorization: getCache("accessToken") || ""
     },
     cache: new InMemoryCache()
   }),

@@ -1,4 +1,4 @@
-import { IonContent, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonContent, IonGrid, IonRow, IonCol, IonPage } from '@ionic/react';
 import React from 'react';
 
 
@@ -11,8 +11,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ leftSidebar, mainContent, rightSidebar }) => {
   return (
-    <IonContent>
-      <IonGrid>
+    <IonPage>
+      <IonContent>
         <IonRow>
           {/* Only visible on medium and larger screens */}
           <IonCol sizeMd="3" className="ion-hide-sm-down">{leftSidebar}</IonCol>
@@ -23,8 +23,8 @@ const Layout: React.FC<LayoutProps> = ({ leftSidebar, mainContent, rightSidebar 
           {/* Only visible on medium and larger screens */}
           <IonCol sizeMd="3" className="ion-hide-sm-down">{rightSidebar}</IonCol>
         </IonRow>
-      </IonGrid>
-    </IonContent>
+      </IonContent>
+    </IonPage>
   );
 };
 

@@ -3,17 +3,17 @@ import {IonButton, IonIcon, useIonToast} from "@ionic/react"
 import {create, ellipsisHorizontalOutline, trash} from "ionicons/icons"
 import {useState} from "react"
 import {useParams} from "react-router-dom"
-import ReplyInput from "../ReplyInput"
+import ReplyInput from "../replyInput"
 import Reply from "./actions/Reply"
 import Upvote from "./actions/Upvote"
 import "./index.css"
 import ShowMore from "./organism/ShowPeopleComments"
 import ThreadHeader from "./organism/ThreadHeader"
 
-import {DeleteComment, EditComment} from "graphql/user"
+import {DeleteComment, EditComment} from "../../../datasource/graphql/user"
 import ReactQuill from "react-quill"
 import {useSelector} from "react-redux"
-import {USER_SERVICE_GQL} from "servers/types"
+import {USER_SERVICE_GQL} from "../../../datasource/servers/types"
 
 function Comment({
   comment,

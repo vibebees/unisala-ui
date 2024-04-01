@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client"
 import { IonButton, IonSpinner, useIonToast } from "@ionic/react"
-import { RegisterUserEvent } from "graphql/user"
+import { RegisterUserEvent } from "../../../../datasource/graphql/user"
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { USER_SERVICE_GQL } from "servers/types"
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 
 const RegisterButton = ({ event }) => {
   const { user } = useSelector((store) => store?.userProfile)

@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import moment from "moment"
-import { Avatar } from "component/Avatar"
+import { Avatar } from "../../../defaults"
 
 const ThreadHeader = ({ username, profilePic, firstName, lastName, date }) => {
   return (

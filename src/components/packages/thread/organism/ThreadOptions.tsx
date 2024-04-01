@@ -1,10 +1,10 @@
 import { useMutation } from "@apollo/client"
 import { IonIcon, useIonToast } from "@ionic/react"
-import { DeletePost, getNewsFeed } from "graphql/user"
+import { DeletePost, getNewsFeed } from "../../../../datasource/graphql/user"
 import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
-import { USER_SERVICE_GQL } from "servers/types"
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 
 const ThreadOptions = ({
   loggedinUser,

@@ -1,8 +1,10 @@
-import { Avatar } from "component/Avatar"
+import React from "react"
 import { useSelector } from "react-redux"
+import { Avatar } from "../../../defaults"
+import { userInfo } from "../../../../utils/cache"
 
 const FormAvatar = () => {
-  const { user } = useSelector((store) => store?.userProfile)
+  const { user } = userInfo
   return (
     <div className="thread-header gap-2">
       <div className="thread_profile-pic ">

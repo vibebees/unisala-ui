@@ -11,11 +11,11 @@ import {
   IonItemDivider,
   IonText
 } from "@ionic/react"
-import ImageWithLoader from "component/Reusable/Image/ImageWithLoader"
-import {Event} from "component/events"
-import Thread from "component/thread"
-import {Button, Card, Col, Grid, Row} from "component/ui"
-import {getNewsFeed, getUserGql} from "graphql/user"
+import ImageWithLoader from "../reusable/Image/ImageWithLoader"
+import {Event} from "../events"
+import Thread from "../thread"
+import {Button, Card, Col, Grid, Row} from "../../defaults"
+import {getNewsFeed, getUserGql} from "../../../datasource/graphql/user"
 import {location, schoolOutline} from "ionicons/icons"
 import {useState} from "react"
 import {useSelector} from "react-redux"

@@ -3,7 +3,7 @@
 import React from "react"
 import { Content, Text, Button, Row } from "../components/defaults"
 
-export const PageNotFound = ({ msg }) => {
+const PageNotFound = ({ msg }) => {
   return (
     <Content color="light">
       <div
@@ -65,3 +65,4 @@ export const SpaceNotFound = () => {
   )
 }
 
+export default PageNotFound

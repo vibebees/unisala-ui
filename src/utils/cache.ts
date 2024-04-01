@@ -56,3 +56,6 @@ export function clearCache(): void {
         console.error(`Error clearing local storage: ${error}`);
     }
 }
+
+export const authenticated =  getCache("accessToken") ? true : false;
+export const userInfo = getCache("userInfo") || {};

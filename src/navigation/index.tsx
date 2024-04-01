@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { IonBadge, IonCol, IonIcon, IonLabel, IonRouterOutlet, IonRow, IonTabBar, IonTabButton, IonTabs, IonText } from '@ionic/react';
+import {
+    Badge, Col, Icon, Label, RouterOutlet, Row, TabBar, TabButton, Tabs, Text,
+    Header, Toolbar, Title, Searchbar, Buttons, MenuButton
+} from "../components/defaults/"
 import { personCircle } from 'ionicons/icons';
 import { Link, Redirect, Route, useHistory, useLocation, useParams } from 'react-router-dom';
 import Tab1 from '../pages2/Tab1';
@@ -7,8 +10,7 @@ import Tab2 from '../pages2/Tab2';
 import Tab3 from '../pages2/Tab3';
 import { PageRoute } from './PageRoute';
 import { ExploreIcon, HomeIcon, PeopleIcon, MessageIcon } from '../components/packages/icons';
-import { IonHeader, IonToolbar, IonTitle, IonSearchbar, IonButtons, IonMenuButton } from '@ionic/react';
-import { SearchBar } from '../components/packages/searchBox';
+ import { SearchBar } from '../components/packages/searchBox';
 
 // Define props if you have any for NavBar, for example:
 interface NavBarProps {
@@ -18,31 +20,6 @@ type RouteParams = {
     path?: string;
 }
 
-const SearchNavBar: React.FC = () => {
-    const [ searchText, setSearchText ] = useState('');
-
-    const handleSearch = (event: CustomEvent) => {
-        setSearchText(event.detail.value);
-        // Trigger the search logic using searchText
-    };
-
-    return (
-        <IonHeader>
-            <IonToolbar>
-                <IonButtons slot="start">
-                    <IonMenuButton />
-                </IonButtons>
-                <IonTitle>My App</IonTitle>
-                <IonSearchbar
-                    value={searchText}
-                    onIonChange={handleSearch}
-                    showCancelButton="focus"
-                    placeholder="Search"
-                ></IonSearchbar>
-            </IonToolbar>
-        </IonHeader>
-    );
-};
 
 const SearchBar = () => {
 
@@ -66,7 +43,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
             link: "/search?tab=uni"
         },
         {
-            name: "My Network",
+            name: " Network",
             Icon: PeopleIcon,
             link: "/mynetwork"
         },
@@ -77,7 +54,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
             count: 0
         },
         {
-            name: "My Profile",
+            name: "Profile",
             Icon: PeopleIcon,
             link: "/profile"
         }
@@ -123,14 +100,14 @@ export const NavBar: React.FC<NavBarProps> = () => {
       }, [location]);
 
     return (
-        <IonTabs>
-            <IonRouterOutlet>
+        <Tabs>
+            <RouterOutlet>
                 <PageRoute />
-            </IonRouterOutlet>
+            </RouterOutlet>
 
 
-            {/* <IonTabBar slot={isMobile ? "bottom" : "top"}>
-                <IonTabButton tab={"unisala"} href={'/'} layout ="icon-start">
+            {/* <TabBar slot={isMobile ? "bottom" : "top"}>
+                <TabButton tab={"unisala"} href={'/'} layout ="icon-start">
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
                         alt="logo"
@@ -138,42 +115,42 @@ export const NavBar: React.FC<NavBarProps> = () => {
                             width: "45px"
                         }}
                     />
-                </IonTabButton>
-                {navigation.map((item, index) => (
-                    <IonTabButton tab={item.name} href={'/' + item.name}>
+                </TabButton>
+                {navigat.map((item, index) => (
+                    <TabButton tab={item.name} href={'/' + item.name}>
                         <item.Icon fill={active === item.link ? "blue" : "#747372"} />
-                        <IonLabel>{item.name}</IonLabel>
-                    </IonTabButton>
+                        <Label>{item.name}</Label>
+                    </TabButton>
                 ))}
-            </IonTabBar> */}
+            </TabBar> */}
 
-            <IonTabBar slot={isMobile? "bottom": "top"} >
+            <TabBar slot={isMobile? "bottom": "top"} >
                 {!isMobile && (
-                    <IonTabButton tab="unisala" href="/" style={{ display: 'flex' }}>
+                    <TabButton tab="unisala" href="/" style={{ display: 'flex' }}>
                      <img
                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
                          alt="logo"
                          style={{ width: "45px" }}
                      />
-                 </IonTabButton>
+                 </TabButton>
                 )}
 
-                <IonTabBar>
+                <TabBar>
                  <SearchBar/>
-                    </IonTabBar>
+                    </TabBar>
 
-                {navigation.map(({name, Icon, link}) => (
-                    <IonTabButton key={name} tab={name}
+                {navigation?.map(({name, Icon, link}) => (
+                    <TabButton key={name} tab={name}
                         onClick={() => handleTabClick(link)} selected={activeTab === link}
                         className={activeTab === link ? 'tab-button-active' : 'tab-button-inactive'}
                     >
                         <Icon />
-                        <IonLabel>{name}</IonLabel>
-                    </IonTabButton>
+                        <Label  style ={{  fontSize: isMobile? "10px": ''}}>{name}</Label>
+                    </TabButton>
                 ))}
-            </IonTabBar>
+            </TabBar>
 
-        </IonTabs>
+        </Tabs>
 
     );
 };

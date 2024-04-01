@@ -1,4 +1,5 @@
-import { Button, Typography } from "component/ui"
+import React from "react"
+import { Button, Typography } from "../../../defaults"
 
 const NotLogggedModal = ({ setAllowPost }) => {
   return (

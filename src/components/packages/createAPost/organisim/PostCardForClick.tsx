@@ -1,11 +1,11 @@
-import { IonAvatar, IonItem } from "@ionic/react"
-import GalleryIcon from "Icons/GalleryIcon"
-import { Col } from "component/ui"
+import React from "react"
+import { Avatar, Col, Item } from "../../../defaults"
 import { useSelector } from "react-redux"
-import { Avatar } from "../../Avatar"
+ import { GalleryIcon } from "../../icons"
+import { userInfo } from "../../../../utils/cache"
 
 export const PostCardForClick = () => {
-  const { user } = useSelector((store) => store?.userProfile)
+  const { user } = userInfo
 
   return (
     <div
@@ -14,15 +14,15 @@ export const PostCardForClick = () => {
         cursor: "pointer"
       }}
     >
-      <IonItem lines="none">
-        <IonAvatar
+      <Item lines="none">
+        <Avatar
           slot="start"
           style={{
             alignSelf: "center"
           }}
         >
           <Avatar username={user?.username} profilePic={user?.picture} />
-        </IonAvatar>
+        </Avatar>
         <input
           type="text"
           placeholder={"suggest univeristy"}
@@ -30,11 +30,11 @@ export const PostCardForClick = () => {
         />
 
         <Col size="auto">
-          <IonItem lines="none">
+          <Item lines="none">
             <GalleryIcon />
-          </IonItem>
+          </Item>
         </Col>
-      </IonItem>
+      </Item>
     </div>
   )
 }

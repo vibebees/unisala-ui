@@ -1,5 +1,5 @@
 import { Buttons } from "../../../defaults/index"
-import Share from "../../../packages/s"
+import Share from "../../../packages/share"
 import { Reply, Save, Upvote } from "../actions"
 
 const ThreadFooter = ({

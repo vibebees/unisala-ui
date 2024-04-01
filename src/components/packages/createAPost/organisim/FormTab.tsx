@@ -1,5 +1,6 @@
-import LeftArrow from "Icons/LeftArrow"
-import { Button, Typography } from "component/ui"
+import React from "react"
+import { Button, Typography } from "../../../defaults"
+import { LeftArrow } from "../../icons"
 
 const FormTab = ({ metaData, selectedTab, setSelectedTab }) => {
   return (

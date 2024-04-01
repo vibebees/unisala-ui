@@ -1,8 +1,9 @@
 import React from "react"
 import { lazy, Suspense } from "react"
-import {Route, Switch} from "react-router"
+import {Redirect, Route, Switch} from "react-router"
 import { ProtectedRoute } from "../utils/lib/protectedRoute"
 import { PreLoader } from "../components/packages/preloader"
+import { authenticated } from "../utils/cache"
 
 // import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
 
@@ -20,12 +21,12 @@ const Org = lazy(() => import("../pages/org"))
 const AuthPage = lazy(() => import("../pages/auth"))
 const StudyAbroadRoadmap = lazy(() => import("../pages/roadmap"))
 
-const LandingPage = lazy(() => import("../pages/home"))
 const FeedPage = lazy(() => import("../pages/home"))
 
 const ThreadDetail = lazy(() => import("../pages/thread.detail"))
-const PageNotFound = lazy(() => import("./PageNotFound"))
-
+const PageNotFound= lazy(() => import("./PageNotFound"))
+const LandingPage = lazy(() => import("../pages/landingPage"))
+const Standard = lazy(() => import("../pages/standard"))
 const messagingRoutes = () => (
   <>
     <ProtectedRoute>
@@ -68,15 +69,26 @@ const orgRoutes = () => (
 )
 
 export const PageRoute = ({ allProps }) => (
-  <Switch>
-
-    <Suspense fallback={<PreLoader/>}>
-
-    <Route exact path="/">
-        <LandingPage />
+  <Suspense fallback={<PreLoader />}>
+    <Switch>
+      <Route exact path="/">
+        {authenticated ? <Redirect to="/feed" /> : <LandingPage />}
       </Route>
-
-
-    </Suspense>
-  </Switch>
+      <Route path="/feed">
+        {authenticated ? <FeedPage /> : <Redirect to="/" />}
+      </Route>
+      {/* Protected routes example */}
+      <Route path="/profile">
+        {authenticated ? <ProfilePage /> : <Redirect to="/" />}
+      </Route>
+      <Route path="/standard">
+          <Standard />
+      </Route>
+      {/* More routes */}
+      {/* Fallback route for 404 Not Found */}
+      <Route path="*">
+        <PageNotFound />
+      </Route>
+    </Switch>
+  </Suspense>
 )

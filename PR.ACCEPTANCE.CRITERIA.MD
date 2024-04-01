@@ -9,7 +9,10 @@
   localStorage.get(item);
 ### State Management
 
-- **Rule**: save in Redux store by writing action and reducer
+- **Rule**: use utils>cache>apis
+  getCache
+  setCache
+  removeCache
 
 
  # Code Organization and Configuration

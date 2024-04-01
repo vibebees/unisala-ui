@@ -1,10 +1,9 @@
 import { IonCard } from "@ionic/react"
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import ReplyInput from "../ReplyInput"
+import ReplyInput from "../replyInput"
 import "./index.css"
-import { Card } from "component/ui"
-import {
+ import {
   ShowPeopleComments,
   ThreadEditable,
   ThreadExpand,
@@ -14,6 +13,7 @@ import {
   ThreadOptions,
   ThreadRating
 } from "./organism"
+import { Card } from "../../defaults"
 
 const Thread = ({ thread, feedType, feedId }) => {
   const {

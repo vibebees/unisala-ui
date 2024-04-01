@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import {
-  ApolloProvider
-} from "@apollo/client"
+import { ApolloProvider } from "@apollo/client"
+import './tailwind.css'
+import "./index.css"
 
 import { client } from "./datasource/servers/endpoints"
 client.clearStore()

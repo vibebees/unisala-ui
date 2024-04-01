@@ -2,7 +2,7 @@ import { IonAlert, IonCard, IonCardContent, IonImg } from "@ionic/react"
 import { useState } from "react"
 import RegisterButton from "../atoms/RegisterButton"
 import { EventCardHeader } from "./cardHeader"
-import { defaultEventsImages } from "component/feed/default.images"
+import { defaultEventsImages } from "../../feed/default.images"
 export const EventCard = ({ event }) => {
   const [showAlert, setShowAlert] = useState(false)
   const [selectedYear, setSelectedYear] = useState("")

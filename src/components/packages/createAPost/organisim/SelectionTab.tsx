@@ -1,8 +1,10 @@
-import { Button } from "component/ui"
-import { useSelector } from "react-redux"
+import React from "react"
+import { Button } from "../../../defaults"
+import { userInfo } from "../../../../utils/cache"
+
 
 const SelectionTab = ({ metaData, onClick }) => {
-  const { user } = useSelector((store) => store?.userProfile)
+  const { user } = userInfo
   return (
     <div className="grid place-items-center gap-y-8 mt-5">
       {metaData &&

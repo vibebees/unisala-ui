@@ -6,7 +6,6 @@ import { getUpdatedSchoolInfo } from "./../../datasource/graphql/uni"
 import { fetchFamousUniversities } from "./../../datasource/graphql/user"
 import useDocTitle from "../../hooks/useDocTitile"
 import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from "./../../datasource/servers/types"
-import { UnisalaLandingPage } from "./UnisalaIntro"
 import { Card, Col, Grid, Row } from "../../components/defaults"
 const FloatingButton = lazy(() => import("../../components/packages/floatingButton/index"))
 const CreateAPostCard = lazy(() => import("../../components/packages/createAPost/template"))
@@ -116,7 +115,7 @@ export const Home = ({ allProps }) => {
             }}
             className="max-md:px-0 "
           >
-            {loggedIn ? renderLoggedInView() : UnisalaLandingPage({ allProps })}
+           {renderLoggedInView()}
           </Col>
           {width > 1000 && views.greaterThan1000}
           {renderNewUserView()}

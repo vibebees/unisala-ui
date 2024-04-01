@@ -43,6 +43,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { NavBar, } from './navigation';
 import { SearchBar } from './components/packages/searchBox';
+import './tailwind.css'
+import "./index.css"
 
 setupIonicReact();
 

@@ -135,7 +135,7 @@ export const RefresherContent = CustomWrapper(IonRefresherContent);
 export const Reorder = CustomWrapper(IonReorder);
 export const ReorderGroup = CustomWrapper(IonReorderGroup);
 export const RippleEffect = CustomWrapper(IonRippleEffect);
-export const RouterOutlet = CustomWrapper(IonRouterOutlet);
+export const RouterOutlet = IonRouterOutlet
 export const Searchbar = CustomWrapper(IonSearchbar);
 export const Segment = CustomWrapper(IonSegment);
 export const SegmentButton = CustomWrapper(IonSegmentButton);
@@ -145,9 +145,9 @@ export const SkeletonText = CustomWrapper(IonSkeletonText);
 export const Spinner = CustomWrapper(IonSpinner);
 export const SplitPane = CustomWrapper(IonSplitPane);
 export const Tab = CustomWrapper(IonTab);
-export const TabBar = CustomWrapper(IonTabBar);
-export const TabButton = CustomWrapper(IonTabButton);
-export const Tabs = CustomWrapper(IonTabs);
+export const TabBar = IonTabBar
+export const TabButton = IonTabButton
+export const Tabs = IonTabs
 export const Text = CustomWrapper(IonText);
 export const Textarea = CustomWrapper(IonTextarea);
 export const Thumbnail = CustomWrapper(IonThumbnail);
@@ -177,4 +177,4 @@ export  const Typography = forwardRef(
 
 Typography.displayName = "Typography"
 
-export const ReactRouter = CustomWrapper(OriginalIonReactRouter);
+export const ReactRouter = OriginalIonReactRouter

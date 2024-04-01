@@ -2,10 +2,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { ApolloProvider } from "@apollo/client"
-import './tailwind.css'
-import "./index.css"
-
 import { client } from "./datasource/servers/endpoints"
+import './index.css';
+
 client.clearStore()
 
 const container = document.getElementById('root');

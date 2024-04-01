@@ -21,7 +21,7 @@ const Org = lazy(() => import("../pages/org"))
 const AuthPage = lazy(() => import("../pages/auth"))
 const StudyAbroadRoadmap = lazy(() => import("../pages/roadmap"))
 
-const FeedPage = lazy(() => import("../pages/home"))
+const FeedPage = lazy(() => import("../pages/standard"))
 
 const ThreadDetail = lazy(() => import("../pages/thread.detail"))
 const PageNotFound= lazy(() => import("./PageNotFound"))

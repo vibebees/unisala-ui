@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { ApolloProvider } from "@apollo/client"
 import { client } from "./datasource/servers/endpoints"
-import './index.css';
+import "./tailwindOutput.css"
 
 client.clearStore()
 

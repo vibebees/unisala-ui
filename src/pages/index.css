@@ -1,11 +1,6 @@
-@media (max-width: 576px) {
-    .hidden-xs {
-      display: none;
-    }
+/* Global styles.css or in your component's local CSS file */
+@media (max-width: 768px) {
+  .hidden-sm {
+    display: none;
   }
-
-  @media (max-width: 768px) {
-    .hidden-sm {
-      display: none;
-    }
-  }
+}

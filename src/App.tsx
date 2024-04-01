@@ -42,7 +42,6 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import './theme/tailwind.css';
-import "./index.css"
 
 import { NavBar, } from './navigation';
 import { SearchBar } from './components/packages/searchBox';

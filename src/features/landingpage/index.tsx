@@ -5,11 +5,10 @@ import {Card,CardContent,} from "../../components/defaults"
   import currentStudents from "../../assets/currentStudents.jpeg"
   import question from "../../assets/welcome/question.jpeg"
 import { Content } from "../../components/defaults"
-import { IonContent } from '@ionic/react'
 
 
 let Actual = () => (
-  <Content style={{ margin: "27px 0px 0px 0px" }}>
+  <div style={{ margin: "27px 0px 0px 0px" }}>
   <Card className="">
           {/* <Login /> */}
           log in card
@@ -21,7 +20,7 @@ let Actual = () => (
         <h1 className="text-2xl font-bold pt-1 pb-2">
           <strong>Are you an incoming student?</strong> 🤔
         </h1>
-        <img src={question} alt="roadmap" />
+        <img src={question} alt="roadmap"   className="w-full md:w-1/2 h-auto md:h-1/4" />
         <li>
           <strong></strong>
           <ul className="list-inside space-y-1 mt-1">
@@ -55,7 +54,7 @@ let Actual = () => (
         <h1 className="text-2xl font-bold pt-1 pb-2">
           <strong> Are you a current student 🧑‍🎓 or alumni 🎓 ?</strong>
         </h1>
-        <img src={currentStudents} alt="roadmap" />
+        <img src={currentStudents} alt="roadmap"  className="w-full md:w-1/2 h-auto md:h-1/4"  />
         <li>
           <strong></strong>
           <ul className="list-inside space-y-1 mt-1">
@@ -150,7 +149,7 @@ let Actual = () => (
 
   <Card className="mb-1 !">
     <CardContent className="p-0 relative flex-column text-center">
-      <img src={ExploreUniversities} alt="roadmap" />
+      <img src={ExploreUniversities} alt="roadmap"   className="w-full md:w-1/2 h-auto md:h-1/4" />
       <div className="absolute w-full bottom-20  -right-7">
         <br />
         <div className="flex gap-4 w-full pr-28 justify-start ">
@@ -298,15 +297,11 @@ let Actual = () => (
       </div>
     </IonCardContent>
   </IonCard> */}
-</Content>
+</div>
 )
   export const  LandingPageTemplate = () => {
     return (
-        // Actual()
-
-        <IonContent>
-          Test this pe
-        </IonContent>
+        Actual()
     
     )
   }

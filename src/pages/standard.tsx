@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonItem, IonAvatar, IonLabel } from '@ionic/react';
+import {  IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonItem, IonAvatar, IonLabel } from '@ionic/react';
 import Layout from './layout';
 
 const HomePage: React.FC = () => {

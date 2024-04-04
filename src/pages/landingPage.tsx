@@ -15,30 +15,7 @@ export default function LandingPage() {
     { title: 'Item 2', description: 'Description for item 2' },
     // Add more items here
   ];
- 
-  const mainContent = (
-    <IonContent>
-     <IonCard>
-       <IonCardHeader>Test</IonCardHeader>
-       <IonCardContent>
-         This is the main content area.
-       </IonCardContent>
-     </IonCard>
-      <IonList>
-       {items.map((item, index) => (
-         <IonItem key={index}>
-           <IonAvatar slot="start">
-             <img src={`https://placekitten.com/200/200?image=${index}`} alt="avatar"/>
-           </IonAvatar>
-           <IonLabel>
-             <h2>{item.title}</h2>
-             <p>{item.description}</p>
-           </IonLabel>
-         </IonItem>
-       ))}
-     </IonList>
-    </IonContent>
-   );
+
 
 
   const leftSidebar = (
@@ -104,7 +81,7 @@ export default function LandingPage() {
   return (
     <Layout
     leftSidebar={leftSidebar}
-    mainContent={mainContent}
+    mainContent={<LandingPageTemplate/>}
     rightSidebar={rightSidebar}
   />
   )  

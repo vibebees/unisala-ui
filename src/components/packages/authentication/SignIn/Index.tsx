@@ -1,3 +1,4 @@
+import React from "react"
 import GoogleAuth from "../GoogleAuth"
 import SignInForm from "./SignInForm"
 import AppleAuth from "../AppleAuth"

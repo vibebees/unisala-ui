@@ -1,16 +1,16 @@
 import {useMutation} from "@apollo/client"
 import {IonButton, IonCard, useIonToast} from "@ionic/react"
 import clsx from "clsx"
-import {EditProfile, getUserGql} from "graphql/user"
-import jwtDecode from "jwt-decode"
+import {jwtDecode} from "jwt-decode"
 import {useContext, useState} from "react"
 import {useDispatch, useSelector} from "react-redux"
 import {useHistory} from "react-router"
-import {USER_SERVICE_GQL} from "servers/types"
-import {WelcomeData} from ".."
-import {getUserProfile} from "../../../../store/action/userProfile"
-import { getCache, removeCache } from "../../../../../utils/cache"
+ import {WelcomeData} from ".."
+ import { getCache, removeCache } from "../../../../../utils/cache"
+ import { USER_SERVICE_GQL } from "../../../../../datasource/servers/types"
+import { EditProfile , getUserGql} from "../../../../../datasource/graphql/user"
 
+const getUserProfile = (data) => { }
 const StepsButtons = ({ allProps }) => {
   const { welcomeFormdata } = useContext(WelcomeData),
     dispatch = useDispatch(),

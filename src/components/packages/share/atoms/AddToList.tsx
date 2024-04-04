@@ -1,16 +1,13 @@
 import React from "react"
 import { receiptOutline, addOutline } from "ionicons/icons"
 import {
- Icon,
- Item,
- Label,
- ActionSheet,
+  Item,
   useIonToast,
   Modal
 } from "../../../defaults"
 import { authInstance } from "../../../../datasource/api/axiosInstance"
 import { userServer } from "../../../../datasource/servers/endpoints"
-import CreateListModal from "component/List/atoms/CreateListModal"
+import CreateListModal from "../../list/atoms/CreateListModal"
 import { useSelector } from "react-redux"
 
 

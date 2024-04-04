@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
 import SingleList from "../atoms/SingleList"
-import { authInstance } from "api/axiosInstance"
-import { userServer } from "servers/endpoints"
+import { authInstance } from "../../../../datasource/api/axiosInstance"
+import { userServer } from "../../../../datasource/servers/endpoints"
 import { ListContext } from ".."
 
 const ListContainer = () => {

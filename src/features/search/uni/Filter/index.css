@@ -1,0 +1,75 @@
+.search-control {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+.search-control__label {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: black !important;
+}
+
+.select-placeholder {
+  opacity: 1 !important;
+}
+
+
+
+.field {
+  display: inline-flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.search-field__indented {
+  margin-left: 1rem;
+}
+
+.select-field {
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+ion-radio::part(container) {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+ion-radio::part(mark) {
+  background: none;
+  transition: none;
+  transform: none;
+  border-radius: 0;
+}
+
+ion-radio.radio-checked::part(container) {
+  background: #6815ec;
+  border-color: transparent;
+}
+
+ion-radio.radio-checked::part(mark) {
+  width: 6px;
+  height: 10px;
+
+  border-width: 0px 2px 2px 0px;
+  border-style: solid;
+  border-color: #fff;
+
+  transform: rotate(45deg);
+}
+
+ion-select {
+  margin-top: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  ion-text {
+    font-size: 14px;
+  }
+}

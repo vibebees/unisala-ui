@@ -8,9 +8,9 @@ import {
   useIonToast,
   IonSpinner
 } from "@ionic/react"
-import { userServer } from "servers/endpoints"
-import { authInstance } from "api/axiosInstance"
-import { ListContext } from "component/List/index"
+import { userServer } from "../../../../datasource/servers/endpoints"
+import { authInstance } from "../../../../datasource/api/axiosInstance"
+import { ListContext } from "../../list"
 
 const CreateListModal = ({ editList = false, list = {} }) => {
   const { setLists, lists } = useContext(ListContext)

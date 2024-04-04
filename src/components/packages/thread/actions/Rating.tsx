@@ -1,5 +1,5 @@
 import React from "react"
-import CircleRating from "component/circleRating"
+import CircleRating from "../../circleRating"
 
 const Rating = ({ label, rating = null }) => {
   if (!rating) return null

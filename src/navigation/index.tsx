@@ -11,6 +11,7 @@ import Tab3 from '../pages2/Tab3';
 import { PageRoute } from './PageRoute';
 import { ExploreIcon, HomeIcon, PeopleIcon, MessageIcon } from '../components/packages/icons';
  import { SearchBar } from '../components/packages/searchBox';
+import { authenticated } from '../utils/cache';
 
 // Define props if you have any for NavBar, for example:
 interface NavBarProps {
@@ -31,6 +32,7 @@ const SearchBar = () => {
     )
 }
 export const NavBar: React.FC<NavBarProps> = () => {
+    let profileLink = authenticated ? "/@/prashantbasnet94" : "/profile";
     const navigation = [
         {
             name: "Home",
@@ -56,7 +58,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         {
             name: "Profile",
             Icon: PeopleIcon,
-            link: "/profile"
+            link: profileLink
         }
     ]
     // find current user path

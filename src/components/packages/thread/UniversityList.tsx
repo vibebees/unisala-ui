@@ -5,7 +5,7 @@ import { arrowBackOutline } from "ionicons/icons"
 import { authInstance } from "api/axiosInstance"
 import { useDebouncedEffect } from "hooks/useDebouncedEffect"
 import SearchLoadingSkeleton from "component/authentication/Welcome/atom/SearchLoadingSkeleton"
-import ImageWithLoader from "component/Reusable/Image/ImageWithLoader"
+import ImageWithLoader from "../reusable/Image/ImageWithLoader"
 import NoImageFound from "assets/no_image_found.png"
 const UniversityList = ({
   handleUniversitySelect,

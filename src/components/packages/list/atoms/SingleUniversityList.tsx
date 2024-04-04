@@ -1,5 +1,5 @@
 import React from "react"
-import ImageWithLoader from "component/Reusable/Image/ImageWithLoader"
+import ImageWithLoader from "../../reusable/Image/ImageWithLoader"
 import {
   IonCard,
   IonCol,
@@ -11,8 +11,8 @@ import {
   useIonToast
 } from "@ionic/react"
 import { location, closeOutline } from "ionicons/icons"
-import { authInstance } from "api/axiosInstance"
-import { userServer } from "servers/endpoints"
+import { authInstance } from "../../../../datasource/api/axiosInstance"
+import { userServer } from "../../../../datasource/servers/endpoints"
 import { useHistory, useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 

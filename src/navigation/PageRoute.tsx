@@ -79,11 +79,19 @@ export const PageRoute = ({ allProps }) => (
       </Route>
       {/* Protected routes example */}
       <Route path="/profile">
-        {authenticated ? <ProfilePage /> : <Redirect to="/" />}
+        {authenticated
+          ? <ProfilePage />
+          : <AuthPage allProps={{ ...allProps, routeState: "signin" }} />}
       </Route>
       <Route path="/standard">
           <Standard />
       </Route>
+
+      <Route path="/@/:username" exact>
+        <ProfilePage />
+      </Route>
+
+
       {/* More routes */}
       {/* Fallback route for 404 Not Found */}
       <Route path="*">

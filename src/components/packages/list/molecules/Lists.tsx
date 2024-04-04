@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import SingleUniversityList from "../atoms/SingleUniversityList"
-import { authInstance } from "api/axiosInstance"
-import { userServer } from "servers/endpoints"
-import { URLgetter } from "utils/lib/URLupdate"
+import { authInstance } from "../../../../datasource/api/axiosInstance"
+import { userServer } from "../../../../datasource/servers/endpoints"
+import { URLgetter } from "../../../../utils/lib/URLupdate"
 
 const Lists = () => {
   const id = URLgetter("id")

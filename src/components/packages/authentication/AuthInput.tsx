@@ -1,9 +1,10 @@
+import React from "react"
 import "./auth.css"
 
 export const AuthInput = ({
   type,
   name,
-  value,
+  value ="",
   HandleChange,
   validation,
   disabled = false

@@ -1,8 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
-import ImageWithLoader from "component/Reusable/Image/ImageWithLoader"
-import FullScreenImage from "component/Reusable/Image/FullScreenImage"
 
 const ThreadImages = ({ images, _id }) => {
   const slideOpts = {

@@ -1,5 +1,5 @@
 import React from "react"
-import ImageWithLoader from "component/Reusable/Image/ImageWithLoader"
+import ImageWithLoader from "../../reusable/Image/ImageWithLoader"
 import { IonCard, IonText, IonCol, IonRow } from "@ionic/react"
 import ActionButton from "./ActionButton"
 import { URLupdate } from "utils/lib/URLupdate"

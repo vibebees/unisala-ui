@@ -25,7 +25,7 @@ import { LikeATag } from "../../../components/packages/tags"
 import Modal from "../../../components/packages/reusable/modal"
 import { DetailItem } from "../../../components/packages/folderStructure/molecules/detailItem"
 import { Table } from "../../../components/packages/folderStructure/molecules/table"
-// import IonWebPop from "features/university/sideDetails/visitWebsite/IonWebPop"
+import IonWebPop from "../../university/sideDetails/visitWebsite/IonWebPop"
 const IonWebPop = () => {<></>}
 const ScholarshipCard = ({
   pictures = [],

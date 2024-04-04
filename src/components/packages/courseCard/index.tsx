@@ -19,7 +19,7 @@ import CardImage from "./atom/CardImage"
 import ShareButton from "../share/index"
 // import CustomTrackingLink from "features/analytics/LinkTrack"
 import clsx from "clsx"
-
+const CustomTrackingLink = ({ title, to, destination, children }) => { }
 function CardActions({ allProps }) {
   const { showSave = false, showShare = false } = allProps
 

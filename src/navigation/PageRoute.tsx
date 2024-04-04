@@ -17,7 +17,7 @@ const DiscoverUni = lazy(() => import("../pages/discoverUni"))
 const SpacePage = lazy(() => import("../pages/space"))
 const Org = lazy(() => import("../pages/org"))
 
-// const UniversityPage = lazy(() => import("../features/university/index"))
+const UniversityPage = lazy(() => import("../pages/university"))
 const AuthPage = lazy(() => import("../pages/auth"))
 const StudyAbroadRoadmap = lazy(() => import("../pages/roadmap"))
 
@@ -71,6 +71,13 @@ const orgRoutes = () => (
   </>
 )
 
+const universityRoutes = () => (
+<>
+      <Route exact path="/university/:id">
+        <UniversityPage />
+      </Route>
+    </>
+)
 export const PageRoute = ({ allProps }) => (
   <Suspense fallback={<PreLoader />}>
     <Switch>
@@ -98,6 +105,9 @@ export const PageRoute = ({ allProps }) => (
         <DiscoverUni />
       </Route>
 
+      <Route exact path="/university/:id">
+        <UniversityPage />
+      </Route>
 
       {/* More routes */}
       {/* Fallback route for 404 Not Found */}

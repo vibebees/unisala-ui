@@ -1,7 +1,6 @@
 import React from "react"
-// import University from "features/university/index"
-const UniversityPage = () => {
-    // <University />
-    <>University</>
-}
+import University from "../features/university"
+const UniversityPage = () => (
+    <University />
+)
 export default UniversityPage

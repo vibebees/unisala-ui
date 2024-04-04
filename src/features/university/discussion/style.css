@@ -1,0 +1,11 @@
+/* Define wider width for larger screens */
+@media (min-width: 768px) {
+    .editor-school-review {
+       max-width: 800px;
+      height: 200px; /* Remove quotes and adjust the height as needed */
+      overflow-y: auto; /* Remove quotes */
+      width: 100%; /* Remove quotes */
+      margin: 0 auto; /* Remove quotes */
+    }
+  }
+  

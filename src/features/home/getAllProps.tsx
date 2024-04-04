@@ -15,11 +15,10 @@ import {
 } from "ionicons/icons"
 import { useQuery } from "@apollo/client"
 import { useHistory, useLocation } from "react-router"
-import ProfilePop from "components/packages/profilePop"
+import ProfilePop from "../../components/packages/profilePop"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { GetTopActiveSpaces, GetTopOrgs } from "../../datasource/graphql/user"
-import useWindowWidth from "../../hooks/useWindowWidth"
-import { getCache } from "../../utils/cache"
+ import { getCache } from "../../utils/cache"
 const unisalaImg = ""
 export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
   const [activeProfile, setActiveProfile] = useState({ profile: false }),
@@ -35,15 +34,7 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     { getTopActiveSpaces } = topSpaceData || {},
     { getTopOrgSpace } = topOrgData || {},
     views = {
-      greaterThan1000: screenGreaterThan1000(),
-      greaterThan768: screensMoreThan768({
-        activeTab,
-        setActiveTab,
-        unisalaImg,
-        loggedIn,
-        topSpaces: getTopActiveSpaces?.spaceCategory,
-        topOrgs: getTopOrgSpace
-      }),
+
       lessThan768: screenLessThan768({
         setActiveProfile,
         personCircle,
@@ -57,7 +48,7 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     [createAPostPopUp, setCreateAPostPopUp] = useState(false),
     [verfiyAPostPopUp, setVerifyAPostPopUp] = useState(false),
     [page, setPage] = useState(0),
-    width = useWindowWidth(),
+    width = window.innerWidth,
     history = useHistory(),
     location = useLocation(),
     [unitId, setUnitId] = useState(

@@ -57,8 +57,7 @@ export const Home = ({ allProps }) => {
   }, [schoolData])
 
   const renderLoggedInView = () => (
-    <>
-      <div className="mx-12 max-md:mx-2 max-lg:mx-5">
+      <div >
         <CreateAPostCard allProps={allProps} />
         <FolderStructure
           allProps={{
@@ -69,19 +68,8 @@ export const Home = ({ allProps }) => {
             customHeight: false
           }}
         />
-
-        {/* <Card className=" mt-4 ion-no-padding ion-no-margin">
-          <ScrollableCard
-            allProps={{
-              data: discoverUni,
-              className: "similarschoolss"
-            }}
-          />
-        </Card> */}
-
         <InfiniteFeed userInfo={user} allProps={allProps} feedType="newsfeed" />
       </div>
-    </>
   )
 
   const renderNewUserView = React.useCallback(() => {
@@ -92,7 +80,7 @@ export const Home = ({ allProps }) => {
   }, [loggedIn, newUser])
 
   return (
-    <Content color="light">
+    <>
       <FloatingButton />
       {width < 768 && views.lessThan768}
       <Grid
@@ -121,6 +109,6 @@ export const Home = ({ allProps }) => {
           {renderNewUserView()}
         </Row>
       </Grid>
-    </Content>
+    </>
   )
 }

@@ -21,6 +21,7 @@ import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { fetchFamousUniversities } from "../../datasource/graphql/user"
 // import CustomTrackingLink from "features/analytics/LinkTrack"
 import ImageWithLoader from "../../components/packages/reusable/Image/ImageWithLoader"
+import { IonIcon } from "@ionic/react"
 // import TopOrgs from "../../features/org/TopOrgs"
 
 const TopOrgs = () => { }

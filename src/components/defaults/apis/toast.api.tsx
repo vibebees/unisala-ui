@@ -16,4 +16,4 @@ function useCustomToast() {
   return showToast;
 }
 
-export default useCustomToast;
+export default useIonToast

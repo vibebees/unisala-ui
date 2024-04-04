@@ -17,7 +17,7 @@ import UserCtaBtns from "./userCtaBtns/UserCtaBtns"
 import "./index.css"
 import { useEffect, useState } from "react"
 import { getImage } from "../../../datasource/servers/s3.configs"
-import { Avatar } from "../../../components/defaults"
+import { AvatarProfile } from "../../../components/packages/Avatar"
 
 const ProfileHeader = ({ tab, setTab, data }) => {
   const [coverImage, setCoverImage] = useState("")
@@ -81,7 +81,7 @@ const ProfileHeader = ({ tab, setTab, data }) => {
         </div>
 
         <div className="user-profile">
-          <Avatar profilePic={profilePic} username={username} />
+          <AvatarProfile profilePic={profilePic} username={username} />
           <div className="border-[7px] border-neutral-300  absolute left-0 top-0 bottom-0  right-0 rounded-full z-10" />
           <svg
             xmlns="http://www.w3.org/2000/svg"

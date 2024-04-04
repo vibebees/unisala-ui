@@ -1,9 +1,9 @@
 import {useEffect, useMemo, useState} from "react"
 import {createAvatar} from "@dicebear/core"
 import {thumbs} from "@dicebear/collection"
-import {getImage} from "servers/s3.configs"
+import {getImage} from "../../datasource/servers/s3.configs"
 
-export function Avatar({profilePic, username = "anon"}) {
+export function AvatarProfile ({profilePic, username = "anon"}) {
   const [profileImage, setProfileImage] = useState()
 
   useEffect(() => {

@@ -61,12 +61,12 @@ function Save({ postId, saved, thread }) {
   })
 
   return (
-    <IonButtons
+    <Buttons
       className="post-button"
       onClick={save}
       style={{ cursor: "pointer" }}
     >
-      <IonIcon
+      <Icon
         color={saved ? "secondary" : "medium"}
         style={{
           margin: "0px"
@@ -74,7 +74,7 @@ function Save({ postId, saved, thread }) {
         className="text-2xl max-md:text-lg"
         icon={bookmark}
       />
-    </IonButtons>
+    </Buttons>
   )
 }
 

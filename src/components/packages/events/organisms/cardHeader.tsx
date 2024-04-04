@@ -4,7 +4,7 @@ import {
   IonCardTitle,
   IonIcon
 } from "@ionic/react"
-import ShareButton from "component/Share/atoms/ShareButton"
+import ShareButton from "../../share/atoms/ShareButton"
 import { calendarOutline } from "ionicons/icons"
 
 export const EventCardHeader = ({ event, data }) => {

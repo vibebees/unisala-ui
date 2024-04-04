@@ -80,10 +80,10 @@ import { CustomWrapper } from './wrapper';
 import { forwardRef } from 'react';
 import { cn } from '../../utils';
 import useCustomToast from './apis/toast.api';
-
+import { AvatarProfile } from '../packages/Avatar';
 // Wrap and export Ionic components
 export const Alert = CustomWrapper(IonAlert);
-export const Avatar = CustomWrapper(IonAvatar);
+export const Avatar = AvatarProfile
 export const BackButton = CustomWrapper(IonBackButton);
 export const Badge = CustomWrapper(IonBadge);
 export const Button = CustomWrapper(IonButton);

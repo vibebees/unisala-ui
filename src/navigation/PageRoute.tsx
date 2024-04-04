@@ -7,7 +7,7 @@ import { authenticated } from "../utils/cache"
 
 // import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
 
-const ProfilePage = lazy(() => import("../pages/user.profile"))
+const ProfilePage = lazy(() => import("../pages/userProfile"))
 const Messages = lazy(() => import("../pages/message"))
 const MyNetwork = lazy(() => import("../pages/network"))
 const Notifications = lazy(() => import("../pages/notification"))
@@ -27,6 +27,9 @@ const ThreadDetail = lazy(() => import("../pages/thread.detail"))
 const PageNotFound= lazy(() => import("./PageNotFound"))
 const LandingPage = lazy(() => import("../pages/landingPage"))
 const Standard = lazy(() => import("../pages/standard"))
+const HomePage = lazy(() => import("../pages/home"))
+
+
 const messagingRoutes = () => (
   <>
     <ProtectedRoute>
@@ -75,7 +78,7 @@ export const PageRoute = ({ allProps }) => (
         {authenticated ? <Redirect to="/feed" /> : <LandingPage />}
       </Route>
       <Route path="/feed">
-        {authenticated ? <FeedPage /> : <Redirect to="/" />}
+        {authenticated ? <HomePage /> : <Redirect to="/" />}
       </Route>
       {/* Protected routes example */}
       <Route path="/profile">

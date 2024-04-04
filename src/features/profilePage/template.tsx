@@ -2,7 +2,6 @@ import React from "react"
 import { useEffect, useState } from "react"
 import { useHistory, useLocation, useParams } from "react-router"
 import {
-  Content,
   Grid,
   Row,
   Col,
@@ -137,7 +136,7 @@ const ProfilePage = () => {
 
   if (!getUser?.user) {
     return (
-      <Content>
+      <>
         <Card
           style={{ textAlign: "center", marginInline: "auto" }}
           className="max-width-container "
@@ -153,12 +152,12 @@ const ProfilePage = () => {
             </CardSubtitle>
           </CardHeader>
         </Card>
-      </Content>
+      </>
     )
   }
 
   return (
-    <Content>
+    <>
       <Grid className="max-width-container max-md:px-0">
         <Row>
 
@@ -176,7 +175,7 @@ const ProfilePage = () => {
           {/* {windowWidth >= 1000 && views.greaterThan100} */}
         </Row>
       </Grid>
-    </Content>
+    </>
   )
 }
 

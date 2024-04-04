@@ -56,7 +56,7 @@ export const Home = ({ allProps }) => {
     setUserGuide(generatedUserGuide)
   }, [schoolData])
 
-  const renderLoggedInView = () => (
+  const Feed = () => (
       <div >
         <CreateAPostCard allProps={allProps} />
         <FolderStructure
@@ -82,33 +82,8 @@ export const Home = ({ allProps }) => {
   return (
     <>
       <FloatingButton />
-      {width < 768 && views.lessThan768}
-      <Grid
-        style={{
-          margin: "auto"
-        }}
-        className="max-md:px-0"
-      >
-        <Row
-          style={{ justifyContent: "flex-start", margin: "0 auto" }}
-          className="max-width-container"
-        >
-          {width > 768 && views.greaterThan768}
-          <Col
-            style={{
-              maxWidth: "900px",
-              margin: "auto",
-
-              overflow: "hidden"
-            }}
-            className="max-md:px-0 "
-          >
-           {renderLoggedInView()}
-          </Col>
-          {width > 1000 && views.greaterThan1000}
-          {renderNewUserView()}
-        </Row>
-      </Grid>
+      {renderNewUserView()}
+      {Feed()}
     </>
   )
 }

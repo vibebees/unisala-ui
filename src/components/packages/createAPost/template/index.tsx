@@ -1,5 +1,6 @@
 import axios from "axios"
-import { Card, Modal } from "../../../defaults/index"
+import { Card } from "../../../defaults/index"
+
 import {usePathName} from "../../../../hooks/usePathname"
 import {useEffect, useState} from "react"
 import {useSelector} from "react-redux"
@@ -8,6 +9,7 @@ import {userServer} from "../../../../datasource/servers/endpoints"
 import {PostCardForClick} from "../organisim/PostCardForClick"
 import {PostModalOnClick} from "../organisim/PostModalOnClick"
 import { getCache, setCache } from "../../../../utils/cache"
+import { CreateAPostModal } from "../molecules/modal"
 const CreateAPostCard = ({ allProps }) => {
   const { user } = useSelector((state) => state.userProfile)
   const { setCreateAPostPopUp } = allProps
@@ -67,7 +69,7 @@ const CreateAPostCard = ({ allProps }) => {
         }}
         className="ion-no-margin ion-no-padding"
       >
-        <Modal
+        <CreateAPostModal
           ModalData={<PostModalOnClick allProps={allProps} metaData={meta} />}
           ModalButton={<PostCardForClick allProps={{ ...allProps, user }} />}
           header="Create a Post"

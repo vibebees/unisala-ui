@@ -153,10 +153,10 @@ function ReplyInput({
          "
         >
           <ThreadHeader
-            firstName={user.firstName}
-            username={user.username}
-            lastName={user.lastName}
-            profilePic={user.profilePic}
+            firstName={user?.firstName}
+            username={user?.username}
+            lastName={user?.lastName}
+            profilePic={user?.profilePic}
           />
         </div>
 

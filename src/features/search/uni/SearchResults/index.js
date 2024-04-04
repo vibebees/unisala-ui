@@ -8,11 +8,11 @@ import {
 } from "@ionic/react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import CourseCard from "component/courseCard"
-import noResultsFound from "assets/no-results.jpg"
+import CourseCard from "../../../../components/packages/courseCard"
+import noResultsFound from "../../../../assets/no-results.jpg"
 import "./index.css"
-import CustomTrackingLink from "features/analytics/LinkTrack"
-import { FeedSkeleton } from "component/skeleton/feedSkeleton"
+// import CustomTrackingLink from "features/analytics/LinkTrack"
+import { FeedSkeleton } from "../../../../components/packages/skeleton/feedSkeleton"
 
 const NoResultCard = () => {
   return (<IonCard style={{textAlign: "center"}}>

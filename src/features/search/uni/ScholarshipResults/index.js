@@ -1,13 +1,13 @@
 /* eslint-disable complexity */
 import React, { useEffect, useState } from "react"
 import ScholarshipCard from "features/search/atoms/ScholarshipCard"
-import { UNIVERSITY_SERVICE_GQL } from "servers/types"
-import { ScholarshipResults } from "graphql/uni"
+import { UNIVERSITY_SERVICE_GQL } from "../../../../datasource/servers/types"
+import { ScholarshipResults } from "../../../../datasource/graphql/uni"
 import { useQuery, useLazyQuery } from "@apollo/client"
-import { URLgetter } from "utils/lib/URLupdate"
+import { URLgetter } from "../../../../utils/lib/URLupdate"
 import { useHistory } from "react-router-dom"
 import { IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react"
-import { FeedSkeleton } from "component/skeleton/feedSkeleton"
+import {FeedSkeleton} from "../../../../components/packages/skeleton/feedSkeleton"
 
 const dummyScholarship = {
   university: "University of Arkansas at Little Rock",

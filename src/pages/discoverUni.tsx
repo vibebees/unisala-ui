@@ -1,6 +1,6 @@
 import React from "react"
-// import SearchPage from "../features/search/index.js"
+import SearchPage from "../features/search/index.js"
 const DiscoverPage = () => {
-    return <>SearchPage </>
+    return <SearchPage/>
 }
 export default DiscoverPage

@@ -13,7 +13,7 @@ import {
   IonButton,
   IonList
 } from "@ionic/react"
-import CardImage from "component/courseCard/atom/CardImage"
+import CardImage from "../../../components/packages/courseCard/atom/CardImage"
 import {
   schoolOutline,
   starOutline,
@@ -21,12 +21,12 @@ import {
   receiptOutline
 } from "ionicons/icons"
 import ScholarshipText from "./ScholarshipText"
-import { LikeATag } from "component/tags"
-import Modal from "component/Reusable/Modal"
-import { DetailItem } from "component/folderStructure/molecules/detailItem"
-import { Table } from "component/folderStructure/molecules/table"
-import IonWebPop from "features/university/sideDetails/visitWebsite/IonWebPop"
-
+import { LikeATag } from "../../../components/packages/tags"
+import Modal from "../../../components/packages/reusable/modal"
+import { DetailItem } from "../../../components/packages/folderStructure/molecules/detailItem"
+import { Table } from "../../../components/packages/folderStructure/molecules/table"
+// import IonWebPop from "features/university/sideDetails/visitWebsite/IonWebPop"
+const IonWebPop = () => {<></>}
 const ScholarshipCard = ({
   pictures = [],
   university_name = "",

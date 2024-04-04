@@ -5,10 +5,10 @@ import {
   IonCardSubtitle
 } from "@ionic/react"
 import { useQuery } from "@apollo/client"
-import { userSearch } from "graphql/user"
-import UserCard from "component/userCard"
-import noResultsFound from "assets/no-results.jpg"
-import { USER_SERVICE_GQL } from "servers/types"
+import { userSearch } from "../../../../datasource/graphql/user"
+import UserCard from "../../../../components/packages/userCard"
+import noResultsFound from "../../../../assets/no-results.jpg"
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 
 function index({ query }) {
   const { data } = useQuery(userSearch(query), {

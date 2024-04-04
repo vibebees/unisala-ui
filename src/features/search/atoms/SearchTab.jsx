@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { IonCard, IonCardContent, IonText } from "@ionic/react"
 import { useHistory } from "react-router"
 import { URLgetter, URLupdate } from "utils/lib/URLupdate"
-import { ButtonTrack } from "features/analytics/ButtonTrack"
+// import { ButtonTrack } from "features/analytics/ButtonTrack"
 
 const SearchTab = () => {
   const [tab, setTab] = useState("all")
@@ -60,7 +60,7 @@ const SearchTab = () => {
                 onClick={() => {
                   const urldata = URLupdate("tab", t.value)
                   history.push({ search: urldata })
-                  ButtonTrack(`${t.value} search tab clicked`)
+                  // ButtonTrack(`${t.value} search tab clicked`)
                 }}
                 className="max-md:text-xs"
                 style={{

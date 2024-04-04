@@ -3,11 +3,11 @@ import { IonButton, IonCard, IonCardContent, IonCol, IonIcon, IonLabel, IonRow }
 import "./index.css"
 import { useEffect, useLayoutEffect, useState, useRef, useContext } from "react"
 import { useLazyQuery } from "@apollo/client"
-import { UNIVERSITY_SERVICE_GQL } from "servers/types"
-import { UniFilterResults } from "graphql/uni"
-import { searchGetSuccess } from "store/action"
+import { UNIVERSITY_SERVICE_GQL } from "../../../../datasource/servers/types"
+import { UniFilterResults } from "../../../../datasource/graphql/uni"
+import { searchGetSuccess } from "../../../../datasource/store/action"
 import { useDispatch } from "react-redux"
-import { statesArray } from "utils/lib/states"
+import { statesArray } from "../../../../utils/lib/states"
 import axios from "axios"
 import RadioGroup from "features/search/atoms/RadioGroup"
 import RangeSelect from "features/search/atoms/RangeSelect"
@@ -21,9 +21,8 @@ import {
   SAT_SCORES,
   TUITION
 } from "./constants"
-import { universityServer } from "servers/endpoints"
-import { URLgetter, URLupdate } from "utils/lib/URLupdate"
-import { useDebouncedEffect } from "hooks/useDebouncedEffect"
+import { universityServer } from "../../../../datasource/servers/endpoints"
+import { URLgetter, URLupdate } from "../../../../utils/lib/URLupdate"
 import {search} from "ionicons/icons"
 import {ExploreFilterPopupContext} from "../ExploreUniFilterPopupContext"
 

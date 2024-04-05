@@ -1,7 +1,7 @@
 import React from "react"
 import SingleStatCard from "../molecules/SingleStatCard"
 import { IonCardContent } from "@ionic/react"
-import Typography from "component/ui/Typography"
+import {Typography} from "../../../defaults"
 
 const StatCard = ({ allProps }) => {
   const { data, label, containerStyle, CardStyle } = allProps

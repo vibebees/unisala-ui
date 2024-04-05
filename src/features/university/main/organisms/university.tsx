@@ -22,7 +22,7 @@ export const UniversityBuild = ({ allProps }) => {
     })
   }
   return (
-    <IonContent>
+    <>
       <section
         ref={app}
         onScroll={() => {
@@ -59,6 +59,6 @@ export const UniversityBuild = ({ allProps }) => {
           )}
         </div>
       </section>
-    </IonContent>
+    </>
   )
 }

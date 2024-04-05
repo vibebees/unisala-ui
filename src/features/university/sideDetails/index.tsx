@@ -20,7 +20,7 @@ import {
   schoolOutline,
   thumbsUpOutline
 } from "ionicons/icons"
-import React from "react"
+import React, { useEffect } from "react"
 
 import StatCardTemplate from "../dataStatCard/template/StatCardTemplate"
 import StatCardTemplateTwo from "../dataStatCard/template/StatCardTemplateTwo"
@@ -37,6 +37,7 @@ import { DepartmentRating } from "./departmentRatings"
 import Statstics from "./statistics"
 import StudentCharges from "./studentCharges"
 import VisitWebsite from "./visitWebsite"
+import { useLocation } from "react-router"
 
 const SideDetails = ({
   activeTab,
@@ -126,72 +127,27 @@ const SideDetails = ({
       setWidth(innerWidth)
     }
   }
+  const location = useLocation();
 
-  React.useEffect(() => {
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const section = queryParams.get('section');
+    if (section) {
+      const sectionElement = document.getElementById(section);
+      if (sectionElement) {
+        sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
-  })
+  }, [location]);
 
   return (
-    <IonGrid className={width > 719 ? "ion-padding" : ""}>
-      <IonCol
-        className=""
-        style={{
-          display: "flex"
-        }}
-      >
-        {width > 720 && (
-          <IonRow className="block" style={{ flexShrink: 0, height: "auto" }}>
-            <IonCard
-              style={{
-                position: "sticky",
-                top: "70px"
+    <IonGrid >
 
-                // minWidth: "20vw"
-              }}
-            >
-              <IonList>
-                {sideMenu.map((item, i) => {
-                  return (
-                    item.title && (
-                      <IonItem
-                        style={{
-                          cursor: "pointer"
-                        }}
-                        onClick={() => {
-                          forwardedRef.app.current.scrollTo(
-                            0,
-                            forwardedRef[item.ref].current.offsetTop +
-                              forwardedRef.profile.current.clientHeight
-                          )
-                        }}
-                        key={i}
-                      >
-                        <IonIcon
-                          color={activeTab === i ? "primary" : "medium"}
-                          icon={item.icon}
-                        />
-                        <IonLabel
-                          color={activeTab === i ? "primary" : "dark"}
-                          className="ion-margin-start"
-                        >
-                          <h2>{item.title}</h2>
-                        </IonLabel>
-                      </IonItem>
-                    )
-                  )
-                })}
-              </IonList>
-            </IonCard>
-          </IonRow>
-        )}
         <IonRow
           className="w-[calc(100%-270px)] block"
           style={{ flex: 1, margin: 0 }}
         >
-          <section ref={forwardedRef.scholarship}>
+          <section ref={forwardedRef.scholarship} id="scholarship">
             <FolderStructure
               allProps={{
                 folderName: "Scholarships",
@@ -201,14 +157,15 @@ const SideDetails = ({
               }}
             />
           </section>
-          <section ref={forwardedRef.studentCharges}>
+          <section ref={forwardedRef.studentCharges} id="studentCharges">
             <StudentCharges />
           </section>
 
-          <section>
+          <section id="departmentRatings">
             <DepartmentRating ratings={uniData?.departmentRatings} />
           </section>
-          <section ref={forwardedRef.admission}>
+
+          <section ref={forwardedRef.admission} id="admission">
             <StatCardTemplate
               allProps={{
                 data: uniData?.admissionInfo,
@@ -217,7 +174,7 @@ const SideDetails = ({
             />
           </section>
 
-          <section ref={forwardedRef.financialAid}>
+          <section ref={forwardedRef.financialAid} id = "financialAid">
             <RectangularCard
               allProps={{
                 data: uniData?.financialAid,
@@ -226,11 +183,11 @@ const SideDetails = ({
             />
           </section>
 
-          <section ref={forwardedRef.statistics}>
+          <section ref={forwardedRef.statistics} id ="statistics">
             <Statstics />
           </section>
 
-          <section ref={forwardedRef.libraries}>
+          <section ref={forwardedRef.libraries} id="libraries">
             <StatCardTemplateTwo
               allProps={{
                 data: uniData.elevatorInfo.library,
@@ -239,35 +196,35 @@ const SideDetails = ({
             />
           </section>
 
-          <section ref={forwardedRef.testScore}>
+          <section ref={forwardedRef.testScore} id = "testScore">
             <CardWithCircularGrid
               dataSource={uniData?.testScore}
               parentProps={allProps}
             />
           </section>
 
-          <section ref={forwardedRef.website}>
+          <section ref={forwardedRef.website} id ="website">
             <VisitWebsite />
           </section>
-          <section ref={forwardedRef.Professors}>
+          <section ref={forwardedRef.Professors} id ="Professors">
             <Professors allProps={uniData?.professors} />
           </section>
-          <section ref={forwardedRef.similarCollages}>
+          <section ref={forwardedRef.similarCollages} id="similarCollages">
             <ImageCard
               allProps={{
                 data: uniData?.similarSchools,
                 header: "Similar Collages"
               }}
             />
-          </section>
+          </section>1
 
-          <section ref={forwardedRef.report}>
+          <section ref={forwardedRef.report} id ="report">
             <ReportCard
               dataSource={uniData.userEvaluation.report}
               parentProps={allProps}
             />
           </section>
-          <section ref={forwardedRef.campusLife}>
+          <section ref={forwardedRef.campusLife} id="campusLife">
             <PollCard
               dataSource={uniData.userEvaluation.reviews}
               parentProps={allProps}
@@ -280,11 +237,10 @@ const SideDetails = ({
           {/* <section ref={forwardedRef.Interview}>
             <Discussion unitId={unitId} />
           </section> */}
-          <section ref={forwardedRef.Interview}>
+          <section ref={forwardedRef.Interview} id= "interviewExperience">
             <Interview unitId={uniData?.elevatorInfo?.unitId} />
           </section>
         </IonRow>
-      </IonCol>
     </IonGrid>
   )
 }

@@ -32,7 +32,7 @@ const SearchBar = () => {
     )
 }
 export const NavBar: React.FC<NavBarProps> = () => {
-    let profileLink = authenticated ? "/@/prashantbasnet94" : "/profile";
+    let profileLink = authenticated ? "/@/prashantbasnet17" : "/profile";
     const navigation = [
         {
             name: "Home",

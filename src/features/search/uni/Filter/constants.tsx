@@ -160,3 +160,4 @@ export const INITIAL_QUERY_DATA = {
   undergraduateOffCampusNotWithFamilyInStateCostOfAttendance: null,
   undergraduateOffCampusNotWithFamilyOutOfStateCostOfAttendance: null
 }
+

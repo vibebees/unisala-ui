@@ -4,14 +4,13 @@ import "./index.css"
 import { useEffect, useLayoutEffect, useState, useRef, useContext } from "react"
 import { useLazyQuery } from "@apollo/client"
 import { UNIVERSITY_SERVICE_GQL } from "../../../../datasource/servers/types"
-import { UniFilterResults } from "../../../../datasource/graphql/uni"
 import { searchGetSuccess } from "../../../../datasource/store/action"
 import { useDispatch } from "react-redux"
 import { statesArray } from "../../../../utils/lib/states"
 import axios from "axios"
-import RadioGroup from "../../../search/atoms/RadioGroup"
-import RangeSelect from "../../../search/atoms/RangeSelect"
-import MulitiSelect from "../../../search/atoms/MulitiSelect"
+import RadioGroup from "../../atoms/RadioGroup"
+import RangeSelect from "../../atoms/RangeSelect"
+import MulitiSelect from "../../atoms/MulitiSelect"
 import AsyncSelect from "react-select/async"
 import { useHistory } from "react-router-dom"
 import {
@@ -25,6 +24,7 @@ import { universityServer } from "../../../../datasource/servers/endpoints"
 import { URLgetter, URLupdate } from "../../../../utils/lib/URLupdate"
 import {search} from "ionicons/icons"
 import {ExploreFilterPopupContext} from "../ExploreUniFilterPopupContext"
+import { ThreadSkeleton } from "../../../../components/packages/skeleton/threadSkeleton"
 
 function index({ setIsLoading, filterPage }) {
   const [isFiltered, setIsFiltered] = useState(false)
@@ -32,13 +32,8 @@ function index({ setIsLoading, filterPage }) {
   const history = useHistory()
   const dispatch = useDispatch()
   const ref = useRef()
-  const [getUniversityResults, { data, loading, fetchMore }] = useLazyQuery(
-    UniFilterResults,
-    {
-      context: { server: UNIVERSITY_SERVICE_GQL },
-      fetchPolicy: "network-only"
-    }
-  )
+
+
 
   useEffect(() => {
     if (filterPage > 1 && isFiltered) {
@@ -59,7 +54,9 @@ function index({ setIsLoading, filterPage }) {
     }
   }, [filterPage])
 
-  const {popUp, closePopup} = useContext(ExploreFilterPopupContext)
+  // const {popUp, closePopup} = useContext(ExploreFilterPopupContext)
+  const popUp = false, closePopup = () => {}
+
 
   const getAllQueryParams = (page) => {
     let queryObject = {}
@@ -179,29 +176,8 @@ function index({ setIsLoading, filterPage }) {
     return queryObject
   }
 
-  useEffect(() => {
-    setIsLoading(loading)
-  }, [loading])
 
-  useEffect(() => {
-    setIsFiltered(true)
-    const queryObject = getAllQueryParams(1)
-    getUniversityResults({
-      variables: {
-        ...queryObject
-      }
-    })
-  }, [history.location.search])
 
-  useEffect(() => {
-    const d = data?.searchUniversity?.map((item) => ({
-      overallRating: item.overallRating,
-      totalPeopleVoted: item.totalPeopleVoted,
-      ...item.elevatorInfo,
-      ...item.studentCharges
-    }))
-    dispatch(searchGetSuccess(d))
-  }, [data])
 
   useLayoutEffect(() => {
     const majordata = URLgetter("major")
@@ -257,9 +233,9 @@ function index({ setIsLoading, filterPage }) {
     }, 1000)
   }
 
+
   return (
-    <>
-      <IonCard className="filter-card-wrapper mx-1 ion-no-margin">
+      <div className="filter-card-wrapper mx-1 ">
         <IonCardContent>
           <div className="grid grid-cols-1 gap-5">
             <RadioGroup
@@ -300,8 +276,8 @@ function index({ setIsLoading, filterPage }) {
             )}
           </div>
 
-          <div className="mt-5 grid grid-cols-1">
-            <div className="search-control ">
+          <div >
+            <div >
               {/* <h2 className="search-control__label">Test scores</h2>
               <IonRow>
                 <RangeSelect
@@ -324,7 +300,7 @@ function index({ setIsLoading, filterPage }) {
             <div className="search-control">
               <h2 className="search-control__label">Fees</h2>
 
-              <IonRow className="w-full flex-nowrap">
+              <IonRow className="w-full ">
                 <IonCol>
                   <RangeSelect
                     Label={"Application Fee"}
@@ -395,8 +371,7 @@ function index({ setIsLoading, filterPage }) {
 
             </IonButton>
         </IonCardContent>
-      </IonCard>
-    </>
+      </div>
   )
 }
 

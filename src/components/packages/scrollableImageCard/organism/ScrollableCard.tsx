@@ -4,6 +4,7 @@ import clsx from "clsx"
 import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons"
 import SingleImageCard from "../molecules/SingleImageCard"
 import "./similarCollege.css"
+import { CustomTrackingLink } from "../../../analytics/LinkTrack"
 
 const ScrollableCard = ({ allProps }) => {
   const { title, data, className } = allProps
@@ -42,15 +43,15 @@ const ScrollableCard = ({ allProps }) => {
         >
           {data?.map((item, index) => {
             return (
-              // <CustomTrackingLink
-              //   to={"/university/" + item?.name}
-              //   key={index}
-              //   destination={"/university"}
-              //   title={"clicked on university card"}
-              //   className="h-full py-2"
-              // >
+              <CustomTrackingLink
+                to={"/university/" + item?.name}
+                key={index}
+                destination={"/university"}
+                title={"clicked on university card"}
+                className="h-full py-2"
+              >
                 <SingleImageCard key={index} allProps={item} />
-              // </CustomTrackingLink>
+               </CustomTrackingLink>
             )
           })}
         </div>

@@ -17,10 +17,9 @@ import { useDispatch } from "react-redux"
 import useWindowWidth from "../../../hooks/useWindowWidth"
 import { searchGetSuccess } from "../../../datasource/store/action/index"
 import { useQuery } from "@apollo/client"
-import { UniSearchDataList, ScholarshipResults } from "../../../datasource/graphql/uni/"
 import { UNIVERSITY_SERVICE_GQL } from "../../../datasource/servers/types"
 import { useLocation } from "react-router"
-import { INITIAL_QUERY_DATA } from "./Filter/constants"
+import { INITIAL_QUERY_DATA } from "./filter/constants"
 import { URLgetter } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router-dom"
 import clsx from "clsx"
@@ -30,37 +29,20 @@ import {ResultsColumn} from "./resultColumn"
 
 
 
-function index({ query }) {
+function index({ query, loading }) {
   const windowWidth = useWindowWidth()
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
   const searchParams = new URLSearchParams(location.search)
-  const [filtered, setFiltered] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+
   const [activeSubTab, setActiveSubTab] = useState("u")
-  const { data, loading } = useQuery(UniSearchDataList, {
-    context: { server: UNIVERSITY_SERVICE_GQL },
-    variables: { name: query || "" },
-    skip: searchParams.size > 2
-  })
 
 
-  useEffect(() => {
-    dispatch(searchGetSuccess(data?.searchSchool))
-  }, [data])
 
   const [filterPage, setFilterPage] = useState(1)
 
-  useEffect(() => {
-    for (const [key, value] of searchParams) {
-      if (Object.keys(INITIAL_QUERY_DATA).includes(key)) {
-        setFiltered(true)
-      } else {
-        setFiltered(false)
-      }
-    }
-  }, [searchParams])
+
 
   useEffect(() => {
     const url = URLgetter("st")
@@ -71,28 +53,25 @@ function index({ query }) {
     }
   }, [history.location.search])
 
-  const isDesktop = useWindowWidth() > 768
-
 
 
 
 return (
   <>
     <IonRow>
-      {isDesktop ? (
+      {/* {isDesktop ? (
         <DesktopFilter filterPage={filterPage} setIsLoading={setIsLoading} />
       ) : (
           <MobileFilter
             filterPage={1} // Example page number
             setIsLoading={() => {}} // Replace with actual setIsLoading function
           />
-      )}
+      )} */}
       <ResultsColumn
-        isLoading={isLoading}
-        loading={loading}
         activeSubTab={activeSubTab}
         filterPage={filterPage}
         setFilterPage={setFilterPage}
+        loading={loading}
       />
     </IonRow>
   </>

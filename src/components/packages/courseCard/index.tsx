@@ -17,9 +17,8 @@ import Offerings from "../../../features/search/atoms/Offerings"
 import RatingCard from "../../../features/search/atoms/RatingCard"
 import CardImage from "./atom/CardImage"
 import ShareButton from "../share/index"
-// import CustomTrackingLink from "features/analytics/LinkTrack"
-import clsx from "clsx"
-const CustomTrackingLink = ({ title, to, destination, children }) => { }
+ import clsx from "clsx"
+import { CustomTrackingLink } from "../../analytics/LinkTrack"
 function CardActions({ allProps }) {
   const { showSave = false, showShare = false } = allProps
 

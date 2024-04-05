@@ -19,9 +19,9 @@ import { useLocation } from "react-router"
 import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { fetchFamousUniversities } from "../../datasource/graphql/user"
-// import CustomTrackingLink from "features/analytics/LinkTrack"
 import ImageWithLoader from "../../components/packages/reusable/Image/ImageWithLoader"
 import { IonIcon } from "@ionic/react"
+import { CustomTrackingLink } from "../../components/analytics/LinkTrack"
 // import TopOrgs from "../../features/org/TopOrgs"
 
 const TopOrgs = () => { }
@@ -89,12 +89,12 @@ export const screenGreaterThan1000 = () => {
 
         {getFamousUniversity?.map((item, index) => {
           return (
-            // <CustomTrackingLink
-            //   to={`/university/${item?.name}`}
-            //   destination={"/university"}
-            //   title="Clicked on famous university List card"
-            //   key={index}
-            // >
+            <CustomTrackingLink
+              to={`/university/${item?.name}`}
+              destination={"/university"}
+              title="Clicked on famous university List card"
+              key={index}
+            >
               <Item
                 style={{
                   margin: "0px",
@@ -125,7 +125,7 @@ export const screenGreaterThan1000 = () => {
                   </h2>
                 </Label>
               </Item>
-            // </CustomTrackingLink>
+            </CustomTrackingLink>
           )
         })}
         <Link to="/search?tab=uni" style={{ marginTop: "120px" }}>

@@ -140,109 +140,171 @@ const SideDetails = ({
     }
   }, [location]);
 
+  const sectionComponents = {
+    scholarship: FolderStructure,
+    studentCharges: StudentCharges,
+    departmentRatings: DepartmentRating,
+    admission: StatCardTemplate,
+    financialAid: RectangularCard,
+    statistics: Statstics,
+    libraries: StatCardTemplateTwo,
+    testScore: CardWithCircularGrid,
+    website: VisitWebsite,
+    Professors: Professors,
+    similarCollages: ImageCard,
+    report: ReportCard,
+    campusLife: PollCard,
+    interviewExperience: Interview,
+    // Add more mappings as necessary
+  };
+
+
+  interface SectionConfig {
+    ref?: React.RefObject<HTMLDivElement>;
+    id: string;
+    component: React.ReactNode;
+  }
+
+  const sections: SectionConfig[] = [
+    {
+      ref: forwardedRef.scholarship,
+      id: 'scholarship',
+      component: (
+        <FolderStructure
+          allProps={{
+            folderName: 'Scholarships',
+            data: uniData?.scholarshipInfo?.scholarships,
+            showDetails: true,
+            popUp: true,
+          }}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.studentCharges,
+      id: 'studentCharges',
+      component: <StudentCharges />,
+    },
+    {
+      id: 'departmentRatings',
+      component: <DepartmentRating ratings={uniData?.departmentRatings} />,
+    },
+    {
+      ref: forwardedRef.admission,
+      id: 'admission',
+      component: (
+        <StatCardTemplate
+          allProps={{
+            data: uniData?.admissionInfo,
+            bodyTitle: 'Admission',
+          }}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.financialAid,
+      id: 'financialAid',
+      component: (
+        <RectangularCard
+          allProps={{
+            data: uniData?.financialAid,
+            year: uniData?.financialAid?.year,
+          }}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.statistics,
+      id: 'statistics',
+      component: <Statstics />,
+    },
+    {
+      ref: forwardedRef.libraries,
+      id: 'libraries',
+      component: (
+        <StatCardTemplateTwo
+          allProps={{
+            data: uniData?.elevatorInfo?.library,
+            bodyTitle: 'Libraries',
+          }}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.testScore,
+      id: 'testScore',
+      component: (
+        <CardWithCircularGrid
+          dataSource={uniData?.testScore}
+          parentProps={allProps}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.website,
+      id: 'website',
+      component: <VisitWebsite />,
+    },
+    {
+      ref: forwardedRef.Professors,
+      id: 'Professors',
+      component: <Professors allProps={uniData?.professors} />,
+    },
+    {
+      ref: forwardedRef.similarCollages,
+      id: 'similarCollages',
+      component: (
+        <ImageCard
+          allProps={{
+            data: uniData?.similarSchools,
+            header: 'Similar Collages',
+          }}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.report,
+      id: 'report',
+      component: (
+        <ReportCard
+          dataSource={uniData?.userEvaluation?.report}
+          parentProps={allProps}
+        />
+      ),
+    },
+    {
+      ref: forwardedRef.campusLife,
+      id: 'campusLife',
+      component: (
+        <PollCard
+          dataSource={uniData?.userEvaluation?.reviews}
+          parentProps={allProps}
+        />
+      ),
+    },
+    {
+      id: 'ranking',
+      component: <Ranking />,
+    },
+    {
+      ref: forwardedRef.Interview,
+      id: 'interviewExperience',
+      component: <Interview unitId={uniData?.elevatorInfo?.unitId} />,
+    },
+  ];
+
+
   return (
-    <IonGrid >
-
-        <IonRow
-          className="w-[calc(100%-270px)] block"
-          style={{ flex: 1, margin: 0 }}
-        >
-          <section ref={forwardedRef.scholarship} id="scholarship">
-            <FolderStructure
-              allProps={{
-                folderName: "Scholarships",
-                data: uniData?.scholarshipInfo?.scholarships,
-                showDetails: true,
-                popUp: true
-              }}
-            />
+    <IonGrid>
+      <IonRow className="w-[calc(100%-270px)] block" style={{ flex: 1, margin: 0 }}>
+        {sections.map(({ ref, id, component }) => (
+          <section ref={ref} id={id} key={id}>
+            {component}
           </section>
-          <section ref={forwardedRef.studentCharges} id="studentCharges">
-            <StudentCharges />
-          </section>
-
-          <section id="departmentRatings">
-            <DepartmentRating ratings={uniData?.departmentRatings} />
-          </section>
-
-          <section ref={forwardedRef.admission} id="admission">
-            <StatCardTemplate
-              allProps={{
-                data: uniData?.admissionInfo,
-                bodyTitle: "Admission"
-              }}
-            />
-          </section>
-
-          <section ref={forwardedRef.financialAid} id = "financialAid">
-            <RectangularCard
-              allProps={{
-                data: uniData?.financialAid,
-                year: uniData?.financialAid?.year
-              }}
-            />
-          </section>
-
-          <section ref={forwardedRef.statistics} id ="statistics">
-            <Statstics />
-          </section>
-
-          <section ref={forwardedRef.libraries} id="libraries">
-            <StatCardTemplateTwo
-              allProps={{
-                data: uniData.elevatorInfo.library,
-                bodyTitle: "Libraries"
-              }}
-            />
-          </section>
-
-          <section ref={forwardedRef.testScore} id = "testScore">
-            <CardWithCircularGrid
-              dataSource={uniData?.testScore}
-              parentProps={allProps}
-            />
-          </section>
-
-          <section ref={forwardedRef.website} id ="website">
-            <VisitWebsite />
-          </section>
-          <section ref={forwardedRef.Professors} id ="Professors">
-            <Professors allProps={uniData?.professors} />
-          </section>
-          <section ref={forwardedRef.similarCollages} id="similarCollages">
-            <ImageCard
-              allProps={{
-                data: uniData?.similarSchools,
-                header: "Similar Collages"
-              }}
-            />
-          </section>1
-
-          <section ref={forwardedRef.report} id ="report">
-            <ReportCard
-              dataSource={uniData.userEvaluation.report}
-              parentProps={allProps}
-            />
-          </section>
-          <section ref={forwardedRef.campusLife} id="campusLife">
-            <PollCard
-              dataSource={uniData.userEvaluation.reviews}
-              parentProps={allProps}
-            />
-          </section>
-
-          <section>
-            <Ranking />
-          </section>
-          {/* <section ref={forwardedRef.Interview}>
-            <Discussion unitId={unitId} />
-          </section> */}
-          <section ref={forwardedRef.Interview} id= "interviewExperience">
-            <Interview unitId={uniData?.elevatorInfo?.unitId} />
-          </section>
-        </IonRow>
+        ))}
+      </IonRow>
     </IonGrid>
-  )
+  );
 }
 export default SideDetails
 

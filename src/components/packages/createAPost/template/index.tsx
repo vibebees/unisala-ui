@@ -1,19 +1,19 @@
 import axios from "axios"
 import { Card } from "../../../defaults/index"
 
-import {usePathName} from "../../../../hooks/usePathname"
-import {useEffect, useState} from "react"
-import {useSelector} from "react-redux"
-import {useHistory} from "react-router"
-import {userServer} from "../../../../datasource/servers/endpoints"
-import {PostCardForClick} from "../organisim/PostCardForClick"
-import {PostModalOnClick} from "../organisim/PostModalOnClick"
+import { usePathName } from "../../../../hooks/usePathname"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { useHistory } from "react-router"
+import { userServer } from "../../../../datasource/servers/endpoints"
+import { PostCardForClick } from "../organisim/PostCardForClick"
+import { PostModalOnClick } from "../organisim/PostModalOnClick"
 import { getCache, setCache } from "../../../../utils/cache"
 import { CreateAPostModal } from "../molecules/modal"
 const CreateAPostCard = ({ allProps }) => {
   const { user } = useSelector((state) => state.userProfile)
   const { setCreateAPostPopUp } = allProps
-  const [meta, setMeta] = useState({})
+  const [ meta, setMeta ] = useState({})
   const history = useHistory()
   const params = new URLSearchParams(window.location.href.search)
   const pathname = usePathName(0) || "home"
@@ -38,7 +38,7 @@ const CreateAPostCard = ({ allProps }) => {
           )
 
           const metaData = createAPostMetaData.data?.data || []
-          const getCurrentPageMetaData = metaData[pathname] || {}
+          const getCurrentPageMetaData = metaData[ pathname ] || {}
           const { addAPost } = getCurrentPageMetaData || {}
 
           setMeta(addAPost)
@@ -50,10 +50,9 @@ const CreateAPostCard = ({ allProps }) => {
     }
 
     fn()
-  }, [pathname])
+  }, [ pathname ])
 
   return (
-    <>
       <Card
         style={{ marginBottom: "12px" }}
         onClick={() => {
@@ -67,7 +66,6 @@ const CreateAPostCard = ({ allProps }) => {
           // setCreateAPostPopUp(true)
           // console.log("clicked")
         }}
-        className="ion-no-margin ion-no-padding"
       >
         <CreateAPostModal
           ModalData={<PostModalOnClick allProps={allProps} metaData={meta} />}
@@ -75,7 +73,6 @@ const CreateAPostCard = ({ allProps }) => {
           header="Create a Post"
         />
       </Card>
-    </>
   )
 }
 

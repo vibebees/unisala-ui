@@ -22,7 +22,6 @@ export const UniversityBuild = ({ allProps }) => {
     })
   }
   return (
-    <>
       <section
         ref={app}
         onScroll={() => {
@@ -31,12 +30,10 @@ export const UniversityBuild = ({ allProps }) => {
         style={{
           overflow: "auto",
           scrollBehavior: "smooth",
-          backgroundColor: "#f5f5f5"
         }}
       >
         {/* {loading && <h1>loading</h1>} */}
         <HeaderNavigator allProps={allProps} />
-        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div ref={profile} className="mb-2">
             <UniversityHeader allProps={allProps} />
           </div>
@@ -57,8 +54,6 @@ export const UniversityBuild = ({ allProps }) => {
               />
             </div>
           )}
-        </div>
       </section>
-    </>
   )
 }

@@ -2,7 +2,7 @@ import { IonChip, IonIcon, IonLabel } from "@ionic/react"
 import { closeOutline } from "ionicons/icons"
 import React from "react"
 import { useHistory } from "react-router"
-import { URLdelete } from "utils/lib/URLupdate"
+import { URLdelete } from "../../../utils/lib/URLupdate"
 
 const Chip = ({ item }) => {
   const history = useHistory()

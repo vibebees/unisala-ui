@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { IonRow, IonText, IonIcon, IonLabel, IonCol } from "@ionic/react"
 import { schoolOutline } from "ionicons/icons"
-import { URLgetter } from "utils/lib/URLupdate"
+import { URLgetter } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router"
 
 const Offerings = ({ allProps }) => {

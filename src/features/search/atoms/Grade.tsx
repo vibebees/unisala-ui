@@ -1,6 +1,6 @@
 import React from "react"
-import useGradeColor from "hooks/useGradeColor"
-import useGrade from "hooks/useGrade"
+import useGradeColor from "../../../hooks/useGradeColor"
+import useGrade from "../../../hooks/useGrade"
 
 const Grade = ({ allProps }) => {
   const { average, width } = allProps

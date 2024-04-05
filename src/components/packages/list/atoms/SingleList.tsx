@@ -2,8 +2,8 @@ import React from "react"
 import ImageWithLoader from "../../reusable/Image/ImageWithLoader"
 import { IonCard, IonText, IonCol, IonRow } from "@ionic/react"
 import ActionButton from "./ActionButton"
-import { URLupdate } from "utils/lib/URLupdate"
-import { useHistory } from "react-router"
+ import { useHistory } from "react-router"
+import { URLupdate } from "../../../../utils/lib/URLupdate"
 
 const SingleList = ({ _id, description, title, isMyProfile = false }) => {
   const history = useHistory()

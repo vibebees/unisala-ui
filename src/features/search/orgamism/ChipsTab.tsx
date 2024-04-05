@@ -1,7 +1,7 @@
 import React from "react"
 import Chip from "../atoms/Chip"
 import { IonRow, IonButton, IonCol } from "@ionic/react"
-import { URLgetter } from "utils/lib/URLupdate"
+import { URLgetter } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router-dom"
 
 export const ChipsTab = () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { IonCard, IonCardContent, IonText } from "@ionic/react"
 import { useHistory } from "react-router"
-import { URLgetter, URLupdate } from "utils/lib/URLupdate"
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
 // import { ButtonTrack } from "features/analytics/ButtonTrack"
 
 const SearchTab = () => {
@@ -27,6 +27,14 @@ const SearchTab = () => {
       {
         name: "Posts",
         value: "post"
+      },
+      {
+        name: "Spaces",
+        value: "space"
+      },
+      {
+        name: "Orgs",
+        value: "org"
       }
     ]
   }, [])
@@ -81,3 +89,4 @@ const SearchTab = () => {
 }
 
 export default SearchTab
+

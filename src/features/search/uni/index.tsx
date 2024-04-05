@@ -14,7 +14,7 @@ import {
   IonContent
 } from "@ionic/react"
 import { useDispatch } from "react-redux"
-import useWindowWidth from "hooks/useWindowWidth"
+import useWindowWidth from "../../../hooks/useWindowWidth"
 import { searchGetSuccess } from "../../../datasource/store/action/index"
 import { useQuery } from "@apollo/client"
 import { UniSearchDataList, ScholarshipResults } from "../../../datasource/graphql/uni/"

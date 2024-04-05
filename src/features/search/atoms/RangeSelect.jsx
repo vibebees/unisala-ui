@@ -6,7 +6,7 @@ import {
   IonSelectOption,
   useIonToast
 } from "@ionic/react"
-import { URLgetter, URLupdate } from "utils/lib/URLupdate"
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router"
 
 const RangeSelect = ({

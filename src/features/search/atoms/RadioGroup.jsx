@@ -9,7 +9,7 @@ import {
 } from "@ionic/react"
 import Label from "./Label"
 import { useLocation, useHistory } from "react-router"
-import { URLupdate, URLgetter } from "utils/lib/URLupdate"
+import { URLupdate, URLgetter } from "../../../utils/lib/URLupdate"
 
 const RadioGroup = ({
   Label1,

@@ -21,12 +21,12 @@ import {
   receiptOutline
 } from "ionicons/icons"
 import ScholarshipText from "./ScholarshipText"
-import { LikeATag } from "../../../components/packages/tags"
-import Modal from "../../../components/packages/reusable/modal"
+ import Modal from "../../../components/packages/reusable/modal"
 import { DetailItem } from "../../../components/packages/folderStructure/molecules/detailItem"
 import { Table } from "../../../components/packages/folderStructure/molecules/table"
 import IonWebPop from "../../university/sideDetails/visitWebsite/IonWebPop"
-const IonWebPop = () => {<></>}
+import { LikeATag } from "../../../components/packages/tags"
+
 const ScholarshipCard = ({
   pictures = [],
   university_name = "",

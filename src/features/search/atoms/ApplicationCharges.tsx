@@ -2,7 +2,7 @@
 import React from "react"
 import { IonRow, IonText, IonIcon, IonLabel } from "@ionic/react"
 import { cashOutline } from "ionicons/icons"
-import { URLgetter } from "utils/lib/URLupdate"
+import { URLgetter } from "../../../utils/lib/URLupdate"
 
 const ApplicationCharges = ({
   undergraduateApplicationFee = null,

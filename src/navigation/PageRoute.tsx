@@ -87,6 +87,9 @@ export const PageRoute = ({ allProps }) => (
       <Route path="/feed">
         {authenticated ? <HomePage /> : <Redirect to="/" />}
       </Route>
+      <Route path="/home">
+        {authenticated ? <HomePage /> : <Redirect to="/" />}
+      </Route>
       {/* Protected routes example */}
       <Route path="/profile">
         {authenticated

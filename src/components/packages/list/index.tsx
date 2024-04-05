@@ -15,7 +15,7 @@ import {
 } from "@ionic/react"
 import ListContainer from "./molecules/ListContainer"
 import { useHistory, useParams } from "react-router"
-import { URLgetter, URLdelete } from "utils/lib/URLupdate"
+import { URLgetter, URLdelete } from "../../../utils/lib/URLupdate"
 import Lists from "./molecules/Lists"
 import { useSelector } from "react-redux"
 export const ListContext = createContext()

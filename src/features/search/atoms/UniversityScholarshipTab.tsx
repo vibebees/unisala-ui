@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { IonCard, IonCol, IonRow } from "@ionic/react"
 import { useHistory } from "react-router"
-import { URLgetter, URLupdate } from "utils/lib/URLupdate"
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
 import clsx from "clsx"
 
 const UniversityScholarshipTab = () => {

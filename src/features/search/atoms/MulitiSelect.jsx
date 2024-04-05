@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useLayoutEffect } from "react"
 import Select from "react-select"
 import { IonLabel } from "@ionic/react"
-import { URLgetter, URLupdate } from "utils/lib/URLupdate"
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router"
 
 const customStyles = {

@@ -42,6 +42,13 @@ const messagingRoutes = () => (
     </ProtectedRoute>
   </>
 )
+const networkRoutes = () => (
+    <ProtectedRoute>
+      <Route path="/mynetwork" exact>
+        <MyNetwork />
+      </Route>
+    </ProtectedRoute>
+)
 const spaceRoutes = () => (
   <>
     <ProtectedRoute>
@@ -112,9 +119,11 @@ export const PageRoute = ({ allProps }) => (
         <UniversityPage />
       </Route>
 
-      <Route path="/mynetwork" exact>
-      <MyNetwork />
+      <Route path="/messages" exact>
+        <Messages />
       </Route>
+
+      {networkRoutes()}
 
       {/* More routes */}
       {/* Fallback route for 404 Not Found */}

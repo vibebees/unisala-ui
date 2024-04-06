@@ -1,8 +1,8 @@
+import { useSelector } from "react-redux"
 import { Redirect, useLocation } from "react-router-dom"
-import { getCache } from "../cache"
 
-export const ProtectedRoute = ({ children: any })  => {
-  const accessToken = getCache("accessToken")
+export function ProtectedRoute({ children }) {
+  const { loggedIn } = useSelector((state) => state?.userProfile || {})
   const location = useLocation()
 
   const [_, route, id] = location.pathname.split("/")
@@ -18,11 +18,11 @@ export const ProtectedRoute = ({ children: any })  => {
   ]
 
   // Check if the route is in the allowedRoutes array and user is not logged in
-  if (!accessToken && allowedRoutes.includes(route)) {
+  if (!loggedIn && allowedRoutes.includes(route)) {
     return children
   }
 
-  if (!accessToken) {
+  if (!loggedIn) {
     return <Redirect to="/" />
   }
   return children

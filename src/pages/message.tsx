@@ -1,8 +1,9 @@
 import React from "react"
-// import Message from "../features/messages/template"
+import Layout from "./layout"
+import Message from "../features/messages"
 
 const MessagePage = () => {
-    return <>Message</>
+    return <Message />
 }
 
 export default MessagePage

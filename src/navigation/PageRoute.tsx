@@ -112,6 +112,10 @@ export const PageRoute = ({ allProps }) => (
         <UniversityPage />
       </Route>
 
+      <Route path="/mynetwork" exact>
+      <MyNetwork />
+      </Route>
+
       {/* More routes */}
       {/* Fallback route for 404 Not Found */}
       <Route path="*">

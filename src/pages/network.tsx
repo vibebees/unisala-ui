@@ -1,6 +1,6 @@
 import React from "react"
-// import Network from "../features/myNetwork"
+import Network from "../features/myNetwork"
 const NetworkPage = () => {
-    return <>Network</>
+    return <Network/>
 }
 export default NetworkPage

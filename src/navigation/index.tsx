@@ -12,9 +12,10 @@ import { PageRoute } from './PageRoute';
 import { ExploreIcon, HomeIcon, PeopleIcon, MessageIcon } from '../components/packages/icons';
  import { SearchBar } from '../components/packages/searchBox';
 import { authenticated } from '../utils/cache';
+import { IonCol, IonGrid, IonHeader, IonRow } from '@ionic/react';
 
 // Define props if you have any for NavBar, for example:
-interface NavBarProps {
+interface NavigationProps {
     // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
 }
 type RouteParams = {
@@ -22,16 +23,8 @@ type RouteParams = {
 }
 
 
-const SearchBar = () => {
 
-    return (
-        // <IonSearchbar></IonSearchbar>
-        <div style={{ width: "100%" }}>
-        <SearchBar />
-    </div>
-    )
-}
-export const NavBar: React.FC<NavBarProps> = () => {
+export const Navigation: React.FC<NavigationProps> = () => {
     let profileLink = authenticated ? "/@/prashantbasnet17" : "/profile";
     const navigation = [
         {
@@ -102,57 +95,50 @@ export const NavBar: React.FC<NavBarProps> = () => {
       }, [location]);
 
     return (
-        <Tabs>
-            <RouterOutlet>
-                <PageRoute />
-            </RouterOutlet>
+        <>
+            <IonHeader>
+                <IonGrid
 
+                >
+                <IonRow>
+                    <IonCol>
+                        <Link to="/">
+                            <img
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
+                                alt="logo"
+                                style={{
+                                    width: "45px"
+                                }}
+                            />
+                        </Link>
+                    </IonCol>
+                    <IonCol >
+                        <SearchBar />
+                    </IonCol>
+                </IonRow>
+                </IonGrid>
+            </IonHeader>
 
-            {/* <TabBar slot={isMobile ? "bottom" : "top"}>
-                <TabButton tab={"unisala"} href={'/'} layout ="icon-start">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
-                        alt="logo"
-                        style={{
-                            width: "45px"
-                        }}
-                    />
-                </TabButton>
-                {navigat.map((item, index) => (
-                    <TabButton tab={item.name} href={'/' + item.name}>
-                        <item.Icon fill={active === item.link ? "blue" : "#747372"} />
-                        <Label>{item.name}</Label>
-                    </TabButton>
-                ))}
-            </TabBar> */}
+            <Tabs>
+                <RouterOutlet>
+                    <PageRoute />
+                </RouterOutlet>
 
-            <TabBar slot={isMobile? "bottom": "top"} >
-                {!isMobile && (
-                    <TabButton tab="unisala" href="/" style={{ display: 'flex' }}>
-                     <img
-                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
-                         alt="logo"
-                         style={{ width: "45px" }}
-                     />
-                 </TabButton>
-                )}
+                <TabBar slot={isMobile ? "bottom" : "top"} >
 
-                <TabBar>
-                 <SearchBar/>
-                    </TabBar>
+                    {navigation?.map(({ name, Icon, link }) => (
+                        <TabButton key={name} tab={name}
+                            onClick={() => handleTabClick(link)} selected={activeTab === link}
+                            className={activeTab === link ? 'tab-button-active' : 'tab-button-inactive'}
+                        >
+                            <Icon />
+                            <Label style={{ fontSize: isMobile ? "10px" : '' }}>{name}</Label>
+                        </TabButton>
+                    ))}
+                </TabBar>
 
-                {navigation?.map(({name, Icon, link}) => (
-                    <TabButton key={name} tab={name}
-                        onClick={() => handleTabClick(link)} selected={activeTab === link}
-                        className={activeTab === link ? 'tab-button-active' : 'tab-button-inactive'}
-                    >
-                        <Icon />
-                        <Label  style ={{  fontSize: isMobile? "10px": ''}}>{name}</Label>
-                    </TabButton>
-                ))}
-            </TabBar>
-
-        </Tabs>
+            </Tabs>
+        </>
 
     );
 };

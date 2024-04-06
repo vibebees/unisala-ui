@@ -57,7 +57,7 @@ export const SearchBar = () => {
 
   return (
     <>
-      <div className="search-box">
+      <div className="search-box" style={{backgroundColor:"#000"}}>
         <IonInput
           type="text"
           placeholder="   Search universities, people..."

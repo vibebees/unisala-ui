@@ -2,18 +2,7 @@ import React from 'react';
 import { Link, Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonCol,
-  IonGrid,
-  IonHeader,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonRow,
-  IonSearchbar,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonTitle,
   IonToolbar,
   setupIonicReact
 } from '@ionic/react';
@@ -43,17 +32,19 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import './theme/tailwind.css';
 
-import { NavBar, } from './navigation';
-import { SearchBar } from './components/packages/searchBox';
+import { Navigation } from './navigation';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <NavBar />
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <Navigation />
+      </IonReactRouter>
+    </IonApp>
+  );
+}
 
 export default App;

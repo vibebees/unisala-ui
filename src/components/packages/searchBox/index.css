@@ -84,3 +84,28 @@
         display: none;
     }
 }
+
+.ion-searchbar {
+    --background: #f5f5f5; /* Background color of the search bar */
+    --border-radius: 10px; /* Border radius */
+    --border-color: red; /* Border color */
+    --padding-start: 0px; /* Adjusting padding might require targeting specific parts or adjusting globally */
+    --padding-end: 0px;
+  }
+
+
+  /* Scoped components require higher specificity to customize */
+ion-searchbar.custom {
+
+    --border-radius: 10px;
+    --height: '50px';
+    --box-shadow: 0 3px 13px 0 rgb(60 60 60 / 40%);
+}
+
+  ion-searchbar.ios.custom {
+    --cancel-button-color: #19422d;
+  }
+
+  ion-searchbar.md.custom {
+    --cancel-button-color: #fff;
+  }

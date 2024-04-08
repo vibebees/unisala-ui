@@ -73,7 +73,7 @@ export const SearchBar = () => {
           }
         }}
         value={searchValue}
-        onIonChange={(e) => {
+        onIonInput={(e) => {
           console.log(e.detail.value)
           setSearchValue(e.detail.value)
           setDropDownOptions(true)
@@ -83,9 +83,12 @@ export const SearchBar = () => {
             setDropDownOptions(false)
           }
         }}
-        style={{marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px", backgroundColor: "#f5f5f5"}}
+        style={{marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px"}}
         animated={true}
         clearIcon={trashBin}
+        class="custom"
+        autocomplete="on"
+        debounce={500}
         />
         {/* <Link
           to={searchValue ? `/search?q=${searchValue}` : "#"}

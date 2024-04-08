@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { IonInput } from "@ionic/react"
+import { IonInput, IonSearchbar } from "@ionic/react"
 import { useLazyQuery } from "@apollo/client"
 import { UniSearchDataList } from "../../../datasource/graphql/uni"
 
@@ -12,6 +12,7 @@ import { userSearch } from "../../../datasource/graphql/user"
 import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect"
 import { SearchIcon } from "../icons"
 import { getCache } from "../../../utils/cache"
+import { trashBin } from "ionicons/icons"
 
 export const SearchBar = () => {
   const [ searchValue, setSearchValue ] = useState("")
@@ -55,38 +56,42 @@ export const SearchBar = () => {
     }
   }, [])
 
+  // return (
+  //   <IonSearchbar showClearButton="always" clearIcon={trashBin} placeholder="Custom Clear Icon" animated ={true}></IonSearchbar>
+  // )
   return (
     <>
-      <div className="search-box" style={{backgroundColor:"#000"}}>
-        <IonInput
-          type="text"
-          placeholder="   Search universities, people..."
-          className="search-input-box !pr-10 "
-          onKeyUp={(e) => {
-            if (e.key === "Enter") {
-              setDropDownOptions(false)
-              history.push(searchValue ? `/search?q=${searchValue}` : "#")
-              handleSearch(searchValue)
-            }
-          }}
-          value={searchValue}
-          onIonChange={(e) => {
-            setSearchValue(e.detail.value)
-            setDropDownOptions(true)
-          }}
-          onKeyDown={(e) => {
-            if (searchValue && e.keyCode === 27) {
-              setDropDownOptions(false)
-            }
-          }}
+        <IonSearchbar
+
+        type="text"
+        placeholder="   Search universities, people..."
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            setDropDownOptions(false)
+            history.push(searchValue ? `/search?q=${searchValue}` : "#")
+            handleSearch(searchValue)
+          }
+        }}
+        value={searchValue}
+        onIonChange={(e) => {
+          console.log(e.detail.value)
+          setSearchValue(e.detail.value)
+          setDropDownOptions(true)
+        }}
+        onKeyDown={(e) => {
+          if (searchValue && e.keyCode === 27) {
+            setDropDownOptions(false)
+          }
+        }}
+        style={{marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px", backgroundColor: "#f5f5f5"}}
+        animated={true}
+        clearIcon={trashBin}
         />
-        <Link
+        {/* <Link
           to={searchValue ? `/search?q=${searchValue}` : "#"}
           className="search-box__search-icon flex justify-center items-center "
         >
-          <SearchIcon onClick={() => setDropDownOptions(false)} />
-        </Link>
-      </div>
+        </Link> */}
       {dropDownOptions && Array.isArray(options) && options.length > 0 && (
         <div
           className="recommend-search"

@@ -10,9 +10,10 @@ import Tab2 from '../pages2/Tab2';
 import Tab3 from '../pages2/Tab3';
 import { PageRoute } from './PageRoute';
 import { ExploreIcon, HomeIcon, PeopleIcon, MessageIcon } from '../components/packages/icons';
- import { SearchBar } from '../components/packages/searchBox';
+import { SearchBar } from '../components/packages/searchBox';
 import { authenticated } from '../utils/cache';
 import { IonCol, IonGrid, IonHeader, IonRow } from '@ionic/react';
+import { max } from 'moment';
 
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
@@ -86,36 +87,45 @@ export const Navigation: React.FC<NavigationProps> = () => {
     const isMobile = width <= 768; // You can adjust this value
     const history = useHistory();
     const location = useLocation();
-    const [activeTab, setActiveTab] = useState<string>("");
+    const [ activeTab, setActiveTab ] = useState<string>("");
     const handleTabClick = (path: string) => {
         history.push(path);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         setActiveTab(location.pathname);
-      }, [location]);
+    }, [ location ]);
+    const desktopViewCss = { marginRight: "0px", paddingStart: "0px", paddingEnd: "0px", maxWidth: '10%' }
+    const styleForIcon = { flex: "0 0 auto", padding: 0, height: "100%", width: '50px' }
+    const styleForSearch = { flex: "0 0 auto", }
 
     return (
         <>
             <IonHeader>
                 <IonGrid
-
+                    style={{
+                        // boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.75)",
+                        position: "sticky",
+                        top: 0,
+                        // height:"70px",
+                        marginBottom: "10px"
+                    }}
                 >
-                <IonRow>
-                    <IonCol>
-                        <Link to="/">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
-                                alt="logo"
-                                style={{
-                                    width: "45px"
-                                }}
-                            />
-                        </Link>
-                    </IonCol>
-                    <IonCol >
-                        <SearchBar />
-                    </IonCol>
-                </IonRow>
+                    <IonRow>
+                        <IonCol style={styleForIcon}>
+                            <Link to="/">
+                                <img
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
+                                    alt="logo"
+                                    style={{
+                                        width: "45px"
+                                    }}
+                                />
+                            </Link>
+                        </IonCol>
+                        <IonCol size={isMobile ? null : '4'} style={{...styleForSearch}}>
+                            <SearchBar />
+                        </IonCol>
+                    </IonRow>
                 </IonGrid>
             </IonHeader>
 
@@ -124,12 +134,15 @@ export const Navigation: React.FC<NavigationProps> = () => {
                     <PageRoute />
                 </RouterOutlet>
 
-                <TabBar slot={isMobile ? "bottom" : "top"} >
+                <TabBar slot={isMobile ? "bottom" : "top"} className=" justify-end padding-0">
+
+
 
                     {navigation?.map(({ name, Icon, link }) => (
                         <TabButton key={name} tab={name}
                             onClick={() => handleTabClick(link)} selected={activeTab === link}
                             className={activeTab === link ? 'tab-button-active' : 'tab-button-inactive'}
+                            style={isMobile ? { padding: "0px", margin: "0px" } : desktopViewCss}
                         >
                             <Icon />
                             <Label style={{ fontSize: isMobile ? "10px" : '' }}>{name}</Label>
@@ -138,6 +151,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
                 </TabBar>
 
             </Tabs>
+
         </>
 
     );

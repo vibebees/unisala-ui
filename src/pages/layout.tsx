@@ -78,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ leftSidebar = leftSidebarDefault, mainC
           <Col sizeMd="2" className="ion-hide-sm-down  bg-blue-500">{leftSidebar}</Col>
 
           {/* Always visible, but spans more columns on small screens */}
-          <Col sizeSm="12" sizeMd="8" className =" bg-yellow-500">{mainContent}</Col>
+          <Col sizeSm="12" sizeMd="8" className =" bg-yellow-500"> {mainContent}</Col>
 
           {/* Only visible on medium and larger screens */}
           <Col sizeMd="2" className="ion-hide-sm-down  bg-green-500">{rightSidebar}</Col>

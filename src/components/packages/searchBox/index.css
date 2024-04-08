@@ -2,18 +2,17 @@
     align-items: center;
     position: relative;
     display: flex;
+    width: 100%
 }
 
 .search-input-box {
     background: #eef3f8;
-
     color: #000;
     font-weight: 600;
     border-radius: 7px;
     --placeholder-font-weight: 500;
     --placeholder-opacity: 0.4;
     --placeholder-color: #515050;
-    width: 100%;
 }
 
 .search-box__search-icon {

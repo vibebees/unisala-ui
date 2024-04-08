@@ -96,33 +96,35 @@ export const Navigation: React.FC<NavigationProps> = () => {
     }, [ location ]);
     const desktopViewCss = { marginRight: "0px", paddingStart: "0px", paddingEnd: "0px", maxWidth: '10%' }
     const styleForIcon = { flex: "0 0 auto", padding: 0, height: "100%", width: '50px' }
-    const styleForSearch = { flex: "0 0 auto", }
+    const styleForSearch = { flex: "0 0 auto", width: "100%"}
+    const navBarStyle = isMobile
+    ? { width: "100%", height: "50px", border: 'none' , boxShadow:'none'}
+    : { width: "50%", height: "55px", border: 'none', boxShadow:'none' };
 
     return (
         <>
-            <IonHeader>
+            <IonHeader style={navBarStyle}>
                 <IonGrid
                     style={{
                         // boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.75)",
                         position: "sticky",
                         top: 0,
-                        // height:"70px",
                         marginBottom: "10px"
                     }}
                 >
                     <IonRow>
-                        <IonCol style={styleForIcon}>
+                        <IonCol style={isMobile ? {...styleForIcon, display: 'none'} : styleForIcon} size='1'>
                             <Link to="/">
                                 <img
                                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
                                     alt="logo"
                                     style={{
-                                        width: "45px"
+
                                     }}
                                 />
                             </Link>
                         </IonCol>
-                        <IonCol size={isMobile ? null : '4'} style={{...styleForSearch}}>
+                        <IonCol  style={{...styleForSearch}} size='11'>
                             <SearchBar />
                         </IonCol>
                     </IonRow>

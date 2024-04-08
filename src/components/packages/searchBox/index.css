@@ -20,7 +20,6 @@
     margin: auto;
     top: 0;
     bottom: 0;
-    z-index: 1000;
     right: 5px;
 }
 
@@ -34,7 +33,7 @@
 .recommend-search {
     position: absolute;
     background: #fff;
-    max-height: 400px;
+    max-height: 300px;
     border-radius: 10px;
     margin-top: 10px;
     box-shadow: 0 3px 13px 0 rgb(60 60 60 / 40%);

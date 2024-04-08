@@ -56,45 +56,45 @@ export const SearchBar = () => {
     }
   }, [])
 
-  // return (
-  //   <IonSearchbar showClearButton="always" clearIcon={trashBin} placeholder="Custom Clear Icon" animated ={true}></IonSearchbar>
-  // )
+  const SearchBar = () => {
+    return (      <IonSearchbar
+      type="text"
+      placeholder="   Search universities, people..."
+      onKeyUp={(e) => {
+        if (e.key === "Enter") {
+          setDropDownOptions(false)
+          history.push(searchValue ? `/search?q=${searchValue}` : "#")
+          handleSearch(searchValue)
+        }
+      }}
+      value={searchValue}
+      onIonInput={(e) => {
+        console.log(e.detail.value)
+        setSearchValue(e.detail.value)
+        setDropDownOptions(true)
+      }}
+      onKeyDown={(e) => {
+        if (searchValue && e.keyCode === 27) {
+          setDropDownOptions(false)
+        }
+      }}
+      style={{ marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px" }}
+      animated={true}
+      clearIcon={trashBin}
+      class="custom"
+      autocomplete="on"
+      debounce={500}
+    />)
+  }
   return (
     <>
-        <IonSearchbar
 
-        type="text"
-        placeholder="   Search universities, people..."
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            setDropDownOptions(false)
-            history.push(searchValue ? `/search?q=${searchValue}` : "#")
-            handleSearch(searchValue)
-          }
-        }}
-        value={searchValue}
-        onIonInput={(e) => {
-          console.log(e.detail.value)
-          setSearchValue(e.detail.value)
-          setDropDownOptions(true)
-        }}
-        onKeyDown={(e) => {
-          if (searchValue && e.keyCode === 27) {
-            setDropDownOptions(false)
-          }
-        }}
-        style={{marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px"}}
-        animated={true}
-        clearIcon={trashBin}
-        class="custom"
-        autocomplete="on"
-        debounce={500}
-        />
-        {/* <Link
+      {/* <Link
           to={searchValue ? `/search?q=${searchValue}` : "#"}
           className="search-box__search-icon flex justify-center items-center "
         >
         </Link> */}
+      {SearchBar()}
       {dropDownOptions && Array.isArray(options) && options.length > 0 && (
         <div
           className="recommend-search"

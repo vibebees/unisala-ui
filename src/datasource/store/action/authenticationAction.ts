@@ -25,7 +25,7 @@ export const loginUser = ({
         if (res.data.success) {
           res?.data?.accessToken && setCache("accessToken", res?.data?.accessToken)
           res?.data?.refreshToken && setCache("refreshToken", res?.data?.refreshToken)
-          res?.data && setCache("user", res?.data)
+          res?.data && setCache("userInfo", res?.data)
           setActiveNavDrop({ profile: false })
 
           dispatch({
@@ -136,7 +136,7 @@ export const googleAuthAction = ({
       if (res.data.success) {
         setCache("accessToken", res?.data?.accessToken)
         setCache("refreshToken", res?.data?.refreshToken)
-
+        res?.data && setCache("userInfo", res?.data)
         if (res?.data.isFirstLogin) {
           setCache("newUser", "true")
         }

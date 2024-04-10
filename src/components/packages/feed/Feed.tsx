@@ -9,6 +9,7 @@ import { getNewsFeed, getUserGql } from "../../../datasource/graphql/user";
 import { FeedSkeleton } from "../skeleton/feedSkeleton";
 import { Event } from "../events";
 import { ApiError } from "../errorHandler/ApiError";
+import { userName } from "../../../utils/cache";
 interface FeedProps {
   allProps: any;  // Define specific types based on usage
   feedType: string;
@@ -24,10 +25,9 @@ interface Post {
 }
 
 const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
-  const username = useSelector((state: any) => state.userProfile.user?.username);  // Define the state type properly
 
   const { data: userInfoData } = useQuery(getUserGql, {
-    variables: { username },
+    variables: { userName },
     context: { server: "USER_SERVICE_GQL" }
   });
 

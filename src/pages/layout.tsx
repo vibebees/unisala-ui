@@ -68,7 +68,7 @@ const rightSidebarDefault = (
     {/* Add more cards if needed */}
   </div>
 );
-const style = {backgroundColor:"#f3f7ff"}
+const style = {backgroundColor: "#F0F2F5"};
 const Layout: React.FC<LayoutProps> = ({ leftSidebar = leftSidebarDefault, mainContent, rightSidebar = rightSidebarDefault }) => {
   return (
     <Page>

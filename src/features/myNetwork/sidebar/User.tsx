@@ -14,6 +14,7 @@ import {
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
  import { useMutation } from "@apollo/client"
 import { Avatar } from "../../../components/defaults"
+import { userName } from "../../../utils/cache"
 
 export default function User({ item, setIsOpen, isOpen }) {
   const [disconnected, setDisconnected] = useState(false)
@@ -67,7 +68,7 @@ export default function User({ item, setIsOpen, isOpen }) {
   return (
     <IonItem mode="ios" className="mb-1" lines="full">
       <IonAvatar slot="start">
-        <Avatar username={item?.user?.username} profilePic={item?.user?.picture} />
+        <Avatar username={userName} profilePic={item?.user?.picture} />
       </IonAvatar>
       <IonLabel>
         <div className="flex">
@@ -78,7 +79,7 @@ export default function User({ item, setIsOpen, isOpen }) {
             // onClick={handleUserProfile}
           >
             <h2>{item?.user?.firstName + " " + item?.user?.lastName}</h2>
-            <p>{item?.user?.username}</p>
+            <p>{userName}</p>
           </div>
           <IonButton
             mode="ios"

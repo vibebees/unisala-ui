@@ -15,6 +15,7 @@ const WelcomeSteps = lazy(() => import("../../components/packages/authentication
 const InfiniteFeed = lazy(() => import("../../components/packages/feed/Feed"))
 // const ScrollableCard = lazy(() =>import("../../components/packages/ScrollableImageCard/organism/ScrollableCard"))
 const FolderStructure = lazy(() => import("../../components/packages/folderStructure/index"))
+const ScrollableCard = lazy(() => import("../../components/packages/scrollableImageCard/organism/ScrollableCard"))
 
 export const Home = ({ allProps }) => {
   useDocTitle("Unisala")
@@ -42,8 +43,8 @@ export const Home = ({ allProps }) => {
       context: { server: UNIVERSITY_SERVICE_GQL }
     }
   )
-  const { data: famousUniversities } = useQuery(fetchFamousUniversities, {
-    variables: { limit: 100, page: 0 },
+  const { data: famousUniversities , loading: famousUniversitiesLoading, error} = useQuery(fetchFamousUniversities, {
+    variables: { limit: 20, page: 0 },
     context: { server: USER_SERVICE_GQL }
   })
 
@@ -57,20 +58,33 @@ export const Home = ({ allProps }) => {
     setUserGuide(generatedUserGuide)
   }, [schoolData])
 
+  console.log({schoolData, userGuide, userInfo})
   const Feed = () => (
-      <div >
-        <CreateAPostCard allProps={allProps} />
-        <FolderStructure
+    <div >
+      <CreateAPostCard allProps={allProps} />
+      <FolderStructure
+        allProps={{
+          ...allProps,
+          folderName: "",
+          data: userGuide,
+          popUp: false,
+          customHeight: false
+        }}
+      />
+      <Card className=" mt-4 ion-no-padding ion-no-margin">
+        <ScrollableCard
           allProps={{
             ...allProps,
-            folderName: "",
-            data: userGuide,
-            popUp: false,
-            customHeight: false
+            data: discoverUni,
+            title: "Discover Universities",
+            loading: famousUniversitiesLoading,
+            error: error
           }}
         />
-        <InfiniteFeed userInfo={user} allProps={allProps} feedType="newsfeed" />
-      </div>
+      </Card>
+
+      <InfiniteFeed userInfo={user} allProps={allProps} feedType="newsfeed" />
+    </div>
   )
 
   const renderNewUserView = React.useCallback(() => {

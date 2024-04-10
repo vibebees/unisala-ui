@@ -1,5 +1,5 @@
 import React from "react"
-import { CardContent, Grid, Icon, Typography } from "../../../defaults/index"
+import { CardContent, Grid, Icon, Spinner, Typography } from "../../../defaults/index"
 import clsx from "clsx"
 import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons"
 import SingleImageCard from "../molecules/SingleImageCard"
@@ -7,7 +7,7 @@ import "./similarCollege.css"
 import { CustomTrackingLink } from "../../../analytics/LinkTrack"
 
 const ScrollableCard = ({ allProps }) => {
-  const { title, data, className } = allProps
+  const { title, data, className , loading} = allProps
   const handleRightScrollClick = () => {
     const container = document.querySelector(`.${className}`)
     container?.scrollBy({
@@ -22,6 +22,9 @@ const ScrollableCard = ({ allProps }) => {
       left: -500,
       behavior: "smooth"
     })
+  }
+  if (loading) {
+    return <CardContent> <Spinner /></CardContent>
   }
   return (
     <CardContent className="p-0 ion-no-padding mt-4  ion-no-margin w-full ">

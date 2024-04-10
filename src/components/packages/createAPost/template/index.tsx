@@ -20,12 +20,11 @@ const CreateAPostCard = ({ allProps }) => {
 
   useEffect(() => {
     const cacheKey = `metadata-${pathname}`
-    const cachedMeta = getCache(cacheKey)
+    const cachedMeta = getCache(cacheKey) || false
 
     const fn = async () => {
       if (cachedMeta) {
-        const cachedData = JSON.parse(cachedMeta)
-        setMeta(cachedData)
+        setMeta(cachedMeta)
       } else {
         try {
           const createAPostMetaData = await axios.get(
@@ -66,7 +65,6 @@ const CreateAPostCard = ({ allProps }) => {
           // setCreateAPostPopUp(true)
           // console.log("clicked")
         }}
-      style = {{height:'50px'}}
       >
         <CreateAPostModal
           ModalData={<PostModalOnClick allProps={allProps} metaData={meta} />}

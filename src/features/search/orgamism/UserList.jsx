@@ -1,6 +1,7 @@
 import CardTitle from "../../university/rectangularCardGrid/atoms/CardTitle"
 
 import UserCard from "../../../components/packages/userCard"
+import {userName} from "../../../utils/cache"
 export const UserResults = ({ users, loading }) => {
   return (
     <div>
@@ -15,7 +16,7 @@ export const UserResults = ({ users, loading }) => {
               profileBanner={user?.coverPicture}
               profileImg={user?.picture}
               name={user?.firstName + " " + user?.lastName}
-              username={user?.username}
+              username={userName}
               location={user?.location}
               oneLineBio={user?.oneLineBio}
             />

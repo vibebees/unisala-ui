@@ -33,18 +33,6 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     }),
     { getTopActiveSpaces } = topSpaceData || {},
     { getTopOrgSpace } = topOrgData || {},
-    views = {
-
-      lessThan768: screenLessThan768({
-        setActiveProfile,
-        personCircle,
-        activeProfile,
-        loggedIn,
-        username: user.username,
-        ProfilePop,
-        propsall
-      })
-    },
     [createAPostPopUp, setCreateAPostPopUp] = useState(false),
     [verfiyAPostPopUp, setVerifyAPostPopUp] = useState(false),
     [page, setPage] = useState(0),
@@ -151,7 +139,6 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     user,
     loggedIn,
     GetTopActiveSpaces,
-    views,
     page,
     setPage,
     history,
@@ -159,6 +146,8 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     userInfo,
     generateUserGuide,
     unitId,
-    setUnitId
+    setUnitId,
+    spaces: getTopActiveSpaces,
+    orgs:getTopOrgSpace
   }
 }

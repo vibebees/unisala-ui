@@ -1,3 +1,4 @@
+import React from "react"
 import { useMutation } from "@apollo/client"
 import { IonIcon, useIonToast } from "@ionic/react"
 import { DeletePost, getNewsFeed } from "../../../../datasource/graphql/user"
@@ -5,6 +6,7 @@ import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+import { userName } from "../../../../utils/cache"
 
 const ThreadOptions = ({
   loggedinUser,
@@ -75,7 +77,7 @@ const ThreadOptions = ({
     }
   })
 
-  if (loggedinUser?.username === username) {
+  if (userName === username) {
     return (
       <div className="absolute z-20 top-4 right-8">
         <div className="relative">

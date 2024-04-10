@@ -7,21 +7,22 @@ import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { getUserProfile } from "../../datasource/graphql/user"
 import { callSocket } from "../../datasource/servers/endpoints"
-import { getCache } from "../../utils/cache"
-
+import { userName , userInfo} from "../../utils/cache"
+import Layout from "../../pages/layout"
+import {LeftSideBar} from "./leftSideBar"
+import { all } from "axios"
 export default function HomePage({ propsall }) {
   const socket = useRef<ReturnType<typeof callSocket> | null>(null);
-  const { user, loggedIn } = useSelector((store) => store?.userProfile || {})
-
-  const { loading, error, data, refetch } = useQuery(getUserProfile, {
+  const { loggedIn } = userInfo
+  console.log( !loggedIn ,  !userName)
+   const { loading, error, data, refetch } = useQuery(getUserProfile, {
     context: { server: USER_SERVICE_GQL },
     variables: {
-      username: user?.username
+      username: userName
     },
-    skip: !loggedIn || !user?.username
+    skip: !loggedIn || !userName
   }),
-    userInfo = data?.getUser?.user,
-    allProps = getAllPropsHome({ user, loggedIn, userInfo, refetch, propsall })
+    allProps = getAllPropsHome({ user: userInfo, loggedIn, refetch, propsall })
 
   useEffect(() => {
     socket.current = callSocket()
@@ -35,6 +36,9 @@ export default function HomePage({ propsall }) {
       console.log("callSocket disconnected")
     }
   }, [])
-
-  return <Home allProps={{ ...allProps, refetch }} />
+  console.log(allProps, "allProps")
+  return <Layout
+    mainContent={<Home allProps = {allProps} />}
+    leftSidebar={< LeftSideBar { ...allProps} />}
+  />
 }

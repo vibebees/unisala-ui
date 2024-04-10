@@ -9,6 +9,7 @@ import { userSearch } from "graphql/user"
 import UserCard from "component/userCard"
 import noResultsFound from "assets/no-results.jpg"
 import { USER_SERVICE_GQL } from "servers/types"
+import { userName } from "../../../../utils/cache"
 
 function index({ query }) {
   const { data } = useQuery(userSearch(query), {
@@ -38,7 +39,7 @@ function index({ query }) {
           profileBanner={user?.coverPicture}
           profileImg={user?.picture}
           name={user?.firstName + " " + user?.lastName}
-          username={user?.username}
+          username={userName}
           loaction={user?.location}
           oneLineBio={user?.oneLineBio}
         />

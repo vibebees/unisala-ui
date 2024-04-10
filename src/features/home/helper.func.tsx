@@ -282,34 +282,7 @@ export const screensMoreThan768 = ({
             </div>
           </Card>
 
-          <Card className="overflow-y-auto my-4 max-h-[348px]">
-            <Text color="dark">
-              <h6 className="text-center my-2 font-semibold">Top Spaces</h6>
-            </Text>
 
-            <TopSpaces topSpaces={topSpaces} />
-            <Link to="/space" style={{ marginTop: "120px" }}>
-              <Text
-                className="max-w-[250px] text-[#3880FF] text-center  font-semibold"
-                fill="solid"
-                style={{
-                  "--background": "white",
-                  "--background-hover": "#eee"
-                }}
-              >
-                <h1 className="py-4">Browse More Spaces</h1>
-              </Text>
-            </Link>
-          </Card>
-
-          <Card className="overflow-y-auto my-4 max-h-[348px]">
-            <Text color="dark">
-              <h6 className="text-center my-2 font-semibold">
-                Top Organization
-              </h6>
-            </Text>
-            <TopOrgs topOrgs={topOrgs?.data} />
-          </Card>
         </>
       ) : (
         <Card

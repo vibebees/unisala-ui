@@ -99,6 +99,7 @@ ion-searchbar.custom {
     --border-radius: 10px;
     --height: '50px';
     --box-shadow: 0 3px 13px 0 rgb(60 60 60 / 40%);
+    --background: #fff;
 }
 
   ion-searchbar.ios.custom {

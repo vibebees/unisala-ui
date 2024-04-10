@@ -6,7 +6,7 @@ const AuthPage = ({ allProps }) => {
 
   return (
     <Layout
-      mainContent={<LoginPage allProps={{}} />}
+      mainContent={<LoginPage allProps={{...allProps}} />}
     />
   )
 }

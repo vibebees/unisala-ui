@@ -25,6 +25,7 @@ export const loginUser = ({
         if (res.data.success) {
           res?.data?.accessToken && setCache("accessToken", res?.data?.accessToken)
           res?.data?.refreshToken && setCache("refreshToken", res?.data?.refreshToken)
+          res?.data && setCache("user", res?.data)
           setActiveNavDrop({ profile: false })
 
           dispatch({

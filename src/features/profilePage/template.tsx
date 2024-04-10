@@ -155,8 +155,7 @@ const ProfilePage = () => {
       </>
     )
   }
-  console.log(tab, "tab")
-  console.log(profileBodyData, "user")
+
   return (
     <>
       <Grid className="max-width-container max-md:px-0">

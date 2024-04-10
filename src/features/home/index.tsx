@@ -11,9 +11,8 @@ import { getCache } from "../../utils/cache"
 
 export default function HomePage({ propsall }) {
   const socket = useRef<ReturnType<typeof callSocket> | null>(null);
-  const user = {
-    username: "prashantbasnet17"
-  }, loggedIn = getCache("accessToken")?.length ?? 0 > 0
+  const { user, loggedIn } = useSelector((store) => store?.userProfile || {})
+
   const { loading, error, data, refetch } = useQuery(getUserProfile, {
     context: { server: USER_SERVICE_GQL },
     variables: {

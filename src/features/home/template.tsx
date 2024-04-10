@@ -7,6 +7,7 @@ import { fetchFamousUniversities } from "./../../datasource/graphql/user"
 import useDocTitle from "../../hooks/useDocTitile"
 import { UNIVERSITY_SERVICE_GQL, USER_SERVICE_GQL } from "./../../datasource/servers/types"
 import { Card, Col, Grid, Row } from "../../components/defaults"
+import { useSelector } from "react-redux"
 const FloatingButton = lazy(() => import("../../components/packages/floatingButton/index"))
 const CreateAPostCard = lazy(() => import("../../components/packages/createAPost/template"))
 
@@ -28,7 +29,7 @@ export const Home = ({ allProps }) => {
     generateUserGuide
   } = allProps || {}
 
-  const { interestedUni } = userInfo || {}
+  const { interestedUni } =  useSelector(state => state.userProfile) || {}
   const [unitId] = interestedUni || []
 
   const [userGuide, setUserGuide] = useState([])

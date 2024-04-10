@@ -12,7 +12,7 @@ import {
   useIonToast,
   IonSpinner
 } from "@ionic/react"
-import { create } from "ionicons/icons"
+import { create, logOut } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
 import { EditProfile, getUserGql } from "../../../../datasource/graphql/user"
 import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
@@ -21,6 +21,7 @@ import "./index.css"
 import { useDispatch } from "react-redux"
 import { updateUserProfile } from "../../../../datasource/store/action/userProfile"
 import { useHistory } from "react-router-dom"
+import { Label } from "../../../../components/defaults"
 function index({ profileHeader }) {
   // for autocomplete location
   const Avatar = () => "Avatar"
@@ -219,9 +220,19 @@ function index({ profileHeader }) {
         onClick={() => setIsOpen(true)}
       >
         <IonIcon className="grey-icon-10 mr-1" color="" icon={create} />
-        <span>{windowWidth >= 768 && "Edit"}</span>
+        <span>{"Edit"}</span>
       </IonButton>
-
+      <IonButtons
+          onClick={() => {
+            localStorage.clear()
+            window.location.reload()
+          }}
+          className="profile-drop-btn"
+          lines="none"
+        >
+          <IonIcon slot="start" icon={logOut} />
+          <Label color="dark">Log out</Label>
+        </IonButtons>
       <IonModal
         onDidDismiss={() => {
           setIsOpen(false)

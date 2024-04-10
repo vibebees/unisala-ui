@@ -30,9 +30,10 @@ const
     if (graphQLErrors) {
       graphQLErrors.forEach(({message, locations, path}) => {
         if (message === "You are not logged in. Please login") {
-          removeCache("accessToken")
-          removeCache("refreshToken")
-          window.location.href = "/login"
+          alert("You are not logged in. Please login")
+          // removeCache("accessToken")
+          // removeCache("refreshToken")
+          // window.location.href = "/login"
         }
       }
       )

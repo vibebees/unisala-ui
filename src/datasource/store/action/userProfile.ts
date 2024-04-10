@@ -1,3 +1,4 @@
+import { setCache } from "../../../utils/cache"
 import {
   GET_USER_PROFILE,
   UPDATE_USER_PROFILE,
@@ -9,6 +10,7 @@ import {
 } from "./types"
 
 export const getUserProfile = (data) => {
+  setCache("userInfo", data)
     return {
       type: GET_USER_PROFILE,
       payload: data

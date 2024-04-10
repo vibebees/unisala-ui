@@ -13,7 +13,7 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
   const [connectionType, setConnectionType] = useState(
     profileHeader.connectionType
   )
-
+    console.log({profileHeader})
   const [sendConnectRequest] = useMutation(SendConnectRequest, {
     onCompleted: (data) => {
       if (data.sendConnectRequest.success) {
@@ -54,7 +54,7 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
         />
       )
     }
-
+console.log({connectionType})
     if (!connectionType) {
       return (
         <IonButton
@@ -68,7 +68,7 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
           }}
         >
           <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
-          {windowWidth >= 768 && "Connect"}
+          {"Connect"}
         </IonButton>
       )
     }

@@ -23,7 +23,7 @@ export function ProtectedRoute({ children }) {
   }
 
   if (!loggedIn) {
-    return <Redirect to="/" />
+    return <Redirect to="/login" />
   }
   return children
 }

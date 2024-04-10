@@ -3,7 +3,8 @@ import { lazy, Suspense } from "react"
 import {Redirect, Route, Switch} from "react-router"
 import { ProtectedRoute } from "../utils/lib/protectedRoute"
 import { PreLoader } from "../components/packages/preloader"
-import { authenticated } from "../utils/cache"
+import { useSelector } from "react-redux"
+import { getCache } from "../utils/cache"
 
 // import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
 
@@ -85,51 +86,64 @@ const universityRoutes = () => (
       </Route>
     </>
 )
-export const PageRoute = ({ allProps }) => (
-  <Suspense fallback={<PreLoader />}>
-    <Switch>
-      <Route exact path="/">
-        {authenticated ? <Redirect to="/feed" /> : <LandingPage />}
-      </Route>
-      <Route path="/feed">
-        {authenticated ? <HomePage /> : <Redirect to="/" />}
-      </Route>
-      <Route path="/home">
-        {authenticated ? <HomePage /> : <Redirect to="/" />}
-      </Route>
-      {/* Protected routes example */}
-      <Route path="/profile">
-        {authenticated
-          ? <ProfilePage />
-          : <AuthPage allProps={{ ...allProps, routeState: "signin" }} />}
-      </Route>
-      <Route path="/standard">
-          <Standard />
-      </Route>
+export const PageRoute = ({ allProps }) => {
+  const test = useSelector((state) => state?.userProfile),
+  authenticated = getCache('refreshToken') ? true : false;
+  console.log(authenticated )
+  return (
+    <Suspense fallback={<PreLoader />}>
+      <Switch>
+        <Route exact path="/">
+          {authenticated ? <Redirect to="/feed" /> : <LandingPage />}
+        </Route>
+        <Route path="/feed">
+          {authenticated ? <HomePage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/home">
+          {authenticated ? <HomePage /> : <Redirect to="/" />}
+        </Route>
+        {/* Protected routes example */}
+        <Route path="/profile">
+          {authenticated
+            ? <ProfilePage />
+            :  <Redirect to="/login" />}
+        </Route>
+        <Route path="/standard">
+            <Standard />
+        </Route>
 
-      <Route path="/@/:username" exact>
-        <ProfilePage />
-      </Route>
+        <Route path="/@/:username" exact>
+          <ProfilePage />
+        </Route>
 
-      <Route path="/search" exact>
-        <Discover />
-      </Route>
+        <Route path="/search" exact>
+          <Discover />
+        </Route>
 
-      <Route exact path="/university/:id">
-        <UniversityPage />
-      </Route>
+        <Route path="/register" exact>
+          <AuthPage allProps={{ ...allProps, routeState: "signup" }} />
+        </Route>
 
-      <Route path="/messages" exact>
-        <Messages />
-      </Route>
+        <Route path="/login" exact>
+          <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
+        </Route>
 
-      {networkRoutes()}
 
-      {/* More routes */}
-      {/* Fallback route for 404 Not Found */}
-      <Route path="*">
-        <PageNotFound />
-      </Route>
-    </Switch>
-  </Suspense>
-)
+
+        {networkRoutes()}
+        {spaceRoutes()}
+        {orgRoutes()}
+        {messagingRoutes()}
+        {universityRoutes()}
+
+
+        {/* More routes */}
+        {/* Fallback route for 404 Not Found */}
+        <Route path="*">
+          <PageNotFound />
+        </Route>
+      </Switch>
+    </Suspense>
+  )
+
+}

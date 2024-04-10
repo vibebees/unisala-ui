@@ -4,7 +4,7 @@ import { Avatar } from "../../../defaults"
 import { userInfo } from "../../../../utils/cache"
 
 const FormAvatar = () => {
-  const { user } = userInfo
+  const { user } = useSelector(state => state.userProfile)
   return (
     <div className="thread-header gap-2">
       <div className="thread_profile-pic ">

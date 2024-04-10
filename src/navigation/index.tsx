@@ -11,9 +11,10 @@ import Tab3 from '../pages2/Tab3';
 import { PageRoute } from './PageRoute';
 import { ExploreIcon, HomeIcon, PeopleIcon, MessageIcon } from '../components/packages/icons';
 import { SearchBar } from '../components/packages/searchBox';
-import { authenticated } from '../utils/cache';
+import { authenticated, getCache, userName } from '../utils/cache';
 import { IonCol, IonGrid, IonHeader, IonRow } from '@ionic/react';
 import { max } from 'moment';
+import { useSelector } from 'react-redux';
 
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
@@ -26,7 +27,8 @@ type RouteParams = {
 
 
 export const Navigation: React.FC<NavigationProps> = () => {
-    let profileLink = authenticated ? "/@/prashantbasnet17" : "/profile";
+    const authenticated = getCache("refreshToken");
+     let profileLink = authenticated ? "/@/" + userName : "/profile";
     const navigation = [
         {
             name: "Home",
@@ -118,9 +120,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
                                 <img
                                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
                                     alt="logo"
-                                    style={{
-
-                                    }}
+                                    style={{width: "45px" }}
                                 />
                             </Link>
                         </IonCol>

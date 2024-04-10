@@ -11,6 +11,22 @@ import { Event } from "../events";
 import { ApiError } from "../errorHandler/ApiError";
 import { userName } from "../../../utils/cache";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import { Card } from "../../defaults";
+
+
+const NoContentCard = () => (
+<div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg shadow-lg h-52 md:h-64 border border-gray-200">
+  <span className="text-5xl md:text-6xl">📭</span>
+  <p className="text-gray-800 text-md md:text-lg mt-4">
+    No content on this page
+  </p>
+</div>
+
+);
+
+
+
+
 interface FeedProps {
   allProps: any;  // Define specific types based on usage
   feedType: string;
@@ -65,7 +81,9 @@ const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
     }
     setPage(page + 1);
   };
-
+  if (posts?.length === 0) {
+    return <NoContentCard/>
+  }
   return (
     <div>
       {posts?.map((post, index) => (

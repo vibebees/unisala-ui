@@ -2,8 +2,8 @@ import { useQuery } from "@apollo/client"
  import { GetAllHistoryEvents } from "../../../../datasource/graphql/user"
  import Contribution from "../atoms/Contribution"
 import {List, Typography} from "../../../../components/defaults"
-import {ListSkeleton} from "../../../../components/packages/skeleton/ListSkeleton"
-import {USER_SERVICE_GQL} from "../../../../datasource/servers/types"
+ import {USER_SERVICE_GQL} from "../../../../datasource/servers/types"
+import {FeedSkeleton} from "../../../../components/packages/skeleton/feedSkeleton"
 
 const ContributionArray = [
   {
@@ -56,10 +56,10 @@ const ContributionsList = ({ _id }) => {
   if (loading) {
     return (
       <>
-        <ListSkeleton />
-        <ListSkeleton />
-        <ListSkeleton />
-        <ListSkeleton />
+        <FeedSkeleton />
+        <FeedSkeleton />
+        <FeedSkeleton />
+        <FeedSkeleton />
       </>
     )
   }

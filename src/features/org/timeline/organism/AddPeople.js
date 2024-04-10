@@ -4,7 +4,7 @@ import { Input, List, Row } from  "../../../../components/defaults"
  import { useDebouncedEffect } from "../../../../hooks/useDebouncedEffect"
 import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 import {Search} from "../../../../datasource/graphql/user"
-import {ListSkeleton} from "../../../../components/packages/skeleton/ListSkeleton"
+import {FeedSkeleton} from "../../../../components/packages/skeleton/feedSkeleton"
 const AddPeopleForm = lazy(() => import("../../timeline/atoms/AddPeopleForm"))
 const PeopleList = lazy(() => import("../../timeline/atoms/PeopleList"))
 
@@ -58,11 +58,11 @@ const AddPeople = ({ data: historyData, setdata }) => {
 
       {loading && (
         <>
-          <ListSkeleton />
-          <ListSkeleton />
-          <ListSkeleton />
-          <ListSkeleton />
-          <ListSkeleton />
+          <FeedSkeleton />
+          <FeedSkeleton />
+          <FeedSkeleton />
+          <FeedSkeleton />
+          <FeedSkeleton />
         </>
       )}
 

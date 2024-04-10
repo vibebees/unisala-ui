@@ -50,20 +50,20 @@ const networkRoutes = () => (
       </Route>
     </ProtectedRoute>
 )
-const spaceRoutes = () => (
-  <>
-    <ProtectedRoute>
-      <Switch>
-        <Route path="/space" exact>
-          {/* <SpaceIndex /> */}
-        </Route>
-        <Route path="/space/:category" exact>
-          <SpacePage />
-        </Route>
-      </Switch>
-    </ProtectedRoute>
-  </>
-)
+// const spaceRoutes = () => (
+//   <>
+//     <ProtectedRoute>
+//       <Switch>
+//         <Route path="/space" exact>
+//           {/* <SpaceIndex /> */}
+//         </Route>
+//         <Route path="/space/:category" exact>
+//           <SpacePage />
+//         </Route>
+//       </Switch>
+//     </ProtectedRoute>
+//   </>
+// )
 
 const orgRoutes = () => (
   <>
@@ -79,13 +79,11 @@ const orgRoutes = () => (
   </>
 )
 
-const universityRoutes = () => (
-<>
-      <Route exact path="/university/:id">
-        <UniversityPage />
-      </Route>
-    </>
-)
+// const universityRoutes = () => (
+// <>
+
+//     </>
+// )
 export const PageRoute = ({ allProps }) => {
   const test = useSelector((state) => state?.userProfile),
   authenticated = getCache('refreshToken') ? true : false;
@@ -126,17 +124,22 @@ export const PageRoute = ({ allProps }) => {
         <Route path="/login" exact>
           <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
         </Route>
+        <Route path="/space" exact>
+          {/* <SpaceIndex /> */}
+        </Route>
+        <Route path="/space/:category" exact>
+          <SpacePage />
+        </Route>
+
+        <Route exact path="/university/:id">
+        <UniversityPage />
+        </Route>
+
 
         {orgRoutes()}
 
-        {spaceRoutes()}
-
-
         {messagingRoutes()}
-        {universityRoutes()}
         {networkRoutes()}
-
-
         {/* More routes */}
         {/* Fallback route for 404 Not Found */}
         <Route path="*">

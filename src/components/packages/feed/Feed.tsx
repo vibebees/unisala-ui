@@ -56,7 +56,7 @@ const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
           });
         }
       });
-      event.detail.complete();
+      event?.detail?.complete();
     } catch (error) {
       console.error('Error loading more posts:', error);
     }

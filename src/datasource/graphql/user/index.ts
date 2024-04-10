@@ -1656,4 +1656,61 @@ export const AddComment = gql`
       }
     }
   }
+`,
+  GetAllHistoryEvents = gql`
+    query getAllHistoryActivity(
+      $orgHistoryId: ID!
+      $startYear: Int
+      $endYear: Int
+    ) {
+      getAllHistoryActivity(
+        orgHistoryId: $orgHistoryId
+        startYear: $startYear
+        endYear: $endYear
+      ) {
+        status {
+          success
+          message
+        }
+        data {
+          _id
+          title
+          user {
+            _id
+            firstName
+            lastName
+            username
+            picture
+          }
+        }
+      }
+    }
+  `,
+  EditHistory = gql`
+  mutation editHistory(
+    $orgHistoryId: ID!
+    $title: String
+    $description: String
+    $date: String
+  ) {
+    editHistory(
+      orgHistoryId: $orgHistoryId
+      title: $title
+      description: $description
+      date: $date
+    ) {
+      status {
+        success
+        message
+      }
+      data {
+        _id
+        userId
+        orgId
+        title
+        description
+        date
+      }
+    }
+  }
 `

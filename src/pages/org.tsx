@@ -1,4 +1,7 @@
 import React from "react"
-// import Space from "../features/org/index"
-const SpacePage = () => < > Space</>
-export default SpacePage
+import Org from "../features/org/index"
+export default function OrgPage() {
+  return (
+    <Org/>
+  )
+}

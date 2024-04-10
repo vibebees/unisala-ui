@@ -1,15 +1,11 @@
-import unisalaImg from "assets/unisala-intro.png"
-import useDocTitle from "hooks/useDocTitile"
-import { personCircle } from "ionicons/icons"
 import { useState } from "react"
+import useDocTitle from "hooks/useDocTitile"
+import unisalaImg from "../../assets/unisala-intro.png"
 import { useHistory, useParams } from "react-router"
-import { screenGreaterThan1000 } from "./screens.greater.1000"
-import { screenLessThan768 } from "./screens.lessThan768"
-import { screensMoreThan768 } from "./screens.moreThan768"
 
 export const getAllProps = ({
   user = {},
-  topSpaceData = {},
+  topOrgData = {},
   loggedIn = false,
   profileData = {},
   data = {},
@@ -17,8 +13,7 @@ export const getAllProps = ({
 }) => {
   useDocTitle("Unisala")
 
-
-  const { getTopActiveSpaces } = topSpaceData || {},
+  const { getTopOrgSpace } = topOrgData || {},
     [showTopScrollbtn, setShowTopScrollbtn] = useState(false),
     history = useHistory(),
     [width, setWidth] = useState(window.innerWidth),
@@ -30,34 +25,17 @@ export const getAllProps = ({
     },
     [activeProfile, setActiveProfile] = useState(false),
     [activeTab, setActiveTab] = useState(0),
-    views = {
-      greaterThan1000: screenGreaterThan1000({
-        title: "Top Spaces",
-        topSpaces: getTopActiveSpaces?.spaceCategory
-      }),
-      greaterThan768: screensMoreThan768({
-        activeTab,
-        setActiveTab,
-        unisalaImg,
-        profileData,
-        loggedIn
-      }),
-      lessThan768: screenLessThan768({
-        setActiveProfile,
-        personCircle,
-        activeProfile,
-        loggedIn,
-        username: user.username
-      })
-    },
     [createAPostPopUp, setCreateAPostPopUp] = useState(false),
     [verfiyAPostPopUp, setVerifyAPostPopUp] = useState(false),
     params = useParams(),
-    searchSpaceCategory = data?.searchSpaceCategory || {},
-    { data: spaceCategory } = searchSpaceCategory,
-    spaceId = spaceCategory?._id,
-    parentId = spaceCategory?.parentId // this could be null as the current space could be parent in itself
+    searchOrgCategory = data?.getOrgSpaceById || {},
+    { data: orgData } = searchOrgCategory,
+    orgId = orgData?._id,
+    // role = spaceCategory?.role,
+    // isJoined = spaceCategory?.isJoined,
+    parentId = orgData?.parentId // this could be null as the current space could be parent in itself
   let tags = []
+
   const configSegment = {
       options: [
         {
@@ -106,23 +84,23 @@ export const getAllProps = ({
     setActiveProfile,
     user,
     loggedIn,
-    spaceId,
-    views,
+    orgId,
     handleResize,
     showTopScrollbtn,
     setShowTopScrollbtn,
     profileData,
     params,
     parentId,
-    topSpaceData,
+    getTopOrgSpace,
     data,
     loading,
-    searchSpaceCategory,
-    spaceCategory,
+    searchOrgCategory,
+    orgData,
     tags,
     configSegment,
     tab,
     setTab
+    // role,
+    // isJoined
   }
 }
-

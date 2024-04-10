@@ -127,13 +127,14 @@ export const PageRoute = ({ allProps }) => {
           <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
         </Route>
 
-
-
-        {networkRoutes()}
-        {spaceRoutes()}
         {orgRoutes()}
+
+        {spaceRoutes()}
+
+
         {messagingRoutes()}
         {universityRoutes()}
+        {networkRoutes()}
 
 
         {/* More routes */}

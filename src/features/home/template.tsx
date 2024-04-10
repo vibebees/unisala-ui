@@ -58,7 +58,6 @@ export const Home = ({ allProps }) => {
     setUserGuide(generatedUserGuide)
   }, [schoolData])
 
-  console.log({schoolData, userGuide, userInfo})
   const Feed = () => (
     <div >
       <CreateAPostCard allProps={allProps} />

@@ -1,40 +1,43 @@
-import { useMutation } from "@apollo/client"
 import {
   IonButton,
   IonCard,
+  IonCardContent,
   IonCardHeader,
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
   IonModal,
   IonPopover,
   IonTitle,
   IonToolbar,
   useIonToast
 } from "@ionic/react"
-import SpaceHeaderImg from "../../assets/space-header.jpg"
-import UpdateSpaceForm from "../../components/packages/updateSpaceForm"
- import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
-import { useState } from "react"
+import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useSelector } from "react-redux"
-import { useHistory } from "react-router"
+import { DeleteSpace } from "../../datasource/graphql/user"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
+import { useMutation } from "@apollo/client"
+import { useHistory } from "react-router"
+import { useState } from "react"
+import UpdateSpaceForm from "../../components/packages/updateSpaceForm"
+import SpaceHeaderImg from "../../assets/space-header.jpg"
 import "./Space.css"
-import {DeleteSpace} from "../../datasource/graphql/user"
-import {userInfo} from "../../utils/cache"
 
 const linearGradientStyle = {
   background: "linear-gradient(90deg, rgba(0,0,0) 20%, rgba(99,96,96,1) 62%)"
 }
 
 const SpaceHeader = ({ spaceDetails }) => {
- const loggedinUser = userInfo
+  const { user: loggedinUser } = useSelector((state) => state.userProfile)
 
   //   the user who created this space
   const { user } = spaceDetails || {}
   const [present, dismiss] = useIonToast()
   const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
+  const [showEvents, setShowEvents] = useState(false)
+  const [showMembers, setShowMembers] = useState(false)
   //  delete space
   const [deleteSpace] = useMutation(DeleteSpace, {
     context: { server: USER_SERVICE_GQL },
@@ -114,7 +117,7 @@ const SpaceHeader = ({ spaceDetails }) => {
     )
 
   return (
-    <>
+    <IonCard className="ion-no-margin rounded-b-xl ">
       <IonCardHeader>
         <img
           className="profile-header-img"
@@ -124,16 +127,15 @@ const SpaceHeader = ({ spaceDetails }) => {
         />
       </IonCardHeader>
 
-      <div className="profile-header-gradient">
+      <div className="profile-header-gradient ">
         <h2 className="space-name">{spaceDetails?.name}</h2>
         <p className="space-description" style={{ fontSize: "16px" }}>
           {spaceDetails?.description}
         </p>
         <OptionsEditSpace />
       </div>
-    </>
+    </IonCard>
   )
 }
 
 export default SpaceHeader
-

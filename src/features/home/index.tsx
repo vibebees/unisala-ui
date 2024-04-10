@@ -5,7 +5,7 @@ import { getAllPropsHome } from "./getAllProps"
 import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
-import { getUserProfile } from "../../datasource/graphql/user"
+import { getUserGql } from "../../datasource/graphql/user"
 import { callSocket } from "../../datasource/servers/endpoints"
 import { userName , userInfo, getCache} from "../../utils/cache"
 import Layout from "../../pages/layout"
@@ -14,15 +14,15 @@ import { all } from "axios"
 export default function HomePage({ propsall }) {
   const socket = useRef<ReturnType<typeof callSocket> | null>(null);
   const loggedIn = getCache('refreshToken')
-  console.log({userName, loggedIn})
-   const { loading, error, data, refetch } = useQuery(getUserProfile, {
+
+   const { loading, error, data, refetch } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: {
       username: userName,
-      test: "test"
-
     },
-    skip: !loggedIn || !userName
+     skip: !loggedIn || !userName,
+     fetchPolicy: 'network-only', // Used for first execution
+     nextFetchPolicy: 'cache-first', //
   }),
     allProps = getAllPropsHome({ user: userInfo, loggedIn, refetch, propsall })
 

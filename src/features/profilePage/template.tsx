@@ -34,7 +34,8 @@ const ProfilePage = () => {
 
   const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
-    variables: { username: username }
+    variables: { username: username },
+    fetchPolicy: 'cache-first'
   })
   useDocTitle(username)
 

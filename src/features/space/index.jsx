@@ -2,7 +2,6 @@ import {useQuery} from "@apollo/client"
 import {
   GetSpaceCategory,
   GetTopActiveSpaces,
-  getUserProfile
 } from "../../datasource/graphql/user"
 import {useSelector} from "react-redux"
 import {useParams} from "react-router"
@@ -20,13 +19,8 @@ export default function SpacePage() {
     {loggedIn} = userInfo,
     user = userInfo,
     profileData =
-      loggedIn &&
-      useQuery(getUserProfile, {
-        context: { server: USER_SERVICE_GQL },
-        variables: {
-          username: user?.username
-        }
-      }),
+      loggedIn
+     ,
     { data, loading } = useQuery(GetSpaceCategory, {
       context: { server: USER_SERVICE_GQL },
       variables: { q: params.category }

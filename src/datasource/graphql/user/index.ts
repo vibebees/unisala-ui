@@ -355,29 +355,6 @@ export const AddComment = gql`
       }
     }
   `,
-  getUserProfile = gql`
-    query getUser($username: String!) {
-      getUser(username: $username) {
-        user {
-          firstName
-          lastName
-          username
-          badges {
-            private
-            earnedBadges {
-              title
-              description
-              date
-            }
-          }
-          interestedSubjects
-          interestedUni
-          studyLevel
-          userStatus
-        }
-      }
-    }
-  `,
   GetReplyList = (id, pid) =>
     gql`
             query {

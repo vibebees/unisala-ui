@@ -10,6 +10,7 @@ import { FeedSkeleton } from "../skeleton/feedSkeleton";
 import { Event } from "../events";
 import { ApiError } from "../errorHandler/ApiError";
 import { userName } from "../../../utils/cache";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 interface FeedProps {
   allProps: any;  // Define specific types based on usage
   feedType: string;
@@ -27,8 +28,10 @@ interface Post {
 const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
 
   const { data: userInfoData } = useQuery(getUserGql, {
-    variables: { userName },
-    context: { server: "USER_SERVICE_GQL" }
+    variables: { username: userName },
+    context: { server: USER_SERVICE_GQL },
+    skip: !userName,
+    fetchPolicy: 'cache-first'
   });
 
   const [page, setPage] = useState(0);

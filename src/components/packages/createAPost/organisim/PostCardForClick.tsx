@@ -9,7 +9,7 @@ export const PostCardForClick = () => {
   const { user } =  useSelector(state => state.userProfile)
 
   return (
-    <div style={{ padding: "2px", cursor: "pointer" }}>
+    <div style={{ padding: "1px", cursor: "pointer" }}>
       <IonItem lines="none" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <IonAvatar slot="start">
           <Avatar username={user?.username} profilePic={user?.picture} />

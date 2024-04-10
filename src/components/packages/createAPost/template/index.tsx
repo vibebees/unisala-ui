@@ -54,7 +54,7 @@ const CreateAPostCard = ({ allProps }) => {
 
   return (
       <Card
-        style={{ marginBottom: "12px" }}
+        style={{ marginBottom: "5px" }}
         onClick={() => {
           // params.append("create", "y")
           // if (allProps.unitId) {
@@ -66,6 +66,7 @@ const CreateAPostCard = ({ allProps }) => {
           // setCreateAPostPopUp(true)
           // console.log("clicked")
         }}
+      style = {{height:'50px'}}
       >
         <CreateAPostModal
           ModalData={<PostModalOnClick allProps={allProps} metaData={meta} />}

@@ -89,7 +89,6 @@ const universityRoutes = () => (
 export const PageRoute = ({ allProps }) => {
   const test = useSelector((state) => state?.userProfile),
   authenticated = getCache('refreshToken') ? true : false;
-  console.log(authenticated )
   return (
     <Suspense fallback={<PreLoader />}>
       <Switch>

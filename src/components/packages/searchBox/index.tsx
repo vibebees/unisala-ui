@@ -78,7 +78,7 @@ export const SearchBar = () => {
           setDropDownOptions(false)
         }
       }}
-      style={{ marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px", }}
+      style={{ marginTop: "-5px", padding: "0px", borderColor: "red", borderRadius: "10px"}}
       animated={true}
       clearIcon={trashBin}
       class="custom"

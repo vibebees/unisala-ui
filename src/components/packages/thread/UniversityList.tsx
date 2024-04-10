@@ -21,7 +21,7 @@ const UniversityList = ({
     try {
       const res = await authInstance.get(
         `${universityServer}/keyword/schoolname/${
-          searchText.trim().length === 0 ? "New York" : searchText.trim()
+          searchText?.trim().length === 0 ? "New York" : searchText?.trim()
         }/5`
       )
       setResults(res.data)

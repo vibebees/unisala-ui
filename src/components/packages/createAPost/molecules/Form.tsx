@@ -528,11 +528,11 @@ const Form = ({ metaData, postData, setPostData, allProps }) => {
   return (
     <div className="px-2">
       <form onSubmit={handleSubmit}>
-        {metaData?.edges?.map((item) => {
+        {metaData?.edges?.map((item, index) => {
           return (
-            <>
+            <React.Fragment key ={index} >
               <div className="mt-4">{item && generateHTML(item)}</div>
-            </>
+            </React.Fragment>
           )
         })}
         <ImageUpload files={files} setFiles={setFiles} />

@@ -1,3 +1,4 @@
+import React from "react"
 import { lazy } from "react"
 import "./index.css"
 import { EventCard } from "./organisms"

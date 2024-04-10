@@ -17,13 +17,14 @@ import Guestbook from "./guestbook"
 import Saved from "./saved"
 import { useQuery } from "@apollo/client"
  import useDocTitle from "../../hooks/useDocTitile"
-import noResultsFound from "../../assets/no-results.jpg"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { useSelector } from "react-redux"
 import { screenGreaterThan1000 } from "../home/helper.func"
 import List from "../../components/packages/list"
 import { URLgetter, URLupdate } from "../../utils/lib/URLupdate"
 import { getUserGql } from "../../datasource/graphql/user"
+import { NoResultFound } from "../../components/packages/errorHandler/NoResultFound"
+import { ApiError } from "../../components/packages/errorHandler/ApiError"
 
 const ProfilePage = () => {
   const [tab, setTab] = useState(0)
@@ -31,7 +32,7 @@ const ProfilePage = () => {
   const history = useHistory()
   const { user: loggedInUser } = useSelector((state) => state.userProfile)
 
-  const { data } = useQuery(getUserGql, {
+  const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username }
   })
@@ -134,28 +135,16 @@ const ProfilePage = () => {
     }
   }, [tab])
 
+
+
+  if (error) {
+    return (<ApiError/>)
+  }
   if (!getUser?.user) {
     return (
-      <>
-        <Card
-          style={{ textAlign: "center", marginInline: "auto" }}
-          className="max-width-container "
-        >
-          <img alt="unisala: no results found" src={noResultsFound} />
-          <CardHeader>
-            <CardTitle>
-              Sorry, this page is not available. &#9785;
-            </CardTitle>
-            <CardSubtitle>
-              The link you followed may be broken, or the page may have been
-              removed.
-            </CardSubtitle>
-          </CardHeader>
-        </Card>
-      </>
+      <NoResultFound />
     )
   }
-
   return (
     <>
       <Grid className="max-width-container max-md:px-0">

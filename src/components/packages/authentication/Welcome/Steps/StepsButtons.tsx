@@ -9,9 +9,9 @@ import {useHistory} from "react-router"
  import { getCache, removeCache } from "../../../../../utils/cache"
  import { USER_SERVICE_GQL } from "../../../../../datasource/servers/types"
 import { EditProfile , getUserGql} from "../../../../../datasource/graphql/user"
+import { getUserProfile } from "../../../../../datasource/store/action/userProfile"
 
-const getUserProfile = (data) => { }
-const StepsButtons = ({ allProps }) => {
+ const StepsButtons = ({ allProps }) => {
   const { welcomeFormdata } = useContext(WelcomeData),
     dispatch = useDispatch(),
     [present, dismiss] = useIonToast(),

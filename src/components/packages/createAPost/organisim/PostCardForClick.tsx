@@ -3,9 +3,10 @@ import { Avatar } from "../../../defaults";
 import { IonAvatar, IonItem } from "@ionic/react";
 import { GalleryIcon } from "../../icons";
 import { userInfo } from "../../../../utils/cache";
+import { useSelector } from "react-redux";
 
 export const PostCardForClick = () => {
-  const { user } = userInfo;
+  const { user } =  useSelector(state => state.userProfile)
 
   return (
     <div style={{ padding: "2px", cursor: "pointer" }}>

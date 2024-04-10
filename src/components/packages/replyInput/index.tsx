@@ -18,6 +18,7 @@ import { useEffect, useState } from "react"
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
 import "./index.css"
 import { userInfo } from "../../../utils/cache"
+import { useSelector } from "react-redux"
 
 function ReplyInput({
   setReply,
@@ -29,7 +30,7 @@ function ReplyInput({
   replyTo,
   reply = false
 }) {
-  const { user } = userInfo
+  const { user } =  useSelector(state => state.userProfile)
   const [commentText, setCommentText] = useState("")
   const [present, dismiss] = useIonToast()
   const [modalOpen, setModalOpen] = useState(reply)

@@ -24,13 +24,9 @@ const NoContentCard = () => (
 
 );
 
-
-
-
 interface FeedProps {
-  allProps: any;  // Define specific types based on usage
   feedType: string;
-  feedId: string;
+  feedId?: string;
 }
 
 interface Post {
@@ -41,7 +37,7 @@ interface Post {
   suggestedOrgs?: { spaces: any[] };  // Define org types
 }
 
-const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
+const InfiniteFeed: React.FC<FeedProps> = ({  feedType, feedId }) => {
 
   const { data: userInfoData } = useQuery(getUserGql, {
     variables: { username: userName },
@@ -89,7 +85,7 @@ const InfiniteFeed: React.FC<FeedProps> = ({ allProps, feedType, feedId }) => {
       {posts?.map((post, index) => (
         <div className="mt-5" key={post._id || `post-${index}`}>
           {post.type === "event" &&  <Event events={post} />}
-          {post.type === "post" && <Post post={post} index={index} allProps={allProps} feedType={feedType} feedId={feedId} />}
+          {post.type === "post" && <Post post={post} index={index} feedType={feedType} feedId={feedId} />}
           {post.type === "university" && <University studyLevel={userInfoData?.getUser?.user?.studyLevel} post={post} />}
           {post.type === "suggestedSpace" && <SuggestedSpace data={post.suggestedSpace?.spaces} post={post} title="Suggested Space" type="space" />}
           {post.type === "suggestedOrgs" && <SuggestedSpace data={post.suggestedOrgs?.spaces} post={post} title="Suggested Orgs" type="org" />}

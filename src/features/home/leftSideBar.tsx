@@ -23,24 +23,24 @@ export const LeftSideBar = ({
   const GroupReference = ({ data, reference = "space" }) => {
     let to = reference === "space" ? "Spaces" : "Orgs";
     let spaceCard = reference === "space" ? true : false;
-    return (<Card className="overflow-y-auto my-4 max-h-[348px]">
-      <Text color="dark">
-        <h6 className="text-center my-2 font-semibold">Top {to}</h6>
-      </Text>
+    return (<Card >
+          <Text color="dark">
+            <h6 className="text-center my-2 font-semibold">Top {to}</h6>
+          </Text>
 
-      <SpaceReference references={data} spaceCard={spaceCard} />
-      <Link to="/space" style={{ marginTop: "120px" }}>
-        <Text
-          className="max-w-[250px] text-[#3880FF] text-center  font-semibold"
-          fill="solid"
-          style={{
-            "--background": "white",
-            "--background-hover": "#eee"
-          }}
-        >
-          <h1 className="py-4">Browse More {to}</h1>
-        </Text>
-      </Link>
+          <SpaceReference references={data} spaceCard={spaceCard} />
+          <Link to="/space" style={{ marginTop: "120px" }}>
+            <Text
+              className="max-w-[250px] text-[#3880FF] text-center  font-semibold"
+              fill="solid"
+              style={{
+                "--background": "white",
+                "--background-hover": "#eee"
+              }}
+            >
+              <h1 className="py-4">Browse More {to}</h1>
+            </Text>
+          </Link>
     </Card>)
   }
   let topSpace = () => {

@@ -1,30 +1,10 @@
+import React from "react"
 import { useEffect, useState } from "react"
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonHeader,
-  IonIcon,
-  IonMenu,
-  IonMenuButton,
-  IonMenuToggle,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-  IonContent
-} from "@ionic/react"
 import { useDispatch } from "react-redux"
 import useWindowWidth from "../../../hooks/useWindowWidth"
-import { searchGetSuccess } from "../../../datasource/store/action/index"
-import { useQuery } from "@apollo/client"
-import { UNIVERSITY_SERVICE_GQL } from "../../../datasource/servers/types"
 import { useLocation } from "react-router"
-import { INITIAL_QUERY_DATA } from "./filter/constants"
 import { URLgetter } from "../../../utils/lib/URLupdate"
 import { useHistory } from "react-router-dom"
-import clsx from "clsx"
-import { DesktopFilter } from "./desktopFilter"
-import { MobileFilter } from "./mobileFilter"
 import {ResultsColumn} from "./resultColumn"
 
 
@@ -57,24 +37,12 @@ function index({ query, loading }) {
 
 
 return (
-  <>
-    <IonRow>
-      {/* {isDesktop ? (
-        <DesktopFilter filterPage={filterPage} setIsLoading={setIsLoading} />
-      ) : (
-          <MobileFilter
-            filterPage={1} // Example page number
-            setIsLoading={() => {}} // Replace with actual setIsLoading function
-          />
-      )} */}
-      <ResultsColumn
+  <ResultsColumn
         activeSubTab={activeSubTab}
         filterPage={filterPage}
         setFilterPage={setFilterPage}
         loading={loading}
       />
-    </IonRow>
-  </>
 )
 }
 

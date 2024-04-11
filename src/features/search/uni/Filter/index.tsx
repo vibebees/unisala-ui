@@ -25,6 +25,7 @@ import { URLgetter, URLupdate } from "../../../../utils/lib/URLupdate"
 import {search} from "ionicons/icons"
 import {ExploreFilterPopupContext} from "../ExploreUniFilterPopupContext"
 import { ThreadSkeleton } from "../../../../components/packages/skeleton/threadSkeleton"
+import { UniFilterResults } from "../../../../datasource/graphql/uni"
 
 function index({ setIsLoading, filterPage }) {
   const [isFiltered, setIsFiltered] = useState(false)
@@ -32,6 +33,14 @@ function index({ setIsLoading, filterPage }) {
   const history = useHistory()
   const dispatch = useDispatch()
   const ref = useRef()
+  const [getUniversityResults, { data, loading, fetchMore }] = useLazyQuery(
+    UniFilterResults,
+    {
+      context: { server: UNIVERSITY_SERVICE_GQL },
+      fetchPolicy: "network-only"
+    }
+  )
+
 
 
 
@@ -58,126 +67,83 @@ function index({ setIsLoading, filterPage }) {
   const popUp = false, closePopup = () => {}
 
 
+  const parseRange = (rangeStr) => {
+    const [min, max] = rangeStr.split("-").map(Number);
+    return { min, max };
+  };
+
+  const buildFeeObject = (feeRange, degreePrefix) => {
+    const feeObj = parseRange(feeRange);
+    return {
+      [`${degreePrefix}ApplicationFee`]: feeObj,
+    };
+  };
+
+  const buildTuitionObject = (tuitionRange, degreePrefix, tuitionType) => {
+    const tuitionObj = parseRange(tuitionRange);
+    return {
+      [`${degreePrefix}${tuitionType}TuitionFee`]: tuitionObj,
+    };
+  };
+
   const getAllQueryParams = (page) => {
-    let queryObject = {}
-    const degree = URLgetter("deg")
-    const tutionLevel = URLgetter("loc")
-    const accomodation = URLgetter("acc")
-    const family = URLgetter("fam")
-    const sat = URLgetter("sat")
-    const act = URLgetter("act")
-    const applicationFee = URLgetter("af")
-    const CostOfAttendance = URLgetter("coa")
-    const tuitionFee = URLgetter("tf")
-    const state = URLgetter("state")
-    const major = URLgetter("major")
+    const queryObject = {
+      page,
+      sat: URLgetter("sat") ? parseRange(URLgetter("sat")) : undefined,
+      act: URLgetter("act") ? parseRange(URLgetter("act")) : undefined,
+      state: URLgetter("state"),
+      major: URLgetter("major"),
+    };
 
-    queryObject.page = page
+    const degree = URLgetter("deg");
+    const degreePrefix = degree === "u" ? "undergraduate" : "graduate";
 
-    if (sat) {
-      let newSat = sat.split("-")
-      let newSatObj = {
-        min: parseInt(newSat[0]),
-        max: parseInt(newSat[1])
-      }
-      queryObject.sat = newSatObj
-    }
+    const tutionLevel = URLgetter("loc");
+    const tuitionType = tutionLevel === "I" ? "InState" : "OutOfState";
 
-    if (act) {
-      let newAct = act.split("-")
-      let newActObj = {
-        min: parseInt(newAct[0]),
-        max: parseFloat(newAct[1])
-      }
-      queryObject.act = newActObj
-    }
+    const accomodation = URLgetter("acc");
+    const family = URLgetter("fam");
+    const applicationFee = URLgetter("af");
+    const tuitionFee = URLgetter("tf");
+    const CostOfAttendance = URLgetter("coa");
 
     if (applicationFee) {
-      let newApplicationFee = applicationFee.split("-")
-      let newApplicationFeeObj = {
-        min: parseInt(newApplicationFee[0]),
-        max: parseInt(newApplicationFee[1])
-      }
-      if (degree === "u") {
-        queryObject.undergraduateApplicationFee = newApplicationFeeObj
-      } else if (degree === "g") {
-        queryObject.graduateApplicationFee = newApplicationFeeObj
-      }
+      Object.assign(queryObject, buildFeeObject(applicationFee, degreePrefix));
     }
 
     if (tuitionFee) {
-      let newTutionFee = tuitionFee.split("-")
-      let newTutionFeeObj = {
-        min: parseInt(newTutionFee[0]),
-        max: parseInt(newTutionFee[1])
-      }
-      if (degree === "u") {
-        if (tutionLevel === "I") {
-          queryObject.undergraduateInStateTuitionFee = newTutionFeeObj
-        } else if (tutionLevel === "O") {
-          queryObject.undergraduateOutOfStateTuitionFee = newTutionFeeObj
-        }
-      } else if (degree === "g") {
-        if (tutionLevel === "I") {
-          queryObject.graduateInStateTuitionFee = newTutionFeeObj
-        } else if (tutionLevel === "O") {
-          queryObject.graduateOutOfStateTuitionFee = newTutionFeeObj
-        }
-      }
+      Object.assign(queryObject, buildTuitionObject(tuitionFee, degreePrefix, tuitionType));
     }
 
     if (CostOfAttendance) {
-      let newCostOfAttendence = CostOfAttendance.split("-")
-      let newCostOfAttendenceObj = {
-        min: parseInt(newCostOfAttendence[0]),
-        max: parseInt(newCostOfAttendence[1])
+      const costKey = `${degreePrefix}${accomodation === "o" ? "OnCampus" : "OffCampus"}${family === "W" ? "WithFamily" : "NotWithFamily"}${tuitionType}CostOfAttendance`;
+      queryObject[costKey] = parseRange(CostOfAttendance);
+    }
+
+    return queryObject;
+  };
+
+
+
+  useEffect(() => {
+    setIsFiltered(true)
+    const queryObject = getAllQueryParams(1)
+    getUniversityResults({
+      variables: {
+        ...queryObject
       }
-      if (degree === "u") {
-        // oncampus
-        if (accomodation === "o") {
-          if (tutionLevel === "I") {
-            queryObject.undergraduateOnCampusInStateCostOfAttendance =
-              newCostOfAttendenceObj
-          } else if (tutionLevel === "O") {
-            queryObject.undergraduateOnCampusOutOfStateCostOfAttendance =
-              newCostOfAttendenceObj
-          }
-          // offcampus
-        } else if (accomodation === "O") {
-          if (family === "W") {
-            if (tutionLevel === "I") {
-              queryObject.undergraduateOffCampusWithFamilyInStateCostOfAttendance =
-                newCostOfAttendenceObj
-            } else if (tutionLevel === "O") {
-              queryObject.undergraduateOffCampusWithFamilyOutOfStateCostOfAttendance =
-                newCostOfAttendenceObj
-            }
-          } else if (family === "N") {
-            if (tutionLevel === "I") {
-              queryObject.undergraduateOffCampusNotWithFamilyInStateCostOfAttendance =
-                newCostOfAttendenceObj
-            } else if (tutionLevel === "O") {
-              queryObject.undergraduateOffCampusNotWithFamilyOutOfStateCostOfAttendance =
-                newCostOfAttendenceObj
-            }
-          }
-        }
-      }
-    }
+    })
+  }, [history.location.search])
 
-    if (state) {
-      queryObject.state = state
-    }
-
-    if (major) {
-      queryObject.major = major
-    }
-
-    return queryObject
-  }
-
-
-
+  useEffect(() => {
+    const d = data?.searchUniversity?.map((item) => ({
+      overallRating: item.overallRating,
+      totalPeopleVoted: item.totalPeopleVoted,
+      ...item.elevatorInfo,
+      ...item.studentCharges
+    }))
+    dispatch(searchGetSuccess(d))
+  }, [ data ])
 
   useLayoutEffect(() => {
     const majordata = URLgetter("major")
@@ -236,7 +202,7 @@ function index({ setIsLoading, filterPage }) {
 
   return (
       <div className="filter-card-wrapper mx-1 ">
-        <IonCardContent>
+        <>
           <div className="grid grid-cols-1 gap-5">
             <RadioGroup
               Label1={"Undergraduate"}
@@ -370,7 +336,7 @@ function index({ setIsLoading, filterPage }) {
             <IonIcon icon={search}></IonIcon>
 
             </IonButton>
-        </IonCardContent>
+        </>
       </div>
   )
 }

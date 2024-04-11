@@ -82,7 +82,7 @@ export const Home = ({ allProps }) => {
         />
       </Card>
 
-      <InfiniteFeed userInfo={user} allProps={allProps} feedType="newsfeed" />
+      <InfiniteFeed feedType="newsfeed"  />
     </div>
   )
 

@@ -83,8 +83,7 @@ export const SearchTemplate: React.FC = () => {
       <SearchFilterRow setPopUp={setPopUp} />
       {tab !== "uni" && <SearchTab />}
 
-      <IonRow className="md:px-16">
-        <IonCol className="result-col">
+        <IonCol className="mt-5" style={{width:'900px'}}>
           {tab === "all" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               <UserResults users={users} loading={uniLoading} />
@@ -98,7 +97,6 @@ export const SearchTemplate: React.FC = () => {
           {tab === "space" && <SpaceList spaces={spaces} />}
           {tab === "org" && <OrgList orgs={orgs} />}
         </IonCol>
-      </IonRow>
     </>
   );
 };

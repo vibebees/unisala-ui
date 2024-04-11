@@ -10,7 +10,7 @@ import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkel
 export const ResultsColumn = ({  loading, activeSubTab, filterPage, setFilterPage }) => {
 
   return  (
-    <IonCol className="results-col pl-[360px] max-md:mt-14 max-md:mx-0 max-md:px-0">
+    <IonCol >
       <SearchTab />
       <ChipsTab />
       <UniversityScholarshipTab />

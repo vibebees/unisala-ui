@@ -18,9 +18,9 @@ import { useHistory, useLocation } from "react-router"
 import ProfilePop from "../../components/packages/profilePop"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { GetTopActiveSpaces, GetTopOrgs } from "../../datasource/graphql/user"
- import { getCache } from "../../utils/cache"
+ import { authenticated, getCache, userInfo } from "../../utils/cache"
 const unisalaImg = ""
-export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
+export const getAllPropsHome = ({ }) => {
   const [activeProfile, setActiveProfile] = useState({ profile: false }),
     [activeTab, setActiveTab] = useState(0),
     [newUser, setNewUser] = useState(getCache("newUser") || false),
@@ -136,14 +136,14 @@ export const getAllPropsHome = ({ user, loggedIn, userInfo, propsall }) => {
     setNewUser,
     activeProfile,
     setActiveProfile,
-    user,
-    loggedIn,
+    user:  userInfo,
+    loggedIn: authenticated,
     GetTopActiveSpaces,
     page,
     setPage,
     history,
     location,
-    userInfo,
+    userInfo: userInfo,
     generateUserGuide,
     unitId,
     setUnitId,

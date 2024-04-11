@@ -96,7 +96,8 @@ export const CardTitle = CustomWrapper(IonCardTitle);
 export const Checkbox = CustomWrapper(IonCheckbox);
 export const Chip = CustomWrapper(IonChip);
 export const Col = CustomWrapper(IonCol);
-export const Content = CustomWrapper(IonContent);
+export const Content = IonContent
+export const Page = IonPage
 export const Datetime = CustomWrapper(IonDatetime);
 export const Fab = CustomWrapper(IonFab);
 export const FabButton = CustomWrapper(IonFabButton);
@@ -124,7 +125,6 @@ export const MenuToggle = CustomWrapper(IonMenuToggle);
 export const Modal = CustomWrapper(IonModal);
 export const Nav = CustomWrapper(IonNav);
 export const Note = CustomWrapper(IonNote);
-export const Page = CustomWrapper(IonPage);
 export const Popover = CustomWrapper(IonPopover);
 export const ProgressBar = CustomWrapper(IonProgressBar);
 export const Radio = CustomWrapper(IonRadio);
@@ -157,6 +157,8 @@ export const Toggle = CustomWrapper(IonToggle);
 export const Toolbar = CustomWrapper(IonToolbar);
 export const Row = CustomWrapper(IonRow);
 export const useIonToast = useCustomToast
+export const SimpleAvatar = IonAvatar
+
 export  const Typography = forwardRef(
   ({ variant = "h2", children, className, ...rest }, ref) => {
     return (

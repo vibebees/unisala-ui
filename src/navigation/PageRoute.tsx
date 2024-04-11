@@ -32,16 +32,11 @@ const HomePage = lazy(() => import("../pages/home"))
 
 
 const messagingRoutes = () => (
-  <>
+  // <>
     <ProtectedRoute>
-      <Route path="/messages" exact>
-        <Messages />
-      </Route>
-      <Route path="/messages/:username" exact>
-        <Messages />
-      </Route>
+
     </ProtectedRoute>
-  </>
+  // </>
 )
 const networkRoutes = () => (
     <ProtectedRoute>
@@ -132,13 +127,17 @@ export const PageRoute = ({ allProps }) => {
         </Route>
 
         <Route exact path="/university/:id">
-        <UniversityPage />
+          <UniversityPage />
         </Route>
-
+        <Route path="/messages" exact>
+          <Messages />
+        </Route>
+        <Route path="/messages/:username" exact>
+          <Messages />
+        </Route>
 
         {orgRoutes()}
 
-        {messagingRoutes()}
         {networkRoutes()}
         {/* More routes */}
         {/* Fallback route for 404 Not Found */}

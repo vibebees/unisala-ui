@@ -29,7 +29,6 @@ const NoResultCard = () => {
 }
 function index({ filterPage, setFilterPage, isLoading }) {
   const { searchData } = useSelector((store) => store?.university || [])
-  console.log("999", searchData)
   const ResultCard = () => (
     <div className="relative">
     {Array.isArray(searchData) &&

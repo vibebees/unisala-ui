@@ -1,7 +1,9 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent,  Content, Item, Label, List, CardSubtitle,  Row, Col, Page } from "../components/defaults";
+import { Card, CardHeader, CardTitle, CardContent, Content, Item, Label, List, CardSubtitle, Row, Col, Page } from "../components/defaults";
 
-
+import "./index.css"
+import { IonPage, IonCard } from '@ionic/react';
+import { Test } from 'vitest';
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;
@@ -68,20 +70,35 @@ const rightSidebarDefault = (
     {/* Add more cards if needed */}
   </div>
 );
-const style = {backgroundColor: "#F0F2F5"};
+const style = { backgroundColor: "#F0F2F5" };
+let
+  mainContentStyle = { display: 'flex', justifyContent: 'center', padding: '0 10px' },
+  mainRowStyle = { maxWidth: '1128px', width: '100%', flexWrap: 'nowrap' }
+
 const Layout: React.FC<LayoutProps> = ({ leftSidebar = leftSidebarDefault, mainContent, rightSidebar = rightSidebarDefault }) => {
   return (
-    <Page>
-      <Content>
-        <Row>
+    <Page style={{ backgroundColor: "#F0F2F5" }} >
+      <Content className="layout-content " >
+        <Row className="layout-row" style ={style}>
           {/* Only visible on medium and larger screens */}
-          <Col sizeMd="3" className="ion-hide-md-down" style={style} >{leftSidebar}</Col>
+          <Col sizeMd="3" className="ion-hide-md-down layout-col"  >
+            <div style={{ width: '100%', maxWidth: '300px' }}>
+              {leftSidebar}
+            </div>
+          </Col>
 
           {/* Always visible, but spans more columns on small screens */}
-          <Col sizeSm="12" sizeMd="6"  style ={style}> {mainContent}</Col>
-
+          <Col sizeSm="12" sizeMd="6"  className="layout-col" >
+            <div style={{ width: '100%', maxWidth: '900px' }}>
+              {mainContent}
+            </div>
+          </Col>
           {/* Only visible on medium and larger screens */}
-          <Col sizeMd="3" className="ion-hide-md-down "  style ={style}>{rightSidebar}</Col>
+          <Col sizeMd="3"  className=" ion-hide-md-down layout-col" >
+            <div style={{ width: '100%', maxWidth: '300px' }}>
+              {rightSidebar}
+            </div>
+          </Col>
         </Row>
       </Content>
     </Page>

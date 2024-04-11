@@ -11,15 +11,13 @@ export const SpaceReference = ({ references =[] , spaceCard=true}) => {
       {references?.map((item, index) => (
         <Link to={`/${to}/` + item?.name} className="" key={index}>
           <IonItem
-            className="max-w-[250px] "
-            fill="solid"
             style={{
               "--background": "white",
               "--background-hover": "#eee"
             }}
             key={index}
           >
-            <GraduatesIcon className="mr-3 mb-px" />
+            {/* <GraduatesIcon className="mr-3 mb-px" /> */}
             <IonLabel className="ion-text-wrap">
               <h2 className="capitalize">{item.name}</h2>
             </IonLabel>

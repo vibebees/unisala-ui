@@ -49,7 +49,7 @@ const SearchTab = () => {
   }, [history.location.search])
 
   return (
-    <IonCard className=" sticky max-md:static -top-14 z-20 max-md:m-0">
+    <IonCard>
       <IonCardContent>
         {query.length > 0 && (
           <h1 className="text-sm">Search Result For {`"${query}"`}: </h1>

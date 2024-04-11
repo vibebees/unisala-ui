@@ -1,7 +1,7 @@
 import React from "react";
 import Thread from "../thread";
 
-export const Post = ({ post, allProps, feedType, feedId }) => {
+export const Post = ({ post,  feedType, feedId }) => {
   return (
     <div
       style={{
@@ -14,7 +14,6 @@ export const Post = ({ post, allProps, feedType, feedId }) => {
       <Thread
         thread={post}
         id={post._id}
-        allProps={allProps}
         feedType={feedType}
         feedId={feedId}
         key={post?._id || post} />

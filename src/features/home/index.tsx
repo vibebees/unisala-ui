@@ -7,10 +7,11 @@ import { useQuery } from "@apollo/client"
 import { USER_SERVICE_GQL } from "../../datasource/servers/types"
 import { getUserGql } from "../../datasource/graphql/user"
 import { callSocket } from "../../datasource/servers/endpoints"
-import { userName , userInfo, getCache} from "../../utils/cache"
+import { userName ,  getCache} from "../../utils/cache"
 import Layout from "../../pages/layout"
 import {LeftSideBar} from "./leftSideBar"
 import { all } from "axios"
+import { FamousUniversities } from "../../components/packages/famousUniversites"
 export default function HomePage({ propsall }) {
   const socket = useRef<ReturnType<typeof callSocket> | null>(null);
   const loggedIn = getCache('refreshToken')
@@ -24,7 +25,7 @@ export default function HomePage({ propsall }) {
      fetchPolicy: 'network-only', // Used for first execution
      nextFetchPolicy: 'cache-first', //
   }),
-    allProps = getAllPropsHome({ user: userInfo, loggedIn, refetch, propsall })
+    allProps = getAllPropsHome({loggedIn, refetch, propsall })
 
   useEffect(() => {
     socket.current = callSocket()
@@ -40,6 +41,7 @@ export default function HomePage({ propsall }) {
   }, [])
   return <Layout
     mainContent={<Home allProps = {allProps} />}
-    leftSidebar={< LeftSideBar { ...allProps} />}
+    leftSidebar={< LeftSideBar {...allProps} />}
+    rightSidebar = {<FamousUniversities/>}
   />
 }

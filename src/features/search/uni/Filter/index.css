@@ -73,3 +73,9 @@ ion-select {
     font-size: 14px;
   }
 }
+
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Aligns items vertically */
+  justify-content: flex-start; /* Aligns items to the start of the container */
+}

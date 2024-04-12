@@ -1,5 +1,5 @@
 import { Avatar, Button, Input, Item } from "../../../../components/defaults"
-import DeleteIcon from "Icons/DeleteIcon"
+import {DeleteIcon} from "../../../../components/packages/icons"
 
 const AddPeopleForm = ({ picture, id, title, username, setdata }) => {
   const handleDeleteClick = () => {

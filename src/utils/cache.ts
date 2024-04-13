@@ -27,12 +27,23 @@ export function getCache<T>(key: string): T | null {
  */
 export function setCache<T>(key: string, value: T): void {
     try {
-        const item = JSON.stringify(value);
+        let item: string;
+        if (typeof value === "string") {
+            try {
+                JSON.parse(value); // Try parsing to check if it's a valid JSON string
+                item = value; // It's a valid JSON string, use it directly
+            } catch {
+                item = JSON.stringify(value); // Not a valid JSON string, stringify it
+            }
+        } else {
+            item = JSON.stringify(value); // It's not a string, so stringify it
+        }
         localStorage.setItem(key, item);
     } catch (error) {
         console.error(`Error storing item in local storage: ${error}`);
     }
 }
+
 
 /**
  * Removes an item from local storage.

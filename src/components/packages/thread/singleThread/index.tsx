@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { IonCard } from "@ionic/react"
-import ReplyInput from "../../ReplyInput"
+import ReplyInput from "../../replyInput"
 import ShowPeopleComments from "../organism/ShowPeopleComments"
 import { useSelector } from "react-redux"
 import {

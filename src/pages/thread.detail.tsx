@@ -1,7 +1,10 @@
 import React from "react"
-// import ThreadPage from "../features/thread/index"
+import ThreadPage from "../features/thread/index"
+import Layout from "./layout"
 const ThreadDetail = () => {
-    return < >ThreadPage</>
+    return <Layout
+        mainContent={<ThreadPage />}
+    />
 }
 
 export default ThreadDetail

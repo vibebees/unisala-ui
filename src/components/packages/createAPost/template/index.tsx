@@ -19,37 +19,31 @@ const CreateAPostCard = ({ allProps }) => {
   const pathname = usePathName(0) || "home"
 
   useEffect(() => {
-    const cacheKey = `metadata-${pathname}`
-    const cachedMeta = getCache(cacheKey) || false
+    const cacheKey = "metadata-all"
+    const cachedMeta = getCache(cacheKey) || false;
 
     const fn = async () => {
       if (cachedMeta) {
-        setMeta(cachedMeta)
+        setMeta(cachedMeta[pathname]['addAPost']);  // Use the pathname to select the right metadata
       } else {
         try {
-          const createAPostMetaData = await axios.get(
-            userServer + "/getMetadataTags",
+          const response = await axios.get(
+            `${userServer}/getMetadataTags`,
             {
-              headers: {
-                authorization: getCache("accessToken")
-              }
+              headers: { authorization: getCache("accessToken") }
             }
-          )
-
-          const metaData = createAPostMetaData.data?.data || []
-          const getCurrentPageMetaData = metaData[ pathname ] || {}
-          const { addAPost } = getCurrentPageMetaData || {}
-
-          setMeta(addAPost)
-          setCache(cacheKey, JSON.stringify(addAPost))
+          );
+          const allMetaData = response.data?.data || {};
+          setCache(cacheKey,allMetaData);  // Cache all metadata once
+          setMeta(allMetaData[pathname]['addAPost']);  // Use the pathname to select the right metadata
         } catch (error) {
-          console.error("Failed to fetch metadata", error)
+          console.error("Failed to fetch metadata", error);
         }
       }
-    }
+    };
 
-    fn()
-  }, [ pathname ])
+    fn();
+  }, [pathname]);
 
   return (
       <Card

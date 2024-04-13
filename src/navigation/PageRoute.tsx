@@ -1,6 +1,6 @@
 import React from "react"
 import { lazy, Suspense } from "react"
-import {Redirect, Route, Switch} from "react-router"
+import { Redirect, Route, Switch } from "react-router"
 import { ProtectedRoute } from "../utils/lib/protectedRoute"
 import { PreLoader } from "../components/packages/preloader"
 import { useSelector } from "react-redux"
@@ -25,7 +25,7 @@ const StudyAbroadRoadmap = lazy(() => import("../pages/roadmap"))
 const FeedPage = lazy(() => import("../pages/standard"))
 
 const ThreadDetail = lazy(() => import("../pages/thread.detail"))
-const PageNotFound= lazy(() => import("./PageNotFound"))
+const PageNotFound = lazy(() => import("./PageNotFound"))
 const LandingPage = lazy(() => import("../pages/landingPage"))
 const Standard = lazy(() => import("../pages/standard"))
 const HomePage = lazy(() => import("../pages/home"))
@@ -33,17 +33,15 @@ const HomePage = lazy(() => import("../pages/home"))
 
 const messagingRoutes = () => (
   // <>
-    <ProtectedRoute>
+  <ProtectedRoute>
 
-    </ProtectedRoute>
+  </ProtectedRoute>
   // </>
 )
 const networkRoutes = () => (
-    <ProtectedRoute>
-      <Route path="/mynetwork" exact>
-        <MyNetwork />
-      </Route>
-    </ProtectedRoute>
+  <ProtectedRoute>
+
+  </ProtectedRoute>
 )
 // const spaceRoutes = () => (
 //   <>
@@ -63,13 +61,8 @@ const networkRoutes = () => (
 const orgRoutes = () => (
   <>
     <Switch>
-       {/* exact is important here for /org/:category/:admin/:requestor/:orgId/:role*/}
-      <Route path="/org/:category" exact>
-        <Org />
-      </Route>
-      <Route path="/org/:category/:admin/:requestor/:orgId/:role" >
-        <Org />
-      </Route>
+      {/* exact is important here for /org/:category/:admin/:requestor/:orgId/:role*/}
+
     </Switch>
   </>
 )
@@ -81,7 +74,7 @@ const orgRoutes = () => (
 // )
 export const PageRoute = ({ allProps }) => {
   const test = useSelector((state) => state?.userProfile),
-  authenticated = getCache('refreshToken') ? true : false;
+    authenticated = getCache('refreshToken') ? true : false;
   return (
     <Suspense fallback={<PreLoader />}>
       <Switch>
@@ -98,11 +91,16 @@ export const PageRoute = ({ allProps }) => {
         <Route path="/profile">
           {authenticated
             ? <ProfilePage />
-            :  <Redirect to="/login" />}
+            : <Redirect to="/login" />}
         </Route>
         <Route path="/standard">
-            <Standard />
+          <Standard />
         </Route>
+
+        <Route exact path="/thread/:id">
+          <ThreadDetail />
+        </Route>
+
 
         <Route path="/@/:username" exact>
           <ProfilePage />
@@ -135,10 +133,16 @@ export const PageRoute = ({ allProps }) => {
         <Route path="/messages/:username" exact>
           <Messages />
         </Route>
+        <Route path="/mynetwork" exact>
+          <MyNetwork />
+        </Route>
+        <Route path="/org/:category" exact>
+          <Org />
+        </Route>
+        <Route path="/org/:category/:admin/:requestor/:orgId/:role" >
+          <Org />
+        </Route>
 
-        {orgRoutes()}
-
-        {networkRoutes()}
         {/* More routes */}
         {/* Fallback route for 404 Not Found */}
         <Route path="*">

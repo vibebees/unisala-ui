@@ -8,7 +8,7 @@ const Message = () => {
 
     return <Layout
         mainContent={<Template />}
-        // leftSidebar={ <Communicators recentMessages = {recentMessages} />}
+        rightSidebar={ <Communicators recentMessages = {recentMessages} />}
     />
 }
 

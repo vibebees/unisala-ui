@@ -69,7 +69,6 @@ export const SearchBar = () => {
       }}
       value={searchValue}
       onIonInput={(e) => {
-        console.log(e.detail.value)
         setSearchValue(e.detail.value)
         setDropDownOptions(true)
       }}

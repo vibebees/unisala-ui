@@ -65,27 +65,8 @@ export const Navigation: React.FC<NavigationProps> = () => {
         setActive(window.location.pathname)
     }, [])
 
-    // Hook to detect window size
-    const useWindowSize = () => {
-        const [ windowSize, setWindowSize ] = useState({
-            width: window.innerWidth,
-        });
-
-        useEffect(() => {
-            const handleResize = () => {
-                setWindowSize({
-                    width: window.innerWidth,
-                });
-            };
-
-            window.addEventListener('resize', handleResize);
-            return () => window.removeEventListener('resize', handleResize);
-        }, []);
-
-        return windowSize;
-    };
-
-    const { width } = useWindowSize();
+// use media query from css
+    const width = window.innerWidth
     const isMobile = width <= 768; // You can adjust this value
     const history = useHistory();
     const location = useLocation();

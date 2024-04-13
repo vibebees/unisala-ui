@@ -21,24 +21,24 @@ import {
   updateUnreadMessages
 } from "../../datasource/store/action/userProfile"
 import { addSeenEye, removeSeenEye } from "../../datasource/store/action/userActivity"
+import { userInfo } from "../../utils/cache"
 // import notificationSound from "assets/sounds/notification.mp3"
 // import sendingSound from "assets/sounds/sending.mp3"
 const index = () => {
   useDocTitle("Messages")
   const windowWidth = window.innerWidth,
-    { getUsers } = [],
     socket = useRef(),
     chatbox = useRef(null),
-    { username } = useParams(),
     { messagingTo } = useSelector((state) => state?.userActivity),
-    { user } = useSelector((state) => state?.userProfile),
+    user = userInfo,
+    username = user?.username,
     { loading, error, data } =
-      (messagingTo?._id &&
+      (messagingTo?.id &&
         useQuery(getMessagesByIdGql, {
           variables: {
             // currentUser
-            senderId: user?._id,
-            receiverId: messagingTo?._id
+            senderId: user?.id,
+            receiverId: messagingTo?.id
           },
           context: { server: MESSAGE_SERVICE_GQL },
           nextFetchPolicy: "cache-first"
@@ -52,7 +52,9 @@ const index = () => {
     myNetwork =
       useQuery(ConnectedList, {
         context: { server: USER_SERVICE_GQL },
-        variables: { userId: user._id }
+        variables: { userId: user?.id },
+        skip: !user?.id
+
       }) || {},
     { connectedList } = myNetwork?.data || {},
     { connectionList } = connectedList || [],
@@ -92,11 +94,11 @@ const index = () => {
     if (connectionList?.length > 0) {
       socket.current = messageSocket()
       socket.current.emit("queryRecentMessageForNetwork", {
-        userId: user?._id,
+        userId: user?.id,
         connectedList: connectionList.map((o) => {
           return {
-            senderId: user?._id,
-            receiverId: o?.user?._id
+            senderId: user?.id,
+            receiverId: o?.user?.id
           }
         })
       })
@@ -106,7 +108,7 @@ const index = () => {
         (recentMessagesWithNetwork) => {
           const mergedData =
             connectionList.map((conn) => {
-              const userId = conn?.user?._id
+              const userId = conn?.user?.id
               if (!userId) return ""
               const userMessages = recentMessagesWithNetwork.filter(
                 (msg) => msg?.senderId === userId || msg?.receiverId === userId
@@ -153,8 +155,8 @@ const index = () => {
       console.log("connected")
     })
     socket.current.emit("joinRoom", {
-      senderId: user?._id,
-      receiverId: messagingTo?._id
+      senderId: user?.id,
+      receiverId: messagingTo?.id
     })
     socket.current.on("joinedRoom", (roomName) => {
       console.log("joined room", roomName)
@@ -166,7 +168,7 @@ const index = () => {
   }, [])
 
   useEffect(() => {
-    socket?.current?.emit("addUser", { userId: user?._id, user })
+    socket?.current?.emit("addUser", { userId: user?.id, user })
     socket?.current?.on("getUser", (allUsers) => {})
   }, [])
   return (

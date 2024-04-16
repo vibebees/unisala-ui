@@ -72,18 +72,19 @@ import {
   IonToast,
   IonToggle,
   IonToolbar,
-  IonRow
-} from '@ionic/react';
-import { IonReactRouter as OriginalIonReactRouter } from '@ionic/react-router';
+  IonRow,
+} from "@ionic/react";
+import React from "react";
+import { IonReactRouter as OriginalIonReactRouter } from "@ionic/react-router";
 
-import { CustomWrapper } from './wrapper';
-import { forwardRef } from 'react';
-import { cn } from '../../utils';
-import useCustomToast from './apis/toast.api';
-import { AvatarProfile } from '../packages/Avatar';
+import { CustomWrapper } from "./wrapper";
+import { forwardRef } from "react";
+import { cn } from "../../utils";
+import useCustomToast from "./apis/toast.api";
+import { AvatarProfile } from "../packages/Avatar";
 // Wrap and export Ionic components
 export const Alert = CustomWrapper(IonAlert);
-export const Avatar = AvatarProfile
+export const Avatar = AvatarProfile;
 export const BackButton = CustomWrapper(IonBackButton);
 export const Badge = CustomWrapper(IonBadge);
 export const Button = CustomWrapper(IonButton);
@@ -96,8 +97,8 @@ export const CardTitle = CustomWrapper(IonCardTitle);
 export const Checkbox = CustomWrapper(IonCheckbox);
 export const Chip = CustomWrapper(IonChip);
 export const Col = CustomWrapper(IonCol);
-export const Content = IonContent
-export const Page = IonPage
+export const Content = IonContent;
+export const Page = IonPage;
 export const Datetime = CustomWrapper(IonDatetime);
 export const Fab = CustomWrapper(IonFab);
 export const FabButton = CustomWrapper(IonFabButton);
@@ -135,7 +136,7 @@ export const RefresherContent = CustomWrapper(IonRefresherContent);
 export const Reorder = CustomWrapper(IonReorder);
 export const ReorderGroup = CustomWrapper(IonReorderGroup);
 export const RippleEffect = CustomWrapper(IonRippleEffect);
-export const RouterOutlet = IonRouterOutlet
+export const RouterOutlet = IonRouterOutlet;
 export const Searchbar = CustomWrapper(IonSearchbar);
 export const Segment = CustomWrapper(IonSegment);
 export const SegmentButton = CustomWrapper(IonSegmentButton);
@@ -145,9 +146,9 @@ export const SkeletonText = CustomWrapper(IonSkeletonText);
 export const Spinner = CustomWrapper(IonSpinner);
 export const SplitPane = CustomWrapper(IonSplitPane);
 export const Tab = CustomWrapper(IonTab);
-export const TabBar = IonTabBar
-export const TabButton = IonTabButton
-export const Tabs = IonTabs
+export const TabBar = IonTabBar;
+export const TabButton = IonTabButton;
+export const Tabs = IonTabs;
 export const Text = CustomWrapper(IonText);
 export const Textarea = CustomWrapper(IonTextarea);
 export const Thumbnail = CustomWrapper(IonThumbnail);
@@ -156,10 +157,10 @@ export const Toast = CustomWrapper(IonToast);
 export const Toggle = CustomWrapper(IonToggle);
 export const Toolbar = CustomWrapper(IonToolbar);
 export const Row = CustomWrapper(IonRow);
-export const useIonToast = useCustomToast
-export const SimpleAvatar = IonAvatar
+export const useIonToast = useCustomToast;
+export const SimpleAvatar = IonAvatar;
 
-export  const Typography = forwardRef(
+export const Typography = forwardRef<HTMLIonTextElement, ITypography>(
   ({ variant = "h2", children, className, ...rest }, ref) => {
     return (
       <IonText ref={ref} {...rest}>
@@ -173,10 +174,10 @@ export  const Typography = forwardRef(
         {variant === "h6" && <h6 className={className}>{children}</h6>}
         {variant === "p" && <p className={className}>{children}</p>}
       </IonText>
-    )
+    );
   }
-)
+);
 
-Typography.displayName = "Typography"
+Typography.displayName = "Typography";
 
-export const ReactRouter = OriginalIonReactRouter
+export const ReactRouter = OriginalIonReactRouter;

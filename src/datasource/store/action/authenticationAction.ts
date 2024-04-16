@@ -1,11 +1,16 @@
-import axios from "axios"
-import { LOGIN, USER_LOGIN, USER_LOGIN_ERROR, USER_REGISTRATION } from "./types"
-import { universityServer, userServer } from "../../servers/endpoints"
+import axios from "axios";
+import {
+  LOGIN,
+  USER_LOGIN,
+  USER_LOGIN_ERROR,
+  USER_REGISTRATION,
+} from "./types";
+import { universityServer, userServer } from "../../servers/endpoints";
 import {
   UNI_SERV_SIGNED_URL,
-  USER_SERV_SIGNED_URL
-} from "../types/userActivity"
-import { setCache } from "../../../utils/cache"
+  USER_SERV_SIGNED_URL,
+} from "../types/userActivity";
+import { setCache } from "../../../utils/cache";
 
 export const loginUser = ({
   input,
@@ -15,30 +20,32 @@ export const loginUser = ({
   setauth,
   history,
   redirectUrl,
-  setActiveNavDrop
+  setActiveNavDrop,
 }) => {
   return (dispatch) => {
     axios
       .post(userServer + `/login`, input)
       .then((res) => {
-        setLoading(false)
+        setLoading(false);
         if (res.data.success) {
-          res?.data?.accessToken && setCache("accessToken", res?.data?.accessToken)
-          res?.data?.refreshToken && setCache("refreshToken", res?.data?.refreshToken)
-          res?.data && setCache("userInfo", res?.data)
-          setActiveNavDrop({ profile: false })
+          res?.data?.accessToken &&
+            setCache("accessToken", res?.data?.accessToken);
+          res?.data?.refreshToken &&
+            setCache("refreshToken", res?.data?.refreshToken);
+          res?.data && setCache("userInfo", res?.data);
+          setActiveNavDrop({ profile: false });
 
           dispatch({
             type: USER_LOGIN,
-            payload: res?.data || {}
-          })
+            payload: res?.data || {},
+          });
 
           if (redirectUrl) {
             setTimeout(() => {
-              window.location.replace(`/university/${redirectUrl}&create=y`)
-            }, 1000)
+              window.location.replace(`/university/${redirectUrl}&create=y`);
+            }, 1000);
           } else {
-            history.push("/home")
+            history.push("/home");
           }
         }
 
@@ -48,46 +55,46 @@ export const loginUser = ({
             message: res.data.message,
             buttons: [{ text: "X", handler: () => dismiss() }],
             color: "primary",
-            mode: "ios"
-          })
+            mode: "ios",
+          });
           if (res.data.status === 302) {
-            setauth({ state: "userNotVerified", email: input.email })
+            setauth({ state: "userNotVerified", email: input.email });
           }
         }
-        return res
+        return res;
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         present({
           duration: 3000,
           message: error.response.data.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
         if (error.status === 302) {
-          setauth({ state: "userNotVerified", email: input.email })
+          setauth({ state: "userNotVerified", email: input.email });
         }
-      })
-  }
-}
+      });
+  };
+};
 
 export const registerUser =
   ({ input, setsave, setdatacheck, setauth, present, dismiss }) =>
   (dispatch) => {
-    setsave(true) // Assuming this is meant to indicate loading
+    setsave(true); // Assuming this is meant to indicate loading
 
     axios
       .post(userServer + `/register`, input)
       .then((res) => {
-        setsave(false) // Stop loading indication
+        setsave(false); // Stop loading indication
         if (res.data.success === true) {
-          setdatacheck(false) // Reset data check if successful
-          setauth({ state: "SignUpVerification", email: input.email })
+          setdatacheck(false); // Reset data check if successful
+          setauth({ state: "SignUpVerification", email: input.email });
           dispatch({
             type: USER_REGISTRATION,
-            payload: res.data // Usually you only need the data, not the entire response
-          })
+            payload: res.data, // Usually you only need the data, not the entire response
+          });
         } else if (res.data.success === false) {
           // Handle case where success is explicitly false
           present({
@@ -95,33 +102,33 @@ export const registerUser =
             message: res.data.message,
             buttons: [{ text: "X", handler: () => dismiss() }],
             color: "primary",
-            mode: "ios"
-          })
+            mode: "ios",
+          });
         }
       })
       .catch((err) => {
-        setsave(false) // Stop loading indication
-        setdatacheck(false) // Reset data check on error
+        setsave(false); // Stop loading indication
+        setdatacheck(false); // Reset data check on error
         // Check if the error response has the expected format
         if (err.response && err.response.data.errors) {
           // Example action dispatch on error
 
           // Present the first error message to the user
-          const firstError = err.response.data.errors[0]
+          const firstError = err.response.data.errors[0];
           if (firstError) {
             present({
               duration: 3000,
               message: firstError.msg,
               buttons: [{ text: "X", handler: () => dismiss() }],
               color: "danger",
-              mode: "ios"
-            })
+              mode: "ios",
+            });
           }
         } else {
-          console.error("An unexpected error occurred", err)
+          console.error("An unexpected error occurred", err);
         }
-      })
-  }
+      });
+  };
 
 export const googleAuthAction = ({
   present,
@@ -129,44 +136,44 @@ export const googleAuthAction = ({
   payload,
   redirectUrl,
   history,
-  setActiveNavDrop
+  setActiveNavDrop,
 }) => {
   return (dispatch) =>
     axios.post(userServer + `/auth/google`, payload).then((res) => {
       if (res.data.success) {
-        setCache("accessToken", res?.data?.accessToken)
-        setCache("refreshToken", res?.data?.refreshToken)
-        res?.data && setCache("userInfo", res?.data)
+        setCache("accessToken", res?.data?.accessToken);
+        setCache("refreshToken", res?.data?.refreshToken);
+        res?.data && setCache("userInfo", res?.data);
         if (res?.data.isFirstLogin) {
-          setCache("newUser", "true")
+          setCache("newUser", "true");
         }
         dispatch({
           type: USER_LOGIN,
-          payload: res.data
-        })
+          payload: res.data,
+        });
         dispatch({
           type: LOGIN,
-          payload: res.data
-        })
-        setActiveNavDrop({ profile: false })
-        history?.push("/home")
+          payload: res.data,
+        });
+        setActiveNavDrop({ profile: false });
+        history?.push("/home");
       }
       if (!res.data.success) {
         dispatch({
           type: USER_LOGIN_ERROR,
-          payload: res.data
-        })
+          payload: res.data,
+        });
 
         present({
           duration: 3000,
           message: res.data.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
-    })
-}
+    });
+};
 
 const getNewRefreshToken = (refreshToken) => {
   return (dispatch) =>
@@ -174,11 +181,11 @@ const getNewRefreshToken = (refreshToken) => {
       if (res.data.success) {
         dispatch({
           type: USER_LOGIN,
-          payload: res.data
-        })
+          payload: res.data,
+        });
       }
-    })
-}
+    });
+};
 
 // export const isLoggedIn = (user) => {
 //     try {
@@ -354,13 +361,13 @@ const getNewRefreshToken = (refreshToken) => {
 
 export const getPresingedUrl = (type) => {
   let serviceToCall = null,
-    serviceThatSigned
+    serviceThatSigned;
   if (type === "UNI") {
-    serviceToCall = universityServer
-    serviceThatSigned = UNI_SERV_SIGNED_URL
+    serviceToCall = universityServer;
+    serviceThatSigned = UNI_SERV_SIGNED_URL;
   } else {
-    serviceToCall = userServer
-    serviceThatSigned = USER_SERV_SIGNED_URL
+    serviceToCall = userServer;
+    serviceThatSigned = USER_SERV_SIGNED_URL;
   }
   return async (dispatch) => {
     await axios
@@ -368,12 +375,12 @@ export const getPresingedUrl = (type) => {
       .then((res) => {
         dispatch({
           type: serviceThatSigned,
-          payload: res.data
-        })
+          payload: res.data,
+        });
         // setUsers(() => res?.data?.data?.users || []);
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }
-}
+        console.log(err);
+      });
+  };
+};

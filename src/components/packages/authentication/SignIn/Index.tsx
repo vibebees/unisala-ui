@@ -1,16 +1,16 @@
-import React from "react"
-import GoogleAuth from "../GoogleAuth"
-import SignInForm from "./SignInForm"
-import AppleAuth from "../AppleAuth"
-import "../auth.css"
-import clsx from "clsx"
-import { Typography } from "../../../defaults/index"
+import React from "react";
+import GoogleAuth from "../GoogleAuth";
+import SignInForm from "./SignInForm";
+import AppleAuth from "../AppleAuth";
+import "../auth.css";
+import clsx from "clsx";
+import { Typography } from "../../../defaults";
 
 export const SignIn = ({
   setauth,
   auth,
   setShowSignup = null,
-  setActiveNavDrop = () => {}
+  setActiveNavDrop = () => {},
 }) => {
   return (
     <div
@@ -31,7 +31,7 @@ export const SignIn = ({
       <div className="auth-button">
         <div
           style={{
-            width: "234px"
+            width: "234px",
           }}
         >
           <GoogleAuth setauth={setauth} setActiveNavDrop={setActiveNavDrop} />
@@ -52,6 +52,6 @@ export const SignIn = ({
         setShowSignup={setShowSignup}
       />
     </div>
-  )
-}
-export default SignIn
+  );
+};
+export default SignIn;

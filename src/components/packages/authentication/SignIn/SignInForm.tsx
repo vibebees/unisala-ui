@@ -1,43 +1,43 @@
-import { useState } from "react"
-import { IonSpinner, IonRow, useIonToast } from "@ionic/react"
-import { Typography, Button } from "../../../defaults"
-import AuthInput from "../AuthInput"
-import { useDispatch } from "react-redux"
-import { useHistory } from "react-router"
-import { validateSignIn } from "../../../../utils/components/validate"
-import { loginUser } from "../../../../datasource/store/action/authenticationAction"
+import { useState } from "react";
+import { IonSpinner, IonRow, useIonToast } from "@ionic/react";
+import { Typography, Button } from "../../../defaults";
+import AuthInput from "../AuthInput";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { validateSignIn } from "../../../../utils/components/validate";
+import { loginUser } from "../../../../datasource/store/action/authenticationAction";
 
 const SignInForm = ({
   setauth,
   setShowSignup = null,
-  setActiveNavDrop = () => {}
+  setActiveNavDrop = () => {},
 }) => {
-  const params = new URLSearchParams(window.location.search)
-  const spaceOrgName = params.get("org")
+  const params = new URLSearchParams(window.location.search);
+  const spaceOrgName = params.get("org");
   const [input, setInput] = useState({
     email: params.get("email"),
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
-    code: params.get("code")
-  })
-  const [errors, setErrors] = useState({})
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
-  const [present, dismiss] = useIonToast()
-  const history = useHistory()
+    code: params.get("code"),
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [present, dismiss] = useIonToast();
+  const history = useHistory();
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setInput((prev) => ({ ...prev, [name]: value }))
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }))
-  }
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const validationErrors = validateSignIn(input)
+    e.preventDefault();
+    const validationErrors = validateSignIn(input);
     if (Object.keys(validationErrors).length === 0) {
-      setLoading(true)
+      setLoading(true);
       dispatch(
         loginUser({
           input,
@@ -47,13 +47,13 @@ const SignInForm = ({
           setActiveNavDrop,
           redirectUrl: params.get("uni")
             ? params.get("uni") + `?unitId=${params.get("unitId")}`
-            : null
+            : null,
         })
-      )
+      );
     } else {
-      setErrors(validationErrors)
+      setErrors(validationErrors);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -84,7 +84,7 @@ const SignInForm = ({
         <Typography
           style={{ color: "#3880ff", cursor: "pointer" }}
           onClick={() => {
-            setauth({ state: "emailVerify" })
+            setauth({ state: "emailVerify" });
           }}
           variant="p"
         >
@@ -103,8 +103,8 @@ const SignInForm = ({
 
       <IonRow
         onClick={() => {
-          setauth({ state: "signup" })
-          if (setShowSignup) setShowSignup(true)
+          setauth({ state: "signup" });
+          if (setShowSignup) setShowSignup(true);
         }}
         className="auth-change mt-8 inline-flex "
       >
@@ -114,6 +114,6 @@ const SignInForm = ({
         </p>
       </IonRow>
     </form>
-  )
-}
-export default SignInForm
+  );
+};
+export default SignInForm;

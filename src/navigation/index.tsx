@@ -1,45 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
-  Badge,
-  Col,
-  Icon,
   Label,
   RouterOutlet,
-  Row,
   TabBar,
   TabButton,
   Tabs,
-  Text,
-  Header,
-  Toolbar,
-  Title,
-  Searchbar,
-  Buttons,
-  MenuButton,
 } from "../components/defaults/";
-import { personCircle } from "ionicons/icons";
-import {
-  Link,
-  Redirect,
-  Route,
-  useHistory,
-  useLocation,
-  useParams,
-} from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { PageRoute } from "./PageRoute";
-import {
-  ExploreIcon,
-  HomeIcon,
-  PeopleIcon,
-  MessageIcon,
-} from "../components/packages/icons";
 import { SearchBar } from "../components/packages/searchBox";
-import { authenticated, getCache, userName } from "../utils/cache";
 import { IonCol, IonGrid, IonHeader, IonRow } from "@ionic/react";
-import { max } from "moment";
-import { useSelector } from "react-redux";
 import useRoutes from "../hooks/useRoutes";
 import { cn } from "../utils";
+import useWindowWidth from "../hooks/useWindowWidth";
 
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
@@ -51,24 +24,19 @@ type RouteParams = {
 
 export const Navigation: React.FC<NavigationProps> = () => {
   const routes = useRoutes();
-
-  // find current user path
-  const { path } = useParams<RouteParams>();
   const [active, setActive] = useState<string>("home");
-
-  useEffect(() => {
-    setActive(window.location.pathname);
-  }, []);
-
-  // use media query from css
-  const width = window.innerWidth;
-  const isMobile = width <= 768; // You can adjust this value
+  const { isMobile } = useWindowWidth();
   const history = useHistory();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("");
   const handleTabClick = (path: string) => {
     history.push(path);
   };
+
+  useEffect(() => {
+    setActive(window.location.pathname);
+  }, []);
+
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location]);
@@ -91,27 +59,15 @@ export const Navigation: React.FC<NavigationProps> = () => {
 
   return (
     <>
-      <IonHeader style={navBarStyle}>
-        <IonGrid
-          style={{
-            // boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.75)",
-            position: "sticky",
-            top: 0,
-            marginBottom: "10px",
-          }}
-        >
+      <IonHeader className="w-1/2 h-14 border-none shadow-none max-md:w-full max-md:h-12 ">
+        <IonGrid className="position-sticky bg-white  top-0 mb-3">
           <IonRow>
-            <IonCol
-              style={
-                isMobile ? { ...styleForIcon, display: "none" } : styleForIcon
-              }
-              size="1"
-            >
+            <IonCol className="ion-no-padding h-full " size="1">
               <Link to="/">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
                   alt="logo"
-                  style={{ width: "45px" }}
+                  className="h-10 w-10 shrink-0 object-contain"
                 />
               </Link>
             </IonCol>
@@ -138,15 +94,15 @@ export const Navigation: React.FC<NavigationProps> = () => {
               onClick={() => handleTabClick(link)}
               selected={activeTab === link}
               className={cn(
-                "max-md:p-0 max-md:m-0 !w-[10%] ion-no-padding !px-0 !mx-0  ion-no-margin",
+                " max-w-[10%] max-md:max-w-full ion-no-padding px-0 mx-0  ion-no-margin",
                 activeTab === link
                   ? "tab-button-active "
                   : "tab-button-inactive"
               )}
             >
               <Icon />
-              <Label style={{ fontSize: isMobile ? "10px" : "" }}>
-                <span className="!text-red-800">{name}</span>
+              <Label className="font-semibold text-black max-md:text-smm">
+                {name}
               </Label>
             </TabButton>
           ))}

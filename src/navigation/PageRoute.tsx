@@ -143,6 +143,15 @@ export const PageRoute = ({ allProps }) => {
           <Org />
         </Route>
 
+
+        <Route path="/messages" exact>
+          <Messages />
+        </Route>
+        <Route path="/messages/:username" exact>
+          <Messages />
+        </Route>
+
+
         {/* More routes */}
         {/* Fallback route for 404 Not Found */}
         <Route path="*">

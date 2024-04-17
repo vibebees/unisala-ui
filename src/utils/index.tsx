@@ -4,9 +4,8 @@ import { getMessagesByIdGql } from "../datasource/graphql/user/index.ts"
 
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { removeIdFromUnreadMessages, updateUnreadMessages } from "../datasource/store/action/userProfile.ts"
 
-const  removeIdFromUnreadMessages = () =>{},
-updateUnreadMessages = () =>{}
 export const lastMsgWasSentByMe = (message, user) => {
     return message?.senderId === user?._id
   },

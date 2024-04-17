@@ -20,17 +20,31 @@ import { MessageItem } from "./messageItem"
 import { Link, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { messageSeen } from "../../../utils"
+import { useApolloClient } from "@apollo/client"
+import { userInfo } from "../../../utils/cache"
+import { messageSocket } from "../../../datasource/servers/endpoints"
 
-export const MessagingStation = ({ socket = {}, messages = [], chatbox = [], user = {}, messagingTo = {}, recentMessages = [] }) => {
-
+export const MessagingStation = ({ data }) => {
     const
+        { messagingTo } = useSelector((state) => state?.userActivity),
+        { messagingToId } = useParams(),
+        user = userInfo,
+        chatbox = useRef(null),
+        userId = user?.id,
+        dispatch = useDispatch(),
+        client = useApolloClient(),
+        socket = useRef(null),
+        { recentMessages } = useSelector((store) => store?.userProfile),
+        chatboxRef = useRef(null),
+        [ selectedUser, setSelectedUser ] = useState(null),
+        [ showMessageView, setShowMessageView ] = useState(false),
+        [ messages, setMessages ] = useState([]),
         lastMessageStatus = () => {
             return (<strong>read</strong>)
         },
         { username } = useParams(),
         { messageSeenBy } = useSelector((store) => store?.userActivity),
         showEye = messageSeenBy?.includes(messagingTo?._id),
-        dispatch = useDispatch(),
         MessageHistory = () => {
             return (
                 <IonCard className="chats-wrapper">
@@ -59,9 +73,9 @@ export const MessagingStation = ({ socket = {}, messages = [], chatbox = [], use
                     </IonItem>
                     <div ref={chatbox} className="chat-box">
                         {messages?.map((item, index) =>
-                        <MessageItem showEye = {showEye} index= {index} key={index} item={item} currentUserId={user?._id} messageSize ={messages?.length - 1 }/>)}
+                            <MessageItem showEye={showEye} index={index} key={index} item={item} currentUserId={user?._id} messageSize={messages?.length - 1} />)}
                     </div>
-                    <TypeBox socket={socket} dispatch = {dispatch}/>
+                    <TypeBox socket={socket} dispatch={dispatch} />
                 </IonCard>
             )
 
@@ -77,10 +91,50 @@ export const MessagingStation = ({ socket = {}, messages = [], chatbox = [], use
                 </IonCard>
             )
         }
-        useEffect(() => {
-            if (username) {
-              messageSeen({ messagingTo, username, recentMessages, socket, user, dispatch })
-            }
-          }, [username, recentMessages])
+    useEffect(() => {
+        if (username && messagingTo && recentMessages && socket && user) {
+            messageSeen({ messagingTo, username, recentMessages, socket, user, dispatch });
+        }
+    }, [ username, messagingTo, recentMessages, socket, user, dispatch ]);
+
+
+    useEffect(() => {
+        const messageSocketConnection = messageSocket();
+        socket.current = messageSocketConnection;
+
+        if (userId) {
+            socket.current.emit('joinRoom', { senderId: userId, receiverId: messagingToId });
+        }
+
+        socket.current.on('getMessage', (messageData) => {
+            setMessages(prevMessages => [ ...prevMessages, messageData ]);
+            scrollBottom();
+        });
+
+        socket.current.on('messageRead', (seenMsg) => {
+            dispatch(addSeenEye(seenMsg.receiverId));
+        });
+
+        return () => {
+            messageSocketConnection.disconnect();
+        };
+    }, [ userId, messagingToId ]);
+
+
+
+    useEffect(() => {
+        if (data?.getMessagesById?.[ 0 ]?.messages) {
+            setMessages(data.getMessagesById[ 0 ].messages);
+            scrollBottom();
+        }
+    }, [ data ]);
+
+
+    const scrollBottom = () => {
+        if (chatboxRef.current) {
+            chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+        }
+    };
+
     return username ? <MessageHistory /> : <DefaultMessage />
 }

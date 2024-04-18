@@ -26,37 +26,24 @@ export const MessageItem = ({ firstName, username, lastName, picture, _id, image
 
                 <IonAvatar slot="start">
                     <Avatar profilePic={firstName + " " + lastName} username={firstName + lastName} />
-
                 </IonAvatar>
                 <IonLabel>
                     <div className="flex ">
                         {" "}
                         <h2>{firstName + " " + lastName}</h2>
-                        <img
-                            src="https://www.svgrepo.com/show/178831/badges-money.svg"
-                            alt=""
-                            width={20}
-                        />
                     </div>
-                    <p
-                        style={{
-                            margin: 0
-                        }}
-                    >
+                    <p style={{margin: 0}} >
                         {username}
                     </p>
                 </IonLabel>
             </IonItem>
             <IonRow>
                 <IonCol>
-                    { }
                     <IonText style={{ fontWeight: seen ? "normal" : "bold" }} >
                         {message?.text?.length > 20 ? message?.text?.slice(0, 20) + "..." : message?.text?.slice(0, 20)}
                     </IonText>
                 </IonCol>
-                <IonCol>
-                    {!seen && <IonIcon icon={helpCircle} color="blue" />}
-                </IonCol>
+
             </IonRow>
 
         </div>

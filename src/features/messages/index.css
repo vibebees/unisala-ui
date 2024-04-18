@@ -2,3 +2,23 @@
     min-width: calc(100% - 420px);
     overflow: auto;
 }
+
+
+/* Add this to remove padding from the grid itself */
+.messagingGrid {
+    --ion-grid-padding: 0;
+    --ion-grid-column-padding: 0;
+    background-color: yellowgreen;
+}
+
+
+/* Add this to your index.css or similar stylesheet */
+.no-padding {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Ensure no margins exist between IonCol components */
+.ion-col {
+    --ion-grid-column-padding: 0;
+}

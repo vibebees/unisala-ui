@@ -1,73 +1,84 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { IonCard, IonCardContent, IonText } from "@ionic/react"
-import { useHistory } from "react-router"
-import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Card,
+  CardContent,
+  Typography,
+} from "././../../../components/defaults";
+import { useHistory } from "react-router";
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
 // import { ButtonTrack } from "features/analytics/ButtonTrack"
 
 const SearchTab = () => {
-  const [tab, setTab] = useState("all")
-  const history = useHistory()
-  const searchParams = new URLSearchParams(history.location.search)
-  const query = searchParams.get("q") || ""
+  const [tab, setTab] = useState("all");
+  const history = useHistory();
+  const searchParams = new URLSearchParams(history.location.search);
+  const query = searchParams.get("q") || "";
 
   const tabs = useMemo(() => {
     return [
       {
         name: "All",
-        value: "all"
+        value: "all",
       },
       {
         name: "Universities & Scholarships",
-        value: "uni"
+        value: "uni",
       },
       {
         name: "Users",
-        value: "user"
+        value: "user",
       },
       {
         name: "Posts",
-        value: "post"
+        value: "post",
       },
       {
         name: "Spaces",
-        value: "space"
+        value: "space",
       },
       {
         name: "Orgs",
-        value: "org"
-      }
-    ]
-  }, [])
+        value: "org",
+      },
+    ];
+  }, []);
 
   useEffect(() => {
-    const getTab = URLgetter("tab")
+    const getTab = URLgetter("tab");
     if (getTab) {
-      setTab(getTab)
+      setTab(getTab);
     } else {
-      setTab("all")
+      setTab("all");
     }
-  }, [history.location.search])
+  }, [history.location.search]);
 
   return (
-    <IonCard>
-      <IonCardContent>
+    <Card className="shadow-none  border-b-2 border-neutral-300 rounded-none">
+      <CardContent>
         {query.length > 0 && (
-          <h1 className="text-sm">Search Result For {`"${query}"`}: </h1>
+          <Typography variant="p">
+            {" "}
+            <span className="text-neutral-800 font-medium">
+              {" "}
+              Search Result For:
+            </span>{" "}
+            {`"${query}"`}
+          </Typography>
         )}
         <div
           style={{
             display: "inline-flex",
             gap: "1rem",
             marginTop: "1.5rem",
-            overflow: "auto"
+            overflow: "auto",
           }}
         >
           {tabs.map((t, index) => (
-            <IonText key={index} className="w-fit ">
+            <Typography key={index} className="w-fit ">
               <h4
                 onClick={() => {
-                  const urldata = URLupdate("tab", t.value)
-                  history.push({ search: urldata })
+                  const urldata = URLupdate("tab", t.value);
+                  history.push({ search: urldata });
                   // ButtonTrack(`${t.value} search tab clicked`)
                 }}
                 className="max-md:text-xs"
@@ -75,18 +86,17 @@ const SearchTab = () => {
                   cursor: "pointer",
 
                   color: t.value === tab ? "#3171e0" : "",
-                  borderBottom: t.value === tab ? "2px solid #3171e0" : ""
+                  borderBottom: t.value === tab ? "2px solid #3171e0" : "",
                 }}
               >
                 {t.name}
               </h4>
-            </IonText>
+            </Typography>
           ))}
         </div>
-      </IonCardContent>
-    </IonCard>
-  )
-}
+      </CardContent>
+    </Card>
+  );
+};
 
-export default SearchTab
-
+export default SearchTab;

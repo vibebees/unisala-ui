@@ -16,7 +16,7 @@ export const ResultsColumn = ({
 }) => {
   return (
     <IonCol>
-      <SearchTab />
+      {/* <SearchTab /> */}
       <ChipsTab />
       <UniversityScholarshipTab />
       {loading ? (

@@ -84,9 +84,8 @@ export const SearchTemplate: React.FC = () => {
 
   return (
     <>
-      <SearchFilterRow setPopUp={setPopUp} />
-      {tab !== "uni" && <SearchTab />}
-
+      {/* <SearchFilterRow setPopUp={setPopUp} /> */}
+      <SearchTab />
       <IonCol className="mt-5" style={{ width: "900px" }}>
         {tab === "all" && (
           <div

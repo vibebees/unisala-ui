@@ -82,6 +82,7 @@ import { forwardRef } from "react";
 import { cn } from "../../utils";
 import useCustomToast from "./apis/toast.api";
 import { AvatarProfile } from "../packages/Avatar";
+import { ITypography } from "../../types/typography";
 // Wrap and export Ionic components
 export const Alert = CustomWrapper(IonAlert);
 export const Avatar = AvatarProfile;
@@ -160,6 +161,7 @@ export const Row = CustomWrapper(IonRow);
 export const useIonToast = useCustomToast;
 export const SimpleAvatar = IonAvatar;
 
+// eslint-disable-next-line no-undef
 export const Typography = forwardRef<HTMLIonTextElement, ITypography>(
   ({ variant = "h2", children, className, ...rest }, ref) => {
     return (

@@ -3,12 +3,11 @@ import { useSelector } from "react-redux"
 import Layout from "../../pages/layout"
 import { ContactList } from "./contactList"
 import Template from "./template"
+import WhatsApp from "./whatsapp/Chat"
 const Message = () => {
     const { recentMessages } = useSelector((store) => store?.userProfile)
 
-    return <Layout
-        mainContent={<Template />}
-    />
+    return <WhatsApp />
 }
 
 export default Message

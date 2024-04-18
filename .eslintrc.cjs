@@ -19,6 +19,10 @@ module.exports = {
   plugins: ["react", "react-hooks"],
   rules: {
     "react/prop-types": "off",
-    "no-use-before-define": "off",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-undef": "off",
   },
 };

@@ -15,9 +15,8 @@ export const ResultsColumn = ({
   setFilterPage,
 }) => {
   return (
-    <IonCol>
-      {/* <SearchTab /> */}
-      <ChipsTab />
+    <IonCol className="ion-no-margin ion-no-padding">
+      {/* <ChipsTab /> */}
       <UniversityScholarshipTab />
       {loading ? (
         <ThreadSkeleton />

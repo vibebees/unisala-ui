@@ -33,6 +33,7 @@ import { getAllQueryParams } from "././uni/Filter/utility";
 import { FeedSkeleton } from "../../components/packages/skeleton/feedSkeleton";
 import { OrgList } from "./orgamism/OrgList";
 import { SpaceList } from "./orgamism/SpaceList";
+import { Col, Row } from "../../components/defaults";
 
 export const SearchTemplate: React.FC = () => {
   const location = useLocation();
@@ -85,28 +86,32 @@ export const SearchTemplate: React.FC = () => {
   return (
     <>
       {/* <SearchFilterRow setPopUp={setPopUp} /> */}
-      <SearchTab />
-      <IonCol className="mt-5" style={{ width: "900px" }}>
-        {tab === "all" && (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
-          >
-            <UserResults users={users} loading={uniLoading} />
-            <UniversityResults
-              universities={uniData?.searchSchool}
-              loading={uniLoading}
-            />
-            <h3 style={{ marginBottom: "1rem", color: "#4d4d4d" }}>Posts</h3>
-          </div>
-        )}
-        {tab === "user" && <UserResults users={users} loading={userLoading} />}
-        {tab === "uni" && (
-          <UniSearchResult query={query} loading={uniLoading} />
-        )}
-        {tab === "post" && <h1>Posts</h1>}
-        {tab === "space" && <SpaceList spaces={spaces} />}
-        {tab === "org" && <OrgList orgs={orgs} />}
-      </IonCol>
+      <Row>
+        <Col style={{ width: "900px" }} className="min-h-[100vh]">
+          <SearchTab />
+          {tab === "all" && (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+            >
+              <UserResults users={users} loading={uniLoading} />
+              <UniversityResults
+                universities={uniData?.searchSchool}
+                loading={uniLoading}
+              />
+              <h3 style={{ marginBottom: "1rem", color: "#4d4d4d" }}>Posts</h3>
+            </div>
+          )}
+          {tab === "user" && (
+            <UserResults users={users} loading={userLoading} />
+          )}
+          {tab === "uni" && (
+            <UniSearchResult query={query} loading={uniLoading} />
+          )}
+          {tab === "post" && <h1>Posts</h1>}
+          {tab === "space" && <SpaceList spaces={spaces} />}
+          {tab === "org" && <OrgList orgs={orgs} />}
+        </Col>
+      </Row>
     </>
   );
 };

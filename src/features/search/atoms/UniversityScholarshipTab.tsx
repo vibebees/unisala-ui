@@ -1,28 +1,28 @@
-import React, { useEffect } from "react"
-import { IonCard, IonCol, IonRow } from "@ionic/react"
-import { useHistory } from "react-router"
-import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
-import clsx from "clsx"
+import React, { useEffect } from "react";
+import { IonCard, IonCol, IonRow } from "@ionic/react";
+import { useHistory } from "react-router";
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
+import clsx from "clsx";
 
 const UniversityScholarshipTab = () => {
-  const history = useHistory()
-  const [active, setActive] = React.useState("u")
+  const history = useHistory();
+  const [active, setActive] = React.useState("u");
 
   useEffect(() => {
-    const url = URLgetter("st")
+    const url = URLgetter("st");
     if (url) {
-      setActive(url)
+      setActive(url);
     } else {
-      setActive("u")
+      setActive("u");
     }
-  }, [history.location.search])
+  }, [history.location.search]);
 
   return (
-    <IonCard className="flex mx-10 h-8">
+    <IonCard className="flex my-2 h-8 shadow-none border border-neutral-200 rounded-md">
       <IonRow
         onClick={() => {
-          const url = URLupdate("st", "u")
-          history.push({ search: url })
+          const url = URLupdate("st", "u");
+          history.push({ search: url });
         }}
         className={clsx(
           " w-full rounded-md  h-full justify-center items-center cursor-pointer",
@@ -33,8 +33,8 @@ const UniversityScholarshipTab = () => {
       </IonRow>
       <IonRow
         onClick={() => {
-          const url = URLupdate("st", "s")
-          history.push({ search: url })
+          const url = URLupdate("st", "s");
+          history.push({ search: url });
         }}
         className={clsx(
           " w-full rounded-md  justify-center items-center cursor-pointer",
@@ -44,7 +44,7 @@ const UniversityScholarshipTab = () => {
         Scholarship
       </IonRow>
     </IonCard>
-  )
-}
+  );
+};
 
-export default UniversityScholarshipTab
+export default UniversityScholarshipTab;

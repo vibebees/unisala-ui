@@ -53,7 +53,7 @@ const SearchTab = () => {
   }, [history.location.search]);
 
   return (
-    <Card className="shadow-none  border-b-2 border-neutral-300 rounded-none">
+    <Card className="shadow-none my-0 border-b-2 border-neutral-300 rounded-none">
       <CardContent>
         {query.length > 0 && (
           <Typography variant="p">

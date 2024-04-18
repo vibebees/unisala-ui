@@ -1,8 +1,8 @@
 // ResultsColumn.js
 import React from "react";
 import { IonCol } from "@ionic/react";
-import SearchResults from "./searchResults";
-import ScholarshipResult from "./scholarshipResults";
+import SearchResults from "./SearchResults";
+import ScholarshipResult from "./ScholarshipResults";
 import UniversityScholarshipTab from "../atoms/UniversityScholarshipTab";
 import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
 

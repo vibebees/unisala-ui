@@ -6,18 +6,18 @@ import { ExploreFilterPopupProvider } from "../features/search/uni/ExploreUniFil
 import { Card } from "../components/defaults/index.js";
 
 const DiscoverPage = () => {
-  let leftSideBar = () => {
-    const [filterPage, setFilterPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-    return (
-      <Card>
-        <DesktopFilter filterPage={filterPage} setIsLoading={setIsLoading} />
-      </Card>
-    );
-  };
+  //   let leftSideBar = () => {
+  //     const [filterPage, setFilterPage] = useState(1);
+  //     const [isLoading, setIsLoading] = useState(false);
+  //     return (
+  //       <Card>
+  //         <DesktopFilter filterPage={filterPage} setIsLoading={setIsLoading} />
+  //       </Card>
+  //     );
+  //   };
 
   return (
-    <Layout leftSidebar={leftSideBar()}>
+    <Layout>
       <ExploreFilterPopupProvider>
         <SearchPage />
       </ExploreFilterPopupProvider>

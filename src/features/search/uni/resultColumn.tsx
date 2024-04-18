@@ -1,26 +1,35 @@
 // ResultsColumn.js
-import React from "react"
-import { IonCol } from "@ionic/react"
-import SearchResults from "./searchResults/index"
-import ScholarshipResult from "./scholarshipResults"
-import SearchTab from "../atoms/SearchTab"
-import { ChipsTab } from "../orgamism/ChipsTab"
-import UniversityScholarshipTab from "../atoms/UniversityScholarshipTab"
-import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton"
-export const ResultsColumn = ({  loading, activeSubTab, filterPage, setFilterPage }) => {
+import React from "react";
+import { IonCol } from "@ionic/react";
+import SearchResults from "./SearchResults";
+import ScholarshipResult from "./ScholarshipResults";
+import SearchTab from "../atoms/SearchTab";
+import { ChipsTab } from "../orgamism/ChipsTab";
+import UniversityScholarshipTab from "../atoms/UniversityScholarshipTab";
+import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
 
-  return  (
-    <IonCol >
+export const ResultsColumn = ({
+  loading,
+  activeSubTab,
+  filterPage,
+  setFilterPage,
+}) => {
+  return (
+    <IonCol>
       <SearchTab />
       <ChipsTab />
       <UniversityScholarshipTab />
       {loading ? (
         <ThreadSkeleton />
       ) : activeSubTab === "u" ? (
-        <SearchResults filterPage={filterPage} setFilterPage={setFilterPage}   />
+        <SearchResults
+          filterPage={filterPage}
+          setFilterPage={setFilterPage}
+          isLoading={false}
+        />
       ) : (
         <ScholarshipResult />
       )}
     </IonCol>
-  )
-}
+  );
+};

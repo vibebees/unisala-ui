@@ -7,11 +7,11 @@ import path from "path";
 export default defineConfig({
   resolve: {
     alias: {
-      datasource: path.resolve(__dirname, "./src/datasource"),
-      components: path.resolve(__dirname, "./src/components"),
-      utils: path.resolve(__dirname, "./src/utils"),
-      hooks: path.resolve(__dirname, "./src/hooks"),
-      features: path.resolve(__dirname, "./src/features"),
+      "@datasource": path.resolve(__dirname, "./src/datasource"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@features": path.resolve(__dirname, "./src/features"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },

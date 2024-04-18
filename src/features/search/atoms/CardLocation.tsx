@@ -1,26 +1,29 @@
-import React from "react"
-import { IonRow, IonText, IonIcon } from "@ionic/react"
-import { location } from "ionicons/icons"
+import React, { FC } from "react";
+import { IonIcon } from "@ionic/react";
+import { location } from "ionicons/icons";
+import { Row, Typography } from "@components/defaults";
 
-const CardLocation = ({ allProps }) => {
-  const { address = {} } = allProps
-  const { city, stateAbbreviation, streetAddressOrPOBox } = address || {}
-  const formattedAddress = `${city}, ${stateAbbreviation}, ${streetAddressOrPOBox}`
+const CardLocation: FC<ICardLocation> = ({
+  city,
+  stateAbbreviation,
+  streetAddressOrPOBox,
+}) => {
+  const formattedAddress = `${city}, ${stateAbbreviation}, ${streetAddressOrPOBox}`;
 
   return (
-    <IonRow
-      className="ion-no-padding gap-1 items-center h-fit mt-2"
-      lines="none"
-    >
+    <Row className="ion-no-padding gap-1 items-center h-fit mt-2">
       <IonIcon
-        className="ion-icon leading-none mt-0 text-primar text-lg"
+        className="ion-icon leading-none mt-0 text-primary text-base"
         icon={location}
       />
-      <IonText className="text-sm leading-none m-0 h-fit ion-no-padding font-semibold text-gray-600">
+      <Typography
+        variant="h5"
+        className="text-xs leading-none m-0 h-fit ion-no-padding font-normal text-gray-600"
+      >
         {formattedAddress}
-      </IonText>
-    </IonRow>
-  )
-}
+      </Typography>
+    </Row>
+  );
+};
 
-export default CardLocation
+export default CardLocation;

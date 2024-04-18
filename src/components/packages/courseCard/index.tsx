@@ -60,7 +60,13 @@ function CourseCard({ allProps }) {
                         {name}
                       </Typography>
 
-                      <Location allProps={allProps} />
+                      <Location
+                        city={allProps?.address?.city}
+                        stateAbbreviation={allProps?.address?.stateAbbreviation}
+                        streetAddressOrPOBox={
+                          allProps?.address?.streetAddressOrPOBox
+                        }
+                      />
                     </Col>
                     <Col className="h-fit">
                       <RatingCard

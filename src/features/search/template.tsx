@@ -29,11 +29,11 @@ import { SearchBar } from "../../components/packages/searchBox";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
-import { getAllQueryParams } from "././uni/Filter/utility";
-import { FeedSkeleton } from "../../components/packages/skeleton/feedSkeleton";
+ import { FeedSkeleton } from "../../components/packages/skeleton/feedSkeleton";
 import { OrgList } from "./orgamism/OrgList";
 import { SpaceList } from "./orgamism/SpaceList";
 import { Col, Row } from "../../components/defaults";
+import { getAllQueryParams } from "./uni/filter/utility";
 
 export const SearchTemplate: React.FC = () => {
   const location = useLocation();

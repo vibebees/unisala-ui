@@ -7,7 +7,7 @@ import WhatsApp from "./whatsapp/Chat"
 const Message = () => {
     const { recentMessages } = useSelector((store) => store?.userProfile)
 
-    return <WhatsApp />
+    return <Template />
 }
 
 export default Message

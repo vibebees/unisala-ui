@@ -20,16 +20,10 @@ import './index.css';
 const MessagingSystem = () => {
   useDocTitle('Messages');
 
-  const { messagingToId } = useParams();
+  const { friendUserName } = useParams();
   const { username, id: userId } = userInfo || {};
 
 
-  const { data, loading, error } = useQuery(getMessagesByIdGql, {
-    skip: !messagingToId,
-    variables: { senderId: userId, receiverId: messagingToId },
-    context: { server: MESSAGE_SERVICE_GQL },
-    fetchPolicy: 'cache-and-network'
-  });
 
   const { data: friendsData, loading: friendsLoading, error: friendsError } = useQuery(ConnectedList, {
     variables: { userId },
@@ -38,6 +32,17 @@ const MessagingSystem = () => {
   });
   const friends = friendsData?.connectedList?.connectionList || [];
 
+
+  // find out friend id from friendUserName
+  const messagingToId = friends.find(friend => friend?.user?.username === friendUserName)?.user._id
+
+  console.log({messagingToId, friends})
+  const { data, loading, error } = useQuery(getMessagesByIdGql, {
+    skip: !messagingToId,
+    variables: { senderId: userId, receiverId: messagingToId },
+    context: { server: MESSAGE_SERVICE_GQL },
+    fetchPolicy: 'cache-and-network'
+  });
 
   const chatProps = {
     friends,
@@ -51,7 +56,7 @@ const MessagingSystem = () => {
       <IonCol>
         <ContactList   {...chatProps} />
       </IonCol>
-      <IonCol >
+      <IonCol className="messages-wrapper" > 
         <MessagingStation  {...chatProps} />
       </IonCol>
     </IonRow>

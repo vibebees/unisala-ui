@@ -14,6 +14,7 @@ import { ChatBottomDetails } from "./components/ChatBottomDetails";
 import { ChatRepliedQuote } from "./components/ChatRepliedQuote";
 import { useCamera } from "./hooks/useCamera";
 import { useGallery } from "./hooks/useGallery";
+import { AvatarProfile } from '@components/packages/Avatar';
 
 const Chat = () => {
 
@@ -283,95 +284,153 @@ const Chat = () => {
     };
 
     return (
+      <IonPage className="chat-page">
+        <IonHeader>
+          <IonToolbar>
+            <IonBackButton
+              slot="start"
+              text={notificationCount > 0 ? notificationCount : ''}
+            />
+            <IonTitle>
+              <div className="chat-contact">
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <AvatarProfile profilePic={"profileImg"} username={"username"} />
+                </div>{' '}
+                <div className="chat-contact-details">
+                  <p>{contact.name}</p>
+                  <IonText color="medium">last seen today at 22:10</IonText>
+                </div>
+              </div>
+            </IonTitle>
 
-        <IonPage className="chat-page">
-            <IonHeader>
-                <IonToolbar>
-                    <IonBackButton slot="start" text={ (notificationCount > 0) ? notificationCount : "" } />
-                    <IonTitle>
+            <IonButtons slot="end">
+              <IonButton
+                fill="clear"
+                onClick={() =>
+                  toaster(
+                    "As this is a UI only, video calling wouldn't work here."
+                  )
+                }
+              >
+                <IonIcon icon={videocamOutline} />
+              </IonButton>
 
-                        <div className="chat-contact">
-                            <img src={ contact?.avatar } alt="avatar" />
-                            <div className="chat-contact-details">
-                                <p>{ contact.name }</p>
-                                <IonText color="medium">last seen today at 22:10</IonText>
-                            </div>
-                        </div>
-                    </IonTitle>
+              <IonButton
+                fill="clear"
+                onClick={() =>
+                  toaster("As this is a UI only, calling wouldn't work here.")
+                }
+              >
+                <IonIcon icon={callOutline} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
 
-                    <IonButtons slot="end">
-                        <IonButton fill="clear" onClick={ () => toaster("As this is a UI only, video calling wouldn't work here.")}>
-                            <IonIcon icon={ videocamOutline } />
-                        </IonButton>
+        <IonContent id="main-chat-content" ref={contentRef}>
+          {chat.map((message, index) => {
+            const repliedMessage = chat.filter(
+              (subMessage) =>
+                parseInt(subMessage.id) === parseInt(message.replyID)
+            )[0];
 
-                        <IonButton fill="clear" onClick={ () => toaster("As this is a UI only, calling wouldn't work here.")}>
-                            <IonIcon icon={ callOutline } />
-                        </IonButton>
-                    </IonButtons>
-                </IonToolbar>
-            </IonHeader>
+            return (
+              <div
+                ref={(ref) => (swiperRefs.current[index] = ref)}
+                id={`chatBubble_${message.id}`}
+                key={index}
+                className={`chat-bubble ${
+                  message.sent ? 'bubble-sent' : 'bubble-received'
+                }`}
+                {...longPressEvent}
+              >
+                <div id={`chatText_${message.id}`}>
+                  <ChatRepliedQuote
+                    message={message}
+                    contact={contact}
+                    repliedMessage={repliedMessage}
+                  />
 
-            <IonContent id="main-chat-content" ref={ contentRef }>
+                  {message.preview}
+                  {message.image && message.imagePath && (
+                    <img src={message.imagePath} alt="chat message" />
+                  )}
+                  <ChatBottomDetails message={message} />
+                </div>
 
-                { chat.map((message, index) => {
+                <div className={`bubble-arrow ${message.sent && 'alt'}`}></div>
+              </div>
+            );
+          })}
 
-                    const repliedMessage = chat.filter(subMessage => parseInt(subMessage.id) === parseInt(message.replyID))[0];
+          <IonActionSheet
+            header="Message Actions"
+            subHeader={actionMessage && actionMessage.preview}
+            isOpen={showActionSheet}
+            onDidDismiss={() => setShowActionSheet(false)}
+            buttons={actionSheetButtons}
+          />
 
-                    return (
-                        <div ref={ ref => swiperRefs.current[index] = ref } id={ `chatBubble_${ message.id }`} key={ index } className={ `chat-bubble ${ message.sent ? "bubble-sent" : "bubble-received" }` } { ...longPressEvent }>
-                            <div id={ `chatText_${ message.id }`}>
+          <IonToast
+            color="primary"
+            isOpen={showToast}
+            onDidDismiss={() => setShowToast(false)}
+            message={toastMessage}
+            position="bottom"
+            duration="3000"
+          />
+        </IonContent>
 
-                                <ChatRepliedQuote message={ message } contact={ contact } repliedMessage={ repliedMessage } />
+        {replyToMessage && <ReplyTo {...replyToProps} />}
 
-                                { message.preview }
-                                { message.image && message.imagePath && <img src={ message.imagePath } alt="chat message" /> }
-                                <ChatBottomDetails message={ message } />
-                            </div>
+        <IonFooter className="chat-footer" id="chat-footer">
+          <IonGrid>
+            <IonRow className="ion-align-items-center">
+              <IonCol size="1">
+                <IonIcon
+                  icon={addOutline}
+                  color="primary"
+                  onClick={handlePrompt}
+                />
+              </IonCol>
 
-                            <div className={ `bubble-arrow ${ message.sent && "alt" }` }></div>
-                        </div>
-                    );
-                })}
+              <div className="chat-input-container">
+                <CreateAnimation ref={textareaRef} {...textareaAnimation}>
+                  <IonTextarea
+                    rows="1"
+                    value={message}
+                    onIonChange={(e) => setMessage(e.target.value)}
+                  />
+                </CreateAnimation>
+              </div>
 
-                <IonActionSheet header="Message Actions" subHeader={ actionMessage && actionMessage.preview } isOpen={ showActionSheet } onDidDismiss={ () => setShowActionSheet(false) } buttons={ actionSheetButtons } />
+              <CreateAnimation ref={sideRef} {...sideButtonsAnimation}>
+                <IonCol size="1">
+                  <IonIcon
+                    icon={cameraOutline}
+                    color="primary"
+                    onClick={handlePhoto}
+                  />
+                </IonCol>
 
-                <IonToast color="primary" isOpen={ showToast } onDidDismiss={ () => setShowToast(false) } message={ toastMessage } position="bottom" duration="3000" />
-            </IonContent>
+                <IonCol size="1">
+                  <IonIcon icon={micOutline} color="primary" />
+                </IonCol>
+              </CreateAnimation>
 
-            { replyToMessage && <ReplyTo { ...replyToProps } /> }
-
-            <IonFooter className="chat-footer" id="chat-footer">
-                <IonGrid>
-                    <IonRow className="ion-align-items-center">
-                        <IonCol size="1">
-                            <IonIcon icon={ addOutline } color="primary" onClick={ handlePrompt } />
-                        </IonCol>
-
-                        <div className="chat-input-container">
-                            <CreateAnimation ref={ textareaRef } { ...textareaAnimation }>
-                                <IonTextarea rows="1" value={ message } onIonChange={ e => setMessage(e.target.value) } />
-                            </CreateAnimation>
-                        </div>
-
-                        <CreateAnimation ref={ sideRef } { ...sideButtonsAnimation }>
-                            <IonCol size="1">
-                                <IonIcon icon={ cameraOutline } color="primary" onClick={ handlePhoto } />
-                            </IonCol>
-
-                            <IonCol size="1">
-                                <IonIcon icon={ micOutline } color="primary" />
-                            </IonCol>
-                        </CreateAnimation>
-
-                        <CreateAnimation ref={ sendRef } { ...sendButtonAnimation }>
-                            <IonCol size="1" className="chat-send-button" onClick={ sendMessage }>
-                                <IonIcon icon={ send } />
-                            </IonCol>
-                        </CreateAnimation>
-                    </IonRow>
-                </IonGrid>
-            </IonFooter>
-        </IonPage>
+              <CreateAnimation ref={sendRef} {...sendButtonAnimation}>
+                <IonCol
+                  size="1"
+                  className="chat-send-button"
+                  onClick={sendMessage}
+                >
+                  <IonIcon icon={send} />
+                </IonCol>
+              </CreateAnimation>
+            </IonRow>
+          </IonGrid>
+        </IonFooter>
+      </IonPage>
     );
 }
 

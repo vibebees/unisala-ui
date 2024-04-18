@@ -85,7 +85,7 @@ export const SearchTemplate: React.FC = () => {
 
   return (
     <>
-      {/* <SearchFilterRow setPopUp={setPopUp} /> */}
+      <SearchFilterRow setPopUp={setPopUp} />
       <Row>
         <Col style={{ width: "900px" }} className="min-h-[100vh]">
           <SearchTab />

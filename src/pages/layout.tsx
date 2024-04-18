@@ -88,9 +88,10 @@ const Layout: React.FC<LayoutProps> = ({
         <Row className="layout-row" style={style}>
           {/* Only visible on medium and larger screens */}
           <Col sizeMd="3" className="ion-hide-md-down layout-col">
-            <div style={{ width: "100%", maxWidth: "300px" }}>
-              {leftSidebar}
-            </div>
+            <div
+              id="left-sidebar"
+              style={{ width: "100%", maxWidth: "300px" }}
+            ></div>
           </Col>
 
           {/* Always visible, but spans more columns on small screens */}

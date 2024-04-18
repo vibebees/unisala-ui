@@ -1,12 +1,12 @@
 import { IonIcon } from "@ionic/react"
 import { eye } from "ionicons/icons"
 export const MessageItem = ({ item, currentUserId, messageSize, index = 0 }) => {
-    const isLastSentMessage = index === messageSize && item.senderId === currentUserId
-
+    const isLastSentMessage = index === messageSize && item?.senderId === currentUserId
+console.log('----> MessageItem: item', item)
     return (
       <>
         <div key={index} className="chat-box__msg">
-          <div className={`${item.senderId === currentUserId ? "msg-text-sent" : "msg-text-received"}`}>
+          <div className={`${item?.senderId === currentUserId ? "msg-text-sent" : "msg-text-received"}`}>
             <p>{item?.message?.text}</p>
           </div>
         </div>

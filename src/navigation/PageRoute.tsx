@@ -125,10 +125,10 @@ export const PageRoute = ({ allProps }) => {
         {/* <Route path="/messages/view-chat/:contact_id" exact>
           <Messages />
         </Route>
+        */}
         <Route path="/mynetwork" exact>
           <MyNetwork />
-        </Route> */}
-
+        </Route>
         <Route path="/messages" exact>
           <Messages />
         </Route>

@@ -34,21 +34,25 @@ const MessagingSystem = () => {
 
 
   // find out friend id from friendUserName
-  const messagingToId = friends.find(friend => friend?.user?.username === friendUserName)?.user._id
 
-  console.log({messagingToId, friends})
-  const { data, loading, error } = useQuery(getMessagesByIdGql, {
+  const 
+  messagingTo = friends?.find(friend => friend?.user?.username === friendUserName)?.user,
+  messagingToId = messagingTo?._id
+
+  const { data, loading: friendConvoLoading, error: friendConvoError } = useQuery(getMessagesByIdGql, {
     skip: !messagingToId,
     variables: { senderId: userId, receiverId: messagingToId },
     context: { server: MESSAGE_SERVICE_GQL },
     fetchPolicy: 'cache-and-network'
-  });
-
+  }),
+  friendConversation = data?.getMessagesByIdGql || []
   const chatProps = {
     friends,
     friendsLoading,
     friendsError,
-    data, loading, error
+    friendConversation, friendConvoLoading, friendConvoError,
+    messagingToId,
+    messagingTo
   };
   return (
     <IonGrid className='messagingGrid'>

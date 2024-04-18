@@ -1,114 +1,38 @@
-// eslint-disable-next-line no-use-before-define
-import React, { useEffect, useRef, useState } from "react"
-import {
-    IonCard,
-    IonItem,
-    IonAvatar,
-    IonLabel,
-    IonButton,
-    IonCardContent,
-    IonContent,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
-    IonList,
-    IonIcon
-} from "@ionic/react"
-import messageImg from "../../../assets/messages.png"
-import "./index.css"
-import { TypeBox } from "./typeBox"
-import { MessageItem } from "./messageItem"
-import { Link, useParams } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { messageSeen } from "../../../utils"
-import { useApolloClient } from "@apollo/client"
-import { userInfo } from "../../../utils/cache"
-import { messageSocket } from "../../../datasource/servers/endpoints"
+import React, { useEffect, useRef, useState } from "react";
+import { IonCard, IonItem, IonAvatar, IonLabel, IonButton, IonCardContent } from "@ionic/react";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { messageSocket } from "../../../datasource/servers/endpoints";
+import { userInfo } from "../../../utils/cache";
+import { addSeenEye } from "../../../datasource/store/action/userActivity";
+import { messageSeen } from "../../../utils";
 
-export const MessagingStation = ({ data }) => {
-    const
-        { messagingTo } = useSelector((state) => state?.userActivity),
-        { messagingToId } = useParams(),
-        user = userInfo,
-        chatbox = useRef(null),
-        userId = user?.id,
-        dispatch = useDispatch(),
-        client = useApolloClient(),
-        socket = useRef(null),
-        { recentMessages } = useSelector((store) => store?.userProfile),
-        chatboxRef = useRef(null),
-        [ selectedUser, setSelectedUser ] = useState(null),
-        [ showMessageView, setShowMessageView ] = useState(false),
-        [ messages, setMessages ] = useState([]),
-        lastMessageStatus = () => {
-            return (<strong>read</strong>)
-        },
-        { username } = useParams(),
-        { messageSeenBy } = useSelector((store) => store?.userActivity),
-        showEye = messageSeenBy?.includes(messagingTo?._id),
-        MessageHistory = () => {
-            return (
-                <IonCard className="chats-wrapper">
-                    <IonItem mode="ios" lines="full" className="chats-header">
-                        <IonAvatar slot="start">
-                            <img src="https://www.svgrepo.com/show/178831/badges-money.svg" />
-                        </IonAvatar>
+import {TypeBox} from "./typeBox";
+import {MessageItem} from "./messageItem";
+import messageImg from "../../../assets/messages.png";
+import "./index.css";
 
-                        <IonLabel>
-                            <div className="flex justify-content-start">
-                                <h2>{messagingTo?.firstName + " " + messagingTo?.lastName}</h2>
-                                <img
-                                    src="https://www.svgrepo.com/show/178831/badges-money.svg"
-                                    alt=""
-                                    width={20}
-                                />
-                            </div>
-                            <p>{messagingTo?.username}</p>
-                        </IonLabel>
-                        <Link to={`/@/${user?.username}`} >
-                            <IonButton mode="ios" size="default" >
-                                View Profile
-                            </IonButton>
-                        </Link>
+export const MessagingStation = ({ friendConversation, messagingTo, messagingToId }) => {
+    const dispatch = useDispatch();
+    const { recentMessages, messageSeenBy } = useSelector((store) => store.userProfile);
+    const chatRef = useRef(null);
+    const socket = useRef(null);
+    const [messages, setMessages] = useState([]);
 
-                    </IonItem>
-                    <div ref={chatbox} className="chat-box">
-                        {messages?.map((item, index) =>
-                            <MessageItem showEye={showEye} index={index} key={index} item={item} currentUserId={user?._id} messageSize={messages?.length - 1} />)}
-                    </div>
-                    <TypeBox socket={socket} dispatch={dispatch} />
-                </IonCard>
-            )
-
-        },
-        DefaultMessage = () => {
-            return (
-                <IonCard className="chats-wrapper">
-                    <IonCardContent className="chats-wrapper__content chats-title">
-                        <img src={messageImg} />
-                        <h2>Chat with your connections!</h2>
-                        <p>Start chatting</p>
-                    </IonCardContent>
-                </IonCard>
-            )
-        }
+    // Load existing messages from conversation history on component mount
     useEffect(() => {
-        if (username && messagingTo && recentMessages && socket && user) {
-            messageSeen({ messagingTo, username, recentMessages, socket, user, dispatch });
+        if (friendConversation?.length > 0) {
+            setMessages(friendConversation[0].messages);
         }
-    }, [ username, messagingTo, recentMessages, socket, user, dispatch ]);
+    }, [friendConversation]);
 
-
+    // Setup socket connection
     useEffect(() => {
-        const messageSocketConnection = messageSocket();
-        socket.current = messageSocketConnection;
+        socket.current = messageSocket(); // Establish socket connection
+        socket.current.emit('joinRoom', { senderId: userInfo?.id, receiverId: messagingToId });
 
-        if (userId) {
-            socket.current.emit('joinRoom', { senderId: userId, receiverId: messagingToId });
-        }
-
-        socket.current.on('getMessage', (messageData) => {
-            setMessages(prevMessages => [ ...prevMessages, messageData ]);
-            scrollBottom();
+        socket.current.on('getMessage', (message) => {
+            setMessages(prevMessages => [...prevMessages, message]);
         });
 
         socket.current.on('messageRead', (seenMsg) => {
@@ -116,25 +40,58 @@ export const MessagingStation = ({ data }) => {
         });
 
         return () => {
-            messageSocketConnection.disconnect();
+            socket.current.disconnect();
         };
-    }, [ userId, messagingToId ]);
+    }, [messagingToId, dispatch]);
 
-
-
+    // Scroll to bottom whenever messages update
     useEffect(() => {
-        if (data?.getMessagesById?.[ 0 ]?.messages) {
-            setMessages(data.getMessagesById[ 0 ].messages);
-            scrollBottom();
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
-    }, [ data ]);
+    }, [messages]);
 
 
-    const scrollBottom = () => {
-        if (chatboxRef.current) {
-            chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
-        }
-    };
+    console.log({messages})
+    const MessageHistory = () => (
+        <IonCard className="chats-wrapper">
+            <IonItem lines="full" className="chats-header">
+                <IonAvatar slot="start">
+                    <img src={messagingTo?.profilePicture || "https://www.example.com/default-avatar.png"} alt={`${messagingTo?.firstName} ${messagingTo?.lastName}`} />
+                </IonAvatar>
+                <IonLabel>
+                    <h2>{`${messagingTo?.firstName} ${messagingTo?.lastName}`}</h2>
+                    <p>{messagingTo?.username}</p>
+                </IonLabel>
+                <Link to={`/@/${userInfo?.username}`}>
+                    <IonButton>View Profile</IonButton>
+                </Link>
+            </IonItem>
+            <div ref={chatRef} className="chat-box">
+                {messages.map((message, index) => (
+                    <MessageItem
+                        item = {message}
+                        key={message._id}
+                        message={message}
+                        showEye={messageSeenBy?.includes(messagingToId)}
+                        currentUserId={userInfo?.id}
+                        isLastMessage={index === messages.length - 1}
+                    />
+                ))}
+            </div>
+            <TypeBox socket={socket.current} />
+        </IonCard>
+    );
 
-    return username ? <MessageHistory /> : <DefaultMessage />
-}
+    const DefaultMessage = () => (
+        <IonCard className="chats-wrapper">
+            <IonCardContent className="chats-wrapper__content chats-title">
+                <img src={messageImg} alt="Start Chatting" />
+                <h2>Chat with your connections!</h2>
+                <p>Start chatting</p>
+            </IonCardContent>
+        </IonCard>
+    );
+
+    return messagingTo?.username ? <MessageHistory /> : <DefaultMessage />;
+};

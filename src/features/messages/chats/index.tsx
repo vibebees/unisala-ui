@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IonCard, IonItem, IonAvatar, IonLabel, IonButton, IonCardContent } from "@ionic/react";
+import { IonCard, IonItem, IonAvatar, IonLabel, IonButton, IonCardContent, IonFooter } from "@ionic/react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { messageSocket } from "../../../datasource/servers/endpoints";
@@ -12,11 +12,20 @@ import {MessageItem} from "./messageItem";
 import messageImg from "../../../assets/messages.png";
 import "./index.css";
 
+
+
+type SocketType = {
+    emit: (event: string, data: any) => void;
+    on: (event: string, func: (data: any) => void) => void;
+    disconnect: () => void;
+};
+
+
 export const MessagingStation = ({ friendConversation, messagingTo, messagingToId }) => {
     const dispatch = useDispatch();
     const { recentMessages, messageSeenBy } = useSelector((store) => store.userProfile);
     const chatRef = useRef(null);
-    const socket = useRef(null);
+    const socket = useRef<SocketType | null>(null);
     const [messages, setMessages] = useState([]);
 
     // Load existing messages from conversation history on component mount
@@ -32,6 +41,8 @@ export const MessagingStation = ({ friendConversation, messagingTo, messagingToI
         socket.current.emit('joinRoom', { senderId: userInfo?.id, receiverId: messagingToId });
 
         socket.current.on('getMessage', (message) => {
+
+            console.log({getMessage: message})
             setMessages(prevMessages => [...prevMessages, message]);
         });
 
@@ -42,17 +53,18 @@ export const MessagingStation = ({ friendConversation, messagingTo, messagingToI
         return () => {
             socket.current.disconnect();
         };
-    }, [messagingToId, dispatch]);
+    }, [messagingToId]);
 
     // Scroll to bottom whenever messages update
     useEffect(() => {
+    setTimeout(() => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
-    }, [messages]);
+    }, 100);  // Delay of 100ms
+}, [messages]);
 
 
-    console.log({messages})
     const MessageHistory = () => (
         <IonCard className="chats-wrapper">
             <IonItem lines="full" className="chats-header">
@@ -79,7 +91,9 @@ export const MessagingStation = ({ friendConversation, messagingTo, messagingToI
                     />
                 ))}
             </div>
-            <TypeBox socket={socket.current} />
+           <IonFooter>
+           <TypeBox socket={socket.current} messagingTo = {messagingTo} />
+           </IonFooter>
         </IonCard>
     );
 

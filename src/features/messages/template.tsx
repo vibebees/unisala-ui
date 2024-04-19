@@ -52,7 +52,8 @@ const MessagingSystem = () => {
     friendsError,
     friendConversation, friendConvoLoading, friendConvoError,
     messagingToId,
-    messagingTo
+    messagingTo,
+    userInfo
   };
   return (
     <IonGrid className='messagingGrid'>

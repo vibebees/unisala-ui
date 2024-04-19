@@ -65,6 +65,7 @@ export const TypeBox = memo(({ socket, messagingTo }: TypeBoxProps) => {
         onKeyDown={handleKeyDown}
         ref={inputRef}
         autoGrow={true}
+        placeholder='Type a message...'
       />
       <IonButton
         type="button"

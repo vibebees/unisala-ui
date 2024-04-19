@@ -1,87 +1,81 @@
-import React, { useState, useRef, useEffect } from "react"
-import { IonButton, IonInput, IonIcon, IonTextarea, IonRow } from "@ionic/react"
-import { send } from "ionicons/icons"
-import { useSelector } from "react-redux"
-import { removeSeenEye } from "../../../datasource/store/action/userActivity"
-import { userInfo } from '@utils/cache'
-
-
-type SocketType = {
-  emit: (event: string, data: any) => void;
-  on: (event: string, func: (data: any) => void) => void;
-  disconnect: () => void;
-};
+import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
+import {
+  IonButton,
+  IonIcon,
+  IonTextarea,
+  IonRow
+} from '@ionic/react';
+import { send } from 'ionicons/icons';
+import { userInfo } from '@utils/cache';
+import './index.css';
 
 type MessagingToType = {
-  firstName: string,
-  lastName: string,
-  username: string,
-  _id: string,
-  picture: null
-}
+  _id: string;
+};
 
 type TypeBoxProps = {
-    socket: SocketType,
-    messagingTo: MessagingToType
+  socket: {
+    emit: (event: string, data: any) => void;
+  };
+  messagingTo: MessagingToType;
 };
-export const TypeBox = ({ socket, messagingTo }: TypeBoxProps) => {
-  const [messageInput, setMessageInput] = useState("");
-  const user = userInfo;
-  const inputRef = useRef<HTMLIonInputElement>(null); // Make sure to define the ref with the correct element type
 
-  const sendMessage = (e: any) => {
-    // Prevent the default form submission if inside a form
-    e.preventDefault();
+export const TypeBox = memo(({ socket, messagingTo }: TypeBoxProps) => {
+  const [messageInput, setMessageInput] = useState('');
+  const inputRef = useRef<HTMLIonTextareaElement>(null);
 
-    // Avoid sending empty messages
-    if (!messageInput.trim()) {
-      return;
+  useEffect(() => {
+    if (messageInput === '') {
+      setTimeout(() => {
+        inputRef.current?.setFocus();
+      }, 100);
     }
+  }, [messageInput]);
 
-    // Construct the message data
-    const data = {
-      senderId: user?.id,
-      receiverId: messagingTo?._id,
-      message: {
-        text: messageInput.trim()
-      },
-      seen: false
+  const sendMessage = useCallback(() => {
+    const messageText = messageInput.trim();
+    if (messageText === '') return;
+
+    const messageData = {
+      senderId: userInfo?.id,
+      receiverId: messagingTo._id,
+      message: { text: messageText },
+      seen: false,
     };
 
-    // Emit the message creation event
-    socket.emit('createMessage', data);
-
-    // Clear the input field after sending the message
+    socket.emit('createMessage', messageData);
     setMessageInput('');
-  };
+  }, [messageInput, messagingTo._id, socket]);
 
-  // Event handler for the key down event
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      sendMessage(e);
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLIonTextareaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
-  };
+  }, [sendMessage]);
 
   return (
-    <IonRow>
+    <IonRow className="type-box">
       <IonTextarea
         mode="md"
         className="input-box"
-        onIonChange={(e) => setMessageInput(e.detail.value!)} // Make sure you're using the correct property from the event
-        placeholder="Message"
-        // ref={inputRef}
+        style={{ flex: 1 }}
         value={messageInput}
-        onKeyDown={handleKeyDown} // Use the handler function here
+        onIonInput={(e) => setMessageInput(e.detail.value || "")}
+        onKeyDown={handleKeyDown}
+        ref={inputRef}
+        autoGrow={true}
       />
-      {/* <IonButton type="submit" mode="ios" onClick={sendMessage}>
+      <IonButton
+        type="button"
+        mode="ios"
+        onClick={sendMessage}
+        style={{ marginLeft: '10px' }}
+      >
         <IonIcon icon={send} />
-      </IonButton> */}
-
-      <IonButton>
-        <IonIcon slot="icon-only" icon={send}></IonIcon>
       </IonButton>
-
-      
     </IonRow>
   );
-};
+});
+
+export default TypeBox;

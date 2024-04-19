@@ -35,7 +35,7 @@ const MessagingSystem = () => {
 
   // find out friend id from friendUserName
 
-  const 
+  const
   messagingTo = friends?.find(friend => friend?.user?.username === friendUserName)?.user,
   messagingToId = messagingTo?._id
 
@@ -52,8 +52,7 @@ const MessagingSystem = () => {
     friendsError,
     friendConversation, friendConvoLoading, friendConvoError,
     messagingToId,
-    messagingTo,
-    userInfo
+    messagingTo
   };
   return (
     <IonGrid className='messagingGrid'>
@@ -61,7 +60,7 @@ const MessagingSystem = () => {
       <IonCol>
         <ContactList   {...chatProps} />
       </IonCol>
-      <IonCol className="messages-wrapper" > 
+      <IonCol className="messages-wrapper" >
         <MessagingStation  {...chatProps} />
       </IonCol>
     </IonRow>

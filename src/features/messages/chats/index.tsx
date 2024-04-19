@@ -55,20 +55,16 @@ export const MessagingStation = ({
     return () => socket.current?.disconnect();
   }, [messagingToId, dispatch]);
 
-  const scrollToBottom = useCallback(() => {
-    if (chatRef.current) {
-      const scrollHeight = chatRef.current.scrollHeight;
-      const height = chatRef.current.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      if (chatRef.current.scrollTop >= maxScrollTop - 100) {
-        chatRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }
-    }
-  }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+
+     // Scroll to bottom whenever messages update
+     useEffect(() => {
+      setTimeout(() => {
+          if (chatRef.current) {
+              chatRef.current.scrollTop = chatRef.current.scrollHeight;
+          }
+      }, 100);  // Delay of 100ms
+  }, [messages]);
 
   const MessageHistory = () => (
     <IonCard className='chats-wrapper'>

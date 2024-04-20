@@ -2,47 +2,43 @@ name: Test/Release
 
 on:
   push:
-    branches: [test]
+    branches: [test]  # Triggers the workflow on commits to the 'test' branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
+    runs-on: ubuntu-latest  # Specifies the latest Ubuntu runner environment
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Uses v3 which is the latest version at the time of writing
 
-      - name: install & build
-        run: |
-          npm i --force
-          CI=false NODE_ENV=TEST npm run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v3  # Updated to v3 for better performance and features
+        with:
+          node-version: '20.x'  # Updated to use Node.js 20.x
+
+      - name: Install dependencies and build
+        run: npm install --force && npm run build --prod
         env:
-          NODE_ENV: TEST
+          CI: false
+          NODE_ENV: TEST  # Sets the NODE_ENV environment variable to 'TEST' for the build process
 
-      - name: copy file via ssh key
-        if: ${{github.ref == 'refs/heads/test'}}
-        uses: appleboy/scp-action@master
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@master  # Consider pinning this to a specific new release for more stability
         with:
           host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "build/*"
-          target: "~/unisala-web"
+          source: "www/*"  # Specifies that all files in the 'www' directory should be copied
+          target: "/var/www/html"  # Files are copied directly into the web root directory
 
-      - name: ssh
-        if: ${{github.ref == 'refs/heads/test'}}
-        uses: appleboy/ssh-action@v0.1.8
+      - name: Restart Nginx
+        uses: appleboy/ssh-action@v0.1.8  # Consider using the latest version available
         with:
           host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd unisala-web/build
-            sudo rm -rf /var/www/html/*
-            sudo cp -r * /var/www/html
+            sudo systemctl reload nginx  # Reloads Nginx to apply new configurations without dropping connections

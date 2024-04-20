@@ -13,6 +13,11 @@
     "lint": "eslint",
     "prepare": "husky"
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "dependencies": {
     "@apollo/client": "^3.9.9",
     "@capacitor/android": "^5.7.4",
@@ -59,6 +64,8 @@
   },
   "devDependencies": {
     "@capacitor/cli": "5.7.4",
+    "@commitlint/cli": "^19.2.2",
+    "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.0.0",
     "@testing-library/dom": ">=7.21.4",
     "@testing-library/jest-dom": "^5.16.5",
@@ -71,6 +78,7 @@
     "@vitejs/plugin-legacy": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.1",
     "autoprefixer": "^10.4.19",
+    "commitlint": "^19.2.2",
     "cypress": "^13.5.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.32.2",

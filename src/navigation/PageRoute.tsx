@@ -8,7 +8,6 @@ import { getCache } from "../utils/cache";
 import { Chats } from '@features/messages/whatsapp/Chats';
 
 
-// import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
 
 const ProfilePage = lazy(() => import("../pages/userProfile"));
 const Messages = lazy(() => import("../pages/message"));

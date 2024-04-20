@@ -1,6 +1,6 @@
 import React from "react"
 import { IonText } from "@ionic/react"
-import useIsData from "hooks/useIsData"
+import useIsData from "../../../../hooks/useIsData"
 import {Typography} from "../../../../components/defaults"
 
 const CardBody = ({ value, percentage }) => {

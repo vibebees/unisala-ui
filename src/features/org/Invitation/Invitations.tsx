@@ -1,12 +1,11 @@
 import React from "react"
-import {SpaceRole} from "utils/lib/SpaceRoles"
-import {OrgContext} from ".."
-import RequestToJoin from "./organism/RequestToJoin"
+import {SpaceRole} from "../../../utils/lib/SpaceRoles"
+ import RequestToJoin from "./organism/RequestToJoin"
 import SendInvitationAll from "./organism/SendInvitationAll"
 import SingleInvitation from "./organism/SingleInvitation"
-import {Card} from "../../../components/defaults"
-
-const Index = () => {
+import { Card } from "../../../components/defaults"
+import {OrgContext} from "../index"
+ const Index = () => {
   const {orgId, orgData} = React.useContext(OrgContext)
   const {isJoined = false} = orgData
   return (

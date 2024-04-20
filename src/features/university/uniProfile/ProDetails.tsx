@@ -7,7 +7,7 @@ import {
 } from "@ionic/react"
 import { heart, location } from "ionicons/icons"
 import { useSelector } from "react-redux"
-import useRating from "hooks/useRating"
+import useRating from "../../../hooks/useRating"
 
 const ProDetails = () => {
     const [width, setWidth] = React.useState(window.innerWidth)

@@ -1,6 +1,6 @@
 import React from "react"
 import Card from "../molecules/Card"
-import useIsData from "hooks/useIsData"
+import useIsData from "../../../../hooks/useIsData"
 
 const CircularCardTemplate = ({ value, header }) => {
   const allProps = {

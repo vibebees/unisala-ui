@@ -1,6 +1,6 @@
-import { useHistory, useLocation } from "react-router"
-import useIsEmpty from "../../../hooks/useIsEmpty"
-import { createRef, useState } from "react"
+import { useHistory, useLocation } from "react-router";
+import useIsEmpty from "@hooks/useIsEmpty";
+import { createRef, useState } from "react";
 
 export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
   const UniEmpty = useIsEmpty(uniData || {}, "School"),
@@ -55,7 +55,7 @@ export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
     [createAPostPopUp, setCreateAPostPopUp] = useState(false),
     [appState, setAppState] = useState({
       scrollTop: 0,
-      clientHeight: 0
+      clientHeight: 0,
     }),
     history = useHistory(),
     location = useLocation(),
@@ -66,14 +66,14 @@ export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
     UniScroll = () => {
       setAppState({
         scrollTop: app?.current?.scrollTop,
-        clientHeight: app?.current?.clientHeight
-      })
+        clientHeight: app?.current?.clientHeight,
+      });
     },
     [width, setWidth] = useState(window.innerWidth),
     handleResize = () => {
-      let { innerWidth } = window
+      let { innerWidth } = window;
       if (width !== innerWidth) {
-        setWidth(innerWidth)
+        setWidth(innerWidth);
       }
     },
     handleScrolling = () => {
@@ -81,77 +81,77 @@ export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
         scholarship?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(0)
+        setActiveTab(0);
       }
       if (
         studentCharges?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(1)
+        setActiveTab(1);
       }
       if (
         admission?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(2)
+        setActiveTab(2);
       }
       if (
         financialAid?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(3)
+        setActiveTab(3);
       }
       if (
         statistics?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(4)
+        setActiveTab(4);
       }
 
       if (
         libraries?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(5)
+        setActiveTab(5);
       }
 
       if (
         testScore?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(6)
+        setActiveTab(6);
       }
       if (
         report?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(7)
+        setActiveTab(7);
       }
       if (
         campusLife?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(8)
+        setActiveTab(8);
       }
       if (
         website?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(8)
+        setActiveTab(8);
       }
       if (
         Professors?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(9)
+        setActiveTab(9);
       }
       if (
         similarCollages?.current?.offsetTop <=
         scrollTop - profile?.current?.clientHeight
       ) {
-        setActiveTab(10)
+        setActiveTab(10);
       }
-    }
+    };
 
   return {
     id,
@@ -216,6 +216,6 @@ export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
     admissionEmpty,
     admission,
     createAPostPopUp,
-    setCreateAPostPopUp
-  }
-}
+    setCreateAPostPopUp,
+  };
+};

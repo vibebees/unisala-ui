@@ -213,16 +213,16 @@ function index({ setIsLoading, filterPage }) {
       <>
         <div className="grid grid-cols-1 gap-5">
           <RadioButtons
-            Label1={"Undergraduate"}
-            Label2={"Graduate"}
+            label1={"Undergraduate"}
+            label2={"Graduate"}
             value1={"undergraduate"}
             value2={"graduate"}
             urlKey={"deg"}
             header={"Level of study"}
           />
           <RadioButtons
-            Label1={"In State"}
-            Label2={"Out State"}
+            label1={"In State"}
+            label2={"Out State"}
             value1={"InState"}
             value2={"OutOfState"}
             urlKey={"loc"}
@@ -230,8 +230,8 @@ function index({ setIsLoading, filterPage }) {
           />
 
           <RadioButtons
-            Label1={"On Campus"}
-            Label2={"Off Campus"}
+            label1={"On Campus"}
+            label2={"Off Campus"}
             value1={"onCampus"}
             value2={"OffCampus"}
             urlKey={"acc"}
@@ -240,14 +240,36 @@ function index({ setIsLoading, filterPage }) {
 
           {URLgetter("acc") === "O" && (
             <RadioButtons
-              Label1={"With roommates"}
-              Label2={"Without roommates"}
+              label1={"With roommates"}
+              label2={"Without roommates"}
               value1={"WithFamily"}
               value2={"NotWithFamily"}
               urlKey={"fam"}
               header={"Staying"}
             />
           )}
+          <RangeSelect
+            Label={"Application Fee"}
+            placeholder={"Application fee"}
+            options={APPLICATION_FEES}
+            urlKey={"af"}
+            showDollarSign={true}
+          />
+
+          <RangeSelect
+            Label={"Tution Fees"}
+            placeholder={"Tution Fee"}
+            options={TUITION}
+            urlKey={"tf"}
+            showDollarSign={true}
+          />
+          <RangeSelect
+            Label={"Cos of Attendence"}
+            options={COA}
+            showDollarSign={true}
+            urlKey={"coa"}
+            placeholder="Cost of Attendence"
+          />
         </div>
 
         <div>
@@ -269,40 +291,6 @@ function index({ setIsLoading, filterPage }) {
                   showDollarSign={false}
                 />
               </IonRow> */}
-          </div>
-
-          <div className="search-control">
-            <h2 className="search-control__label">Fees</h2>
-
-            <IonRow className="w-full ">
-              <IonCol>
-                <RangeSelect
-                  Label={"Application Fee"}
-                  placeholder={"Application fee"}
-                  options={APPLICATION_FEES}
-                  urlKey={"af"}
-                  showDollarSign={true}
-                />
-              </IonCol>
-              <IonCol>
-                <RangeSelect
-                  Label={"Tution Fees"}
-                  placeholder={"Tution Fee"}
-                  options={TUITION}
-                  urlKey={"tf"}
-                  showDollarSign={true}
-                />
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <RangeSelect
-                Label={"Cos of Attendence"}
-                options={COA}
-                showDollarSign={true}
-                urlKey={"coa"}
-                placeholder="Cost of Attendence"
-              />
-            </IonRow>
           </div>
 
           <div className="search-control">

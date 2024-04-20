@@ -1,8 +1,8 @@
-import React from "react"
-import useIsData from "../../../../hooks/useIsData"
-import useCountConverter from "../../../../hooks/useCountConverter"
-import { IonCard, IonLabel, IonText } from "@ionic/react"
-import {Typography} from "../../../defaults"
+import React from "react";
+import useIsData from "hooks/useIsData";
+import useCountConverter from "hooks/useCountConverter";
+import { IonCard } from "@ionic/react";
+import { Typography } from "../../../defaults";
 
 const Card = ({ image, value, title }) => {
   return (
@@ -10,7 +10,7 @@ const Card = ({ image, value, title }) => {
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }}
       className="border max-md:shadow-none  m-0 hover:bg-neutral-50 rounded-md hover:bg-transparent"
     >
@@ -19,7 +19,7 @@ const Card = ({ image, value, title }) => {
           alt=""
           src={image}
           style={{
-            width: "50px"
+            width: "50px",
           }}
           className="mix-blend-multiply"
         />
@@ -40,7 +40,7 @@ const Card = ({ image, value, title }) => {
         </Typography>
       </div>
     </IonCard>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

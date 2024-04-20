@@ -1,7 +1,7 @@
-import React from "react"
-import { IonText } from "@ionic/react"
-import useIsData from "../../../../hooks/useIsData"
-import {Typography} from "../../../../components/defaults"
+import React from "react";
+import { IonText } from "@ionic/react";
+import useIsData from "@hooks/useIsData";
+import { Typography } from "../../../../components/defaults";
 
 const CardBody = ({ value, percentage }) => {
   return (
@@ -14,7 +14,7 @@ const CardBody = ({ value, percentage }) => {
         <span className="font-normal text-base ml-1">({percentage}%)</span>
       )}
     </Typography>
-  )
-}
+  );
+};
 
-export default CardBody
+export default CardBody;

@@ -7,3 +7,18 @@
 * {
     font-family: Manrope, sans-serif !important;
 }
+
+.left-container {
+    width: 100%;
+    max-width: 300px;
+}
+
+.right-container {
+    width: 100%;
+    max-width: 300px;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 900px;
+}

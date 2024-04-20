@@ -38,15 +38,11 @@ const RadioButtons: FC<IRadioButtons> = ({
   return (
     <RadioGroup allowEmptySelection={false} value={selected}>
       <Typography className="search-control__label">{header}</Typography>
-      <Row className="mt-3">
-        <Typography className="mx-3">{label1}</Typography>
+      <Row className="mt-3 text-xs font-medium">
+        <Typography className="mx-3 text-xs">{label1}</Typography>
 
-        <Radio
-          className="text-sm"
-          onIonFocus={handleChange}
-          value={value1}
-        ></Radio>
-        <Typography className="mx-3">{label2}</Typography>
+        <Radio className="" onIonFocus={handleChange} value={value1}></Radio>
+        <Typography className="mx-3 text-xs ">{label2}</Typography>
         <Radio onIonFocus={handleChange} value={value2}></Radio>
       </Row>
     </RadioGroup>

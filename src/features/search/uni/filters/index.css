@@ -7,9 +7,12 @@
 }
 
 .search-control__label {
-  font-size: 16px !important;
+  font-size: 13px !important;
   font-weight: bold !important;
   color: black !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
 }
 
 .select-placeholder {
@@ -35,8 +38,8 @@
 }
 
 ion-radio::part(container) {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   border: 2px solid #ddd;
 }
@@ -49,23 +52,30 @@ ion-radio::part(mark) {
 }
 
 ion-radio.radio-checked::part(container) {
-  background: #6815ec;
+  background: #2d5effca;
   border-color: transparent;
 }
 
-ion-radio.radio-checked::part(mark) {
-  width: 6px;
-  height: 10px;
 
+
+ion-radio.radio-checked::part(mark) {
+  width: 5px;
+  height: 10px;
   border-width: 0px 2px 2px 0px;
   border-style: solid;
   border-color: #fff;
-
+  margin-bottom: 2px;
   transform: rotate(45deg);
+
 }
+
 
 ion-select {
   margin-top: 8px;
+}
+
+.select-text {
+  margin-left: 5px !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -76,6 +86,8 @@ ion-select {
 
 .checkbox-container {
   display: flex;
-  align-items: center; /* Aligns items vertically */
-  justify-content: flex-start; /* Aligns items to the start of the container */
+  align-items: center;
+  /* Aligns items vertically */
+  justify-content: flex-start;
+  /* Aligns items to the start of the container */
 }

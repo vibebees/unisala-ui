@@ -52,15 +52,18 @@ jobs:
           target: "~/unisala-web"
 
 
-      - name: Copy build artifacts to the server
-        uses: appleboy/scp-action@master
+      - name: ssh
+        if: ${{github.ref == 'refs/heads/test'}}
+        uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "65.0.112.117"
+          host: "13.127.190.133"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"
-          target: "/var/www/html"
+          script: |
+            cd unisala-web/dist
+            sudo rm -rf /var/www/html/*
+            sudo cp -r * /var/www/html
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8

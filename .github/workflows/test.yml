@@ -2,65 +2,41 @@ name: Test/Release
 
 on:
   push:
-    branches: [test]  # Triggers the workflow on commits to the 'test' branch
+    branches: [test]
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Specifies the latest Ubuntu runner environment
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Ensures the latest version of the checkout action is used
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3  # Sets up Node.js version 20.x
+        uses: actions/setup-node@v3
         with:
-          node-version: '20.x'  # Uses Node.js version 20.x
-          cache: 'npm'  # Caches npm modules for faster subsequent runs
+          node-version: '20.x'
+          cache: 'npm'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
-        # Installs Ionic CLI globally so that `ionic` commands can be executed
 
       - name: Install dependencies
         run: npm install --force
-        # Installs project dependencies including local Ionic if needed
 
       - name: Build Ionic Application
         run: npm run build --prod
         env:
           CI: false
-          NODE_ENV: TEST  # Environment variable to signify a test environment build
+          NODE_ENV: TEST
 
-      - name: Copy files via SSH
-        uses: appleboy/scp-action@master  # SCP action to copy files to the remote server
-        with:
-          host: "65.0.112.117"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          source: "dist/*"
-          target: "~/unisala-web"
-
-    - name: ssh
-        if: ${{github.ref == 'refs/heads/test'}}
+      - name: Copy files via SSH and restart Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          script: |
-            cd unisala-web/dist
-            sudo rm -rf /var/www/html/*
-            sudo cp -r * /var/www/html
+          source: "build/*"
+          target: "~/unisala-web"
 
-      - name: Restart Nginx
-        uses: appleboy/ssh-action@v0.1.8  # SSH action to execute remote commands
-        with:
-          host: "65.0.112.117"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            sudo systemctl reload nginx  # Command to reload Nginx to apply changes

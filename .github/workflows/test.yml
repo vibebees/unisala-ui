@@ -56,7 +56,7 @@ jobs:
         if: ${{github.ref == 'refs/heads/test'}}
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.127.190.133"
+          host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22

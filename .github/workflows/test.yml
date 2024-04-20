@@ -30,7 +30,7 @@ jobs:
           CI: false
           NODE_ENV: TEST
 
-    - name: Prepare deployment directory on server
+      - name: Deploy application to server
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "65.0.112.117"
@@ -39,23 +39,5 @@ jobs:
           port: 22
           script: |
             sudo rm -rf /var/www/html/*
-
-      - name: Copy build artifacts to the server
-        uses: appleboy/scp-action@master
-        with:
-          host: "65.0.112.117"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          source: "dist/*"
-          target: "/var/www/html"
-
-      - name: Reload Nginx
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: "65.0.112.117"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+            sudo cp -r ${GITHUB_WORKSPACE}/dist/* /var/www/html/
             sudo systemctl reload nginx

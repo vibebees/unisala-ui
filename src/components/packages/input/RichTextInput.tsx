@@ -1,6 +1,6 @@
-import {lazy, useState} from "react"
-import ReactQuill from "react-quill"
-const UniversityList = lazy(() => import("../thread/UniversityList"))
+import { lazy, useState } from "react";
+import ReactQuill from "react-quill";
+import UniversityList from "../thread/UniversityList";
 
 const RichTextInput = ({
   value,
@@ -8,9 +8,10 @@ const RichTextInput = ({
   showUniversityListOnAt,
   id = "rich-text-input",
   handleUniversitySelect,
-  searchText
+  searchText,
 }) => {
-  const [popoverOpen, setPopoverOpen] = useState(false)
+  console.log("text input");
+  const [popoverOpen, setPopoverOpen] = useState(false);
   return (
     <div>
       <div className="h-full text-black relative">
@@ -19,12 +20,12 @@ const RichTextInput = ({
           id={id}
           value={value}
           onChange={(e) => {
-            onChange(e)
+            onChange(e);
           }}
           onKeyDown={(e) => {
             if (e.key === "@") {
               if (showUniversityListOnAt) {
-                setPopoverOpen(true)
+                setPopoverOpen(true);
               }
             }
           }}
@@ -37,7 +38,7 @@ const RichTextInput = ({
         handleUniversitySelect={(e) => handleUniversitySelect(e)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default RichTextInput
+export default RichTextInput;

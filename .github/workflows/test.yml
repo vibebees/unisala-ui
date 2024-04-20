@@ -39,8 +39,21 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"  # Source directory to copy from
-          target: "/var/www/html"  # Target directory to copy to
+          source: "dist/*"
+          target: "~/unisala-web"
+
+    - name: ssh
+        if: ${{github.ref == 'refs/heads/test'}}
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "65.0.112.117"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd unisala-web/dist
+            sudo rm -rf /var/www/html/*
+            sudo cp -r * /var/www/html
 
       - name: Restart Nginx
         uses: appleboy/ssh-action@v0.1.8  # SSH action to execute remote commands

@@ -1,6 +1,6 @@
 import { IonCard, useIonToast } from "@ionic/react"
 import { authInstance } from "../../../../datasource/api/axiosInstance"
-import { OrgContext } from "features/org"
+import { OrgContext } from "../../index"
 import React, { useState } from "react"
  import SendButton from "./SendButton"
 import {userServer} from "../../../../datasource/servers/endpoints"

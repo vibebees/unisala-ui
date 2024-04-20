@@ -1,6 +1,5 @@
 .messages-wrapper {
     min-width: calc(100% - 420px);
-    overflow: auto;
 }
 
 

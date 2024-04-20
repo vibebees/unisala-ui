@@ -1,47 +1,82 @@
-import React, { useState, useRef, useEffect } from "react"
-import { IonButton, IonInput, IonIcon } from "@ionic/react"
-import { send } from "ionicons/icons"
-import { useSelector } from "react-redux"
-import { removeSeenEye } from "../../../datasource/store/action/userActivity"
+import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
+import {
+  IonButton,
+  IonIcon,
+  IonTextarea,
+  IonRow
+} from '@ionic/react';
+import { send } from 'ionicons/icons';
+import { userInfo } from '@utils/cache';
+import './index.css';
 
- export const TypeBox = ({ socket = {}, dispatch = () => {} }) => {
-  const [messageInput, setMessageInput] = useState(""),
-    { messagingTo } = useSelector((state) => state?.userActivity),
-    { user } = useSelector((state) => state?.userProfile),
-    inputRef = useRef(),
-    sendMessage = (e) => {
-      e.preventDefault()
-      const data = {
-        senderId: user._id,
-        receiverId: messagingTo._id,
-        message: {
-          text: messageInput
-        },
-        seen: false
-      }
-      socket.current.emit("createMessage", data)
-      dispatch(removeSeenEye(messagingTo._id))
-      //   setMessageInput("")
-      inputRef.current?.setFocus()
+type MessagingToType = {
+  _id: string;
+};
+
+type TypeBoxProps = {
+  socket: {
+    emit: (event: string, data: any) => void;
+  };
+  messagingTo: MessagingToType;
+};
+
+export const TypeBox = memo(({ socket, messagingTo }: TypeBoxProps) => {
+  const [messageInput, setMessageInput] = useState('');
+  const inputRef = useRef<HTMLIonTextareaElement>(null);
+
+  useEffect(() => {
+    if (messageInput === '') {
+      setTimeout(() => {
+        inputRef.current?.setFocus();
+      }, 100);
     }
+  }, [messageInput]);
+
+  const sendMessage = useCallback(() => {
+    const messageText = messageInput.trim();
+    if (messageText === '') return;
+
+    const messageData = {
+      senderId: userInfo?.id,
+      receiverId: messagingTo._id,
+      message: { text: messageText },
+      seen: false,
+    };
+
+    socket.emit('createMessage', messageData);
+    setMessageInput('');
+  }, [messageInput, messagingTo._id, socket]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLIonTextareaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }, [sendMessage]);
+
   return (
-    <div className="flex">
-      <IonInput
+    <IonRow className="type-box">
+      <IonTextarea
         mode="md"
         className="input-box"
-        onIonChange={(e) => setMessageInput(e.target.value)}
-        placeholder="Message"
-        ref={inputRef}
+        style={{ flex: 1 }}
         value={messageInput}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            sendMessage(e)
-          }
-        }}
-      ></IonInput>
-      <IonButton type="submit" mode="ios" onClick={sendMessage}>
+        onIonInput={(e) => setMessageInput(e.detail.value || "")}
+        onKeyDown={handleKeyDown}
+        ref={inputRef}
+        autoGrow={true}
+        placeholder='Type a message...'
+      />
+      <IonButton
+        type="button"
+        mode="ios"
+        onClick={sendMessage}
+        style={{ marginLeft: '10px' }}
+      >
         <IonIcon icon={send} />
       </IonButton>
-    </div>
-  )
-}
+    </IonRow>
+  );
+});
+
+export default TypeBox;

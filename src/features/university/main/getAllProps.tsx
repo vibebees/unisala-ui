@@ -1,5 +1,5 @@
 import { useHistory, useLocation } from "react-router"
-import useIsEmpty from "hooks/useIsEmpty"
+import useIsEmpty from "../../../hooks/useIsEmpty"
 import { createRef, useState } from "react"
 
 export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {

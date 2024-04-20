@@ -1,5 +1,5 @@
 import { useState } from "react"
-import useDocTitle from "hooks/useDocTitile"
+import useDocTitle from "../../hooks/useDocTitile"
 import unisalaImg from "../../assets/unisala-intro.png"
 import { useHistory, useParams } from "react-router"
 

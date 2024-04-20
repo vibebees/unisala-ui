@@ -4,8 +4,8 @@ import { IonCol, IonInput, IonRow, useIonToast } from "@ionic/react"
 import { useContext, useState } from "react"
 import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 import {EditIcon, CloseIcon, Tick} from "../../../../components/packages/icons"
-import {OrgContext} from "../.."
-import {Button} from "../../../../components/defaults"
+ import {Button} from "../../../../components/defaults"
+import { OrgContext } from "@features/org"
 
 const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
   const { orgData } = useContext(OrgContext)

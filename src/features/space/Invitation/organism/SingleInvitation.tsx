@@ -1,5 +1,5 @@
 import {IonCard, IonInput, useIonToast} from "@ionic/react"
-import {handleSendInvitation} from "features/org/Invitation/utility"
+import {handleSendInvitation} from "../../../org/Invitation/utility"
 import React from "react"
 import Header from "../atoms/Header"
 import SendButton from "../atoms/SendButton"

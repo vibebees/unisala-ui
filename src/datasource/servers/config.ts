@@ -1,6 +1,5 @@
 const config = {
-  NODE_ENV: "PRODUCTION", // or 'PRODUCTION' or 'TEST'
-  // other config settings
+  NODE_ENV: "DEVELOPMENT",
 };
 
 export default config;

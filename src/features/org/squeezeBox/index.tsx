@@ -5,7 +5,7 @@ import {
   IonItem,
   IonLabel
 } from "@ionic/react"
-import { OrgContext } from "features/org"
+import { OrgContext } from "../index"
  import { useContext, useEffect, useRef } from "react"
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
 import "./index.css"

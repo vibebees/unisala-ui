@@ -5,11 +5,13 @@ import { ProtectedRoute } from "../utils/lib/protectedRoute";
 import { PreLoader } from "../components/packages/preloader";
 import { useSelector } from "react-redux";
 import { getCache } from "../utils/cache";
+import { Chats } from '@features/messages/whatsapp/Chats';
 
-// import SpaceIndex from "features/org/SpaceIndex/SpaceIndex"
+
 
 const ProfilePage = lazy(() => import("../pages/userProfile"));
 const Messages = lazy(() => import("../pages/message"));
+
 const MyNetwork = lazy(() => import("../pages/network"));
 const Notifications = lazy(() => import("../pages/notification"));
 // Assuming StudyAbroadRoadmapInput is a component, if it's not, you can't lazy load it
@@ -100,11 +102,11 @@ export const PageRoute = ({ allProps }) => {
         </Route>
 
         <Route path="/register" exact>
-          <AuthPage allProps={{ ...allProps, routeState: "signup" }} />
+          <AuthPage allProps={{ ...allProps, routeState: 'signup' }} />
         </Route>
 
         <Route path="/login" exact>
-          <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
+          <AuthPage allProps={{ ...allProps, routeState: 'signin' }} />
         </Route>
         <Route path="/space" exact>
           {/* <SpaceIndex /> */}
@@ -116,30 +118,29 @@ export const PageRoute = ({ allProps }) => {
         <Route exact path="/university/:id">
           <UniversityPage />
         </Route>
-        <Route path="/messages" exact>
+        {/* <Route path="/messages" exact>
+          <Chats />
+        </Route> */}
+        {/* <Route path="/messages/view-chat/:contact_id" exact>
           <Messages />
         </Route>
-        <Route path="/messages/:username" exact>
-          <Messages />
-        </Route>
+        */}
         <Route path="/mynetwork" exact>
           <MyNetwork />
         </Route>
+        <Route path="/messages" exact>
+          <Messages />
+        </Route>
+        <Route path="/messages/:friendUserName" exact>
+          <Messages />
+        </Route>
+
         <Route path="/org/:category" exact>
           <Org />
         </Route>
         <Route path="/org/:category/:admin/:requestor/:orgId/:role">
           <Org />
         </Route>
-
-
-        <Route path="/messages" exact>
-          <Messages />
-        </Route>
-        <Route path="/messages/:username" exact>
-          <Messages />
-        </Route>
-
 
         {/* More routes */}
         {/* Fallback route for 404 Not Found */}

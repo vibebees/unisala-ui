@@ -1,6 +1,6 @@
 // import StepInput from "../../component/roadmap/StepInput"
 import { useQuery } from "@apollo/client"
- import { OrgContext } from "features/org"
+ import { OrgContext } from "../index"
  import { useContext } from "react"
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
 import SingleTimeline from "./organism/SingleTimeline"

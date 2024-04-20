@@ -1,0 +1,88 @@
+name: Test/Release
+
+on:
+  push:
+    branches: [release]
+
+jobs:
+  deploy-to-lg-server:
+    if: github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: install & build
+        run: |
+          npm i --force
+          CI=false NODE_ENV=PRODUCTION npm run build
+        env:
+          NODE_ENV: PRODUCTION
+
+      - name: copy file via ssh key to first server
+        uses: appleboy/scp-action@master
+        with:
+          host: "43.204.142.210"
+          username: "ec2-user"
+          key: ${{ secrets.SSH_PRIVATE_KEY_FOR_RELEASE }}
+          port: 22
+          source: "build/*"
+          target: "~/unisala-web"
+
+      - name: ssh and setup on first server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "43.204.142.210"
+          username: "ec2-user"
+          key: ${{ secrets.SSH_PRIVATE_KEY_FOR_RELEASE }}
+          port: 22
+          script: |
+            cd unisala-web/build
+            sudo rm -rf /var/www/html/* 
+            sudo cp -r * /var/www/html
+
+  deploy-to-md-t3:
+    if: github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: install & build
+        run: |
+          npm i --force
+          CI=false NODE_ENV=PRODUCTION npm run build
+        env:
+          NODE_ENV: PRODUCTION
+
+      - name: copy file via ssh key to second server
+        uses: appleboy/scp-action@master
+        with:
+          host: "35.154.130.113"
+          username: "ec2-user"
+          key: ${{ secrets.P_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "build/*"
+          target: "~/unisala-web"
+
+      - name: ssh and setup on second server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "35.154.130.113"
+          username: "ec2-user"
+          key: ${{ secrets.P_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd unisala-web/build
+            sudo rm -rf /var/www/html/* 
+            sudo cp -r * /var/www/html

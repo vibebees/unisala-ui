@@ -9,7 +9,7 @@ import {
 } from "@ionic/react"
   import { useContext } from "react"
 import { useHistory } from "react-router"
-import { OrgContext } from ".."
+import { OrgContext } from "../index"
 import Tabs from "../tabs"
  import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
 import MemberList from "./memberList"

@@ -37,6 +37,6 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "build/*"
+          source: "dist/*"
           target: "~/unisala-web"
 

@@ -18,8 +18,8 @@ jobs:
           node-version: '20.x'  # Uses Node.js version 20.x
           cache: 'npm'  # Caches npm modules for faster subsequent runs
 
-    #  - name: Install Ionic CLI
-     #   run: npm install -g @ionic/cli
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
         # Installs Ionic CLI globally so that `ionic` commands can be executed
 
       - name: Install dependencies

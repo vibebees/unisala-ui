@@ -10,35 +10,44 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Uses v3 which is the latest version at the time of writing
+        uses: actions/checkout@v3  # Ensures the latest version of the checkout action is used
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3  # Updated to v3 for better performance and features
+        uses: actions/setup-node@v3  # Sets up Node.js version 20.x
         with:
-          node-version: '20.x'  # Updated to use Node.js 20.x
+          node-version: '20.x'  # Uses Node.js version 20.x
+          cache: 'npm'  # Caches npm modules for faster subsequent runs
 
-      - name: Install dependencies and build
-        run: npm install --force && npm run build --prod
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+        # Installs Ionic CLI globally so that `ionic` commands can be executed
+
+      - name: Install dependencies
+        run: npm install --force
+        # Installs project dependencies including local Ionic if needed
+
+      - name: Build Ionic Application
+        run: npm run build --prod
         env:
           CI: false
-          NODE_ENV: TEST  # Sets the NODE_ENV environment variable to 'TEST' for the build process
+          NODE_ENV: TEST  # Environment variable to signify a test environment build
 
       - name: Copy files via SSH
-        uses: appleboy/scp-action@master  # Consider pinning this to a specific new release for more stability
+        uses: appleboy/scp-action@master  # SCP action to copy files to the remote server
         with:
           host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "www/*"  # Specifies that all files in the 'www' directory should be copied
-          target: "/var/www/html"  # Files are copied directly into the web root directory
+          source: "www/*"  # Source directory to copy from
+          target: "/var/www/html"  # Target directory to copy to
 
       - name: Restart Nginx
-        uses: appleboy/ssh-action@v0.1.8  # Consider using the latest version available
+        uses: appleboy/ssh-action@v0.1.8  # SSH action to execute remote commands
         with:
           host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo systemctl reload nginx  # Reloads Nginx to apply new configurations without dropping connections
+            sudo systemctl reload nginx  # Command to reload Nginx to apply changes

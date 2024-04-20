@@ -33,7 +33,7 @@ import { FeedSkeleton } from "../../components/packages/skeleton/feedSkeleton";
 import { OrgList } from "./orgamism/OrgList";
 import { SpaceList } from "./orgamism/SpaceList";
 import { Col, Row } from "../../components/defaults";
-import { getAllQueryParams } from "./uni/filter/utility";
+import { getAllQueryParams } from "./uni/filters/utility";
 
 export const SearchTemplate: React.FC = () => {
   const location = useLocation();

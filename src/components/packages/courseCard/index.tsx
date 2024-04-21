@@ -29,15 +29,17 @@ function CourseCard({ allProps }) {
     window.location.origin +
     `/university/${name.trim().split(" ")?.join("%20")}`;
 
+  console.log("allProps", allProps);
+
   return (
-    <Card className="max-md:mx-0 relative">
+    <Card className="max-md:mx-0 relative ion-no-margin ion-no-padding shadow-sm border border-neutral-200">
       <CustomTrackingLink
         title={`${name} clicked on university result filter `}
         to={`/university/${name}`}
         destination={`/university/${name}`}
       >
         <Grid>
-          <Row>
+          <Row className="flex-col">
             <Col
               style={{ margin: "auto" }}
               className="overflow-hidden "
@@ -48,58 +50,61 @@ function CourseCard({ allProps }) {
             <Row>
               <Row>
                 <Row>
-                  <Row className="ion-no-padding m-0   items-center  h-fit">
-                    <Col size="12">
-                      <div style={{ display: "flex", float: "right" }}></div>
+                  <Col size="12">
+                    <div style={{ display: "flex", float: "right" }}></div>
 
-                      <Typography
-                        variant="h2"
-                        className="text-base font-medium"
-                        color="dark"
-                      >
-                        {name}
-                      </Typography>
+                    <Typography
+                      variant="h2"
+                      className="text-base font-medium"
+                      color="dark"
+                    >
+                      {name}
+                    </Typography>
 
-                      <Location
-                        city={allProps?.address?.city}
-                        stateAbbreviation={allProps?.address?.stateAbbreviation}
-                        streetAddressOrPOBox={
-                          allProps?.address?.streetAddressOrPOBox
-                        }
-                      />
-                    </Col>
-                    <Col className="h-fit">
-                      <RatingCard
-                        allProps={{ overallRating, totalPeopleVoted }}
-                      />
-                    </Col>
-                  </Row>
-                  <Offerings allProps={allProps} />
-                  <ApplicationCharges
-                    undergraduateApplicationFee={undergraduateApplicationFee}
-                    undergraduate={undergraduate}
-                    graduateApplicationFee={graduateApplicationFee}
-                    graduate={graduate}
-                  />
-
-                  {ownType?.length > 0 && (
-                    <LikeATag
-                      colorTitle="green"
-                      colorValue="yellow"
-                      title="Own Type:"
-                      value={ownType}
+                    <Location
+                      city={allProps?.address?.city}
+                      stateAbbreviation={allProps?.address?.stateAbbreviation}
+                      streetAddressOrPOBox={
+                        allProps?.address?.streetAddressOrPOBox
+                      }
                     />
-                  )}
+                    <br />
+                    <Offerings
+                      undergraduateOffering={allProps?.undergraduateOffering}
+                      graduateOffering={allProps?.graduateOffering}
+                    />
+                    <ApplicationCharges
+                      undergraduateApplicationFee={undergraduateApplicationFee}
+                      undergraduate={undergraduate}
+                      graduateApplicationFee={graduateApplicationFee}
+                      graduate={graduate}
+                    />
+                    {ownType?.length > 0 && (
+                      <LikeATag
+                        colorTitle="green"
+                        colorValue="yellow"
+                        title="Own Type:"
+                        value={ownType}
+                      />
+                    )}
+                    {tags?.length > 0 && (
+                      <LikeATag
+                        colorTitle="blue"
+                        colorValue="blue"
+                        title="tags: "
+                        value={tags?.join("#")}
+                        skipBg={true}
+                      />
+                    )}
+                  </Col>
+                  <Col className="h-fit">
+                    <RatingCard
+                      allProps={{ overallRating, totalPeopleVoted }}
+                    />
+                  </Col>
+                  <Col></Col>
+
                   {/* {tags?.map((tag, index) => <LikeATag colorTitle="blue" colorValue="yellow" title="Tags:" value={tag} key={index} />)} */}
-                  {tags?.length > 0 && (
-                    <LikeATag
-                      colorTitle="blue"
-                      colorValue="blue"
-                      title="tags: "
-                      value={tags?.join("#")}
-                      skipBg={true}
-                    />
-                  )}
 
                   {/* <IonRow>
                   <IonCol>

@@ -1,33 +1,37 @@
-import React, { useState } from "react"
-import { Img, SkeletonText } from "../../../defaults"
-import NoImageFound from "../../../../assets/no_image_found.png"
-import FullScreenImage from "../../../packages/reusable/Image/FullScreenImage"
+import React, { FC, useState } from "react";
+import { Img, SkeletonText } from "../../../defaults";
+import NoImageFound from "../../../../assets/no_image_found.png";
+import { cn } from "@utils/index";
 
-const ImageWithLoader = ({
+interface IImageWithLoader {
+  style?: React.CSSProperties;
+  src: string;
+  className?: string;
+  alt: string;
+}
+
+const ImageWithLoader: FC<IImageWithLoader> = ({
   style,
   src,
   className,
   alt,
-  fullScreenImage = false
 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false)
-  const [imageSrc, setImageSrc] = useState(src)
-  const [showFullScreen, setShowFullScreen] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState(src);
 
   return (
     <>
-      <div style={style} className="relative">
+      <div style={style} className={cn("relative overflow-hidden", className)}>
         <Img
           src={imageSrc}
-          onClick={() => setShowFullScreen(true)}
-          className={className}
+          className={cn("w-full h-full object-cover", className)}
           alt={alt}
           style={style}
           loading="lazy"
           onIonImgDidLoad={() => setImageLoaded(true)}
           onIonError={() => {
-            setImageLoaded(true)
-            setImageSrc(NoImageFound)
+            setImageLoaded(true);
+            setImageSrc(NoImageFound);
           }}
         />
 
@@ -41,7 +45,7 @@ const ImageWithLoader = ({
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ImageWithLoader
+export default ImageWithLoader;

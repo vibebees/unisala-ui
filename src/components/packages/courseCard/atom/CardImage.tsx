@@ -1,35 +1,28 @@
-import ImageWithLoader from "../../reusable/Image/ImageWithLoader"
-import { universityDefaultImage } from "../../../../datasource/servers/s3.configs"
-import NoImage from "../../../../assets/no_image_found.png"
+import React from "react";
+import NoImage from "../../../../assets/no_image_found.png";
 
 const CardImage = ({ pictures = [] }) => {
-  const imageContainerStyle = {
-    display: "inline-flex",
-    flexWrap: "nowrap"
-  }
-  const imageStyle = {
+  const imageStyle: React.CSSProperties = {
     width: "150px",
     height: "120px",
     objectFit: "cover",
     margin: "4px",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  };
 
   return (
-    <div className="card-image - overflow-hidden mr-2">
-      <div style={imageContainerStyle}>
-        {pictures.length > 0 &&
-          pictures?.map((picture, index) => (
-            <ImageWithLoader
-              key={index}
-              src={picture || universityDefaultImage}
-              style={imageStyle}
-              alt={`University Image ${index + 1}`}
-            />
-          ))}
-      </div>
+    <div className="w-full  overflow-hidden flex">
+      {pictures.length > 0 &&
+        pictures?.map((picture, index) => (
+          <img
+            key={index}
+            src={picture || NoImage}
+            alt="University"
+            style={{ ...imageStyle }}
+          />
+        ))}
     </div>
-  )
-}
+  );
+};
 
-export default CardImage
+export default CardImage;

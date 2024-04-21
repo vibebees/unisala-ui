@@ -36,7 +36,7 @@ const Offerings: FC<IOfferings> = ({
         {((graduateOffering && selectedDeg === "graduate") ||
           selectedDeg === null) && (
           <Col size="auto" className="ion-no-padding ml-2 w-fit p-0 h-fit">
-            <Label className="ion-padding-start p-0 font-semibold  text-red-500">
+            <Label className="ion-padding-start p-0 text-xs font-semibold  text-red-500">
               {graduateOffering.substring(0, 30)}
             </Label>
           </Col>
@@ -45,7 +45,7 @@ const Offerings: FC<IOfferings> = ({
         {((undergraduateOffering && selectedDeg === "undergraduate") ||
           selectedDeg === null) && (
           <Col size="auto" className="ion-no-padding h-fit ">
-            <Label className="ion-padding-start  font-bold text-blue-500">
+            <Label className="ion-padding-start  text-xs font-bold text-blue-500">
               {undergraduateOffering.substring(0, 35)} 📚
             </Label>
           </Col>

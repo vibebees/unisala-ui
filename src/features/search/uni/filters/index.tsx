@@ -1,14 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable complexity */
 import React from "react";
-import { IonButton, IonCol, IonIcon, IonLabel, IonRow } from "@ionic/react";
+import { IonIcon, IonLabel } from "@ionic/react";
 import "./index.css";
-import {
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useRef,
-  useContext,
-} from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { UNIVERSITY_SERVICE_GQL } from "../../../../datasource/servers/types";
 import { searchGetSuccess } from "../../../../datasource/store/action";
@@ -20,27 +15,26 @@ import RangeSelect from "../../atoms/RangeSelect";
 import MulitiSelect from "../../atoms/MulitiSelect";
 import AsyncSelect from "react-select/async";
 import { useHistory } from "react-router-dom";
-import {
-  ACT_SCORE,
-  APPLICATION_FEES,
-  COA,
-  SAT_SCORES,
-  TUITION,
-} from "./constants";
+import { APPLICATION_FEES, COA, TUITION } from "./constants";
 import { universityServer } from "../../../../datasource/servers/endpoints";
 import { URLgetter, URLupdate } from "../../../../utils/lib/URLupdate";
 import { search } from "ionicons/icons";
-import { ExploreFilterPopupContext } from "../ExploreUniFilterPopupContext";
 import { ThreadSkeleton } from "../../../../components/packages/skeleton/threadSkeleton";
 import { UniFilterResults } from "../../../../datasource/graphql/uni";
+import { Button } from "@components/defaults";
 
-function index({ setIsLoading, filterPage }) {
+function index({
+  setIsLoading,
+  filterPage,
+}: {
+  setIsLoading: any;
+  filterPage: number;
+}) {
   const [isFiltered, setIsFiltered] = useState(false);
   const [selectedMajor, setSelectedMajor] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
-  const ref = useRef();
-  const [getUniversityResults, { data, loading, fetchMore }] = useLazyQuery(
+  const [getUniversityResults, { data, fetchMore }] = useLazyQuery(
     UniFilterResults,
     {
       context: { server: UNIVERSITY_SERVICE_GQL },
@@ -68,53 +62,54 @@ function index({ setIsLoading, filterPage }) {
   }, [filterPage]);
 
   // const {popUp, closePopup} = useContext(ExploreFilterPopupContext)
-  const popUp = false,
-    closePopup = () => {};
 
-  const parseRange = (rangeStr) => {
+  const closePopup = () => {};
+
+  const parseRange = (rangeStr: string) => {
     const [min, max] = rangeStr.split("-").map(Number);
     return { min, max };
   };
 
-  const buildFeeObject = (feeRange, degreePrefix) => {
+  const buildFeeObject = (feeRange: string, degreePrefix: string) => {
     const feeObj = parseRange(feeRange);
     return {
       [`${degreePrefix}ApplicationFee`]: feeObj,
     };
   };
 
-  const buildTuitionObject = (tuitionRange, degreePrefix, tuitionType) => {
+  const buildTuitionObject = (
+    tuitionRange: string,
+    degreePrefix: string,
+    tuitionType: string
+  ) => {
     const tuitionObj = parseRange(tuitionRange);
     return {
       [`${degreePrefix}${tuitionType}TuitionFee`]: tuitionObj,
     };
   };
 
-  const getAllQueryParams = (page) => {
+  const getAllQueryParams = (page: number) => {
+    const satLocal = URLgetter("sat");
+    const actLocal = URLgetter("act");
     const queryObject = {
       page,
-      sat: URLgetter("sat") ? parseRange(URLgetter("sat")) : undefined,
-      act: URLgetter("act") ? parseRange(URLgetter("act")) : undefined,
+      sat: satLocal ? parseRange(satLocal) : undefined,
+      act: actLocal ? parseRange(actLocal) : undefined,
       state: URLgetter("state"),
       major: URLgetter("major"),
     };
-
     const degree = URLgetter("deg");
     const degreePrefix = degree === "u" ? "undergraduate" : "graduate";
-
     const tutionLevel = URLgetter("loc");
     const tuitionType = tutionLevel === "I" ? "InState" : "OutOfState";
-
     const accomodation = URLgetter("acc");
     const family = URLgetter("fam");
     const applicationFee = URLgetter("af");
     const tuitionFee = URLgetter("tf");
     const CostOfAttendance = URLgetter("coa");
-
     if (applicationFee) {
       Object.assign(queryObject, buildFeeObject(applicationFee, degreePrefix));
     }
-
     if (tuitionFee) {
       Object.assign(
         queryObject,
@@ -127,8 +122,9 @@ function index({ setIsLoading, filterPage }) {
         accomodation === "o" ? "OnCampus" : "OffCampus"
       }${
         family === "W" ? "WithFamily" : "NotWithFamily"
-      }${tuitionType}CostOfAttendance`;
-      queryObject[costKey] = parseRange(CostOfAttendance);
+      }${tuitionType}CostOfAttendance` as keyof typeof queryObject;
+
+      queryObject[costKey] = parseRange(CostOfAttendance) as never;
     }
 
     return queryObject;
@@ -142,6 +138,7 @@ function index({ setIsLoading, filterPage }) {
         ...queryObject,
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.search]);
 
   useEffect(() => {
@@ -152,6 +149,7 @@ function index({ setIsLoading, filterPage }) {
       ...item.studentCharges,
     }));
     dispatch(searchGetSuccess(d));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useLayoutEffect(() => {
@@ -164,17 +162,37 @@ function index({ setIsLoading, filterPage }) {
   }, [history.location.search]);
 
   const customStyles = {
-    menuList: (styles) => ({
+    menuList: (styles: any) => ({
       ...styles,
     }),
-    option: (styles, { isFocused, isSelected }) => ({
+    option: (styles: any, { isFocused, isSelected }: any) => ({
       ...styles,
       background: isFocused ? "#eeeee" : isSelected ? "#90EE90" : undefined,
       zIndex: 1,
     }),
-    menu: (base) => ({
+    menu: (base: any) => ({
       ...base,
       zIndex: 100,
+    }),
+    input: (styles: any) => ({
+      ...styles,
+      height: "28px",
+      fontSize: "13px",
+      fontWeight: "medium",
+      color: "black",
+      opacity: 1,
+      fontFamily: "Manrope, sans-serif ",
+    }),
+    control: (styles: any) => ({
+      ...styles,
+      height: "30px",
+      minHeight: "30px",
+      fontSize: "13px",
+      color: "black",
+      width: "100%",
+      border: "1.6px solid #d4d4d4",
+      backgroundColor: "transparent",
+      fontFamily: "Manrope, sans-serif ",
     }),
   };
 
@@ -195,9 +213,8 @@ function index({ setIsLoading, filterPage }) {
     }
   };
 
-  const loadOptions = (inputVal, callback) => {
+  const loadOptions = (inputVal: string, callback: any) => {
     let options;
-
     setTimeout(async () => {
       try {
         options = await fetchMajor(inputVal);
@@ -209,72 +226,108 @@ function index({ setIsLoading, filterPage }) {
   };
 
   return (
-    <div className="filter-card-wrapper mx-1 ">
-      <>
-        <div className="grid grid-cols-1 gap-5">
-          <RadioButtons
-            label1={"Undergraduate"}
-            label2={"Graduate"}
-            value1={"undergraduate"}
-            value2={"graduate"}
-            urlKey={"deg"}
-            header={"Level of study"}
-          />
-          <RadioButtons
-            label1={"In State"}
-            label2={"Out State"}
-            value1={"InState"}
-            value2={"OutOfState"}
-            urlKey={"loc"}
-            header={"Level of tuition"}
-          />
+    <div className=" w-full mx-auto max-w-[300px] min-w-[270px] mt-1 border border-neutral-200  py-3 px-3  bg-neutral-50 rounded-md sticky top-0 ">
+      <div className="grid grid-cols-1 gap-5 mx-auto w-fit">
+        <RadioButtons
+          label1={"Undergraduate"}
+          label2={"Graduate"}
+          value1={"undergraduate"}
+          value2={"graduate"}
+          urlKey={"deg"}
+          header={"Level of study"}
+        />
+        <RadioButtons
+          label1={"In State"}
+          label2={"Out State"}
+          value1={"InState"}
+          value2={"OutOfState"}
+          urlKey={"loc"}
+          header={"Level of tuition"}
+        />
 
+        <RadioButtons
+          label1={"On Campus"}
+          label2={"Off Campus"}
+          value1={"onCampus"}
+          value2={"OffCampus"}
+          urlKey={"acc"}
+          header={"Are you planning to stay"}
+        />
+
+        {URLgetter("acc") === "O" && (
           <RadioButtons
-            label1={"On Campus"}
-            label2={"Off Campus"}
-            value1={"onCampus"}
-            value2={"OffCampus"}
-            urlKey={"acc"}
-            header={"Are you planning to stay"}
+            label1={"With roommates"}
+            label2={"Without roommates"}
+            value1={"WithFamily"}
+            value2={"NotWithFamily"}
+            urlKey={"fam"}
+            header={"Staying"}
           />
+        )}
+        <RangeSelect
+          Label={"Application Fee"}
+          placeholder={"Application fee"}
+          options={APPLICATION_FEES}
+          urlKey={"af"}
+          showDollarSign={true}
+        />
 
-          {URLgetter("acc") === "O" && (
-            <RadioButtons
-              label1={"With roommates"}
-              label2={"Without roommates"}
-              value1={"WithFamily"}
-              value2={"NotWithFamily"}
-              urlKey={"fam"}
-              header={"Staying"}
-            />
-          )}
-          <RangeSelect
-            Label={"Application Fee"}
-            placeholder={"Application fee"}
-            options={APPLICATION_FEES}
-            urlKey={"af"}
-            showDollarSign={true}
-          />
+        <RangeSelect
+          Label={"Tution Fees"}
+          placeholder={"Tution Fee"}
+          options={TUITION}
+          urlKey={"tf"}
+          showDollarSign={true}
+        />
+        <RangeSelect
+          Label={"Cost of Attendence"}
+          options={COA}
+          showDollarSign={true}
+          urlKey={"coa"}
+          placeholder="Cost of Attendence"
+        />
 
-          <RangeSelect
-            Label={"Tution Fees"}
-            placeholder={"Tution Fee"}
-            options={TUITION}
-            urlKey={"tf"}
-            showDollarSign={true}
-          />
-          <RangeSelect
-            Label={"Cos of Attendence"}
-            options={COA}
-            showDollarSign={true}
-            urlKey={"coa"}
-            placeholder="Cost of Attendence"
+        <div className="search-control">
+          <h2 className="search-control__label mb-2">Major</h2>
+
+          <AsyncSelect
+            cacheOptions
+            loadOptions={loadOptions}
+            defaultOptions
+            styles={customStyles}
+            menuPlacement="top"
+            classNamePrefix={"react-select"}
+            placeholder="Start typing to .... Major"
+            value={{
+              value: selectedMajor,
+              label: selectedMajor,
+            }}
+            className="mt-2"
+            onChange={(e) => {
+              const data = URLupdate("major", e?.value);
+              history.push({ search: data });
+            }}
           />
         </div>
+        <MulitiSelect
+          options={statesArray}
+          Label="State"
+          URLkey={"state"}
+          key={"stateselect"}
+          customStyles={customStyles}
+        />
 
-        <div>
-          <div>
-            {/* <h2 className="search-control__label">Test scores</h2>
+        <Button
+          className="w-full flex-nowrap"
+          color="success"
+          onClick={closePopup}
+        >
+          <IonLabel>Search</IonLabel>
+          <IonIcon icon={search}></IonIcon>
+        </Button>
+      </div>
+
+      {/* <h2 className="search-control__label">Test scores</h2>
               <IonRow>
                 <RangeSelect
                   Label={"SAT:"}
@@ -291,47 +344,6 @@ function index({ setIsLoading, filterPage }) {
                   showDollarSign={false}
                 />
               </IonRow> */}
-          </div>
-
-          <div className="search-control">
-            <h2 className="search-control__label mb-2">Major</h2>
-
-            <AsyncSelect
-              cacheOptions
-              loadOptions={loadOptions}
-              defaultOptions
-              ref={ref}
-              styles={customStyles}
-              menuPlacement="top"
-              placeholder="Start typing to .... Major"
-              value={{
-                value: selectedMajor,
-                label: selectedMajor,
-              }}
-              className="mt-2"
-              onChange={(e) => {
-                const data = URLupdate("major", e.value);
-                history.push({ search: data });
-              }}
-            />
-          </div>
-
-          <MulitiSelect
-            options={statesArray}
-            Label="State"
-            URLkey={"state"}
-            key={"stateselect"}
-          />
-        </div>
-        <IonButton
-          className="w-full flex-nowrap"
-          color="success"
-          onClick={closePopup}
-        >
-          <IonLabel>Search</IonLabel>
-          <IonIcon icon={search}></IonIcon>
-        </IonButton>
-      </>
     </div>
   );
 }

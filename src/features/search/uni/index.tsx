@@ -1,21 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import useWindowWidth from "../../../hooks/useWindowWidth";
-import { useLocation } from "react-router";
 import { URLgetter } from "../../../utils/lib/URLupdate";
 import { useHistory } from "react-router-dom";
 import { ResultsColumn } from "./resultColumn";
 import { DesktopFilter } from "./desktopFilter";
 import { createPortal } from "react-dom";
 
-function UniSearchResult({ query, loading }) {
-  const location = useLocation();
+const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
   const history = useHistory();
-
-  const [activeSubTab, setActiveSubTab] = useState("u");
-
-  const [filterPage, setFilterPage] = useState(1);
+  const [activeSubTab, setActiveSubTab] = useState<string>("u");
+  const [filterPage, setFilterPage] = useState<number>(1);
 
   useEffect(() => {
     const url = URLgetter("st");
@@ -42,6 +36,6 @@ function UniSearchResult({ query, loading }) {
       />
     </>
   );
-}
+};
 
 export default UniSearchResult;

@@ -1,29 +1,27 @@
-import React, { useEffect } from "react";
-import {
-  IonCol,
-  IonLabel,
-  IonSelect,
-  IonSelectOption,
-  useIonToast,
-} from "@ionic/react";
+import React, { FC, useEffect } from "react";
+import { IonSelect, IonSelectOption, useIonToast } from "@ionic/react";
 import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
 import { useHistory } from "react-router";
+import { Typography } from "@components/defaults";
 
-const RangeSelect = ({
+const RangeSelect: FC<IRangeSelect> = ({
   options,
   Label,
   urlKey,
   placeholder = "",
   showDollarSign = false,
 }) => {
-  const [selected, setSelected] = React.useState("");
+  const [selected, setSelected] = React.useState({
+    min: 0,
+    max: 0,
+  });
   const [present, dismiss] = useIonToast();
   const history = useHistory();
-  const handleChanges = (e) => {
+  const handleChanges = (e: any) => {
     const degree = URLgetter("deg");
     const levelOfStudy = URLgetter("loc");
-    const accomadation = URLgetter("acc");
-    const family = URLgetter("fam");
+    // const accomadation = URLgetter("acc");
+    // const family = URLgetter("fam");
     if (urlKey === "af") {
       if (!degree) {
         return present({
@@ -79,11 +77,11 @@ const RangeSelect = ({
 
       setSelected(obj);
     } else {
-      setSelected("");
+      setSelected({ min: 0, max: 0 });
     }
   }, [history.location.search]);
 
-  const dollarSign = (text, extra) => {
+  const dollarSign = (text: string, extra: string) => {
     if (showDollarSign) {
       return text + extra;
     } else {
@@ -93,7 +91,6 @@ const RangeSelect = ({
 
   const selectedText = () => {
     if (!selected) return placeholder;
-
     if (selected.min === 0 && selected.max === 0) {
       return "Free";
     } else if (
@@ -101,7 +98,7 @@ const RangeSelect = ({
       typeof selected.max !== "number" ||
       selected.max.toString() === "NaN"
     ) {
-      return dollarSign(selected.min, "$+");
+      return dollarSign(selected.min.toString(), "$+");
     } else {
       const returnText = selected.min + "-" + selected.max;
       return dollarSign(returnText, "$");
@@ -109,14 +106,17 @@ const RangeSelect = ({
   };
 
   return (
-    <div className="h-fit overflow-hidden">
-      <IonLabel className=" search-control__label ion-no-margin ion-no-padding leading-none">
+    <div className="h-fit overflow-hidden  ">
+      <Typography
+        variant="h6"
+        className=" search-control__label ion-no-margin ion-no-padding !leading-none"
+      >
         {Label}
-      </IonLabel>
+      </Typography>
       <IonSelect
         interface="popover"
         placeholder={placeholder}
-        className="border-[1.6px] border-neutral-300 px-3 rounded-[4px] w-4/5 mt-2 min-h-7 text-xs font-medium  ion-no-margin ion-no-padding   "
+        className="border-[1.6px] mt-[10px] border-neutral-300 px-3 rounded-[4px] w-full  min-h-7 text-xs font-medium  ion-no-margin ion-no-padding   "
         onIonChange={handleChanges}
         selectedText={selectedText()}
       >
@@ -125,7 +125,7 @@ const RangeSelect = ({
             {val.max === 0
               ? "Free"
               : val.max === null
-              ? dollarSign(val.min, "$+")
+              ? dollarSign(val.min.toString(), "$+")
               : dollarSign(val.min + "-" + val.max, "$")}
           </IonSelectOption>
         ))}

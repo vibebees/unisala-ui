@@ -1,13 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  IonCardTitle,
-  IonCol,
-  IonContent,
-  IonIcon,
-  IonRow,
-} from "@ionic/react";
+import React, { useContext, useEffect } from "react";
+import { IonCol, IonIcon, IonRow } from "@ionic/react";
 import { school } from "ionicons/icons";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch } from "react-redux";
 
@@ -29,7 +23,6 @@ import { SearchBar } from "../../components/packages/searchBox";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
-import { FeedSkeleton } from "../../components/packages/skeleton/feedSkeleton";
 import { OrgList } from "./orgamism/OrgList";
 import { SpaceList } from "./orgamism/SpaceList";
 import { Col, Row } from "../../components/defaults";
@@ -59,10 +52,6 @@ export const SearchTemplate: React.FC = () => {
   useEffect(() => {
     if (tab === "uni") {
       const queryObject = getAllQueryParams(0);
-      const queryJSON = JSON.stringify(queryObject); // Convert query params to JSON string
-      const cacheKey = `uniQuery:${queryJSON}`; // Use the JSON string as part of the cache key
-
-      // Check if the API call for this specific query has already been made
       getUniversityResults({ variables: { ...queryObject } });
     }
   }, [history.location.search, tab, getUniversityResults]);
@@ -85,9 +74,9 @@ export const SearchTemplate: React.FC = () => {
 
   return (
     <>
-      <SearchFilterRow setPopUp={setPopUp} />
-      <Row>
-        <Col style={{ width: "900px" }} className="min-h-[100vh]">
+      {/* <SearchFilterRow setPopUp={setPopUp} /> */}
+      <Row className=" max-w-[900px] ion-no-margin ion-no-padding  px-4">
+        <Col className="min-h-[100vh] ion-no-padding ion-no-margin  overflow-hidden w-full">
           <SearchTab />
           {tab === "all" && (
             <div

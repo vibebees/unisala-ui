@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -11,21 +11,21 @@ import {
   IonChip,
   IonGrid,
   IonButton,
-  IonList
-} from "@ionic/react"
-import CardImage from "../../../components/packages/courseCard/atom/CardImage"
+  IonList,
+} from "@ionic/react";
+import CardImage from "../../../components/packages/courseCard/atom/CardImage";
 import {
   schoolOutline,
   starOutline,
   bookOutline,
-  receiptOutline
-} from "ionicons/icons"
-import ScholarshipText from "./ScholarshipText"
- import Modal from "../../../components/packages/reusable/modal"
-import { DetailItem } from "../../../components/packages/folderStructure/molecules/detailItem"
-import { Table } from "../../../components/packages/folderStructure/molecules/table"
-import IonWebPop from "../../university/sideDetails/visitWebsite/IonWebPop"
-import { LikeATag } from "../../../components/packages/tags"
+  receiptOutline,
+} from "ionicons/icons";
+import ScholarshipText from "./ScholarshipText";
+import Modal from "../../../components/packages/reusable/modal";
+import { DetailItem } from "../../../components/packages/folderStructure/molecules/detailItem";
+import { Table } from "../../../components/packages/folderStructure/molecules/table";
+import IonWebPop from "../../university/sideDetails/visitWebsite/IonWebPop";
+import { LikeATag } from "../../../components/packages/tags";
 
 const ScholarshipCard = ({
   pictures = [],
@@ -38,9 +38,9 @@ const ScholarshipCard = ({
   non_score_eligibility_requirements = "",
   tags = [],
   awards = [],
-  scholarship_url = ""
+  scholarship_url = "",
 }) => {
-  const [popup, setPopup] = React.useState(false)
+  const [popup, setPopup] = React.useState(false);
   const ModalData = (
     <div>
       <IonList>
@@ -68,16 +68,12 @@ const ScholarshipCard = ({
         />
       </IonList>
     </div>
-  )
+  );
 
   return (
-    <IonCard className="h-full max-md:p-0 max-md:m-0 max-md:my-2">
+    <IonCard className="h-full max-md:p-0 max-md:m-0 max-md:my-2 ion-no-margin ion-no-padding">
       <IonRow className="relative">
-        <IonCol
-          size="auto"
-          style={{ margin: "auto" }}
-          className="overflow-hidden "
-        >
+        <IonCol className="overflow-hidden ion-no-margin ion-no-padding">
           <CardImage pictures={pictures} />
         </IonCol>
         <IonCardHeader className="ion-no-margin absolute bottom-0 w-fit  ion-no-padding bg-black py-2 px-5 bg-opacity-60">
@@ -86,7 +82,6 @@ const ScholarshipCard = ({
           </IonCardSubtitle>
         </IonCardHeader>
       </IonRow>
-
       <IonCardContent className="h-full">
         <IonCardTitle className="ion-text-start py-2">
           {scholarship_name}{" "}
@@ -176,7 +171,7 @@ const ScholarshipCard = ({
         </IonRow>
       </IonCardContent>
     </IonCard>
-  )
-}
+  );
+};
 
-export default ScholarshipCard
+export default ScholarshipCard;

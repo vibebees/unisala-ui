@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import {
   IonCard,
   IonCardHeader,
@@ -8,12 +8,17 @@ import {
   IonInfiniteScrollContent,
 } from "@ionic/react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import CourseCard from "../../../../components/packages/courseCard";
 import noResultsFound from "../../../../assets/no-results.jpg";
 import "./index.css";
 import { CustomTrackingLink } from "../../../../components/analytics/LinkTrack";
 import { FeedSkeleton } from "../../../../components/packages/skeleton/feedSkeleton";
+
+interface ISearchResults {
+  filterPage: number;
+  setFilterPage: React.Dispatch<React.SetStateAction<number>>;
+  isLoading: boolean;
+}
 
 const NoResultCard = () => {
   return (
@@ -30,10 +35,14 @@ const NoResultCard = () => {
   );
 };
 
-function SearchResults({ filterPage, setFilterPage, isLoading }) {
+const SearchResults: FC<ISearchResults> = ({
+  filterPage,
+  setFilterPage,
+  isLoading,
+}) => {
   const { searchData } = useSelector((store) => store?.university || []);
   const ResultCard = () => (
-    <div className="relative">
+    <div className="relative flex gap-3 flex-col">
       {Array.isArray(searchData) &&
         searchData.map((data, index) => {
           return (
@@ -72,6 +81,6 @@ function SearchResults({ filterPage, setFilterPage, isLoading }) {
     return <FeedSkeleton />;
   }
   return searchData?.length === 0 ? <NoResultCard /> : <ResultCard />;
-}
+};
 
 export default SearchResults;

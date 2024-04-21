@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IonCard, IonCol, IonRow } from "@ionic/react";
+import { IonCard, IonRow } from "@ionic/react";
 import { useHistory } from "react-router";
 import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
 import clsx from "clsx";
@@ -18,7 +18,7 @@ const UniversityScholarshipTab = () => {
   }, [history.location.search]);
 
   return (
-    <IonCard className="flex my-2 h-8 shadow-none border border-neutral-200 rounded-md">
+    <IonCard className="flex ion-no-margin ion-no-padding my-2 h-8 shadow-none border border-neutral-200 rounded-md">
       <IonRow
         onClick={() => {
           const url = URLupdate("st", "u");

@@ -11,7 +11,7 @@ const CardLocation: FC<ICardLocation> = ({
   const formattedAddress = `${city}, ${stateAbbreviation}, ${streetAddressOrPOBox}`;
 
   return (
-    <Row className="ion-no-padding gap-1 items-center h-fit mt-2">
+    <Row className="ion-no-padding gap-1 items-center h-fit mt-1">
       <IonIcon
         className="ion-icon leading-none mt-0 text-primary text-base"
         icon={location}

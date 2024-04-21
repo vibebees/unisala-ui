@@ -1,9 +1,6 @@
 .search-control {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
 }
 
 .search-control__label {
@@ -90,4 +87,31 @@ ion-select {
   /* Aligns items vertically */
   justify-content: flex-start;
   /* Aligns items to the start of the container */
+}
+
+.react-select__value-container {
+  color: "black";
+  height: 100% !important;
+}
+
+.react-select__single-value {
+  color: black !important;
+  font-weight: 500 !important;
+}
+
+.react-select__input-container {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100% !important;
+
+}
+
+.react-select__indicators {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.react-select__indicator {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

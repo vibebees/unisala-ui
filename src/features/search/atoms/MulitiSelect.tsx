@@ -1,59 +1,59 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from "react"
-import Select from "react-select"
-import { IonLabel } from "@ionic/react"
-import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate"
-import { useHistory } from "react-router"
+import React, { useState, useLayoutEffect, FC } from "react";
+import Select, { SingleValue } from "react-select";
+import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
+import { useHistory } from "react-router";
+import { Typography } from "@components/defaults";
 
-const customStyles = {
-  menuList: (styles) => ({
-    ...styles
-  }),
-  option: (styles, { isFocused, isSelected }) => ({
-    ...styles,
-    background: isFocused ? "#eeeee" : isSelected ? "#90EE90" : undefined,
-    zIndex: 1
-  }),
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  })
-}
+const MulitiSelect: FC<MulitSelectProps> = ({
+  options,
+  Label = "",
+  URLkey,
+  customStyles,
+}) => {
+  const [selected, setSelected] = useState("");
+  const history = useHistory();
 
-const MulitiSelect = ({ options, Label = "", URLkey }) => {
-  const [selected, setSelected] = useState("")
-  const history = useHistory()
-
-  const handleChanges = (e) => {
-    const data = URLupdate(URLkey, e.label)
-    history.push({ search: data })
-  }
+  const handleChanges = (
+    e: SingleValue<{
+      label: string;
+      value: string;
+    }>
+  ) => {
+    const data = URLupdate(URLkey, e?.label);
+    history.push({ search: data });
+  };
 
   useLayoutEffect(() => {
-    const data = URLgetter(URLkey)
+    const data = URLgetter(URLkey);
     if (data) {
-      setSelected(data)
+      setSelected(data);
     } else {
-      setSelected("Select a state")
+      setSelected("Select a state");
     }
-  }, [history.location.search])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.location.search]);
 
   return (
     <div className="search-control z-40">
-      <IonLabel className="mb-2">{Label}</IonLabel>
+      <Typography variant="h6" className="mb-2 search-control__label ">
+        {Label}
+      </Typography>
       <Select
         options={options}
         isSearchable
+        classNamePrefix={"react-select"}
         placeholder={"Select a state"}
         onChange={handleChanges}
         styles={customStyles}
+        className="mt-2"
         menuPlacement="top"
         value={{
           label: selected,
-          value: selected
+          value: selected,
         }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default MulitiSelect
+export default MulitiSelect;

@@ -7,3 +7,35 @@ interface IRadioButtons {
   urlKey: string;
   header?: string;
 }
+
+interface MulitSelectProps {
+  options: {
+    label: string;
+    value: string;
+  }[];
+  Label: string;
+  URLkey: string;
+  customStyles: any;
+}
+
+interface IRangeSelect {
+  options: {
+    min: number;
+    max: number | null;
+  }[];
+  Label: string;
+  urlKey: string;
+  placeholder: string;
+  showDollarSign: boolean;
+}
+
+interface IUniSearchResult {
+  query: string;
+  loading: boolean;
+}
+
+interface IResultsColumn {
+  loading: boolean;
+  activeSubTab: string;
+  filterPage: number;
+}

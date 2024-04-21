@@ -33,17 +33,21 @@ const RadioButtons: FC<IRadioButtons> = ({
     } else {
       setSelected("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.search]);
 
   return (
     <RadioGroup allowEmptySelection={false} value={selected}>
       <Typography className="search-control__label">{header}</Typography>
-      <Row className="mt-3 text-xs font-medium">
-        <Typography className="mx-3 text-xs">{label1}</Typography>
-
-        <Radio className="" onIonFocus={handleChange} value={value1}></Radio>
-        <Typography className="mx-3 text-xs ">{label2}</Typography>
-        <Radio onIonFocus={handleChange} value={value2}></Radio>
+      <Row className="mt-3 grid grid-cols-2 w-full items-center justify-between text-xs font-medium">
+        <div className="w-fit inline-flex ">
+          <Radio className="" onIonFocus={handleChange} value={value1}></Radio>
+          <Typography className="mx-3 text-xs">{label1}</Typography>
+        </div>
+        <div className="inline-flex w-fit justify-end ">
+          <Radio onIonFocus={handleChange} value={value2}></Radio>
+          <Typography className="mx-3 text-xs ">{label2}</Typography>
+        </div>
       </Row>
     </RadioGroup>
   );

@@ -24,9 +24,9 @@ const getServiceConfig = (): ServiceConfig => {
       };
     case "TEST":
       return {
-        messagingServiceAddress: "http://localhost:2222",
+        messagingServiceAddress: "http://test.unisala.com/msg",
         universityServiceAddress: "http://test.unisala.com/uni",
-        messageSocketAddress: "ws://localhost:2224",
+        messageSocketAddress: "ws://test.unisala.com/msg/socket",
         userServiceAddress: "http://test.unisala.com/user",
         callSocketAddress: "ws://localhost:4445"
       };

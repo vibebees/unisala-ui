@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { IonAlert, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { useSelector } from "react-redux";
@@ -12,16 +12,16 @@ import { ApiError } from "../errorHandler/ApiError";
 import { userName } from "../../../utils/cache";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 import { Card } from "../../defaults";
+import { unstable_batchedUpdates } from "react-dom";
 
 
 const NoContentCard = () => (
-<div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg shadow-lg h-52 md:h-64 border border-gray-200">
-  <span className="text-5xl md:text-6xl">📭</span>
-  <p className="text-gray-800 text-md md:text-lg mt-4">
-    No content on this page
-  </p>
-</div>
-
+  <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg shadow-lg h-52 md:h-64 border border-gray-200">
+    <span className="text-5xl md:text-6xl">📭</span>
+    <p className="text-gray-800 text-md md:text-lg mt-4">
+      No content on this page
+    </p>
+  </div>
 );
 
 interface FeedProps {
@@ -32,67 +32,72 @@ interface FeedProps {
 interface Post {
   _id?: string;
   type: 'post' | 'event' | 'university' | 'suggestedSpace' | 'suggestedOrgs';
-  event?: any;  // Define specific event types
-  suggestedSpace?: { spaces: any[] };  // Define space types
-  suggestedOrgs?: { spaces: any[] };  // Define org types
+  event?: any;
+  suggestedSpace?: { spaces: any[] };
+  suggestedOrgs?: { spaces: any[] };
 }
-
-const InfiniteFeed: React.FC<FeedProps> = ({  feedType, feedId }) => {
-
-  const { data: userInfoData } = useQuery(getUserGql, {
-    variables: { username: userName },
-    context: { server: USER_SERVICE_GQL },
-    skip: !userName,
-    fetchPolicy: 'cache-first'
-  });
-
+const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const fetchedPages = useRef(new Set()); // To track fetched pages
   const { data, loading, fetchMore, error } = useQuery(getNewsFeed, {
     variables: { feedQuery: { feedType, feedId, page } },
-    context: { server: "USER_SERVICE_GQL" }
+    context: { server: USER_SERVICE_GQL }
   });
-  if (error) return <ApiError/>
 
-  const posts: Post[] = data?.fetchFeedV2?.data;
-
-  if (loading && !posts) return <FeedSkeleton />;
-
+  useEffect(() => {
+    if (data?.fetchFeedV2?.data && !fetchedPages.current.has(page)) {
+      setPosts(currentPosts => [...currentPosts, ...data.fetchFeedV2.data]);
+      fetchedPages.current.add(page); // Mark this page number as fetched
+    }
+  }, [data?.fetchFeedV2?.data, page]);
+  console.log(posts?.length, 'posts')
   const loadMore = async (event: CustomEvent<void>) => {
+    const nextPage = page + 1;
+    if (fetchedPages.current.has(nextPage)) {
+      event?.target?.complete(); // Complete the event if the page has already been fetched
+      return;
+    }
+
     try {
-      await fetchMore({
-        variables: { feedQuery: { page: page + 1, feedId, feedType } },
+      const result = await fetchMore({
+        variables: { feedQuery: { page: nextPage, feedId, feedType } },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
-          return Object.assign({}, prev, {
+          return {
+            ...prev,
             fetchFeedV2: {
-              ...prev.fetchFeedV2,
-              data: [...prev.fetchFeedV2.data, ...fetchMoreResult.fetchFeedV2.data]
+              ...prev?.fetchFeedV2,
+              data: [...prev?.fetchFeedV2?.data, ...fetchMoreResult?.fetchFeedV2?.data]
             }
-          });
+          };
         }
       });
-      event?.detail?.complete();
+      if (result.data.fetchFeedV2.data.length > 0) {
+        setPage(nextPage); // Only update the page if new data was fetched
+      }
     } catch (error) {
       console.error('Error loading more posts:', error);
     }
-    setPage(page + 1);
+    event?.target?.complete(); // Ensure the IonInfiniteScroll is reset
   };
-  if (posts?.length === 0) {
-    return <NoContentCard/>
-  }
+
+  if (error) return <ApiError />;
+  if (loading && posts.length === 0) return <FeedSkeleton />;
+  if (posts.length === 0) return <NoContentCard />;
+
   return (
     <div>
-      {posts?.map((post, index) => (
-        <div className="mt-5" key={post._id || `post-${index}`}>
-          {post.type === "event" &&  <Event events={post} />}
+      {posts.map((post, index) => (
+        <div key={`${post._id}-${index}`} className="mt-5">
+          {post.type === "event" && <Event event={post.event} />}
           {post.type === "post" && <Post post={post} index={index} feedType={feedType} feedId={feedId} />}
-          {post.type === "university" && <University studyLevel={userInfoData?.getUser?.user?.studyLevel} post={post} />}
-          {post.type === "suggestedSpace" && <SuggestedSpace data={post.suggestedSpace?.spaces} post={post} title="Suggested Space" type="space" />}
-          {post.type === "suggestedOrgs" && <SuggestedSpace data={post.suggestedOrgs?.spaces} post={post} title="Suggested Orgs" type="org" />}
+          {post.type === "university" && <University studyLevel={post.studyLevel} post={post} />}
+          {post.type === "suggestedSpace" && <SuggestedSpace spaces={post.suggestedSpace.spaces} />}
+          {post.type === "suggestedOrgs" && <SuggestedSpace spaces={post.suggestedOrgs.spaces} />}
         </div>
       ))}
-
-      <IonInfiniteScroll threshold="50px" onIonInfinite={(e: CustomEvent<void>) => loadMore(e)}>
+      <IonInfiniteScroll threshold="50px" onIonInfinite={loadMore}>
         <IonInfiniteScrollContent loadingText="Loading more posts..." />
       </IonInfiniteScroll>
     </div>

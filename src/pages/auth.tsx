@@ -1,12 +1,11 @@
 import React from "react";
-import { CardContent } from "../components/defaults";
-import Layout from "./layout";
+import LayoutSplit from "@layouts/LayoutSplit";
 import LoginPage from "../features/login";
 const AuthPage = ({ allProps }) => {
   return (
-    <Layout>
+    <LayoutSplit>
       <LoginPage allProps={{ ...allProps }} />
-    </Layout>
+    </LayoutSplit>
   );
 };
 export default AuthPage;

@@ -1,21 +1,21 @@
-import React from "react"
-import { useState } from "react"
-import { Col, Grid, Row } from "../../components/defaults"
-import SignIn from "../../components/packages/authentication/SignIn/Index"
-import SignUp from "../../components/packages/authentication/SignUp/Index"
-import EmailVerify from "../../components/packages/authentication/Verification/ForgotPassword/EmailVerify"
-import SignUpVerification from "../../components/packages/authentication/Verification/SignUpVerification"
-import ForgotPasswordVerification from "../../components/packages/authentication/Verification/ForgotPassword/ForgotPasswordVerification"
-import ResetPassword from "../../components/packages/authentication/Verification/ForgotPassword/ResetPassword"
-import UserNotVerified from "../../components/packages/authentication/Verification/UserNotVerified"
-import WelcomSteps from "../../components/packages/authentication/Welcome"
+import React from "react";
+import { useState } from "react";
+import { Col, Grid, Row } from "../../components/defaults";
+import SignIn from "../../components/packages/authentication/SignIn/Index";
+import SignUp from "../../components/packages/authentication/SignUp/Index";
+import EmailVerify from "../../components/packages/authentication/Verification/ForgotPassword/EmailVerify";
+import SignUpVerification from "../../components/packages/authentication/Verification/SignUpVerification";
+import ForgotPasswordVerification from "../../components/packages/authentication/Verification/ForgotPassword/ForgotPasswordVerification";
+import ResetPassword from "../../components/packages/authentication/Verification/ForgotPassword/ResetPassword";
+import UserNotVerified from "../../components/packages/authentication/Verification/UserNotVerified";
+import WelcomSteps from "../../components/packages/authentication/Welcome";
 
 export const Login = ({ allProps }) => {
   const [auth, setauth] = useState({
     state: allProps?.routeState || "signin",
     email: "",
-    code: 0
-  })
+    code: 0,
+  });
   return (
     <Grid className="ion-no-padding ion-no-margin">
       <Row style={{ overflow: "hidden" }}>
@@ -40,6 +40,6 @@ export const Login = ({ allProps }) => {
         </Col>
       </Row>
     </Grid>
-  )
-}
-export default Login
+  );
+};
+export default Login;

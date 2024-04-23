@@ -11,7 +11,6 @@ import {
   UNIVERSITY_SERVICE_GQL,
   USER_SERVICE_GQL,
 } from "../../../datasource/servers/types";
-import { userSearch } from "../../../datasource/graphql/user";
 import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
 import { SearchIcon } from "../icons";
 import { getCache } from "../../../utils/cache";
@@ -24,10 +23,6 @@ export const SearchBar = () => {
   const [options, setOptions] = useState([]);
   const [GetUni, unidata] = useLazyQuery(UniSearchDataList, {
     context: { server: UNIVERSITY_SERVICE_GQL },
-    skip: true,
-  });
-  const [GetUser, searchUser] = useLazyQuery(userSearch(), {
-    context: { server: USER_SERVICE_GQL },
     skip: true,
   });
   const dropdownRef = useRef(null);

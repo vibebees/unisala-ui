@@ -12,6 +12,8 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@features": path.resolve(__dirname, "./src/features"),
+      "@layouts": path.resolve(__dirname, "./src/layouts"),
+      "@context": path.resolve(__dirname, "./src/context"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },

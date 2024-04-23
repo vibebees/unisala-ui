@@ -7,7 +7,7 @@ import { USER_SERVICE_GQL } from "../../datasource/servers/types";
 import { getUserGql } from "../../datasource/graphql/user";
 import { callSocket } from "../../datasource/servers/endpoints";
 import { userName, getCache } from "../../utils/cache";
-import Layout from "../../pages/layout";
+import Layout from "../../layouts/layout";
 import { LeftSideBar } from "./leftSideBar";
 import { FamousUniversities } from "../../components/packages/famousUniversites";
 export default function HomePage() {

@@ -1,6 +1,6 @@
 import React from "react";
 import SearchPage from "../features/search/index.js";
-import Layout from "./layout.js";
+import Layout from "../layouts/layout.js";
 import { ExploreFilterPopupProvider } from "../features/search/uni/ExploreUniFilterPopupContext.js";
 
 const DiscoverPage = () => {

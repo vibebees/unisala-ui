@@ -1,11 +1,7 @@
-import React from "react"
-import UserProfile from "../features/profilePage"
-import Layout from "./layout"
+import React from "react";
+import UserProfile from "../features/profilePage";
+import Layout from "../layouts/layout";
 const UserProfilePage = () => {
-    return <Layout
-        mainContent={<UserProfile />}
-    />
-
-
-}
-export default UserProfilePage
+  return <Layout mainContent={<UserProfile />} />;
+};
+export default UserProfilePage;

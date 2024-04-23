@@ -1,6 +1,66 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
-export const AddComment = gql`
+export const Login = gql`
+    mutation login(
+      $email: String
+      $password: String
+      $type: String
+      $code: Float
+      $spaceOrgName: String
+    ) {
+      login(
+        email: $email
+        password: $password
+        type: $type
+        code: $code
+        spaceOrgName: $spaceOrgName
+      ) {
+        status {
+          success
+          message
+        }
+        data {
+          accessToken
+          refreshToken
+          firstName
+          lastName
+          username
+          role
+          newUser
+          id
+          userAddedToOrg
+          spaceOrgName
+        }
+      }
+    }
+  `,
+  Register = gql`
+    mutation register(
+      $firstName: String
+      $lastName: String
+      $email: String
+      $password: String
+      $type: String
+      $spaceOrgName: String
+      $code: Float
+    ) {
+      register(
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        password: $password
+        type: $type
+        spaceOrgName: $spaceOrgName
+        code: $code
+      ) {
+        status {
+          success
+          message
+        }
+      }
+    }
+  `,
+  AddComment = gql`
     mutation addComment(
       $postId: String!
       $commentText: String
@@ -1605,35 +1665,35 @@ export const AddComment = gql`
       requestToJoinOrg(orgId: $orgId, status: $status, email: $email) {
         data
       }
-    },
+    }
   `,
   Search = gql`
-  query Search($q: String!) {
-    search(q: $q) {
-      totalItems
-      items {
-        name
-        type
-        username
-      }
-      spaces {
-        name
-        description
-      }
-      users {
-        firstName
-        lastName
-        username
-        oneLinerBio
-        picture
-      }
-      orgs {
-        name
-        description
+    query Search($q: String!) {
+      search(q: $q) {
+        totalItems
+        items {
+          name
+          type
+          username
+        }
+        spaces {
+          name
+          description
+        }
+        users {
+          firstName
+          lastName
+          username
+          oneLinerBio
+          picture
+        }
+        orgs {
+          name
+          description
+        }
       }
     }
-  }
-`,
+  `,
   GetAllHistoryEvents = gql`
     query getAllHistoryActivity(
       $orgHistoryId: ID!
@@ -1664,30 +1724,30 @@ export const AddComment = gql`
     }
   `,
   EditHistory = gql`
-  mutation editHistory(
-    $orgHistoryId: ID!
-    $title: String
-    $description: String
-    $date: String
-  ) {
-    editHistory(
-      orgHistoryId: $orgHistoryId
-      title: $title
-      description: $description
-      date: $date
+    mutation editHistory(
+      $orgHistoryId: ID!
+      $title: String
+      $description: String
+      $date: String
     ) {
-      status {
-        success
-        message
-      }
-      data {
-        _id
-        userId
-        orgId
-        title
-        description
-        date
+      editHistory(
+        orgHistoryId: $orgHistoryId
+        title: $title
+        description: $description
+        date: $date
+      ) {
+        status {
+          success
+          message
+        }
+        data {
+          _id
+          userId
+          orgId
+          title
+          description
+          date
+        }
       }
     }
-  }
-`
+  `;

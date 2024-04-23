@@ -1,77 +1,77 @@
-import { IonRow, IonSpinner, useIonToast } from "@ionic/react"
-import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
-import { userServer } from "../../../../datasource/servers/endpoints"
-import { registerUser } from "../../../../datasource/store/action/authenticationAction"
-import { validateSignup } from "../../../../utils/components/validate"
-import AuthInput from "../AuthInput"
-import "../auth.css"
-import { setCache } from "../../../../utils/cache"
+import React from "react";
+import { IonRow, IonSpinner, useIonToast } from "@ionic/react";
+import { useEffect, useState } from "react";
+import { userServer } from "../../../../datasource/servers/endpoints";
+import { registerUser } from "../../../../datasource/store/action/authenticationAction";
+import { validateSignup } from "../../../../utils/components/validate";
+import AuthInput from "../AuthInput";
+import "../auth.css";
+import { setCache } from "../../../../utils/cache";
 export const SignUpForm = ({ setauth, setShowSignup = null }) => {
-  const [errors, seterrors] = useState({})
-  const [present, dismiss] = useIonToast()
-  const [datacheck, setdatacheck] = useState(false)
-  const [save, setsave] = useState(false)
+  const [errors, seterrors] = useState<ISignupErrors>({});
+  const [present, dismiss] = useIonToast();
+  const [datacheck, setdatacheck] = useState(false);
+  const [save, setsave] = useState(false);
 
-  const searchParams = new URLSearchParams(window.location.search)
-  const spaceOrgName = searchParams.get("org")
-  const code = searchParams.get("code")
-  const email = searchParams.get("email") ?? ""
-  const [input, setInput] = useState({
+  const searchParams = new URLSearchParams(window.location.search);
+  const spaceOrgName = searchParams.get("org");
+  const code = searchParams.get("code");
+  const email = searchParams.get("email") ?? "";
+  const [input, setInput] = useState<ISignupInput>({
     firstName: "",
     lastName: "",
     email: email,
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
-    code: code && code
-  })
+    code: code && code,
+  });
 
   const HandleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setInput((pre) => {
-      return { ...pre, [name]: value }
-    })
+      return { ...pre, [name]: value };
+    });
 
     // if user changes the mail from the invitation one then it will not be invited
 
     if (name === "email" && value !== email) {
       setInput((pre) => {
-        return { ...pre, type: null, spaceOrgName: null }
-      })
+        return { ...pre, type: null, spaceOrgName: null };
+      });
     }
     seterrors({
       ...errors,
-      [name]: ""
-    })
-  }
+      [name]: "",
+    });
+  };
   const submitHandler = (e) => {
-      e.preventDefault()
-      seterrors(validateSignup(input))
-      setdatacheck(true)
-    },
-    dispatch = useDispatch()
+    e.preventDefault();
+    seterrors(validateSignup(input));
+    setdatacheck(true);
+  };
+  // dispatch = useDispatch();
 
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && datacheck) {
-      setsave(true)
-      setCache("email", input.email)
-      dispatch(
-        registerUser({
-          userServer: userServer,
-          input,
-          setdatacheck,
-          setauth,
-          setsave,
-          present,
-          dismiss
-        })
-      )
-      if (spaceOrgName) {
-        setCache("org", spaceOrgName)
-      }
-    }
-  }, [errors])
+  // useEffect(() => {
+  //   if (Object.keys(errors).length === 0 && datacheck) {
+  //     setsave(true);
+  //     setCache("email", input.email);
+  //     // dispatch(
+  //     //   registerUser({
+  //     //     userServer: userServer,
+  //     //     input,
+  //     //     setdatacheck,
+  //     //     setauth,
+  //     //     setsave,
+  //     //     present,
+  //     //     dismiss,
+  //     //   })
+  //     // );
+  //     if (spaceOrgName) {
+  //       setCache("org", spaceOrgName);
+  //     }
+  //   }
+  // }, [errors]);
 
   return (
     <form onSubmit={submitHandler}>
@@ -106,7 +106,7 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
           type="text"
           name="email"
           value={input?.email}
-          disabled={email}
+          disabled={!!email}
         />
       </div>
       <div className="auth-input-div">
@@ -124,7 +124,7 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
         <p
           style={{ color: "#3880ff", cursor: "pointer" }}
           onClick={() => {
-            setauth({ state: "emailVerify" })
+            setauth({ state: "emailVerify" });
           }}
         >
           Forgot Password?
@@ -140,10 +140,10 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
 
       <IonRow
         onClick={() => {
-          setauth({ state: "signin" })
-          if (setShowSignup) {
-            setShowSignup(false)
-          }
+          setauth({ state: "signin" });
+          // if (setShowSignup) {
+          //   setShowSignup(false);
+          // }
         }}
         className="auth-change mt-7 inline-flex"
       >
@@ -153,6 +153,6 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
         </p>
       </IonRow>
     </form>
-  )
-}
-export default SignUpForm
+  );
+};
+export default SignUpForm;

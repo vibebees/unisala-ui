@@ -1,13 +1,12 @@
-import { IonText } from "@ionic/react"
-import GoogleAuth from "../GoogleAuth"
-import SignUpForm from "./SignUpForm"
-import AppleAuth from "../AppleAuth"
-import "../auth.css"
-import { Typography } from "../../../defaults/index"
+import React from "react";
+import GoogleAuth from "../GoogleAuth";
+import SignUpForm from "./SignUpForm";
+import "../auth.css";
+import { Typography } from "../../../defaults/index";
 
 export const SignUp = ({ setauth, setShowSignup = null }) => {
-  const params = new URLSearchParams(window.location.search)
-  const isInvited = params.get("org")
+  const params = new URLSearchParams(window.location.search);
+  const isInvited = params.get("org");
   return (
     <div className="sign-content bg-white">
       <Typography variant="p" className=" border-blue-400 w-fit border-b-2">
@@ -22,7 +21,7 @@ export const SignUp = ({ setauth, setShowSignup = null }) => {
         <div className="auth-button">
           <div
             style={{
-              width: "234px"
+              width: "234px",
             }}
           >
             <GoogleAuth setauth={setauth} />
@@ -38,6 +37,6 @@ export const SignUp = ({ setauth, setShowSignup = null }) => {
 
       <SignUpForm setauth={setauth} setShowSignup={setShowSignup} />
     </div>
-  )
-}
-export default SignUp
+  );
+};
+export default SignUp;

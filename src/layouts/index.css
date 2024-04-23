@@ -6,7 +6,8 @@
 }
 
 .grid-container {
-  max-width: 1200px; /* Adjust this value based on your content and design preference */
+  max-width: 1200px;
+  /* Adjust this value based on your content and design preference */
   margin-left: auto;
   margin-right: auto;
 }
@@ -16,20 +17,25 @@
   display: flex;
   justify-content: center;
   padding: 0 10px;
-  width: 100%; /* Ensures that the Content fills its parent */
+  width: 100%;
+  /* Ensures that the Content fills its parent */
   background-color: black;
 }
 
 .layout-row {
-  max-width: 1200px; /* Your desired max width */
-  width: 100%; /* Allows responsive width */
-  margin: auto; /* Centers the Row */
+  max-width: 1200px;
+  /* Your desired max width */
+  width: 100%;
+  /* Allows responsive width */
+  margin: auto;
+  /* Centers the Row */
 }
 
 .layout-col {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Aligns items to the top */
+  align-items: flex-start;
+  /* Aligns items to the top */
 }
 
 ion-content {

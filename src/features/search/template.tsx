@@ -9,7 +9,6 @@ import {
   UNIVERSITY_SERVICE_GQL,
   USER_SERVICE_GQL,
 } from "../../datasource/servers/types";
-
 // Component imports
 import SearchTab from "./atoms/SearchTab";
 import { UserResults } from "./orgamism/UserList";

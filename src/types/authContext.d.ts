@@ -1,13 +1,24 @@
+/* eslint-disable no-unused-vars */
+
 interface IAuthContext {
-  user: IUser | null;
-  token: string;
+  user: IAuthData | null;
   authenticated: boolean;
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  UpdateAuth: (data: IAuthData) => void;
+  ClearAuth: () => void;
+  loading: boolean;
 }
 
 interface IUser {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
+  username: string;
+}
+
+interface IAuthData extends IUser {
+  accessToken: string;
+  refreshToken: string;
+  newUser: boolean;
+  role: string | number;
 }

@@ -1,11 +1,14 @@
-import { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { IonSpinner, IonRow, useIonToast } from "@ionic/react";
-import { Typography, Button } from "../../../defaults";
+import { Typography, Button } from "@components/defaults";
 import AuthInput from "../AuthInput";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { Login } from "@datasource/graphql/user";
 import { validateSignIn } from "../../../../utils/components/validate";
-import { loginUser } from "../../../../datasource/store/action/authenticationAction";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { LoginMutation } from "src/types/gqlTypes/graphql";
+import { useMutation } from "@apollo/client";
+import { useAuth } from "@context/AuthContext";
+import { useHistory } from "react-router";
 
 const SignInForm = ({
   setauth,
@@ -13,43 +16,81 @@ const SignInForm = ({
   setActiveNavDrop = () => {},
 }) => {
   const params = new URLSearchParams(window.location.search);
+  const { UpdateAuth, authenticated, user } = useAuth();
+  const history = useHistory();
   const spaceOrgName = params.get("org");
-  const [input, setInput] = useState({
-    email: params.get("email"),
+  const [errors, setErrors] = useState<ILoginInputErrors>({});
+  const [present, dismiss] = useIonToast();
+
+  useEffect(() => {
+    console.log("authenticated", authenticated);
+    console.log("user", user);
+
+    if (authenticated) {
+      history.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authenticated]);
+
+  const [input, setInput] = useState<ILoginInput>({
+    email: params.get("email") ?? "",
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
     code: params.get("code"),
   });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const [present, dismiss] = useIonToast();
-  const history = useHistory();
 
-  const handleChange = (e) => {
+  const [LoginUser, { loading }] = useMutation<LoginMutation>(Login, {
+    context: { server: USER_SERVICE_GQL },
+    variables: {
+      email: input.email,
+      password: input.password,
+      spaceOrgName: input.spaceOrgName,
+      type: input.type,
+      code: input.code,
+    },
+    onCompleted: (data) => {
+      console.log("login data", data);
+      if (data.login?.status?.success && data.login && data.login.data) {
+        UpdateAuth({
+          id: data.login?.data.id!,
+          firstName: data.login.data?.firstName!,
+          lastName: data.login.data.lastName!,
+          username: data.login.data?.username!,
+          accessToken: data.login.data?.accessToken!,
+          refreshToken: data.login.data?.refreshToken!,
+          newUser: data.login.data?.newUser!,
+          role: data.login.data?.role!,
+        });
+        present({
+          message: "Login Successful",
+          duration: 3000,
+          color: "success",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      }
+    },
+    onError: (error) => {
+      console.log("login error", error);
+      present({
+        message: error.message,
+        duration: 3000,
+        color: "danger",
+        buttons: [{ text: "X", handler: () => dismiss() }],
+      });
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInput((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const validationErrors = validateSignIn(input);
     if (Object.keys(validationErrors).length === 0) {
-      setLoading(true);
-      dispatch(
-        loginUser({
-          input,
-          history,
-          setLoading,
-          present,
-          setActiveNavDrop,
-          redirectUrl: params.get("uni")
-            ? params.get("uni") + `?unitId=${params.get("unitId")}`
-            : null,
-        })
-      );
+      LoginUser();
     } else {
       setErrors(validationErrors);
     }
@@ -57,7 +98,6 @@ const SignInForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Email input */}
       <div className="auth-input-div">
         <label className="auth-label">Email</label>
         <br />
@@ -104,7 +144,7 @@ const SignInForm = ({
       <IonRow
         onClick={() => {
           setauth({ state: "signup" });
-          if (setShowSignup) setShowSignup(true);
+          // if (setShowSignup) setShowSignup(true);
         }}
         className="auth-change mt-8 inline-flex "
       >

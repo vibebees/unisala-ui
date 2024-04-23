@@ -1,12 +1,22 @@
-import React from 'react';
-import {  IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonItem, IonAvatar, IonLabel } from '@ionic/react';
-import Layout from './layout';
+import React from "react";
+import {
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCardContent,
+  IonList,
+  IonItem,
+  IonAvatar,
+  IonLabel,
+} from "@ionic/react";
+import Layout from "../layouts/layout";
 
 const HomePage: React.FC = () => {
   // Dummy data for the list
   const items = [
-    { title: 'Item 1', description: 'Description for item 1' },
-    { title: 'Item 2', description: 'Description for item 2' },
+    { title: "Item 1", description: "Description for item 1" },
+    { title: "Item 2", description: "Description for item 2" },
     // Add more items here
   ];
 
@@ -50,7 +60,10 @@ const HomePage: React.FC = () => {
       {items.map((item, index) => (
         <IonItem key={index}>
           <IonAvatar slot="start">
-            <img src={`https://placekitten.com/200/200?image=${index}`} alt="avatar"/>
+            <img
+              src={`https://placekitten.com/200/200?image=${index}`}
+              alt="avatar"
+            />
           </IonAvatar>
           <IonLabel>
             <h2>{item.title}</h2>

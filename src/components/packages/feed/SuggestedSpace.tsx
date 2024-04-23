@@ -14,7 +14,7 @@ export const SuggestedSpace = ({ data, title, type }) => {
       </IonCardHeader>
 
       <div className="grid grid-cols-2 ">
-        {data.map((space) => (
+        {data?.map((space) => (
           <div
             key={space._id}
             style={{

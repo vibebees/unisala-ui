@@ -119,7 +119,9 @@ export const client = new ApolloClient({
     },
     cache: new InMemoryCache()
   }),
-  messageSocket = () => io(messageSocketAddress),
+  messageSocket = () => io(messageSocketAddress, {
+    path: "/msg/socket/socket.io"
+}),
   callSocket = () => io(callSocketAddress),
   userServer = userServiceAddress,
   messageServer = messagingServiceAddress,

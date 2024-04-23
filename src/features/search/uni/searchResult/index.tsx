@@ -13,6 +13,7 @@ import noResultsFound from "../../../../assets/no-results.jpg";
 import "./index.css";
 import { CustomTrackingLink } from "../../../../components/analytics/LinkTrack";
 import { FeedSkeleton } from "../../../../components/packages/skeleton/feedSkeleton";
+import { motion } from "framer-motion";
 
 interface ISearchResults {
   filterPage: number;
@@ -41,9 +42,25 @@ const SearchResults: FC<ISearchResults> = ({
   isLoading,
 }) => {
   const { searchData } = useSelector((store) => store?.university || []);
-  const ResultCard = () => (
-    <div className="relative flex gap-3 flex-col">
-      {Array.isArray(searchData) &&
+
+  return (
+    <motion.div
+      initial={{ x: 1000 }}
+      animate={{
+        x: 0,
+      }}
+      exit={{
+        x: 1000,
+      }}
+      transition={{ duration: 0.3 }}
+      className="relative flex gap-3 flex-col"
+    >
+      {isLoading && <FeedSkeleton />}
+      {!isLoading && searchData?.length === 0 && <NoResultCard />}
+
+      {!isLoading &&
+        searchData?.length > 0 &&
+        Array.isArray(searchData) &&
         searchData.map((data, index) => {
           return (
             <CustomTrackingLink
@@ -75,12 +92,8 @@ const SearchResults: FC<ISearchResults> = ({
           )}
         </IonInfiniteScrollContent>
       </IonInfiniteScroll>
-    </div>
+    </motion.div>
   );
-  if (isLoading) {
-    return <FeedSkeleton />;
-  }
-  return searchData?.length === 0 ? <NoResultCard /> : <ResultCard />;
 };
 
 export default SearchResults;

@@ -32,7 +32,7 @@ function CourseCard({ allProps }) {
   console.log("allProps", allProps);
 
   return (
-    <Card className="max-md:mx-0 relative ion-no-margin ion-no-padding shadow-sm border border-neutral-200">
+    <Card className="max-md:mx-0 relative ion-no-margin ion-no-padding shadow-sm border border-neutral-300">
       <CustomTrackingLink
         title={`${name} clicked on university result filter `}
         to={`/university/${name}`}

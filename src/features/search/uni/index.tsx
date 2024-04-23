@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { ResultsColumn } from "./resultColumn";
 import { DesktopFilter } from "./desktopFilter";
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
 
 const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
   const history = useHistory();
@@ -21,12 +22,16 @@ const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
   }, [history.location.search]);
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 1, x: 200 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -200 }}
+    >
       {window !== undefined &&
-        document.getElementById("left-sidebar") &&
+        document.getElementById("filter-container") &&
         createPortal(
           <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
-          document.getElementById("left-sidebar")!
+          document.getElementById("filter-container")!
         )}
       <ResultsColumn
         activeSubTab={activeSubTab}
@@ -34,7 +39,7 @@ const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
         setFilterPage={setFilterPage}
         loading={loading}
       />
-    </>
+    </motion.div>
   );
 };
 

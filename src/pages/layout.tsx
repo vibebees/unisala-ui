@@ -94,7 +94,9 @@ const Layout: React.FC<LayoutProps> = ({
         >
           {/* Only visible on medium and larger screens */}
           {/* <Col sizeMd="3" className="ion-hide-md-down layout-col"> */}
-          <div id="left-sidebar" className="w-fit shrink-0"></div>
+          <div id="left-sidebar" className="w-fit shrink-0">
+            {leftSidebar}
+          </div>
           {/* </Col> */}
 
           {/* Always visible, but spans more columns on small screens */}

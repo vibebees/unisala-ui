@@ -71,7 +71,7 @@ const ScholarshipCard = ({
   );
 
   return (
-    <IonCard className="h-full max-md:p-0 max-md:m-0 max-md:my-2 ion-no-margin ion-no-padding">
+    <IonCard className="h-full max-md:p-0 max-md:m-0 max-md:my-2 ion-no-margin ion-no-padding shadow-none border border-neutral-300">
       <IonRow className="relative">
         <IonCol className="overflow-hidden ion-no-margin ion-no-padding">
           <CardImage pictures={pictures} />

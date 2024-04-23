@@ -1,10 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import { IonCol, IonIcon, IonRow } from "@ionic/react";
-import { school } from "ionicons/icons";
 import { useHistory, useLocation } from "react-router-dom";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch } from "react-redux";
-
 // Interfaces for Apollo and Redux actions might need to be defined or imported if not already
 import { UniFilterResults } from "../../datasource/graphql/uni";
 import { Search } from "../../datasource/graphql/user";
@@ -19,7 +16,6 @@ import { UserResults } from "./orgamism/UserList";
 import { UniversityResults } from "./orgamism/UniversityResults";
 import UniSearchResult from "./uni";
 import { ExploreFilterPopupContext } from "./uni/ExploreUniFilterPopupContext";
-import { SearchBar } from "../../components/packages/searchBox";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
@@ -27,6 +23,7 @@ import { OrgList } from "./orgamism/OrgList";
 import { SpaceList } from "./orgamism/SpaceList";
 import { Col, Row } from "../../components/defaults";
 import { getAllQueryParams } from "./uni/filters/utility";
+import { AnimatePresence } from "framer-motion";
 
 export const SearchTemplate: React.FC = () => {
   const location = useLocation();
@@ -39,7 +36,7 @@ export const SearchTemplate: React.FC = () => {
   useDocTitle(`Search ᛫ ${query}`);
 
   const { data: searchData, loading: userLoading } = useQuery(Search, {
-    variables: { q: query },
+    variables: { q: query, user: true, org: true, space: true, school: true },
     context: { server: USER_SERVICE_GQL },
   });
 
@@ -68,7 +65,7 @@ export const SearchTemplate: React.FC = () => {
     }
   }, [uniData, dispatch]);
 
-  const { setPopUp } = useContext(ExploreFilterPopupContext);
+  // const { setPopUp } = useContext(ExploreFilterPopupContext);
 
   const { users, orgs, spaces } = searchData?.search ?? {};
 
@@ -77,48 +74,68 @@ export const SearchTemplate: React.FC = () => {
       {/* <SearchFilterRow setPopUp={setPopUp} /> */}
       <Row className=" max-w-[900px] ion-no-margin ion-no-padding  px-4">
         <Col className="min-h-[100vh] ion-no-padding ion-no-margin  overflow-hidden w-full">
-          <SearchTab />
-          {tab === "all" && (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
-            >
-              <UserResults users={users} loading={uniLoading} />
-              <UniversityResults
-                universities={uniData?.searchSchool}
+          <AnimatePresence mode="sync">
+            <SearchTab />
+          </AnimatePresence>
+          <AnimatePresence mode="sync">
+            {tab === "all" && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2rem",
+                }}
+              >
+                <UserResults users={users} loading={uniLoading} />
+                <UniversityResults
+                  universities={uniData?.searchSchool}
+                  loading={uniLoading}
+                />
+                <h3 style={{ marginBottom: "1rem", color: "#4d4d4d" }}>
+                  Posts
+                </h3>
+              </div>
+            )}
+            {tab === "user" && (
+              <UserResults
+                key={"user-result"}
+                users={users}
+                loading={userLoading}
+              />
+            )}
+            {tab === "uni" && (
+              <UniSearchResult
+                key={"uni-result"}
+                query={query}
                 loading={uniLoading}
               />
-              <h3 style={{ marginBottom: "1rem", color: "#4d4d4d" }}>Posts</h3>
-            </div>
-          )}
-          {tab === "user" && (
-            <UserResults users={users} loading={userLoading} />
-          )}
-          {tab === "uni" && (
-            <UniSearchResult query={query} loading={uniLoading} />
-          )}
-          {tab === "post" && <h1>Posts</h1>}
-          {tab === "space" && <SpaceList spaces={spaces} />}
-          {tab === "org" && <OrgList orgs={orgs} />}
+            )}
+            {tab === "post" && <h1>Posts</h1>}
+            {tab === "space" && (
+              <SpaceList spaces={spaces} key={"space-result"} />
+            )}
+            {tab === "org" && <OrgList orgs={orgs} />}
+          </AnimatePresence>
         </Col>
       </Row>
     </>
   );
 };
 
-const SearchFilterRow: React.FC<{ setPopUp: (popUp: boolean) => void }> = ({
-  setPopUp,
-}) => (
-  <IonRow className="mobile-row">
-    <IonCol size="auto">
-      <IonIcon
-        icon={school}
-        onClick={() => setPopUp(true)}
-        size="large"
-        color="success"
-      />
-    </IonCol>
-    <IonCol>
-      <SearchBar />
-    </IonCol>
-  </IonRow>
-);
+// const SearchFilterRow: React.FC<{ setPopUp: (popUp: boolean) => void }> = ({
+//   setPopUp,
+// }) => (
+//   <IonRow className="mobile-row">
+//     <IonCol size="auto">
+//       <IonIcon
+//         icon={school}
+//         onClick={() => setPopUp(true)}
+//         size="large"
+//         color="success"
+//       />
+//     </IonCol>
+//     <IonCol>
+//       <SearchBar />
+//     </IonCol>
+//   </IonRow>
+// );

@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { URLgetter } from "../../../../utils/lib/URLupdate";
 import { FeedSkeleton } from "../../../../components/packages/skeleton/feedSkeleton";
+import { motion } from "framer-motion";
 
 const dummyScholarship = {
   university: "University of Arkansas at Little Rock",
@@ -109,7 +110,18 @@ const ScholarshipResult = () => {
   }, [filterPage]);
 
   return (
-    <div>
+    <motion.div
+      initial={{ x: -1000 }}
+      animate={{
+        x: 0,
+      }}
+      exit={{
+        x: -1000,
+      }}
+      transition={{ duration: 0.3 }}
+      className="relative flex gap-3 flex-col shadow-md"
+    >
+      {loading && <FeedSkeleton />}
       {data &&
         Array.isArray(data?.searchScholarship?.scholarships) &&
         data?.searchScholarship?.scholarships.map((data, index) => {
@@ -135,7 +147,7 @@ const ScholarshipResult = () => {
           )}
         </IonInfiniteScrollContent>
       </IonInfiniteScroll>
-    </div>
+    </motion.div>
   );
 };
 

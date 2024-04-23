@@ -5,6 +5,7 @@ import ScholarshipResult from "./scholarshipResult";
 import UniversityScholarshipTab from "../atoms/UniversityScholarshipTab";
 import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
 import { Card } from "@components/defaults";
+import { AnimatePresence } from "framer-motion";
 
 interface IIResultsColumn extends IResultsColumn {
   setFilterPage: Dispatch<SetStateAction<number>>;
@@ -21,19 +22,17 @@ export const ResultsColumn: FC<IIResultsColumn> = ({
       <ChipsTab />
       <UniversityScholarshipTab />
       <div>
-        {loading ? (
-          <Card className="w-full shadow-none overflow-hidden ion-no-margin ion-no-padding">
-            <ThreadSkeleton />
-          </Card>
-        ) : activeSubTab === "u" ? (
-          <SearchResults
-            filterPage={filterPage}
-            setFilterPage={setFilterPage}
-            isLoading={false}
-          />
-        ) : (
-          <ScholarshipResult />
-        )}
+        <AnimatePresence mode="wait">
+          {activeSubTab === "u" && (
+            <SearchResults
+              filterPage={filterPage}
+              setFilterPage={setFilterPage}
+              isLoading={loading}
+              key={"u"}
+            />
+          )}
+          {activeSubTab === "s" && <ScholarshipResult key={"s"} />}
+        </AnimatePresence>
       </div>
     </div>
   );

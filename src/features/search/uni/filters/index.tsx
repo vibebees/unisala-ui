@@ -22,6 +22,7 @@ import { search } from "ionicons/icons";
 import { ThreadSkeleton } from "../../../../components/packages/skeleton/threadSkeleton";
 import { UniFilterResults } from "../../../../datasource/graphql/uni";
 import { Button } from "@components/defaults";
+import { motion } from "framer-motion";
 
 function index({
   setIsLoading,
@@ -226,7 +227,12 @@ function index({
   };
 
   return (
-    <div className=" w-full mx-auto max-w-[300px] min-w-[270px] mt-1 border border-neutral-200  py-3 px-3  bg-neutral-50 rounded-md sticky top-0 ">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className=" w-full max-w-[300px] min-w-[270px] mt-1 border border-neutral-200  py-3 px-3  bg-neutral-50 rounded-md sticky top-0 "
+    >
       <div className="grid grid-cols-1 gap-5 mx-auto w-fit">
         <RadioButtons
           label1={"Undergraduate"}
@@ -344,7 +350,7 @@ function index({
                   showDollarSign={false}
                 />
               </IonRow> */}
-    </div>
+    </motion.div>
   );
 }
 

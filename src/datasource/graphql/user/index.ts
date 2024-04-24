@@ -412,10 +412,12 @@ export const Login = gql`
     }
   `,
   EditComment = gql`
-    mutation editComment($commentId: String!, $commentText: String) {
+    mutation editComment($commentId: String!, $commentText: String!) {
       editComment(commentId: $commentId, commentText: $commentText) {
-        success
-        message
+        status {
+          success
+          message
+        }
       }
     }
   `,
@@ -438,6 +440,8 @@ export const Login = gql`
                         }
             }
         }`,
+  // working
+
   GetSavedList = gql`
     query savedList($userId: String!, $page: Float) {
       savedList(userId: $userId, page: $page, pageSize: 5) {
@@ -725,32 +729,32 @@ export const Login = gql`
   `,
   AddTestScore = (testScores) =>
     gql`
-        mutation addTestScore($testScores: ${testScores}) {
-            addTestScore(testScore: $testScores) {
-            status {
-                message
-                success
-            }
-            testScore {
-                scores {
-                SAT_SCORE {
-                    maths
-                    english
-                }
-                ACT_SCORE {
-                    maths
-                    english
-                }
-                IELTS_SCORE {
-                    score
-                }
-                TOEFL_SCORE {
-                    score
-                }
-                }
-            }
-            }
-        }`,
+      mutation addTestScore($testScores: ${testScores}) {
+          addTestScore(testScore: $testScores) {
+          status {
+              message
+              success
+          }
+          testScore {
+              scores {
+              SAT_SCORE {
+                  maths
+                  english
+              }
+              ACT_SCORE {
+                  maths
+                  english
+              }
+              IELTS_SCORE {
+                  score
+              }
+              TOEFL_SCORE {
+                  score
+              }
+              }
+          }
+          }
+      }`,
   SendConnectRequest = gql`
     mutation sendConnectRequest($receiverId: String!) {
       sendConnectRequest(receiverId: $receiverId) {

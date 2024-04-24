@@ -8,7 +8,7 @@ export const SignUp = () => {
   const params = new URLSearchParams(window.location.search);
   const isInvited = params.get("org");
   return (
-    <div className="sign-content bg-white">
+    <div className="sign-content border border-red-700 bg-white">
       <Typography variant="p" className=" border-blue-400 w-fit border-b-2">
         Start for free
       </Typography>
@@ -35,7 +35,7 @@ export const SignUp = () => {
         <AppleAuth />
       </div> */}
 
-      {/* <SignUpForm /> */}
+      <SignUpForm />
     </div>
   );
 };

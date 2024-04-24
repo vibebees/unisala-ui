@@ -5,9 +5,7 @@ import { ProtectedRoute } from "../utils/lib/protectedRoute";
 import { PreLoader } from "../components/packages/preloader";
 import { useSelector } from "react-redux";
 import { getCache } from "../utils/cache";
-import { Chats } from '@features/messages/whatsapp/Chats';
-
-
+import { Chats } from "@features/messages/whatsapp/Chats";
 
 const ProfilePage = lazy(() => import("../pages/userProfile"));
 const Messages = lazy(() => import("../pages/message"));
@@ -101,12 +99,12 @@ export const PageRoute = ({ allProps }) => {
           <Discover />
         </Route>
 
-        <Route path="/register" exact>
-          <AuthPage allProps={{ ...allProps, routeState: 'signup' }} />
-        </Route>
+        {/* <Route path="/register" exact>
+          <AuthPage allProps={{ ...allProps, routeState: "signup" }} />
+        </Route> */}
 
         <Route path="/login" exact>
-          <AuthPage allProps={{ ...allProps, routeState: 'signin' }} />
+          <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
         </Route>
         <Route path="/space" exact>
           {/* <SpaceIndex /> */}

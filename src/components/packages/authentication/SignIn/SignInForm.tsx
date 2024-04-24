@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState, useContext } from "react";
-import { IonSpinner, IonRow, useIonToast } from "@ionic/react";
-import { Typography, Button } from "@components/defaults";
+import { IonSpinner, useIonToast } from "@ionic/react";
+import { Typography, Button, Row } from "@components/defaults";
 import AuthInput from "../AuthInput";
 import { Login } from "@datasource/graphql/user";
 import { validateSignIn } from "../../../../utils/components/validate";
@@ -14,7 +14,7 @@ import { AuthenticationContext } from "@features/login";
 const SignInForm = () => {
   const { setauth } = useContext(AuthenticationContext)!;
   const params = new URLSearchParams(window.location.search);
-  const { UpdateAuth, authenticated, user } = useAuth();
+  const { UpdateAuth, authenticated } = useAuth();
   const history = useHistory();
   const spaceOrgName = params.get("org");
   const [errors, setErrors] = useState<ILoginInputErrors>({});
@@ -45,7 +45,6 @@ const SignInForm = () => {
       code: input.code,
     },
     onCompleted: (data) => {
-      console.log("login data", data);
       if (data.login?.status?.success && data.login && data.login.data) {
         UpdateAuth({
           id: data.login?.data.id!,
@@ -141,7 +140,7 @@ const SignInForm = () => {
         {loading ? <IonSpinner></IonSpinner> : "Login"}
       </Button>
 
-      <IonRow
+      <Row
         onClick={() => {
           setauth((prev) => {
             return {
@@ -156,7 +155,7 @@ const SignInForm = () => {
           Not Registered Yet?{" "}
           <span className="underline underline-offset-4"> Click Here</span>
         </p>
-      </IonRow>
+      </Row>
     </form>
   );
 };

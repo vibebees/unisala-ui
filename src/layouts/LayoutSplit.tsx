@@ -81,33 +81,29 @@ const LayoutSplit: React.FC<LayoutProps> = ({
   rightSidebar = rightSidebarDefault,
 }) => {
   return (
-    <Page style={{ backgroundColor: "#F0F2F5" }}>
-      <Content
-        className="layout-content 
+    <Content
+      className="layout-content 
       "
+    >
+      <Row
+        className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
+        style={style}
       >
-        <Row
-          className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
-          style={style}
-        >
-          {/* Only visible on medium and larger screens */}
-          <Col sizeMd="3" className="ion-hide-md-down layout-col">
-            {leftSidebar}
-          </Col>
+        {/* Only visible on medium and larger screens */}
+        <Col sizeMd="3" className="ion-hide-md-down layout-col">
+          {leftSidebar}
+        </Col>
 
-          {/* Always visible, but spans more columns on small screens */}
-          <Col sizeSm="12" sizeMd="6" className="layout-col">
-            {children}
-          </Col>
-          {/* Only visible on medium and larger screens */}
-          <Col sizeMd="3" className=" ion-hide-md-down layout-col">
-            <div style={{ width: "100%", maxWidth: "300px" }}>
-              {rightSidebar}
-            </div>
-          </Col>
-        </Row>
-      </Content>
-    </Page>
+        {/* Always visible, but spans more columns on small screens */}
+        <Col sizeSm="12" sizeMd="6" className="layout-col">
+          {children}
+        </Col>
+        {/* Only visible on medium and larger screens */}
+        <Col sizeMd="3" className=" ion-hide-md-down layout-col">
+          <div style={{ width: "100%", maxWidth: "300px" }}>{rightSidebar}</div>
+        </Col>
+      </Row>
+    </Content>
   );
 };
 

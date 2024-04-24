@@ -325,8 +325,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
-
   EditProfile = gql`
     mutation editProfile(
       $picture: String
@@ -440,8 +438,6 @@ export const Login = gql`
                         }
             }
         }`,
-  // working
-
   GetSavedList = gql`
     query savedList($userId: String!, $page: Float) {
       savedList(userId: $userId, page: $page, pageSize: 5) {
@@ -611,8 +607,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
-
   ToggleView = gql`
     mutation toggleView($card: String!) {
       toggleView(card: $card) {
@@ -654,8 +648,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
-
   SendConnectRequest = gql`
     mutation sendConnectRequest($receiverId: String!) {
       sendConnectRequest(receiverId: $receiverId) {
@@ -971,8 +963,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
-
   GetInterviewExperience = gql`
     query getInterviewExperience($unitId: Float!, $page: Int, $pageSize: Int) {
       getInterviewExperience(
@@ -1122,7 +1112,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
   CreateOrgSpace = gql`
     mutation createOrgSpace($name: String!, $description: String) {
       createOrgSpace(name: $name, description: $description) {
@@ -1376,8 +1365,6 @@ export const Login = gql`
       }
     }
   `,
-  // working
-
   GenerateSpaceNewsFeed = gql`
     query GenerateSpaceNewsFeed($limit: Int, $page: Int) {
       generateSpaceNewsFeedSystem(limit: $limit, page: $page) {
@@ -1603,7 +1590,7 @@ export const Login = gql`
   InvitationRequestHandler = gql`
     query requestToJoinOrg($orgId: ID!, $status: String!, $email: String!) {
       requestToJoinOrg(orgId: $orgId, status: $status, email: $email) {
-        
+        data
       }
     }
   `;

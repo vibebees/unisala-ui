@@ -2,12 +2,11 @@ import React from "react";
 import GoogleAuth from "../GoogleAuth";
 import SignInForm from "./SignInForm";
 import "../auth.css";
-import clsx from "clsx";
 import { Typography } from "../../../defaults";
 
 export const SignIn = () => {
   return (
-    <div className={clsx("sign-content")}>
+    <div className="sign-content">
       <Typography
         variant="h2"
         className="text-2xl font-semibold auth-start border-b-4 border-blue-500 pb-2 mb-4 w-fit"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useContext } from "react";
 import { IonRow, IonSpinner, useIonToast } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { userServer } from "../../../../datasource/servers/endpoints";
@@ -7,7 +7,10 @@ import { validateSignup } from "../../../../utils/components/validate";
 import AuthInput from "../AuthInput";
 import "../auth.css";
 import { setCache } from "../../../../utils/cache";
-export const SignUpForm = ({ setauth, setShowSignup = null }) => {
+import { AuthenticationContext } from "@features/login";
+
+export const SignUpForm = () => {
+  const { setauth } = useContext(AuthenticationContext)!;
   const [errors, seterrors] = useState<ISignupErrors>({});
   const [present, dismiss] = useIonToast();
   const [datacheck, setdatacheck] = useState(false);
@@ -27,7 +30,7 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
     code: code && code,
   });
 
-  const HandleChange = (e) => {
+  const HandleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInput((pre) => {
       return { ...pre, [name]: value };
@@ -124,7 +127,12 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
         <p
           style={{ color: "#3880ff", cursor: "pointer" }}
           onClick={() => {
-            setauth({ state: "emailVerify" });
+            setauth((prev) => {
+              return {
+                ...prev,
+                state: "emailVerify",
+              };
+            });
           }}
         >
           Forgot Password?
@@ -140,10 +148,12 @@ export const SignUpForm = ({ setauth, setShowSignup = null }) => {
 
       <IonRow
         onClick={() => {
-          setauth({ state: "signin" });
-          // if (setShowSignup) {
-          //   setShowSignup(false);
-          // }
+          setauth((prev) => {
+            return {
+              ...prev,
+              state: "signin",
+            };
+          });
         }}
         className="auth-change mt-7 inline-flex"
       >

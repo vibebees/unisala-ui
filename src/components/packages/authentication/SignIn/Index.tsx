@@ -1,26 +1,13 @@
 import React from "react";
 import GoogleAuth from "../GoogleAuth";
 import SignInForm from "./SignInForm";
-import AppleAuth from "../AppleAuth";
 import "../auth.css";
 import clsx from "clsx";
 import { Typography } from "../../../defaults";
 
-export const SignIn = ({
-  setauth,
-  auth,
-  setShowSignup = null,
-  setActiveNavDrop = () => {},
-}) => {
+export const SignIn = () => {
   return (
-    <div
-      className={clsx(
-        "sign-content",
-        auth?.state === "welcomeForm"
-          ? "opacity-0 pointer-events-none"
-          : "opacity-100 pointer-events-auto"
-      )}
-    >
+    <div className={clsx("sign-content")}>
       <Typography
         variant="h2"
         className="text-2xl font-semibold auth-start border-b-4 border-blue-500 pb-2 mb-4 w-fit"
@@ -34,7 +21,7 @@ export const SignIn = ({
             width: "234px",
           }}
         >
-          <GoogleAuth setauth={setauth} setActiveNavDrop={setActiveNavDrop} />
+          <GoogleAuth />
         </div>
       </div>
       {/* <div className="auth-button">
@@ -46,11 +33,7 @@ export const SignIn = ({
           or Sign in with Email!
         </Typography>
       </div>
-      <SignInForm
-        setauth={setauth}
-        setActiveNavDrop={setActiveNavDrop}
-        setShowSignup={setShowSignup}
-      />
+      <SignInForm />
     </div>
   );
 };

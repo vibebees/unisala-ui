@@ -4,7 +4,7 @@ import SignUpForm from "./SignUpForm";
 import "../auth.css";
 import { Typography } from "../../../defaults/index";
 
-export const SignUp = ({ setauth, setShowSignup = null }) => {
+export const SignUp = () => {
   const params = new URLSearchParams(window.location.search);
   const isInvited = params.get("org");
   return (
@@ -24,7 +24,7 @@ export const SignUp = ({ setauth, setShowSignup = null }) => {
               width: "234px",
             }}
           >
-            <GoogleAuth setauth={setauth} />
+            <GoogleAuth />
           </div>
           <div className="auth-or">
             <p className="auth-or-p">OR</p>
@@ -35,7 +35,7 @@ export const SignUp = ({ setauth, setShowSignup = null }) => {
         <AppleAuth />
       </div> */}
 
-      <SignUpForm setauth={setauth} setShowSignup={setShowSignup} />
+      {/* <SignUpForm /> */}
     </div>
   );
 };

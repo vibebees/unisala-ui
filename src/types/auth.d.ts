@@ -1,4 +1,19 @@
 /* eslint-disable no-unused-vars */
+
+interface IAuth {
+  state:
+    | "signin"
+    | "signup"
+    | "SignUpVerification"
+    | "emailVerify"
+    | "ForgotPasswordVerification"
+    | "resetPassword"
+    | "userNotVerified"
+    | "welcomeForm";
+  email: string | null;
+  code: number;
+}
+
 interface ILoginInput {
   email: string;
   password: string;

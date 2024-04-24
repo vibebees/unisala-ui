@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState, useContext } from "react";
 import { IonSpinner, IonRow, useIonToast } from "@ionic/react";
 import { Typography, Button } from "@components/defaults";
 import AuthInput from "../AuthInput";
@@ -9,12 +9,10 @@ import { LoginMutation } from "src/types/gqlTypes/graphql";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "@context/AuthContext";
 import { useHistory } from "react-router";
+import { AuthenticationContext } from "@features/login";
 
-const SignInForm = ({
-  setauth,
-  setShowSignup = null,
-  setActiveNavDrop = () => {},
-}) => {
+const SignInForm = () => {
+  const { setauth } = useContext(AuthenticationContext)!;
   const params = new URLSearchParams(window.location.search);
   const { UpdateAuth, authenticated, user } = useAuth();
   const history = useHistory();
@@ -23,9 +21,6 @@ const SignInForm = ({
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
-    console.log("authenticated", authenticated);
-    console.log("user", user);
-
     if (authenticated) {
       history.push("/");
     }
@@ -124,7 +119,12 @@ const SignInForm = ({
         <Typography
           style={{ color: "#3880ff", cursor: "pointer" }}
           onClick={() => {
-            setauth({ state: "emailVerify" });
+            setauth((prev) => {
+              return {
+                ...prev,
+                state: "emailVerify",
+              };
+            });
           }}
           variant="p"
         >
@@ -143,8 +143,12 @@ const SignInForm = ({
 
       <IonRow
         onClick={() => {
-          setauth({ state: "signup" });
-          // if (setShowSignup) setShowSignup(true);
+          setauth((prev) => {
+            return {
+              ...prev,
+              state: "signup",
+            };
+          });
         }}
         className="auth-change mt-8 inline-flex "
       >

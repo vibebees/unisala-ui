@@ -269,8 +269,10 @@ export const Login = gql`
   DeleteComment = gql`
     mutation deleteComment($id: String!) {
       deleteComment(id: $id) {
-        success
-        message
+        status {
+          success
+          message
+        }
       }
     }
   `,
@@ -323,6 +325,8 @@ export const Login = gql`
       }
     }
   `,
+  // working
+
   EditProfile = gql`
     mutation editProfile(
       $picture: String
@@ -417,23 +421,23 @@ export const Login = gql`
   `,
   GetReplyList = (id, pid) =>
     gql`
-            query {
-                replyList (postId:"${id}", parentId:"${pid}") {
-                success
-                message
-                            comments {
-                            _id
-                            userId
-                            postId
-                            commentText
-                            commentImage
-                            firstName
-                            lastName
-                            username
-                            date
-                            }
-                }
-            }`,
+        query {
+            replyList (postId:"${id}", parentId:"${pid}") {
+            success
+            message
+                        comments {
+                        _id
+                        userId
+                        postId
+                        commentText
+                        commentImage
+                        firstName
+                        lastName
+                        username
+                        date
+                        }
+            }
+        }`,
   GetSavedList = gql`
     query savedList($userId: String!, $page: Float) {
       savedList(userId: $userId, page: $page, pageSize: 5) {
@@ -657,26 +661,6 @@ export const Login = gql`
       }
     }
   `,
-  userSearch = (searchString) =>
-    gql`
-    query {
-        searchUser(searchString: "${searchString}") {
-            status {
-                message
-                success
-            }
-            user{
-                _id
-                firstName
-                lastName
-                username
-                picture
-                coverPicture
-                location
-
-            }
-        }
-    }`,
   getFriends = gql`
     query getUsers {
       getUsers {
@@ -741,32 +725,32 @@ export const Login = gql`
   `,
   AddTestScore = (testScores) =>
     gql`
-            mutation addTestScore($testScores: ${testScores}) {
-                addTestScore(testScore: $testScores) {
-                status {
-                    message
-                    success
+        mutation addTestScore($testScores: ${testScores}) {
+            addTestScore(testScore: $testScores) {
+            status {
+                message
+                success
+            }
+            testScore {
+                scores {
+                SAT_SCORE {
+                    maths
+                    english
                 }
-                testScore {
-                    scores {
-                    SAT_SCORE {
-                        maths
-                        english
-                    }
-                    ACT_SCORE {
-                        maths
-                        english
-                    }
-                    IELTS_SCORE {
-                        score
-                    }
-                    TOEFL_SCORE {
-                        score
-                    }
-                    }
+                ACT_SCORE {
+                    maths
+                    english
+                }
+                IELTS_SCORE {
+                    score
+                }
+                TOEFL_SCORE {
+                    score
                 }
                 }
-            }`,
+            }
+            }
+        }`,
   SendConnectRequest = gql`
     mutation sendConnectRequest($receiverId: String!) {
       sendConnectRequest(receiverId: $receiverId) {

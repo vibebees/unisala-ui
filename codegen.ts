@@ -6,7 +6,7 @@ const config: CodegenConfig = {
   ],
   documents: "./src/datasource/graphql/user",
   generates: {
-    "./src/types/": {
+    "./src/types/gqlTypes/": {
       preset: "client",
     },
   },

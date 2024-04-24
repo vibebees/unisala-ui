@@ -1,21 +1,19 @@
-import React, { ChangeEvent, useContext } from "react";
+import React, { ChangeEvent, FormEvent, useContext } from "react";
 import { IonRow, IonSpinner, useIonToast } from "@ionic/react";
-import { useEffect, useState } from "react";
-import { userServer } from "../../../../datasource/servers/endpoints";
-import { registerUser } from "../../../../datasource/store/action/authenticationAction";
+import { useState } from "react";
 import { validateSignup } from "../../../../utils/components/validate";
 import AuthInput from "../AuthInput";
 import "../auth.css";
-import { setCache } from "../../../../utils/cache";
 import { AuthenticationContext } from "@features/login";
+import { useMutation } from "@apollo/client";
+import { Register } from "@datasource/graphql/user";
+import { RegisterMutation } from "src/types/gqlTypes/graphql";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
 
 export const SignUpForm = () => {
   const { setauth } = useContext(AuthenticationContext)!;
   const [errors, seterrors] = useState<ISignupErrors>({});
   const [present, dismiss] = useIonToast();
-  const [datacheck, setdatacheck] = useState(false);
-  const [save, setsave] = useState(false);
-
   const searchParams = new URLSearchParams(window.location.search);
   const spaceOrgName = searchParams.get("org");
   const code = searchParams.get("code");
@@ -27,7 +25,29 @@ export const SignUpForm = () => {
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
-    code: code && code,
+    code: code,
+  });
+
+  const [RegisterUser, { loading }] = useMutation<RegisterMutation>(Register, {
+    context: { server: USER_SERVICE_GQL },
+    variables: {
+      email: input.email,
+      password: input.password,
+      spaceOrgName: input.spaceOrgName,
+      type: input.type,
+      code: input.code,
+    },
+    onCompleted: (data) => {
+      console.log("signup data", data);
+    },
+    onError: (error) => {
+      present({
+        message: error.message,
+        duration: 3000,
+        color: "danger",
+        buttons: [{ text: "X", handler: () => dismiss() }],
+      });
+    },
   });
 
   const HandleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +57,6 @@ export const SignUpForm = () => {
     });
 
     // if user changes the mail from the invitation one then it will not be invited
-
     if (name === "email" && value !== email) {
       setInput((pre) => {
         return { ...pre, type: null, spaceOrgName: null };
@@ -48,33 +67,15 @@ export const SignUpForm = () => {
       [name]: "",
     });
   };
-  const submitHandler = (e) => {
+  const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-    seterrors(validateSignup(input));
-    setdatacheck(true);
+    const validateErrors = validateSignup(input);
+    if (Object.keys(validateErrors).length === 0) {
+      RegisterUser();
+    } else {
+      seterrors(validateErrors);
+    }
   };
-  // dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (Object.keys(errors).length === 0 && datacheck) {
-  //     setsave(true);
-  //     setCache("email", input.email);
-  //     // dispatch(
-  //     //   registerUser({
-  //     //     userServer: userServer,
-  //     //     input,
-  //     //     setdatacheck,
-  //     //     setauth,
-  //     //     setsave,
-  //     //     present,
-  //     //     dismiss,
-  //     //   })
-  //     // );
-  //     if (spaceOrgName) {
-  //       setCache("org", spaceOrgName);
-  //     }
-  //   }
-  // }, [errors]);
 
   return (
     <form onSubmit={submitHandler}>
@@ -143,7 +144,7 @@ export const SignUpForm = () => {
         onSubmit={submitHandler}
         className="block text-center bg-blue-600 w-full outline-none text-sm text-white uppercase rounded-2xl tracking-wide py-2 text-opacity-90 hover:opacity-90"
       >
-        {save ? <IonSpinner></IonSpinner> : "Register"}
+        {loading ? <IonSpinner></IonSpinner> : "Register"}
       </button>
 
       <IonRow

@@ -45,6 +45,18 @@
         }
       }, { once: true });
     });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+    // Wait for the main component to render
+    const rootEl = document.getElementById('root');
+    rootEl.addEventListener('DOMNodeInserted', event => {
+      if (event.target.id === 'root' && rootEl.childElementCount > 0) {
+        // Hide the loading screen
+        document.getElementById('loading-screen').style.display = 'none';
+        // Show the React app
+        document.getElementById('root').style.display = 'block';
+      }
+    }, { once: true });
   </script>
 </body>
 </html>

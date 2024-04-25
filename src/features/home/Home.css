@@ -167,7 +167,7 @@
 
 .profileCard::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: #d5d5d5;
+    background-color: #ffffff00;
     cursor: grab;
 }
 

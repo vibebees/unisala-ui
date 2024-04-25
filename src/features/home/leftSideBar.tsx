@@ -7,6 +7,8 @@ const TopSpaces = lazy(
   () => import("@components/packages/TopSpaces/TopSpaces")
 );
 
+const TopOrgs = lazy(() => import("@components/packages/TopOrg/TopOrg"));
+
 const LeftSideBar = () => {
   const { authenticated, user } = useAuth();
 
@@ -19,14 +21,14 @@ const LeftSideBar = () => {
         top: "0px",
         overflow: "auto",
       }}
-      className="profileCard"
+      className="profileCard ion-no-margin ion-no-padding"
     >
       {authenticated ? (
         <>
-          <Col className="my-0">
-            <Card className="">
+          <Col className="my-0 ion-no-margin ion-no-padding">
+            <Card className=" BorderCard ">
               <div className="aside-profile pt-20">
-                <div className="w-24 h-24 rounded-full overflow-hidden   !border-[7px] !border-neutral-200">
+                <div className="w-24 h-24 rounded-full overflow-hidden  !border-[7px] !border-neutral-200">
                   <Avatar
                     username={user?.username}
                     profilePic={""}
@@ -51,7 +53,7 @@ const LeftSideBar = () => {
                 </Typography>
               </div>
             </Card>
-            <Card className="overflow-y-auto justify-center my-4 max-h-[348px]">
+            <Card className="overflow-y-auto justify-center my-4 max-h-[348px] BorderCard">
               <Typography
                 variant="h6"
                 color="dark"
@@ -71,7 +73,7 @@ const LeftSideBar = () => {
               </Link>
             </Card>
 
-            <Card className="overflow-y-auto my-4 max-h-[348px]">
+            <Card className="overflow-y-auto my-4 max-h-[348px] BorderCard">
               <Typography
                 variant="h6"
                 color="dark"
@@ -79,7 +81,9 @@ const LeftSideBar = () => {
               >
                 Top Organization
               </Typography>
-              {/* <TopOrgs topOrgs={topOrgs?.data} /> */}
+              <Suspense fallback={<IonSpinner></IonSpinner>}>
+                <TopOrgs />
+              </Suspense>
             </Card>
           </Col>
         </>

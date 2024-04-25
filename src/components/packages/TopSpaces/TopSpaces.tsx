@@ -18,9 +18,15 @@ const TopSpaces = () => {
 
   return (
     <div>
-      {!data?.getTopActiveSpaces?.spaceCategory?.length && <div>No Spaces</div>}
+      {!data?.getTopActiveSpaces?.spaceCategory && !loading && !error && (
+        <div className=" text-center text-red-700 my-6">No Spaces</div>
+      )}
 
-      {error && <div>Error fetching top spaces</div>}
+      {error && (
+        <div className="my-6 text-center  text-red-700">
+          Error fetching Top Spaces
+        </div>
+      )}
       {loading && (
         <div className="flex justify-center min-h-9">
           <IonSpinner></IonSpinner>

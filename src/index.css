@@ -9,6 +9,14 @@
 }
 
 
+@layer utilities {
+
+    .BorderCard {
+        @apply shadow-none border border-neutral-300 rounded-md
+    }
+}
+
+
 .left-container {
     width: 100%;
     max-width: 300px;

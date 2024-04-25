@@ -1153,7 +1153,7 @@ export const Login = gql`
     }
   `,
   GetTopOrgs = gql`
-    query {
+    query getTopOrgSpace {
       getTopOrgSpace {
         status {
           success

@@ -1,69 +1,66 @@
-import { useState } from "react"
-import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react"
-import axios from "axios"
-import AuthInput from "../../AuthInput"
-import "../../auth.css"
-import {userServer} from "../../../../../datasource/servers/endpoints"
+import React, { ChangeEvent, FormEvent, useState, useContext } from "react";
+import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react";
+import { SendVerficationMailMutation } from "src/types/gqlTypes/graphql";
+import { SendVerificationMail } from "@datasource/graphql/user";
+import { useMutation } from "@apollo/client";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import AuthInput from "../../AuthInput";
+import "../../auth.css";
+import { AuthenticationContext } from "@features/login";
 
-export const EmailVerify = ({ setauth }) => {
-  const [present, dismiss] = useIonToast()
-  const [loading, setLoading] = useState(false)
+export const EmailVerify = () => {
+  const { setauth } = useContext(AuthenticationContext)!;
+  const [present, dismiss] = useIonToast();
+  const [email, setEmail] = useState("");
 
-  const [email, setEmail] = useState("")
-  const HandleChange = (e) => {
-    setEmail(e.target.value)
-  }
-
-  const submitHandler = (e) => {
-    e.preventDefault()
-  }
-
-  const receiveCode = () => {
-    if (!email) {
-      return present({
-        duration: 2000,
-        message: "Enter valid email",
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios"
-      })
-    }
-    setLoading(true)
-    axios
-      .post(userServer + `/sendVerficationMail`, { email })
-      .then((res) => {
-        setLoading(false)
-        if (res.data.success) {
-          present({
-            duration: 2000,
-            message: res.data.message,
-            buttons: [{ text: "X", handler: () => dismiss() }],
-            color: "primary",
-            mode: "ios"
-          })
-          setauth({ state: "ForgotPasswordVerification", email })
-        }
-        if (!res.data.success) {
-          present({
-            duration: 2000,
-            message: res.data.message,
-            buttons: [{ text: "X", handler: () => dismiss() }],
-            color: "primary",
-            mode: "ios"
-          })
-        }
-      })
-      .catch((err) => {
-        setLoading(false)
+  const [sendVerificationMail, { loading }] =
+    useMutation<SendVerficationMailMutation>(SendVerificationMail, {
+      context: { server: USER_SERVICE_GQL },
+      variables: {
+        email: email,
+      },
+      onCompleted: () => {
         present({
-          duration: 2000,
-          message: err.response.data.message,
+          message: "Verification Code has been sent to your email",
+          duration: 3000,
+          color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios"
-        })
-      })
-  }
+        });
+        setauth((prev) => {
+          return {
+            ...prev,
+            email: email,
+            state: "ForgotPasswordVerification",
+          };
+        });
+      },
+      onError: (error) => {
+        present({
+          message: error.message,
+          duration: 3000,
+          color: "danger",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+    });
+
+  const HandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault();
+    if (email === "") {
+      present({
+        message: "Email is required",
+        duration: 3000,
+        color: "danger",
+        buttons: [{ text: "X", handler: () => dismiss() }],
+      });
+      return;
+    }
+    sendVerificationMail();
+  };
 
   return (
     <form onSubmit={submitHandler} className="sign-content">
@@ -78,6 +75,7 @@ export const EmailVerify = ({ setauth }) => {
           type="text"
           name="email"
           value={email}
+          validation={null}
         />
       </div>
       <IonButton
@@ -86,11 +84,11 @@ export const EmailVerify = ({ setauth }) => {
         className="ion-margin-top"
         expand="full"
         shape="round"
-        onClick={receiveCode}
+        onClick={submitHandler}
       >
         {loading ? <IonSpinner></IonSpinner> : "Next"}
       </IonButton>
     </form>
-  )
-}
-export default EmailVerify
+  );
+};
+export default EmailVerify;

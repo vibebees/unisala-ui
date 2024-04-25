@@ -14,7 +14,7 @@ import { Typography } from "@components/defaults";
 import AuthInput from "../AuthInput";
 
 const SignUpVerification = () => {
-  const { auth } = useContext(AuthenticationContext)!;
+  const { auth, setauth } = useContext(AuthenticationContext)!;
   const [present, dismiss] = useIonToast();
 
   const [input, setInput] = useState({
@@ -42,6 +42,17 @@ const SignUpVerification = () => {
           duration: 3000,
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+        setauth((prev) => {
+          if (prev.state === "ForgotPasswordVerification") {
+            return {
+              ...prev,
+              state: "resetPassword",
+            };
+          }
+          return {
+            ...prev,
+          };
         });
       },
       onError: (error) => {

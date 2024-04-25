@@ -21,12 +21,7 @@ const SignUpVerification = lazy(
       "@components/packages/authentication/Verification/SignUpVerification"
     )
 );
-const ForgotPasswordVerification = lazy(
-  () =>
-    import(
-      "@components/packages/authentication/Verification/ForgotPassword/ForgotPasswordVerification"
-    )
-);
+
 const ResetPassword = lazy(
   () =>
     import(
@@ -74,11 +69,11 @@ export const Login = () => {
             ) : auth.state === "SignUpVerification" ? (
               <SignUpVerification />
             ) : auth.state === "emailVerify" ? (
-              <EmailVerify setauth={setauth} />
+              <EmailVerify />
             ) : auth.state === "ForgotPasswordVerification" ? (
-              <ForgotPasswordVerification setauth={setauth} auth={auth} />
+              <SignUpVerification />
             ) : auth.state === "resetPassword" ? (
-              <ResetPassword setauth={setauth} auth={auth} />
+              <ResetPassword />
             ) : auth.state === "userNotVerified" ? (
               <UserNotVerified setauth={setauth} auth={auth} />
             ) : auth.state === "welcomeForm" ? (

@@ -1,6 +1,6 @@
 import React from "react";
 import { LandingPageTemplate } from "../features/landingpage";
-import Layout from "../layouts/layout";
+import Layout from "../layouts/FreeLayout";
 
 export default function LandingPage() {
   // Dummy data for the list

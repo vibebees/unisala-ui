@@ -10,7 +10,7 @@ import {
   IonAvatar,
   IonLabel,
 } from "@ionic/react";
-import Layout from "../layouts/layout";
+import Layout from "../layouts/FreeLayout";
 
 const HomePage: React.FC = () => {
   // Dummy data for the list

@@ -1,68 +1,112 @@
-import React from "react";
-import { Avatar, Card, Text } from "../../components/defaults";
-import { userInfo } from "../../utils/cache";
-import { AvatarProfile } from "../../components/packages/Avatar";
-import UserCard from "../../components/packages/userCard";
-import { all } from "axios";
+import React, { lazy, Suspense } from "react";
+import { Avatar, Card, Col, Typography } from "../../components/defaults";
 import { Link } from "react-router-dom";
-import { SpaceReference } from "../../components/packages/spaceReference";
-export const LeftSideBar = (
-  {
-    // activeTab,
-    // setActiveTab,
-    // unisalaImg,
-    // profileData,
-    // loggedIn,
-    // spaces,
-    // orgs,
-  }
-) => {
-  let user = userInfo;
-  const radius = 45;
-  const dashArray = radius * Math.PI * 2;
-  const dataOffset = dashArray - (dashArray * 0) / 100;
+import { useAuth } from "@context/AuthContext";
+import { IonSpinner } from "@ionic/react";
+const TopSpaces = lazy(
+  () => import("@components/packages/TopSpaces/TopSpaces")
+);
 
-  const GroupReference = ({ data, reference = "space" }) => {
-    let to = reference === "space" ? "Spaces" : "Orgs";
-    let spaceCard = reference === "space" ? true : false;
-    return (
-      <Card>
-        <Text color="dark">
-          <h6 className="text-center my-2 font-semibold">Top {to}</h6>
-        </Text>
+const LeftSideBar = () => {
+  const { authenticated, user } = useAuth();
 
-        <SpaceReference references={data} spaceCard={spaceCard} />
-        <Link to="/space" style={{ marginTop: "120px" }}>
-          <Text
-            className="max-w-[250px] text-[#3880FF] text-center  font-semibold"
-            fill="solid"
+  return (
+    <Col
+      size="auto"
+      style={{
+        height: "90vh",
+        position: "sticky",
+        top: "0px",
+        overflow: "auto",
+      }}
+      className="profileCard"
+    >
+      {authenticated ? (
+        <>
+          <Col className="my-0">
+            <Card className="">
+              <div className="aside-profile pt-20">
+                <div className="w-24 h-24 rounded-full overflow-hidden   !border-[7px] !border-neutral-200">
+                  <Avatar
+                    username={user?.username}
+                    profilePic={""}
+                    // size="medium"
+                  />
+                </div>
+              </div>
+              <div className="mt-3 mb-6">
+                <Typography
+                  variant="h6"
+                  className="text-center text-sm font-bold"
+                  color="dark"
+                >
+                  {user?.firstName + " " + user?.lastName}
+                </Typography>
+                <Typography
+                  color="medium"
+                  variant="p"
+                  className="text-sm text-center font-normal"
+                >
+                  @{user?.username}
+                </Typography>
+              </div>
+            </Card>
+            <Card className="overflow-y-auto justify-center my-4 max-h-[348px]">
+              <Typography
+                variant="h6"
+                color="dark"
+                className="text-center  w-full my-2 font-semibold"
+              >
+                Top Spaces
+              </Typography>
+
+              <Suspense fallback={<IonSpinner></IonSpinner>}>
+                <TopSpaces />
+              </Suspense>
+
+              <Link to="/space" style={{ marginTop: "120px" }}>
+                <Typography className="max-w-[250px] py-4 text-[#3880FF] text-center  font-semibold">
+                  Browse More Spaces
+                </Typography>
+              </Link>
+            </Card>
+
+            <Card className="overflow-y-auto my-4 max-h-[348px]">
+              <Typography
+                variant="h6"
+                color="dark"
+                className="text-center my-2 font-semibold"
+              >
+                Top Organization
+              </Typography>
+              {/* <TopOrgs topOrgs={topOrgs?.data} /> */}
+            </Card>
+          </Col>
+        </>
+      ) : (
+        <>
+          <Card
             style={{
-              "--background": "white",
-              "--background-hover": "#eee",
+              maxWidth: "250px",
             }}
           >
-            <h1 className="py-4">Browse More {to}</h1>
-          </Text>
-        </Link>
-      </Card>
-    );
-  };
-  let topSpace = () => {
-    return (
-      <>
-        {/* <UserCard
-          key={1}
-          profileBanner={user.coverPicture}
-          profileImg={user.profileImg}
-          name={user.name}
-          username={user.username}
-          loaction={user.loaction}
-          oneLineBio={user.oneLineBio}
-        ></UserCard> */}
-        {/* <GroupReference data={spaces?.spaceCategory} reference="space" />
-        <GroupReference data={orgs?.data} reference="org" /> */}
-      </>
-    );
-  };
-  return topSpace();
+            <img src={""} alt="unisala" />
+            <h5
+              className="black-text"
+              style={{
+                textAlign: "center",
+                fontSize: "1.2rem",
+                lineHeight: "26px",
+                padding: "5px",
+              }}
+            >
+              If studying abroad is your dream, making it simple is ours! ✅
+            </h5>
+          </Card>
+        </>
+      )}
+    </Col>
+  );
 };
+
+export default LeftSideBar;

@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../../layouts/layout";
+import Layout from "../../layouts/FreeLayout";
 import NetworkTemplate from "./template";
 import Sidebar from "./sidebar";
 const NetworkPage = () => {

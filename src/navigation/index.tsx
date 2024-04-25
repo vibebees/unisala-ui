@@ -80,7 +80,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
 
       <Tabs>
         <RouterOutlet>
-          <PageRoute allProps={{}} />
+          <PageRoute />
         </RouterOutlet>
 
         <TabBar

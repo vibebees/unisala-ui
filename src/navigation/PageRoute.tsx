@@ -51,101 +51,66 @@ const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 //   </>
 // )
 
-const orgRoutes = () => (
-  <>
-    <Switch>
-      {/* exact is important here for /org/:category/:admin/:requestor/:orgId/:role*/}
-    </Switch>
-  </>
-);
-
-// const universityRoutes = () => (
-// <>
-
-//     </>
-// )
-export const PageRoute = ({ allProps }) => {
-  const test = useSelector((state) => state?.userProfile),
-    authenticated = getCache("refreshToken") ? true : false;
+export const PageRoute = () => {
+  const authenticated = true;
   return (
     <Suspense fallback={<PreLoader />}>
-      <Switch>
-        <Route exact path="/">
-          {authenticated ? <Redirect to="/feed" /> : <LandingPage />}
-        </Route>
-        <Route path="/feed">
-          {authenticated ? <HomePage /> : <Redirect to="/" />}
-        </Route>
-        <Route path="/home">
-          {authenticated ? <HomePage /> : <Redirect to="/" />}
-        </Route>
-        {/* Protected routes example */}
-        <Route path="/profile">
-          {authenticated ? <ProfilePage /> : <Redirect to="/login" />}
-        </Route>
-        <Route path="/standard">
-          <Standard />
-        </Route>
+      <Route exact path="/" component={HomePage} />
+      <Route path="/feed">
+        {authenticated ? <HomePage /> : <Redirect to="/" />}
+      </Route>
+      <Route path="/home">
+        {authenticated ? <HomePage /> : <Redirect to="/" />}
+      </Route>
+      {/* Protected routes example */}
+      <Route path="/profile">
+        {authenticated ? <ProfilePage /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/standard">
+        <Standard />
+      </Route>
 
-        <Route exact path="/thread/:id">
-          <ThreadDetail />
-        </Route>
+      <Route exact path="/thread/:id">
+        <ThreadDetail />
+      </Route>
 
-        <Route path="/@/:username" exact>
-          <ProfilePage />
-        </Route>
+      <Route path="/@/:username" exact>
+        <ProfilePage />
+      </Route>
 
-        <Route path="/search" exact>
-          <Discover />
-        </Route>
+      <Route path="/search" exact>
+        <Discover />
+      </Route>
 
-        {/* <Route path="/register" exact>
-          <AuthPage allProps={{ ...allProps, routeState: "signup" }} />
-        </Route> */}
+      <Route path="/login" exact>
+        <AuthPage />
+      </Route>
+      {/* <Route path="/space" exact></Route> */}
+      {/* <Route path="/space/:category" exact>
+        <SpacePage />
+      </Route> */}
 
-        <Route path="/login" exact>
-          <AuthPage allProps={{ ...allProps, routeState: "signin" }} />
-        </Route>
-        <Route path="/space" exact>
-          {/* <SpaceIndex /> */}
-        </Route>
-        <Route path="/space/:category" exact>
-          <SpacePage />
-        </Route>
+      <Route exact path="/university/:id">
+        <UniversityPage />
+      </Route>
 
-        <Route exact path="/university/:id">
-          <UniversityPage />
-        </Route>
-        {/* <Route path="/messages" exact>
-          <Chats />
-        </Route> */}
-        {/* <Route path="/messages/view-chat/:contact_id" exact>
-          <Messages />
-        </Route>
-        */}
-        <Route path="/mynetwork" exact>
-          <MyNetwork />
-        </Route>
-        <Route path="/messages" exact>
-          <Messages />
-        </Route>
-        <Route path="/messages/:friendUserName" exact>
-          <Messages />
-        </Route>
+      <Route path="/mynetwork" exact>
+        <MyNetwork />
+      </Route>
+      <Route path="/messages" exact>
+        <Messages />
+      </Route>
+      <Route path="/messages/:friendUserName" exact>
+        <Messages />
+      </Route>
 
-        <Route path="/org/:category" exact>
-          <Org />
-        </Route>
-        <Route path="/org/:category/:admin/:requestor/:orgId/:role">
-          <Org />
-        </Route>
-
-        {/* More routes */}
-        {/* Fallback route for 404 Not Found */}
-        <Route path="*">
-          <PageNotFound />
-        </Route>
-      </Switch>
+      {/* <Route path="/org/:category" exact>
+        <Org />
+      </Route> */}
+      {/* <Route path="/org/:category/:admin/:requestor/:orgId/:role">
+        <Org />
+      </Route> */}
+      <Route component={PageNotFound} />
     </Suspense>
   );
 };

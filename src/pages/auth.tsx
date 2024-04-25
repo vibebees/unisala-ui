@@ -1,5 +1,5 @@
 import React from "react";
-import LayoutSplit from "@layouts/LayoutSplit";
+import LayoutSplit from "@layouts/FixedLayout";
 import LoginPage from "../features/login";
 const AuthPage = () => {
   return (

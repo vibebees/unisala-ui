@@ -12,6 +12,8 @@ import {
 } from "../components/defaults";
 
 import "./index.css";
+import { IonPage, IonCard } from "@ionic/react";
+import { Test } from "vitest";
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;
@@ -75,36 +77,45 @@ let mainContentStyle = {
   },
   mainRowStyle = { maxWidth: "1128px", width: "100%", flexWrap: "nowrap" };
 
-const LayoutSplit: React.FC<LayoutProps> = ({
+const Layout: React.FC<LayoutProps> = ({
   leftSidebar = leftSidebarDefault,
   children,
   rightSidebar = rightSidebarDefault,
 }) => {
   return (
-    <Content
-      className="layout-content 
+    <Page style={{ backgroundColor: "#F0F2F5" }}>
+      <Content
+        className="layout-content 
       "
-    >
-      <Row
-        className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
-        style={style}
       >
-        {/* Only visible on medium and larger screens */}
-        <Col sizeMd="3" className="ion-hide-md-down layout-col">
-          {leftSidebar}
-        </Col>
+        <Row
+          className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
+          style={style}
+        >
+          {/* Only visible on medium and larger screens */}
+          {/* <Col sizeMd="3" className="ion-hide-md-down layout-col"> */}
+          <div id="left-sidebar" className="w-fit shrink-0">
+            {leftSidebar}
+          </div>
+          {/* </Col> */}
 
-        {/* Always visible, but spans more columns on small screens */}
-        <Col sizeSm="12" sizeMd="6" className="layout-col">
-          {children}
-        </Col>
-        {/* Only visible on medium and larger screens */}
-        <Col sizeMd="3" className=" ion-hide-md-down layout-col">
-          <div style={{ width: "100%", maxWidth: "300px" }}>{rightSidebar}</div>
-        </Col>
-      </Row>
-    </Content>
+          {/* Always visible, but spans more columns on small screens */}
+          {/* <Col sizeSm="12" sizeMd="6" className="layout-col"> */}
+          <div className="w-full ">{children}</div>
+          {/* </Col> */}
+          {/* Only visible on medium and larger screens */}
+          {/* <Col sizeMd="3" className=" ion-hide-md-down layout-col">
+            <div style={{ width: "100%", maxWidth: "300px" }}></div>
+          </Col> */}
+          <div className="">
+            <div id="right-sidebar" className="w-fit shrink-0">
+              {rightSidebar}
+            </div>
+          </div>
+        </Row>
+      </Content>
+    </Page>
   );
 };
 
-export default LayoutSplit;
+export default Layout;

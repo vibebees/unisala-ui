@@ -1610,8 +1610,45 @@ export const Login = gql`
         }
       }
     }
+  `,
+  GetAllPostBySpaceCategoryID = gql`
+    query getAllPostBySpaceCategoryID(
+      $id: ID!
+      $pageSize: Int
+      $page: Int
+      $limit: Int
+    ) {
+      getAllPostBySpaceCategoryID(
+        id: $id
+        pageSize: $pageSize
+        page: $page
+        limit: $limit
+      ) {
+        status {
+          success
+          message
+        }
+        data {
+          _id
+          postText
+          postImage
+          date
+          upVoteCount
+          postCommentsCount
+          upVoted
+          user {
+            _id
+            firstName
+            lastName
+            username
+            picture
+          }
+        }
+      }
+    }
   `;
-// InvitationRequestHandler = gql`
+
+// InvitationRequestHandler = gql`;
 //   query requestToJoinOrg($orgId: ID!, $status: String!, $email: String!) {
 //     requestToJoinOrg(orgId: $orgId, status: $status, email: $email) {
 //       data

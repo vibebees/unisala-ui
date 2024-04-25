@@ -1,6 +1,6 @@
 import React from "react";
 import University from "../features/university";
-import Layout from "../layouts/layout";
+import Layout from "../layouts/FreeLayout";
 import {
   schoolOutline,
   cashOutline,

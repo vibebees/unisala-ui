@@ -2,7 +2,7 @@ import { useState } from "react"
 import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react"
 import axios from "axios"
 import "../auth.css"
-import {userServer} from "../../../../datasource/servers/endpoints"
+import {userServer} from "@datasource/servers/endpoints"
 
 export const UserNotVerified = ({ setauth, auth }) => {
   const { email } = auth

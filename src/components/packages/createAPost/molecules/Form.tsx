@@ -11,9 +11,9 @@ import {
   GetAllPostBySpaceCategoryID,
   GetSpaceEvents,
   getNewsFeed,
-} from "../../../../datasource/graphql/user";
-import { userServer } from "../../../../datasource/servers/endpoints";
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
+} from "@datasource/graphql/user";
+import { userServer } from "@datasource/servers/endpoints";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { Typography } from "../../../defaults";
 import { Button, Label, useIonToast } from "../../../defaults/index";
 import {

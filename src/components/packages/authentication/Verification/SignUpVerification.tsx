@@ -1,6 +1,5 @@
 import React, { useState, useContext, FormEvent, ChangeEvent } from "react";
-import { useIonToast } from "@ionic/react";
-import { IonSpinner } from "@ionic/react";
+import { useIonToast, IonSpinner } from "@ionic/react";
 import "../auth.css";
 import {
   SendVerficationMailMutation,

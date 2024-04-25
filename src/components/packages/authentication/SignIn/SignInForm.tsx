@@ -3,7 +3,7 @@ import { IonSpinner, useIonToast } from "@ionic/react";
 import { Typography, Button, Row } from "@components/defaults";
 import AuthInput from "../AuthInput";
 import { Login } from "@datasource/graphql/user";
-import { validateSignIn } from "../../../../utils/components/validate";
+import { validateSignIn } from "@utils/components/validate";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { LoginMutation } from "src/types/gqlTypes/graphql";
 import { useMutation } from "@apollo/client";

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, useContext } from "react";
 import { IonRow, IonSpinner, useIonToast } from "@ionic/react";
 import { useState } from "react";
-import { validateSignup } from "../../../../utils/components/validate";
+import { validateSignup } from "@utils/components/validate";
 import AuthInput from "../AuthInput";
 import "../auth.css";
 import { AuthenticationContext } from "@features/login";

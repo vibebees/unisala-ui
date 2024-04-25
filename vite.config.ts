@@ -2,9 +2,11 @@ import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import path from "path";
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  sourcemap: true,
   resolve: {
     alias: {
       "@datasource": path.resolve(__dirname, "./src/datasource"),
@@ -18,8 +20,6 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
   esbuild: {
-    // loader: "jsx",
-    // include: /src\/.*\.jsx?$/,
     loader: "tsx",
     include: /src\/.*\.[tj]sx?$/,
     exclude: [],
@@ -29,6 +29,10 @@ export default defineConfig({
       include: ["**/*.jsx", "**/*.js"],
     }),
     legacy(),
+    visualizer({
+      open: true,  // Automatically opens the report in your web browser
+      filename: 'bundle-analysis.html'  // Specifies the file name for the report
+    })
   ],
   test: {
     globals: true,

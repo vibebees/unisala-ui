@@ -37,8 +37,14 @@ export const SignUpForm = () => {
       type: input.type,
       code: input.code,
     },
-    onCompleted: (data) => {
-      console.log("signup data", data);
+    onCompleted: () => {
+      setauth((prev) => {
+        return {
+          ...prev,
+          email: input.email,
+          state: "SignUpVerification",
+        };
+      });
     },
     onError: (error) => {
       present({
@@ -139,6 +145,7 @@ export const SignUpForm = () => {
           Forgot Password?
         </p>
       </div>
+      <br />
       <button
         type="submit"
         onSubmit={submitHandler}

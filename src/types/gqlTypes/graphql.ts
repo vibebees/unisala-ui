@@ -1107,15 +1107,15 @@ export type ResStatus = {
   success?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type ResisterResponseQuery = {
-  __typename?: 'ResisterResponseQuery';
-  status?: Maybe<ResStatus>;
-};
-
 export type Response = {
   __typename?: 'Response';
   message?: Maybe<Scalars['String']['output']>;
   success?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type ResponseQuery = {
+  __typename?: 'ResponseQuery';
+  status?: Maybe<ResStatus>;
 };
 
 export type ResponseStatus = {
@@ -1624,6 +1624,18 @@ export type TestScoreSchema = {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type TokenQuery = {
+  __typename?: 'TokenQuery';
+  accessToken?: Maybe<Scalars['String']['output']>;
+  refreshToken?: Maybe<Scalars['String']['output']>;
+};
+
+export type TokenResponseQuery = {
+  __typename?: 'TokenResponseQuery';
+  data?: Maybe<TokenQuery>;
+  status?: Maybe<ResStatus>;
+};
+
 export type TopInterview = {
   __typename?: 'TopInterview';
   _id?: Maybe<Scalars['String']['output']>;
@@ -2004,13 +2016,16 @@ export type RootMutation = {
   login?: Maybe<LoginResponseQuery>;
   /** Read all notifications. */
   readAllNotifications?: Maybe<NotificationListQuery>;
-  register?: Maybe<ResisterResponseQuery>;
+  refreshToken?: Maybe<TokenResponseQuery>;
+  register?: Maybe<ResponseQuery>;
   registeredUserByEventId?: Maybe<SpaceOrgEventResponse>;
   removeConnectRequest?: Maybe<ResStatus>;
+  requestToJoinOrg?: Maybe<ResponseQuery>;
   /** Save. postId is mandatory */
   save?: Maybe<ResStatus>;
   sendConnectRequest?: Maybe<ResStatus>;
   sendGuestbookMessage?: Maybe<SendGuestbookMessageQuery>;
+  sendVerficationMail?: Maybe<ResponseQuery>;
   sentGuestbookMessage?: Maybe<GuestbookQuery>;
   setUser?: Maybe<User>;
   toggleView?: Maybe<ToggleQuery>;
@@ -2021,6 +2036,7 @@ export type RootMutation = {
   updateEventById?: Maybe<SpaceOrgEventResponse>;
   updateOrgSpaceById?: Maybe<OrgSpaceResponse>;
   uploadImage?: Maybe<ImageResponse>;
+  verifyEmail?: Maybe<TokenResponseQuery>;
   verifyReferralCode?: Maybe<ResStatus>;
 };
 
@@ -2327,6 +2343,13 @@ export type RootMutationRemoveConnectRequestArgs = {
 };
 
 
+export type RootMutationRequestToJoinOrgArgs = {
+  email: Scalars['String']['input'];
+  orgId: Scalars['ID']['input'];
+  status?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type RootMutationSaveArgs = {
   postId: Scalars['String']['input'];
 };
@@ -2340,6 +2363,11 @@ export type RootMutationSendConnectRequestArgs = {
 export type RootMutationSendGuestbookMessageArgs = {
   message: Scalars['String']['input'];
   receiverId: Scalars['String']['input'];
+};
+
+
+export type RootMutationSendVerficationMailArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -2382,6 +2410,12 @@ export type RootMutationUpdateOrgSpaceByIdArgs = {
 
 export type RootMutationUploadImageArgs = {
   file: Scalars['String']['input'];
+};
+
+
+export type RootMutationVerifyEmailArgs = {
+  email: Scalars['String']['input'];
+  verificationCode?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -3093,7 +3127,22 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'rootMutation', register?: { __typename?: 'ResisterResponseQuery', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null } | null };
+export type RegisterMutation = { __typename?: 'rootMutation', register?: { __typename?: 'ResponseQuery', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null } | null };
+
+export type VerifyEmailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  verificationCode?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type VerifyEmailMutation = { __typename?: 'rootMutation', verifyEmail?: { __typename?: 'TokenResponseQuery', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null, data?: { __typename?: 'TokenQuery', accessToken?: string | null, refreshToken?: string | null } | null } | null };
+
+export type SendVerficationMailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type SendVerficationMailMutation = { __typename?: 'rootMutation', sendVerficationMail?: { __typename?: 'ResponseQuery', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null } | null };
 
 export type AddCommentMutationVariables = Exact<{
   postId: Scalars['String']['input'];
@@ -3543,6 +3592,8 @@ export type EditHistoryMutation = { __typename?: 'rootMutation', editHistory?: {
 
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"code"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"spaceOrgName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"code"},"value":{"kind":"Variable","name":{"kind":"Name","value":"code"}}},{"kind":"Argument","name":{"kind":"Name","value":"spaceOrgName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"spaceOrgName"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"newUser"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userAddedToOrg"}},{"kind":"Field","name":{"kind":"Name","value":"spaceOrgName"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
 export const RegisterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"register"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"spaceOrgName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"code"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"register"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"firstName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}}},{"kind":"Argument","name":{"kind":"Name","value":"lastName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"spaceOrgName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"spaceOrgName"}}},{"kind":"Argument","name":{"kind":"Name","value":"code"},"value":{"kind":"Variable","name":{"kind":"Name","value":"code"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const VerifyEmailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"verifyEmail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"verificationCode"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"verificationCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"verificationCode"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]}}]} as unknown as DocumentNode<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const SendVerficationMailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"sendVerficationMail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendVerficationMail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]} as unknown as DocumentNode<SendVerficationMailMutation, SendVerficationMailMutationVariables>;
 export const AddCommentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addComment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"commentText"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"parentId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"replyTo"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addComment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postId"}}},{"kind":"Argument","name":{"kind":"Name","value":"commentText"},"value":{"kind":"Variable","name":{"kind":"Name","value":"commentText"}}},{"kind":"Argument","name":{"kind":"Name","value":"parentId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"parentId"}}},{"kind":"Argument","name":{"kind":"Name","value":"replyTo"},"value":{"kind":"Variable","name":{"kind":"Name","value":"replyTo"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"postId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"commentText"}},{"kind":"Field","name":{"kind":"Name","value":"commentImage"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"repliesCount"}},{"kind":"Field","name":{"kind":"Name","value":"upVoteCount"}},{"kind":"Field","name":{"kind":"Name","value":"replyTo"}},{"kind":"Field","name":{"kind":"Name","value":"upVoted"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"picture"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AddCommentMutation, AddCommentMutationVariables>;
 export const AddEducationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addEducation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"school"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"degree"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"major"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startDate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"graduationDate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addEducation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"school"},"value":{"kind":"Variable","name":{"kind":"Name","value":"school"}}},{"kind":"Argument","name":{"kind":"Name","value":"degree"},"value":{"kind":"Variable","name":{"kind":"Name","value":"degree"}}},{"kind":"Argument","name":{"kind":"Name","value":"major"},"value":{"kind":"Variable","name":{"kind":"Name","value":"major"}}},{"kind":"Argument","name":{"kind":"Name","value":"startDate"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startDate"}}},{"kind":"Argument","name":{"kind":"Name","value":"graduationDate"},"value":{"kind":"Variable","name":{"kind":"Name","value":"graduationDate"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}},{"kind":"Field","name":{"kind":"Name","value":"education"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"private"}},{"kind":"Field","name":{"kind":"Name","value":"schools"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"school"}},{"kind":"Field","name":{"kind":"Name","value":"degree"}},{"kind":"Field","name":{"kind":"Name","value":"major"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"graduationDate"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AddEducationMutation, AddEducationMutationVariables>;
 export const AddPostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postText"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"unitId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tags"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postTag"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"levelOfStudy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"major"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gpa"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"testScore"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"TestScoreEnum"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"testScoreMark"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"TestScoreMark"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"preferredLocation"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"universitySearch"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"anonymityOption"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"relationToMajor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"attendAgain"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"reviewSubCategories"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"admissionAndApplicationRating"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"financialAidAndScholarshipRating"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"academicProgramsAndDepartmentRating"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"studentLifeAndServiceRating"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"careerAndAlumniResourceRating"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postText"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postText"}}},{"kind":"Argument","name":{"kind":"Name","value":"unitId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"unitId"}}},{"kind":"Argument","name":{"kind":"Name","value":"tags"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tags"}}},{"kind":"Argument","name":{"kind":"Name","value":"postTag"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postTag"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"levelOfStudy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"levelOfStudy"}}},{"kind":"Argument","name":{"kind":"Name","value":"major"},"value":{"kind":"Variable","name":{"kind":"Name","value":"major"}}},{"kind":"Argument","name":{"kind":"Name","value":"gpa"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gpa"}}},{"kind":"Argument","name":{"kind":"Name","value":"testScore"},"value":{"kind":"Variable","name":{"kind":"Name","value":"testScore"}}},{"kind":"Argument","name":{"kind":"Name","value":"testScoreMark"},"value":{"kind":"Variable","name":{"kind":"Name","value":"testScoreMark"}}},{"kind":"Argument","name":{"kind":"Name","value":"preferredLocation"},"value":{"kind":"Variable","name":{"kind":"Name","value":"preferredLocation"}}},{"kind":"Argument","name":{"kind":"Name","value":"universitySearch"},"value":{"kind":"Variable","name":{"kind":"Name","value":"universitySearch"}}},{"kind":"Argument","name":{"kind":"Name","value":"anonymityOption"},"value":{"kind":"Variable","name":{"kind":"Name","value":"anonymityOption"}}},{"kind":"Argument","name":{"kind":"Name","value":"relationToMajor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"relationToMajor"}}},{"kind":"Argument","name":{"kind":"Name","value":"attendAgain"},"value":{"kind":"Variable","name":{"kind":"Name","value":"attendAgain"}}},{"kind":"Argument","name":{"kind":"Name","value":"reviewSubCategories"},"value":{"kind":"Variable","name":{"kind":"Name","value":"reviewSubCategories"}}},{"kind":"Argument","name":{"kind":"Name","value":"admissionAndApplicationRating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"admissionAndApplicationRating"}}},{"kind":"Argument","name":{"kind":"Name","value":"financialAidAndScholarshipRating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"financialAidAndScholarshipRating"}}},{"kind":"Argument","name":{"kind":"Name","value":"academicProgramsAndDepartmentRating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"academicProgramsAndDepartmentRating"}}},{"kind":"Argument","name":{"kind":"Name","value":"studentLifeAndServiceRating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"studentLifeAndServiceRating"}}},{"kind":"Argument","name":{"kind":"Name","value":"careerAndAlumniResourceRating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"careerAndAlumniResourceRating"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"postText"}},{"kind":"Field","name":{"kind":"Name","value":"date"}}]}}]}}]}}]} as unknown as DocumentNode<AddPostMutation, AddPostMutationVariables>;

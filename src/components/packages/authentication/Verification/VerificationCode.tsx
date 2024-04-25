@@ -1,39 +1,17 @@
-import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react"
-import axios from "axios"
+import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react";
+import axios from "axios";
 
-import AuthInput from "../AuthInput"
-import "../auth.css"
-import {userServer} from "../../../../datasource/servers/endpoints"
+import AuthInput from "../AuthInput";
+import "../auth.css";
+import { userServer } from "../../../../datasource/servers/endpoints";
 
 const VerificationCode = ({ verify, email, loading, HandleChange, input }) => {
-  const [present, dismiss] = useIonToast()
+  const [present, dismiss] = useIonToast();
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    verify()
-  }
-
-  const receiveCode = () => {
-    axios.post(userServer + `/sendVerficationMail`, { email }).then((res) => {
-      if (res.data.success) {
-        present({
-          duration: 3000,
-          message: res.data.message,
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios"
-        })
-      }
-    })
-
-    present({
-      duration: 3000,
-      message: "new code has been sent to your email",
-      buttons: [{ text: "X", handler: () => dismiss() }],
-      color: "primary",
-      mode: "ios"
-    })
-  }
+    e.preventDefault();
+    verify();
+  };
 
   return (
     <form onSubmit={submitHandler} className="sign-content">
@@ -65,13 +43,13 @@ const VerificationCode = ({ verify, email, loading, HandleChange, input }) => {
       <IonText color="primary" className="auth-change">
         <p
           onClick={() => {
-            receiveCode()
+            receiveCode();
           }}
         >
           Didn’t receive a code?
         </p>
       </IonText>
     </form>
-  )
-}
-export default VerificationCode
+  );
+};
+export default VerificationCode;

@@ -60,6 +60,30 @@ export const Login = gql`
       }
     }
   `,
+  VerifyEmail = gql`
+    mutation verifyEmail($email: String!, $verificationCode: Int) {
+      verifyEmail(email: $email, verificationCode: $verificationCode) {
+        status {
+          success
+          message
+        }
+        data {
+          accessToken
+          refreshToken
+        }
+      }
+    }
+  `,
+  SendVerificationMail = gql`
+    mutation sendVerficationMail($email: String!) {
+      sendVerficationMail(email: $email) {
+        status {
+          success
+          message
+        }
+      }
+    }
+  `,
   AddComment = gql`
     mutation addComment(
       $postId: String!
@@ -1586,11 +1610,11 @@ export const Login = gql`
         }
       }
     }
-  `,
-  InvitationRequestHandler = gql`
-    query requestToJoinOrg($orgId: ID!, $status: String!, $email: String!) {
-      requestToJoinOrg(orgId: $orgId, status: $status, email: $email) {
-        data
-      }
-    }
   `;
+// InvitationRequestHandler = gql`
+//   query requestToJoinOrg($orgId: ID!, $status: String!, $email: String!) {
+//     requestToJoinOrg(orgId: $orgId, status: $status, email: $email) {
+//       data
+//     }
+//   }
+// `;

@@ -1,88 +1,135 @@
-import { useState } from "react"
-import { useIonToast } from "@ionic/react"
-import axios from "axios"
-import { useDispatch } from "react-redux"
-import "../auth.css"
-import VerificationCode from "./VerificationCode"
-import { USER_LOGIN } from "../../../../datasource/store/action/types"
-import { userServer } from "../../../../datasource/servers/endpoints"
-import { getCache, removeCache, setCache } from "../../../../utils/cache"
+import React, { useState, useContext, FormEvent, ChangeEvent } from "react";
+import { useIonToast } from "@ionic/react";
+import { IonSpinner } from "@ionic/react";
+import "../auth.css";
+import {
+  SendVerficationMailMutation,
+  VerifyEmailMutation,
+} from "src/types/gqlTypes/graphql";
+import { SendVerificationMail, VerifyEmail } from "@datasource/graphql/user";
+import { useMutation } from "@apollo/client";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { AuthenticationContext } from "@features/login";
+import { Typography } from "@components/defaults";
+import AuthInput from "../AuthInput";
 
-const SignUpVerification = ({ auth, setauth }) => {
-  const [present, dismiss] = useIonToast()
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
+const SignUpVerification = () => {
+  const { auth } = useContext(AuthenticationContext)!;
+  const [present, dismiss] = useIonToast();
 
   const [input, setInput] = useState({
-    verificationCode: ""
-  })
+    verificationCode: "",
+  });
 
-  const HandleChange = (e) => {
-    const { name, value } = e.target
+  const HandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setInput((pre) => {
-      return { ...pre, [name]: value }
-    })
-  }
+      return { ...pre, [name]: value };
+    });
+  };
 
-  const verify = () => {
-    if (input.verificationCode.length < 6) {
-      return present({
-        duration: 3000,
-        message: "Invalid code!",
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios"
-      })
-    }
-
-    setLoading(true)
-    const emailInput = getCache("email")
-    removeCache("email")
-
-    axios
-      .post(userServer + `/verifyEmail`, {
-        ...input,
-        email: emailInput
-      })
-      .then((res) => {
-        setLoading(false)
-        if (res.data.success === true) {
-          setCache("accessToken", res?.data?.accessToken)
-          setCache("refreshToken", res?.data?.refreshToken)
-          dispatch({
-            type: USER_LOGIN,
-            payload: {
-              accessToken: res?.data?.accessToken,
-              refreshToken: res?.data?.refreshToken
-            }
-          })
-          setCache("newUser", "true")
-          window.innerWidth < 768
-            ? window.location.replace("/home")
-            : window.location.replace("/")
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        setLoading(false)
+  const [SignupVerification, { loading }] = useMutation<VerifyEmailMutation>(
+    VerifyEmail,
+    {
+      context: { server: USER_SERVICE_GQL },
+      variables: {
+        email: auth?.email,
+        verificationCode: Number(input.verificationCode),
+      },
+      onCompleted: () => {
         present({
+          message: "Account has been verified",
           duration: 3000,
-          message: err.response.data.message,
+          color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+      onError: (error) => {
+        present({
+          message: error.message,
+          duration: 3000,
           color: "danger",
-          mode: "ios"
-        })
-      })
-  }
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+    }
+  );
+
+  const [sendVerificationMail, { loading: isLoading }] =
+    useMutation<SendVerficationMailMutation>(SendVerificationMail, {
+      context: { server: USER_SERVICE_GQL },
+      variables: {
+        email: auth?.email,
+      },
+      onCompleted: () => {
+        present({
+          message: "Verification Code has been sent to your email",
+          duration: 3000,
+          color: "success",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+      onError: (error) => {
+        present({
+          message: error.message,
+          duration: 3000,
+          color: "danger",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+    });
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault();
+    if (input.verificationCode.length < 6) {
+      present({
+        message: "Verification Code should be of 6 digits",
+        duration: 3000,
+        color: "danger",
+        buttons: [{ text: "X", handler: () => dismiss() }],
+      });
+      return;
+    }
+    SignupVerification();
+  };
 
   return (
-    <VerificationCode
-      HandleChange={HandleChange}
-      input={input}
-      verify={verify}
-      loading={loading}
-      email={auth?.email}
-    />
-  )
-}
-export default SignUpVerification
+    <form onSubmit={submitHandler} className="sign-content">
+      <Typography variant="p" className="ion-margin-bottom verify-dec">
+        Verification Code has been mailed to you. Wait for a few minutes, it
+        might take a while. Account get deprecated if not verified within a
+        month.
+      </Typography>
+      <div className="auth-input-div ion-margin-top">
+        <label className="auth-label">Verification Code</label>
+        <br />
+        <AuthInput
+          HandleChange={HandleChange}
+          type="text"
+          validation={undefined}
+          name="verificationCode"
+          value={input?.verificationCode}
+        />
+      </div>
+      <button
+        disabled={loading}
+        type="submit"
+        onSubmit={submitHandler}
+        className="block mt-5 text-center bg-blue-600 w-full outline-none text-sm text-white uppercase rounded-2xl tracking-wide py-2 text-opacity-90 hover:opacity-90"
+      >
+        {loading ? <IonSpinner></IonSpinner> : "Next"}
+      </button>
+      <Typography variant="p" color="primary" className="auth-change">
+        <p
+          onClick={() => {
+            sendVerificationMail();
+          }}
+        >
+          Didn’t receive a code?
+          {isLoading ? <IonSpinner></IonSpinner> : "Resend"}
+        </p>
+      </Typography>
+    </form>
+  );
+};
+export default SignUpVerification;

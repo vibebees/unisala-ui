@@ -1,13 +1,23 @@
-import React from "react"
-import "./auth.css"
+/* eslint-disable no-unused-vars */
+import React, { FC } from "react";
+import "./auth.css";
 
-export const AuthInput = ({
+interface IAuthInput {
+  type: React.InputHTMLAttributes<HTMLInputElement>["type"];
+  name: string;
+  value: string;
+  HandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  validation: string | undefined | null;
+  disabled?: boolean;
+}
+
+export const AuthInput: FC<IAuthInput> = ({
   type,
   name,
-  value ="",
+  value = "",
   HandleChange,
   validation,
-  disabled = false
+  disabled = false,
 }) => {
   return (
     <div className="auth-input-val-div">
@@ -29,6 +39,6 @@ export const AuthInput = ({
         )}
       </div>
     </div>
-  )
-}
-export default AuthInput
+  );
+};
+export default AuthInput;

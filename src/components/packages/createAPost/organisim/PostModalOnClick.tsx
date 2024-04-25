@@ -10,26 +10,14 @@ import FormTab from "./FormTab";
 import NotLogggedModal from "./NotLogggedModal";
 import SelectionTab from "./SelectionTab";
 
-export const PostModalOnClick = ({ allProps, metaData }) => {
+export const PostModalOnClick = ({ metaData }) => {
   const location = useLocation();
-  const history = useHistory();
   const params = new URLSearchParams(location.search);
-  const { setCreateAPostPopUp, createAPostPopUp, tags } = allProps;
-  const { user, loggedIn } = useSelector((state) => state.userProfile);
   const [selectedTab, setSelectedTab] = useState(null);
   const [allowPost, setAllowPost] = useState(true);
   const [postData, setPostData] = useState({
     id: selectedTab,
   });
-
-  console.log(metaData);
-
-  useLayoutEffect(() => {
-    if (params.get("create")) {
-      setCreateAPostPopUp(true);
-      setSelectedTab(params.get("type"));
-    }
-  }, [params, createAPostPopUp]);
 
   useEffect(() => {
     setPostData((prevPostData) => {
@@ -37,7 +25,7 @@ export const PostModalOnClick = ({ allProps, metaData }) => {
         ...prevPostData,
         id: selectedTab,
         unitId: parseFloat(params.get("unitId")) || null,
-        tags: allProps.tags && tags,
+        // tags: allProps.tags && tags,
       };
     });
   }, [selectedTab]);

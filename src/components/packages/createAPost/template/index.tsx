@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card } from "../../../defaults/index";
-
-import { usePathName } from "../../../../hooks/usePathname";
-
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
-import { userServer } from "../../../../datasource/servers/endpoints";
+import { usePathName } from "@hooks/usePathname";
+import { userServer } from "@datasource/servers/endpoints";
 import { PostCardForClick } from "../organisim/PostCardForClick";
 import { PostModalOnClick } from "../organisim/PostModalOnClick";
 import { getCache, setCache } from "../../../../utils/cache";
-import { CreateAPostModal } from "../molecules/modal";
-const CreateAPostCard = ({ allProps }) => {
-  const { user } = useSelector((state) => state.userProfile);
-  const { setCreateAPostPopUp } = allProps;
+import CreateAPostModal from "../molecules/modal";
+const CreateAPostCard = () => {
   const [meta, setMeta] = useState({});
-  const history = useHistory();
-  const params = new URLSearchParams(window.location.href.search);
-  const pathname = usePathName(0) === "feed" ? "home" : usePathName(0);
+  const pathname = usePathName(0) === "feed" ? "home" : "feed";
   useEffect(() => {
     const cacheKey = "metadata-all";
     const cachedMeta = getCache(cacheKey) || false;
@@ -42,23 +34,10 @@ const CreateAPostCard = ({ allProps }) => {
   }, [pathname]);
 
   return (
-    <Card
-      style={{ marginBottom: "5px" }}
-      onClick={() => {
-        // params.append("create", "y")
-        // if (allProps.unitId) {
-        //   params.append("unitId", allProps.unitId)
-        // }
-        // history.push({
-        //   search: params.toString()
-        // })
-        // setCreateAPostPopUp(true)
-        // console.log("clicked")
-      }}
-    >
+    <Card style={{ marginBottom: "5px" }} onClick={() => {}}>
       <CreateAPostModal
-        ModalData={<PostModalOnClick allProps={allProps} metaData={meta} />}
-        ModalButton={<PostCardForClick allProps={{ ...allProps, user }} />}
+        ModalData={<PostModalOnClick metaData={meta} />}
+        ModalButton={<PostCardForClick />}
         header="Create a Post"
       />
     </Card>

@@ -78,14 +78,14 @@ let mainContentStyle = {
   mainRowStyle = { maxWidth: "1128px", width: "100%", flexWrap: "nowrap" };
 
 const Layout: React.FC<LayoutProps> = ({
-  leftSidebar = leftSidebarDefault,
+  leftSidebar ,
   children,
-  rightSidebar = rightSidebarDefault,
+  rightSidebar ,
 }) => {
   return (
     <Page style={{ backgroundColor: "#F0F2F5" }}>
       <Content
-        className="layout-content 
+        className="layout-content
       "
       >
         <Row

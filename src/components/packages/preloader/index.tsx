@@ -9,6 +9,13 @@ export const PreLoader = () => {
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
         alt=""
       />
+
+      {/* <img
+        src="../../../../assets/icon/UniSala.gif"
+        alt="unisala logo"
+      /> */}
+
+
       <Text color="medium">
         <h1>Unisala</h1>
       </Text>

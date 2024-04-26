@@ -700,7 +700,7 @@ Banner Style
   font-weight: 700;
   color: #fff;
   line-height: 70px;
-  width: 60%;
+  width: 80%;
   margin-bottom: 40px;
 }
 
@@ -1721,7 +1721,6 @@ body {
   }
   .main-banner .item h2 {
     font-size: 36px;
-    line-height: 50px;
   }
   .main-banner .item .buttons {
     display: inline-block;

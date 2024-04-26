@@ -104,6 +104,9 @@ export const PageRoute = () => {
         <Messages />
       </Route>
 
+      <Route path="/landingPage" exact>
+        <LandingPage />
+        </Route>
       {/* <Route path="/org/:category" exact>
         <Org />
       </Route> */}

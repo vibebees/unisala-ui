@@ -1,10 +1,10 @@
 import { useQuery } from "@apollo/client"
-import { ReceivedConnectionList } from "../../../../datasource/graphql/user/"
-import UserCard from "../../../../components/packages/userCard"
+import { ReceivedConnectionList } from "@datasource/graphql/user/"
+import UserCard from "@components/packages/userCard"
 import RequestReceivedButton from "./RequestReceivedButton"
-import StateMessage from "../../../../components/packages/stateMessage"
-import emptyState from "../../../../assets/emptyState.png"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+import StateMessage from "@components/packages/stateMessage"
+import emptyState from "@assets/emptyState.png"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
 import { IonCol, IonGrid, IonRow } from "@ionic/react"
 
 

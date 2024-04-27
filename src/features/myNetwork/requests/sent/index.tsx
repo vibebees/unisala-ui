@@ -2,12 +2,12 @@
 import React from 'react';
 import { IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useQuery } from "@apollo/client";
-import { PendingConnectionList, ConnectionListType } from "../../../../datasource/graphql/user/";
-import UserCard from "../../../../components/packages/userCard";
-import StateMessage from "../../../../components/packages/stateMessage";
-import emptyState from "../../../../assets/emptyState.png";
+import { PendingConnectionList, ConnectionListType } from "@datasource/graphql/user/";
+import UserCard from "@components/packages/userCard";
+import StateMessage from "@components/packages/stateMessage";
+import emptyState from "@assets/emptyState.png";
 import PendingRequestButton from "./PendingRequestButton";
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
 
 // TypeScript interfaces for the data
 interface User {

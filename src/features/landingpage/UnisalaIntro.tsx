@@ -72,7 +72,11 @@ export const UnisalaLandingPage = () => {
       </IonCard>
 
       <IonRow>
-        <FAQ />
+        <IonCol>
+          <IonCard>
+          <FAQ />
+          </IonCard>
+        </IonCol>
       </IonRow>
     </IonGrid>
   );

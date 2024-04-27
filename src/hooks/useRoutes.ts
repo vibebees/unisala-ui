@@ -9,6 +9,7 @@ import { getCache, userName } from "../utils/cache";
 
 const useRoutes = () => {
   const authenticated = getCache("refreshToken");
+  // TODO: check issue here
   let profileLink = authenticated ? "/@/" + userName : "/profile";
   const routes = useMemo(
     () => [
@@ -39,7 +40,7 @@ const useRoutes = () => {
         link: profileLink,
       },
     ],
-    [authenticated]
+    [authenticated],
   );
   return routes;
 };

@@ -1,47 +1,37 @@
-import React from "react"
-import { useEffect, useState } from "react"
-import { useHistory, useLocation, useParams } from "react-router"
-import {
-  Grid,
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardSubtitle
-} from "../../components/defaults"
-import ProfileHeader from "./profileHeader"
-import ProfileBody from "./profileBody"
-import Threads from "./threads"
-import Guestbook from "./guestbook"
-import Saved from "./saved"
-import { useQuery } from "@apollo/client"
- import useDocTitle from "../../hooks/useDocTitile"
-import { USER_SERVICE_GQL } from "../../datasource/servers/types"
-import { useSelector } from "react-redux"
-import { screenGreaterThan1000 } from "../home/helper.func"
-import List from "../../components/packages/list"
-import { URLgetter, URLupdate } from "../../utils/lib/URLupdate"
-import { getUserGql } from "../../datasource/graphql/user"
-import { NoResultFound } from "../../components/packages/errorHandler/NoResultFound"
-import { ApiError } from "../../components/packages/errorHandler/ApiError"
+import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router";
+import { Col, Grid, Row } from "../../components/defaults";
+import { ApiError } from "../../components/packages/errorHandler/ApiError";
+import { NoResultFound } from "../../components/packages/errorHandler/NoResultFound";
+import List from "../../components/packages/list";
+import { getUserGql } from "../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "../../datasource/servers/types";
+import useDocTitle from "../../hooks/useDocTitile";
+import { URLgetter, URLupdate } from "../../utils/lib/URLupdate";
+import Guestbook from "./guestbook";
+import ProfileBody from "./profileBody";
+import ProfileHeader from "./profileHeader";
+import Saved from "./saved";
+import Threads from "./threads";
 
 const ProfilePage = () => {
-  const [tab, setTab] = useState(0)
-  const { username } = useParams()
-  const history = useHistory()
-  const { user: loggedInUser } = useSelector((state) => state.userProfile)
-
+  const [tab, setTab] = useState(0);
+  const { username } = useParams();
+  const history = useHistory();
+  const { user: loggedInUser } = useSelector((state) => state.userProfile);
+  console.log({ username });
   const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username },
-    fetchPolicy: 'cache-first'
-  })
-  useDocTitle(username)
+    fetchPolicy: "cache-first",
+  });
+  useDocTitle(username);
 
-  const { getUser } = data || {}
+  const { getUser } = data || {};
 
-  const myProfile = username === loggedInUser?.username
+  const myProfile = username === loggedInUser?.username;
 
   const {
     firstName,
@@ -56,10 +46,10 @@ const ProfilePage = () => {
     education,
     testScore,
     _id,
-    doj
-  } = getUser?.user || {}
+    doj,
+  } = getUser?.user || {};
 
-  const profilePic = picture
+  const profilePic = picture;
 
   const profileHeaderData = {
     _id,
@@ -73,9 +63,8 @@ const ProfilePage = () => {
     socialLinks,
     myProfile,
     doj,
-    connectionType: getUser?.connectionType
-  }
-
+    connectionType: getUser?.connectionType,
+  };
 
   const profileBodyData = {
     username,
@@ -83,10 +72,10 @@ const ProfilePage = () => {
     badges,
     education,
     testScore,
-    myProfile
-  }
+    myProfile,
+  };
 
-  const locate = useLocation()
+  const locate = useLocation();
 
   const tabMap = {
     0: "profile",
@@ -94,63 +83,58 @@ const ProfilePage = () => {
     2: "list",
     3: "saved",
     4: "roadmap",
-    5: "guestbook"
-  }
+    5: "guestbook",
+  };
 
   // this effect is responsible to show the component(target users who probably came by following a link)
   useEffect(() => {
-    const query = URLgetter("tab")
+    const query = URLgetter("tab");
 
     if (!query) {
-      const tabURL = URLupdate("tab", "profile")
-      history.push({ search: tabURL })
+      const tabURL = URLupdate("tab", "profile");
+      history.push({ search: tabURL });
     } else {
       switch (query) {
         case "threads":
-          setTab(1)
-          break
+          setTab(1);
+          break;
         case "list":
-          setTab(2)
-          break
+          setTab(2);
+          break;
         case "saved":
-          setTab(3)
-          break
+          setTab(3);
+          break;
         case "roadmap":
-          setTab(4)
-          break
+          setTab(4);
+          break;
         case "guestbook":
-          setTab(5)
-          break
+          setTab(5);
+          break;
         default:
-          setTab(0)
+          setTab(0);
       }
     }
-  }, [])
+  }, []);
 
   // this effect handles tab selections
 
   useEffect(() => {
     if (tab) {
-      const tabURL = URLupdate("tab", tabMap[tab])
-      history.push({ search: tabURL })
+      const tabURL = URLupdate("tab", tabMap[tab]);
+      history.push({ search: tabURL });
     }
-  }, [tab])
-
-
+  }, [tab]);
 
   if (error) {
-    return (<ApiError/>)
+    return <ApiError />;
   }
   if (!getUser?.user) {
-    return (
-      <NoResultFound />
-    )
+    return <NoResultFound />;
   }
   return (
     <>
       <Grid className="max-width-container max-md:px-0">
         <Row>
-
           <Col className="w-2/5 max-md:px-0">
             <ProfileHeader tab={tab} setTab={setTab} data={profileHeaderData} />
             {tab === 0 && getUser?.user && (
@@ -166,7 +150,7 @@ const ProfilePage = () => {
         </Row>
       </Grid>
     </>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;

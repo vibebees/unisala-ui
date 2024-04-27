@@ -1,11 +1,7 @@
-import React from "react";
 import { lazy, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router";
-import { ProtectedRoute } from "../utils/lib/protectedRoute";
+import { Redirect, Route } from "react-router";
 import { PreLoader } from "../components/packages/preloader";
-import { useSelector } from "react-redux";
-import { getCache } from "../utils/cache";
-import { Chats } from "@features/messages/whatsapp/Chats";
+import { ProtectedRoute } from "../utils/lib/protectedRoute";
 
 const ProfilePage = lazy(() => import("../pages/userProfile"));
 const Messages = lazy(() => import("../pages/message"));
@@ -106,7 +102,7 @@ export const PageRoute = () => {
 
       <Route path="/landingPage" exact>
         <LandingPage />
-        </Route>
+      </Route>
       {/* <Route path="/org/:category" exact>
         <Org />
       </Route> */}

@@ -1,45 +1,45 @@
-import React, { useState, useRef } from "react"
-import { IonPopover, IonItem, IonInput, IonIcon } from "@ionic/react"
-import { universityServer } from "../../../datasource/servers/endpoints"
-import { arrowBackOutline } from "ionicons/icons"
-import { authInstance } from "../../../datasource/api/axiosInstance"
-import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect"
-import SearchLoadingSkeleton from "../authentication/Welcome/atom/SearchLoadingSkeleton"
-import ImageWithLoader from "../reusable/Image/ImageWithLoader"
-import NoImageFound from "../../../assets/no_image_found.png"
+import { IonIcon, IonInput, IonItem } from "@ionic/react";
+import { arrowBackOutline } from "ionicons/icons";
+import { useState } from "react";
+import NoImageFound from "@assets/no_image_found.png";
+import { authInstance } from "../../../datasource/api/axiosInstance";
+import { universityServer } from "../../../datasource/servers/endpoints";
+import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
+import SearchLoadingSkeleton from "../authentication/Welcome/atom/SearchLoadingSkeleton";
+import ImageWithLoader from "../reusable/Image/ImageWithLoader";
 const UniversityList = ({
   handleUniversitySelect,
   popoverOpen,
   setPopoverOpen,
-  searchText
+  searchText,
 }) => {
-  const [results, setResults] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [results, setResults] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getUniversitites = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await authInstance.get(
         `${universityServer}/keyword/schoolname/${
           searchText?.trim().length === 0 ? "New York" : searchText?.trim()
-        }/5`
-      )
-      setResults(res.data)
+        }/5`,
+      );
+      setResults(res.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleInput = () => {
-    getUniversitites()
-  }
+    getUniversitites();
+  };
 
-  useDebouncedEffect(handleInput, [searchText], 1000)
+  useDebouncedEffect(handleInput, [searchText], 1000);
 
   if (!popoverOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -89,8 +89,8 @@ const UniversityList = ({
               key={index}
               className="ion-no-padding ion-no-margin px-1 cursor-pointer"
               onClick={() => {
-                handleUniversitySelect(result.name)
-                setPopoverOpen(false)
+                handleUniversitySelect(result.name);
+                setPopoverOpen(false);
               }}
             >
               {result.picture ? (
@@ -127,7 +127,7 @@ const UniversityList = ({
     </section>
 
     // </IonPopover>
-  )
-}
+  );
+};
 
-export default UniversityList
+export default UniversityList;

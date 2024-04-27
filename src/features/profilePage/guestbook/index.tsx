@@ -1,37 +1,37 @@
-import { useState } from "react"
+import { useQuery } from "@apollo/client";
 import {
+  IonAvatar,
+  IonButton,
   IonCard,
   IonCardContent,
-  IonText,
-  IonButton,
-  IonList,
+  IonIcon,
   IonItem,
-  IonAvatar,
   IonLabel,
-  IonIcon
-} from "@ionic/react"
-import { ellipsisVertical } from "ionicons/icons"
-import { Link } from "react-router-dom"
-import { useQuery } from "@apollo/client"
-import moment from "moment"
-import {jwtDecode} from "jwt-decode"
-import StateMessage from "../../../components/packages/stateMessage/index"
-import emptyState from "../../../assets/emptyState.png"
-import "./index.css"
-import { receivedGuestbookList } from "../../../datasource/graphql/user"
-import AddGuestBookPop from "./AddGuestBookPop"
-import MorePop from "./MorePop"
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
-import { useSelector } from "react-redux"
- import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton"
-import { Avatar } from "../../../components/defaults"
+  IonList,
+  IonText,
+} from "@ionic/react";
+import { ellipsisVertical } from "ionicons/icons";
+import { jwtDecode } from "jwt-decode";
+import moment from "moment";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import emptyState from "@assets/emptyState.png";
+import { Avatar } from "../../../components/defaults";
+import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
+import StateMessage from "../../../components/packages/stateMessage/index";
+import { receivedGuestbookList } from "../../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import AddGuestBookPop from "./AddGuestBookPop";
+import MorePop from "./MorePop";
+import "./index.css";
 
 function index({ userId, firstName }) {
-  const [page, setPage] = useState(0)
-  const { accessToken } = useSelector((state) => state?.auth)
-  const decode = accessToken && jwtDecode(accessToken)
-  const [isOpen, setIsOpen] = useState(false)
-  const [guestbookList, setGuestbookList] = useState([])
+  const [page, setPage] = useState(0);
+  const { accessToken } = useSelector((state) => state?.auth);
+  const decode = accessToken && jwtDecode(accessToken);
+  const [isOpen, setIsOpen] = useState(false);
+  const [guestbookList, setGuestbookList] = useState([]);
 
   const { loading, refetch } = useQuery(receivedGuestbookList, {
     fetchPolicy: "network-only",
@@ -39,17 +39,17 @@ function index({ userId, firstName }) {
     variables: {
       userId: userId,
       page: page,
-      pageSize: 10
+      pageSize: 10,
     },
     onCompleted: (data) => {
-      setGuestbookList(data?.receivedGuestbookList?.guestbook)
-    }
-  })
+      setGuestbookList(data?.receivedGuestbookList?.guestbook);
+    },
+  });
 
   if (loading) {
     return ["0", "1", "2"].map((item) => {
-      return <ThreadSkeleton key={item} />
-    })
+      return <ThreadSkeleton key={item} />;
+    });
   }
 
   const guestbookLists = () => {
@@ -59,9 +59,9 @@ function index({ userId, firstName }) {
           {Array.isArray(guestbookList) &&
             guestbookList.map((guestbookItem, i) => {
               const { firstName, lastName, username, picture } =
-                guestbookItem?.user || {}
+                guestbookItem?.user || {};
 
-              const { message, date } = guestbookItem || {}
+              const { message, date } = guestbookItem || {};
               return (
                 <IonItem key={i} className="guestbook-li">
                   <IonAvatar slot="start">
@@ -82,12 +82,12 @@ function index({ userId, firstName }) {
                   <IonIcon icon={ellipsisVertical} />
                   <MorePop morePop={false} />
                 </IonItem>
-              )
+              );
             })}
         </IonList>
       </IonCardContent>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ function index({ userId, firstName }) {
             </IonText>
             <IonButton
               onClick={() => {
-                decode && setIsOpen(true)
+                decode && setIsOpen(true);
               }}
               mode="ios"
             >
@@ -144,7 +144,7 @@ function index({ userId, firstName }) {
         <IonCard className="mb-2">{guestbookLists()}</IonCard>
       )}
     </>
-  )
+  );
 }
 
-export default index
+export default index;

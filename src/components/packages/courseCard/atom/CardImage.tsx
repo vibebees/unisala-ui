@@ -1,5 +1,5 @@
 import React from "react";
-import NoImage from "../../../../assets/no_image_found.png";
+import NoImage from "@assets/no_image_found.png";
 
 const CardImage = ({ pictures = [] }) => {
   const imageStyle: React.CSSProperties = {

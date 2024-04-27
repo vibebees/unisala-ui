@@ -1,6 +1,6 @@
 import React from "react"
 import { Card, CardHeader, CardTitle, CardSubtitle } from "../../defaults"
-import noResultsFound from "../../../assets/no-results.jpg"
+import noResultsFound from "@assets/no-results.jpg"
 
 export const ApiError = () => {
     return (

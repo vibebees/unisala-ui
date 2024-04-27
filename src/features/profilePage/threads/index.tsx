@@ -5,15 +5,15 @@ import {
   IonInfiniteScrollContent
 } from "@ionic/react"
 import { Link } from "react-router-dom"
-import StateMessage from "../../../components/packages/stateMessage"
-import emptyState from "../../../assets/emptyState.png"
+import StateMessage from "@components/packages/stateMessage"
+import emptyState from "@assets/emptyState.png"
 import { useSelector } from "react-redux"
 import { Query } from "@apollo/client/react/components"
 import { USER_SERVICE_GQL } from "@datasource/servers/types"
 import { GetUserPost } from "@datasource/graphql/user/"
-import Thread from "../../../components/packages/thread"
-import CourseCard from "../../../components/packages/courseCard"
-import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton"
+import Thread from "@components/packages/thread"
+import CourseCard from "@components/packages/courseCard"
+import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton"
 
 function index({ userId, firstName }) {
   return (

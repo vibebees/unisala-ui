@@ -10,14 +10,14 @@ import {
 } from '@ionic/react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { messageSocket } from '../../../datasource/servers/endpoints';
-import { userInfo } from '../../../utils/cache';
-import { addSeenEye } from '../../../datasource/store/action/userActivity';
+import { messageSocket } from '@datasource/servers/endpoints';
+import { userInfo } from '@utils/cache';
+import { addSeenEye } from '@datasource/store/action/userActivity';
 import { messageSeen } from '../../../utils';
 
 import { TypeBox } from './typeBox';
 import { MessageItem } from './messageItem';
-import messageImg from '../../../assets/messages.png';
+import messageImg from '@assets/messages.png';
 import './index.css';
 import { DefaultChatMessage } from './defaultMessage';
 

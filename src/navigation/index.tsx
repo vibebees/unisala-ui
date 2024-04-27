@@ -13,7 +13,7 @@ import { IonCol, IonGrid, IonHeader, IonRow } from "@ionic/react";
 import useRoutes from "../hooks/useRoutes";
 import { cn } from "../utils";
 import useWindowWidth from "../hooks/useWindowWidth";
-
+import logo from "@assets/icon/UniSala.gif";
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
   // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
@@ -65,7 +65,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
             <IonCol className="ion-no-padding h-full " size="1">
               <Link to="/">
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUsQiplH_OWtHnMb1Nrk31z58OJN009JG-w&usqp=CAU"
+                  src= {logo}
                   alt="logo"
                   className="h-10 w-10 shrink-0 object-contain"
                 />

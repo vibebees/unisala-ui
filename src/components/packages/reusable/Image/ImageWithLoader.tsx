@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Img, SkeletonText } from "../../../defaults";
-import NoImageFound from "../../../../assets/no_image_found.png";
+import NoImageFound from "@assets/no_image_found.png";
 import { cn } from "@utils/index";
 
 interface IImageWithLoader {

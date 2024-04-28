@@ -65,7 +65,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
             <IonCol className="ion-no-padding h-full " size="1">
               <Link to="/">
                 <img
-                  src= {logo}
+                  src={logo}
                   alt="logo"
                   className="h-10 w-10 shrink-0 object-contain"
                 />

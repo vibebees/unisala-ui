@@ -25,9 +25,9 @@ const LeftSideBar = () => {
     >
       {authenticated ? (
         <>
-          <Col className="my-0 ion-no-margin ion-no-padding">
-            <Card className=" BorderCard ">
-              <div className="aside-profile pt-20">
+          <Col className="my-0 ion-no-margin ion-no-padding w-full">
+            <Card className="ion-no-margin ion-no-padding BorderCard ">
+              <div className="aside-profile pt-20 w-full">
                 <div className="w-24 h-24 rounded-full overflow-hidden  !border-[7px] !border-neutral-200">
                   <Avatar
                     username={user?.username}
@@ -53,7 +53,7 @@ const LeftSideBar = () => {
                 </Typography>
               </div>
             </Card>
-            <Card className="overflow-y-auto justify-center my-4 max-h-[348px] BorderCard">
+            <Card className="overflow-y-auto justify-center my-3 max-h-[348px] ion-no-padding ion-no-margin BorderCard">
               <Typography
                 variant="h6"
                 color="dark"
@@ -73,7 +73,7 @@ const LeftSideBar = () => {
               </Link>
             </Card>
 
-            <Card className="overflow-y-auto my-4 max-h-[348px] BorderCard">
+            <Card className="overflow-y-auto ion-no-margin ion-no-padding my-3 max-h-[348px] BorderCard">
               <Typography
                 variant="h6"
                 color="dark"

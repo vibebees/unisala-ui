@@ -159,11 +159,7 @@
 }
 
 
-.profileCard {
-    margin-top: 3px;
-    overflow: auto;
 
-}
 
 .profileCard::-webkit-scrollbar-thumb {
     border-radius: 10px;
@@ -172,6 +168,6 @@
 }
 
 .profileCard::-webkit-scrollbar {
-    width: 7px;
+    width: 0.1px;
     background-color: #665a5a00;
 }

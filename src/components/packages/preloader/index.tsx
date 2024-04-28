@@ -1,6 +1,6 @@
-import React from "react"
-import "./index.css"
-import { Spinner, Text } from "../../defaults"
+import React from "react";
+import "./index.css";
+import { Spinner, Text } from "../../defaults";
 
 export const PreLoader = () => {
   return (
@@ -15,11 +15,10 @@ export const PreLoader = () => {
         alt="unisala logo"
       /> */}
 
-
       <Text color="medium">
         <h1>Unisala</h1>
       </Text>
       <Spinner name="dots" />
     </div>
-  )
-}
+  );
+};

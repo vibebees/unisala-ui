@@ -62,7 +62,7 @@ export const PageRoute = () => {
         {authenticated ? <HomePage /> : <Redirect to="/" />}
       </Route>
       <Route path="/" exact>
-          <LandingPage />
+        <LandingPage />
       </Route>
       {/* Protected routes example */}
       <Route path="/profile" exact>
@@ -83,7 +83,6 @@ export const PageRoute = () => {
       <Route path="/search" exact>
         <Discover />
       </Route>
-
 
       {/* <Route path="/space" exact></Route> */}
       {/* <Route path="/space/:category" exact>
@@ -108,7 +107,7 @@ export const PageRoute = () => {
         <LandingPage />
       </Route>
 
-      <Route exact path="/home" component={LandingPage} />
+      <Route exact path="/home" component={HomePage} />
       {/* <Route path="/org/:category" exact>
         <Org />
       </Route> */}

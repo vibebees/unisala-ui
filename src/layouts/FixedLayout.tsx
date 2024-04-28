@@ -11,11 +11,14 @@ import {
 } from "../components/defaults";
 
 import "./index.css";
+import { cn } from "@utils/index";
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;
   children: React.ReactNode;
   rightSidebar?: React.ReactNode;
+  leftSideBarSticky?: boolean;
+  rightSideBarSticky?: boolean;
 }
 const leftSidebarDefault = (
   <div>
@@ -72,19 +75,23 @@ const FixedLayout: React.FC<LayoutProps> = ({
   leftSidebar = leftSidebarDefault,
   children,
   rightSidebar = rightSidebarDefault,
+  leftSideBarSticky = true,
+  rightSideBarSticky = true,
 }) => {
   return (
-    <Content
-      className="layout-content 
-      "
-    >
+    <Content className="layout-content">
       <Row
         className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
         style={style}
       >
         {/* Only visible on medium and larger screens */}
         <Col sizeMd="3" className="ion-hide-md-down layout-col">
-          {leftSidebar}
+          <div
+            className={cn("w-full", leftSideBarSticky && "sticky top-0")}
+            style={{ width: "100%", maxWidth: "300px" }}
+          >
+            {leftSidebar}
+          </div>
         </Col>
 
         {/* Always visible, but spans more columns on small screens */}
@@ -93,7 +100,12 @@ const FixedLayout: React.FC<LayoutProps> = ({
         </Col>
         {/* Only visible on medium and larger screens */}
         <Col sizeMd="3" className=" ion-hide-md-down layout-col">
-          <div style={{ width: "100%", maxWidth: "300px" }}>{rightSidebar}</div>
+          <div
+            className={cn("w-full", rightSideBarSticky && "sticky top-0")}
+            style={{ width: "100%", maxWidth: "300px" }}
+          >
+            {rightSidebar}
+          </div>
         </Col>
       </Row>
     </Content>

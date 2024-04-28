@@ -19,11 +19,14 @@ export default function HomePage() {
   //   };
   // }, []);
   return (
-    <FixedLayout
-      leftSidebar={<LeftSideBar />}
-      rightSidebar={<FamousUniversities />}
-    >
-      <Home />
-    </FixedLayout>
+    <>
+      <br />
+      <FixedLayout
+        leftSidebar={<LeftSideBar />}
+        rightSidebar={<FamousUniversities />}
+      >
+        <Home />
+      </FixedLayout>
+    </>
   );
 }

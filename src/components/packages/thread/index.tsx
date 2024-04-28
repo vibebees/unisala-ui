@@ -1,9 +1,9 @@
-import { IonCard } from "@ionic/react"
-import { useState } from "react"
-import { useSelector } from "react-redux"
-import ReplyInput from "../replyInput"
-import "./index.css"
- import {
+import { IonCard } from "@ionic/react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import ReplyInput from "../replyInput";
+import "./index.css";
+import {
   ShowPeopleComments,
   ThreadEditable,
   ThreadExpand,
@@ -11,9 +11,9 @@ import "./index.css"
   ThreadHeader,
   ThreadImages,
   ThreadOptions,
-  ThreadRating
-} from "./organism"
-import { Card } from "../../defaults"
+  ThreadRating,
+} from "./organism";
+import { Card } from "../../defaults";
 
 const Thread = ({ thread, feedType, feedId }) => {
   const {
@@ -32,12 +32,12 @@ const Thread = ({ thread, feedType, feedId }) => {
     financialAidAndScholarshipRating,
     academicProgramsAndDepartmentRatingm,
     studentLifeAndServiceRating,
-    careerAndAlumniResourceRating
-  } = thread
-  const [reply, setReply] = useState(false)
-  const [editable, setEditable] = useState(false)
-  const [numberOfComments, setNumberOfComments] = useState(1)
-  const { user: loggedinUser } = useSelector((state) => state.userProfile)
+    careerAndAlumniResourceRating,
+  } = thread;
+  const [reply, setReply] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [numberOfComments, setNumberOfComments] = useState(1);
+  const { user: loggedinUser } = useSelector((state) => state.userProfile);
 
   // useEffect(() => {
   //   getImage("user", image, setImage)
@@ -52,18 +52,18 @@ const Thread = ({ thread, feedType, feedId }) => {
           postText={postText}
           setEditable={setEditable}
         />
-      )
+      );
     }
     return (
       <div className="thread_comment">
         <ThreadExpand htmlText={postText} _id={_id} thread={thread} />
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
-      <Card className="relative  pt-4 pb-3 max-md:my-1 ion-no-margin">
+      <Card className=" BorderCard shadow-none  pt-4 pb-3 max-md:my-1 ion-no-margin">
         <div className="px-4">
           <ThreadHeader
             firstName={user?.firstName}
@@ -129,7 +129,7 @@ const Thread = ({ thread, feedType, feedId }) => {
         </div>
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default Thread
+export default Thread;

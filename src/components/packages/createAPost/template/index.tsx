@@ -34,7 +34,11 @@ const CreateAPostCard = () => {
   }, [pathname]);
 
   return (
-    <Card style={{ marginBottom: "5px" }} onClick={() => {}}>
+    <Card
+      className="BorderCard ion-no-margin ion-no-padding"
+      style={{ marginBottom: "5px" }}
+      onClick={() => {}}
+    >
       <CreateAPostModal
         ModalData={<PostModalOnClick metaData={meta} />}
         ModalButton={<PostCardForClick />}

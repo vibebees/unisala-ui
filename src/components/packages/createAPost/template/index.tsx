@@ -10,6 +10,8 @@ import CreateAPostModal from "../molecules/modal";
 const CreateAPostCard = () => {
   const [meta, setMeta] = useState({});
   const pathname = usePathName(0) === "feed" ? "home" : "feed";
+
+  
   useEffect(() => {
     const cacheKey = "metadata-all";
     const cachedMeta = getCache(cacheKey) || false;
@@ -34,7 +36,11 @@ const CreateAPostCard = () => {
   }, [pathname]);
 
   return (
-    <Card style={{ marginBottom: "5px" }} onClick={() => {}}>
+    <Card
+      className="BorderCard ion-no-margin ion-no-padding"
+      style={{ marginBottom: "5px" }}
+      onClick={() => {}}
+    >
       <CreateAPostModal
         ModalData={<PostModalOnClick metaData={meta} />}
         ModalButton={<PostCardForClick />}

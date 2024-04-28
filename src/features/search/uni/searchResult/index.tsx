@@ -8,11 +8,11 @@ import {
   IonInfiniteScrollContent,
 } from "@ionic/react";
 import { useSelector } from "react-redux";
-import CourseCard from "../../../../components/packages/courseCard";
-import noResultsFound from "../../../../assets/no-results.jpg";
+import CourseCard from "@components/packages/courseCard";
+import noResultsFound from "@assets/no-results.jpg";
 import "./index.css";
-import { CustomTrackingLink } from "../../../../components/analytics/LinkTrack";
-import { FeedSkeleton } from "../../../../components/packages/skeleton/feedSkeleton";
+import { CustomTrackingLink } from "@components/analytics/LinkTrack";
+import { FeedSkeleton } from "@components/packages/skeleton/feedSkeleton";
 import { motion } from "framer-motion";
 
 interface ISearchResults {

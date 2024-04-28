@@ -1,51 +1,51 @@
-import React, { useState, createContext, useEffect, useRef } from "react"
-import { IonRow, IonCol, IonModal } from "@ionic/react"
-import Indicators from "./Steps/Indicators"
-import StepsButtons from "./Steps/StepsButtons"
-import clsx from "clsx"
-import "./index.css"
-import { authInstance } from "../../../../datasource/api/axiosInstance"
-import { userServer } from "../../../../datasource/servers/endpoints"
-import Step from "./Steps/Step"
-import { PreLoader } from "../../preloader"
+import React, { useState, createContext, useEffect, useRef } from "react";
+import { IonRow, IonCol, IonModal } from "@ionic/react";
+import Indicators from "./Steps/Indicators";
+import StepsButtons from "./Steps/StepsButtons";
+import clsx from "clsx";
+import "./index.css";
+import { authInstance } from "../../../../datasource/api/axiosInstance";
+import { userServer } from "../../../../datasource/servers/endpoints";
+import Step from "./Steps/Step";
+import { PreLoader } from "../../preloader";
 
-export const WelcomeData = createContext()
+export const WelcomeData = createContext();
 
 const Index = ({ allProps }) => {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [totalSteps, setTotalSteps] = useState(0)
-  const [meta, setMeta] = useState({})
-  const modalRef = useRef(null)
+  const [currentStep, setCurrentStep] = useState(1);
+  const [totalSteps, setTotalSteps] = useState(0);
+  const [meta, setMeta] = useState({});
+  const modalRef = useRef(null);
 
-  const [status, setStatus] = useState("ideal")
+  const [status, setStatus] = useState("ideal");
   const [welcomeFormdata, setWelcomeFormdata] = useState({
       interestedSubjects: [],
       userStatus: "",
       interestedUni: [],
-      studyLevel: ""
+      studyLevel: "",
     }),
-    { setNewUser, newUser } = allProps
+    { setNewUser, newUser } = allProps;
 
   const getAllQuestion = async () => {
-    setStatus("loading")
+    setStatus("loading");
     try {
       const res = await authInstance.get(
         `${userServer}/get-onboarding-metadata`
-      )
+      );
       if (res.data.success) {
-        setMeta(res.data.data)
-        setTotalSteps(Object.values(res.data.data).length)
-        setStatus("ideal")
+        setMeta(res.data.data);
+        setTotalSteps(Object.values(res.data.data).length);
+        setStatus("ideal");
       }
     } catch (error) {
-      console.log(error)
-      setStatus("error")
+      console.log(error);
+      setStatus("error");
     }
-  }
+  };
 
   useEffect(() => {
-    getAllQuestion()
-  }, [])
+    getAllQuestion();
+  }, []);
 
   const LoadedComponent = (
     <IonRow className="flex-col h-full">
@@ -62,12 +62,12 @@ const Index = ({ allProps }) => {
                   "z-10": currentStep === index + 1,
                   "z-0 opacity-0": currentStep !== index + 1,
                   "fade-enter": currentStep === index + 1,
-                  "fade-exit": currentStep !== index + 1
+                  "fade-exit": currentStep !== index + 1,
                 })}
               >
                 <Step metaData={MetaData} />
               </div>
-            )
+            );
           })}
         </IonCol>
       </IonRow>
@@ -80,12 +80,12 @@ const Index = ({ allProps }) => {
             setCurrentStep,
             modalRef,
             meta,
-            totalSteps
+            totalSteps,
           }}
         />
       </IonCol>
     </IonRow>
-  )
+  );
 
   return (
     <IonModal ref={modalRef} isOpen={newUser}>
@@ -101,6 +101,6 @@ const Index = ({ allProps }) => {
         )}
       </WelcomeData.Provider>
     </IonModal>
-  )
-}
-export default Index
+  );
+};
+export default Index;

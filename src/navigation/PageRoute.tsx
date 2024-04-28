@@ -51,18 +51,20 @@ export const PageRoute = () => {
   const authenticated = true;
   return (
     <Suspense fallback={<PreLoader />}>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/feed">
+      <Route path="/login" exact>
+        <AuthPage />
+      </Route>
+      <Route path="/feed" exact>
         {authenticated ? <HomePage /> : <Redirect to="/" />}
       </Route>
-      <Route path="/home">
-        {authenticated ? <HomePage /> : <Redirect to="/" />}
+      <Route path="/" exact>
+        <LandingPage />
       </Route>
       {/* Protected routes example */}
-      <Route path="/profile">
+      <Route path="/profile" exact>
         {authenticated ? <ProfilePage /> : <Redirect to="/login" />}
       </Route>
-      <Route path="/standard">
+      <Route path="/standard" exact>
         <Standard />
       </Route>
 
@@ -78,9 +80,6 @@ export const PageRoute = () => {
         <Discover />
       </Route>
 
-      <Route path="/login" exact>
-        <AuthPage />
-      </Route>
       {/* <Route path="/space" exact></Route> */}
       {/* <Route path="/space/:category" exact>
         <SpacePage />

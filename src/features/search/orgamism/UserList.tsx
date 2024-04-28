@@ -1,33 +1,26 @@
-import CardTitle from "../../university/rectangularCardGrid/atoms/CardTitle"
+import CardTitle from "../../university/rectangularCardGrid/atoms/CardTitle";
+import UserCard from "../../../components/packages/userCard";
+import { userName } from "../../../utils/cache";
+import React, { FC } from "react";
+import { Row, Typography } from "@components/defaults";
 
-import UserCard from "../../../components/packages/userCard"
-import {userName} from "../../../utils/cache"
-export const UserResults = ({ users, loading }) => {
-  return (
-    <div>
-      <h3 style={{ margin: "1rem", color: "#4d4d4d" }} className="font-medium">
-        Users based on you search
-      </h3>
-      {users?.length ? (
-        <div className="grid-3">
-          {users.map((user, index) => (
-            <UserCard
-              key={index}
-              profileBanner={user?.coverPicture}
-              profileImg={user?.picture}
-              name={user?.firstName + " " + user?.lastName}
-              username={userName}
-              location={user?.location}
-              oneLineBio={user?.oneLineBio}
-            />
-          ))}
-        </div>
-      ) : (
-        <CardTitle style={{ textAlign: "center", color: "#898989" }}>
-          {loading ? "Loading..." : "Sorry! No result found"}
-        </CardTitle>
-      )}
-    </div>
-  )
+interface UserResultsProps {
+  users: IUser[];
+  loading: boolean;
 }
 
+export const UserResults: FC<UserResultsProps> = ({ users, loading }) => {
+  return (
+    <div className="">
+      <Typography variant="h2" className="text-base font-semibold">
+        Users
+      </Typography>
+
+      <Row className="flex mt-2 h-full flex-nowrap bg-transparent flex-row w-full gap-4">
+        {users &&
+          users?.length > 0 &&
+          users.map((user, index) => <UserCard key={index} {...user} />)}
+      </Row>
+    </div>
+  );
+};

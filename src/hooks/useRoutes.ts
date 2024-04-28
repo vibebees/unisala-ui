@@ -40,7 +40,7 @@ const useRoutes = () => {
         link: profileLink,
       },
     ],
-    [authenticated],
+    [authenticated]
   );
   return routes;
 };

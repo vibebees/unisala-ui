@@ -1,101 +1,79 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react";
-import axios from "axios";
 import AuthInput from "../../AuthInput";
-
 import "../../auth.css";
-import { userServer } from "../../../../../datasource/servers/endpoints";
-import { validateSignup } from "../../../../../utils/components/validate";
+import { AuthenticationContext } from "@features/login";
+import { ChangePasswordMutation } from "src/types/gqlTypes/graphql";
+import { ChangePassword } from "@datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { useMutation } from "@apollo/client";
 
 export const ResetPassword = () => {
-  const { code, email } = auth;
+  const { auth, setauth } = useContext(AuthenticationContext)!;
   const [present, dismiss] = useIonToast();
-  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     password: "",
     confirmPassword: "",
   });
-  const HandleChange = (e) => {
+
+  const [changePassword, { loading }] = useMutation<ChangePasswordMutation>(
+    ChangePassword,
+    {
+      context: { server: USER_SERVICE_GQL },
+      variables: {
+        email: auth?.email,
+        code: Number(auth?.code),
+        password: input.password,
+      },
+      onCompleted: () => {
+        present({
+          message: "Password reset Successfully",
+          duration: 3000,
+          color: "success",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+        setauth((prev) => {
+          if (prev.state === "ForgotPasswordVerification") {
+            return {
+              ...prev,
+              state: "resetPassword",
+            };
+          }
+          return {
+            ...prev,
+          };
+        });
+      },
+      onError: (error) => {
+        present({
+          message: error.message,
+          duration: 3000,
+          color: "danger",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+        });
+      },
+    }
+  );
+
+  const HandleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInput((pre) => {
       return { ...pre, [name]: value };
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-  };
-  const { password } = input;
-  const resetPassword = () => {
-    if (!input.password || !input.confirmPassword) {
-      return present({
-        duration: 3000,
-        message: "Empty fields!",
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
-      });
-    }
     if (input.password !== input.confirmPassword) {
-      return present({
+      present({
+        message: "Password didn't match",
         duration: 3000,
-        message: "Passwords donot match!",
+        color: "danger",
         buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
       });
+      return;
     }
-
-    const passwordErrors = validateSignup({ password: password })?.password;
-    if (passwordErrors) {
-      return present({
-        duration: 3000,
-        message: passwordErrors,
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
-      });
-    }
-
-    setLoading(true);
-    axios
-      .post(userServer + `/changePassword`, {
-        email,
-        password,
-        code,
-      })
-      .then((res) => {
-        setLoading(false);
-        if (res.data.success) {
-          present({
-            duration: 3000,
-            message: res.data.message,
-            buttons: [{ text: "X", handler: () => dismiss() }],
-            color: "primary",
-            mode: "ios",
-          });
-          setauth({ state: "signin" });
-        }
-        if (!res.data.success) {
-          present({
-            duration: 3000,
-            message: res.data.message,
-            buttons: [{ text: "X", handler: () => dismiss() }],
-            color: "primary",
-            mode: "ios",
-          });
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        present({
-          duration: 3000,
-          message: err.response.data.message,
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
-      });
+    changePassword();
   };
 
   return (
@@ -111,6 +89,7 @@ export const ResetPassword = () => {
           type="password"
           name="password"
           value={input.password}
+          validation={null}
         />
         <br />
         <label className="auth-label">Confirm Password</label>
@@ -120,6 +99,7 @@ export const ResetPassword = () => {
           type="password"
           name="confirmPassword"
           value={input.confirmPassword}
+          validation={null}
         />
       </div>
       <IonButton
@@ -128,7 +108,7 @@ export const ResetPassword = () => {
         className="ion-margin-top"
         expand="full"
         shape="round"
-        onClick={resetPassword}
+        onClick={submitHandler}
       >
         {loading ? <IonSpinner></IonSpinner> : "Change Password"}
       </IonButton>

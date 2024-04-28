@@ -4,18 +4,9 @@ import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import { CustomTrackingLink } from "../../analytics/LinkTrack";
-import {
-  Col,
-  Card,
-  Item,
-  Label,
-  Text,
-  Avatar,
-  SimpleAvatar,
-  Typography,
-} from "../../defaults";
+import { Col, Card, Item, Label, Text, SimpleAvatar } from "../../defaults";
 import ImageWithLoader from "../reusable/Image/ImageWithLoader";
-import { IonAvatar } from "@ionic/react";
+
 export const FamousUniversities = () => {
   const { data: famousUniversities } = useQuery(fetchFamousUniversities, {
       variables: { limit: 10, page: 0 },
@@ -62,7 +53,7 @@ export const FamousUniversities = () => {
   return (
     <Col
       size="auto"
-      className="famousUniList"
+      className="famousUniList ion-no-margin ion-no-padding"
       style={{
         maxWidth: "300px",
         height: "90vh",
@@ -71,12 +62,12 @@ export const FamousUniversities = () => {
         overflow: "auto",
       }}
     >
-      <Card className="my-0">
+      <Card className="my-0 shadow-none BorderCard ion-no-margin">
         <Text color="dark">
           <h4 style={{ padding: "10px" }}>Famous Universities</h4>
         </Text>
 
-        {getFamousUniversity?.map((item, index) => {
+        {getFamousUniversity?.map((item: any, index: number) => {
           return (
             <CustomTrackingLink
               to={`/university/${item?.name}`}
@@ -94,6 +85,7 @@ export const FamousUniversities = () => {
                 <SimpleAvatar slot="start">
                   <ImageWithLoader
                     src={item.pictures}
+                    alt={item.name}
                     style={{
                       borderRadius: "100%",
                       width: "40px",

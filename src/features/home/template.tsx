@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
 import "./Home.css";
 import useDocTitle from "../../hooks/useDocTitile";
-import { Card } from "../../components/defaults";
 const FloatingButton = lazy(
   () => import("../../components/packages/floatingButton/index")
 );
@@ -52,12 +51,10 @@ export const Home = () => {
   // }, [loggedIn, newUser]);
 
   return (
-    <div className="w-full">
+    <div className="w-full mx-3 overflow-x-hidden">
       <FloatingButton />
       <div>
         <CreateAPostCard />
-        <Card className=" mt-4 ion-no-padding ion-no-margin"></Card>
-
         <InfiniteFeed feedType="newsfeed" />
       </div>
     </div>

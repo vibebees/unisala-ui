@@ -1,7 +1,10 @@
-import React from "react";
+import { Content } from "@components/defaults";
 import UserProfile from "../features/profilePage";
-import Layout from "../layouts/FreeLayout";
 const UserProfilePage = () => {
-  return <Layout mainContent={<UserProfile />} />;
+  return (
+    <Content>
+      <UserProfile />
+    </Content>
+  );
 };
 export default UserProfilePage;

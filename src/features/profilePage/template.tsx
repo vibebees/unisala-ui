@@ -17,6 +17,7 @@ import Saved from "./saved";
 import Threads from "./threads";
 
 const ProfilePage = () => {
+  console.log("profile page");
   const [tab, setTab] = useState(0);
   const { username } = useParams();
   const history = useHistory();
@@ -28,7 +29,7 @@ const ProfilePage = () => {
     fetchPolicy: "cache-first",
   });
   useDocTitle(username);
-
+  console.log({ username });
   const { getUser } = data || {};
 
   const myProfile = username === loggedInUser?.username;

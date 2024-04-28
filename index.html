@@ -12,7 +12,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="shortcut icon" type="image/svg" href="/assets/icon/Unisala.svg"   />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Unisala" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -30,24 +30,19 @@
       }
 
       #loading-screen {
-        width: 300px;
-        padding: 20px;
-        background: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        text-align: center;
-        opacity: 0;
-        animation: fadeIn 2s ease forwards;
-      }
+      position: fixed; /* Change position to fixed */
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Adjust for centering */
+      width: 300px;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      text-align: center;
+      opacity: 1; /* Removed animation property */
+    }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
 
       .loading-image {
         width: 100px;

@@ -5,6 +5,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardSubtitle,
+  IonCardTitle,
   IonCol,
   IonGrid,
   IonItem,
@@ -13,6 +14,7 @@ import {
 import incomingStudents from '@assets/question.jpeg';
 import currentStudents from '@assets/currentStudents.jpeg';
 import alumini from '@assets/alumini.jpeg';
+import StudentOrg from '@assets/studentOrg.webp';
 
 import './css/templatemo-scholar.css';
 import { image } from 'ionicons/icons';
@@ -41,6 +43,12 @@ export const UnisalaLandingPage = () => {
       description:
         'Remember the feeling of home 🏠? Reconnect with it on Unisala. Meet local graduates from your own university or from your homeland. 🌍 Whether you shared the same campus or the same roots, you’ll find community and continuity. 🤝 Share your hard-earned insights and experiences, and keep the cycle of learning and support alive.',
       image: alumini
+    },
+    {
+      title: 'Student Organziations 🎓',
+      description:
+      "Unisala empowers student organizations by unlocking the potential of their alumni networks 🌟 Small groups can showcase their rich history and connections, while larger ones unite past and present members. 🤝 It's where every organization's story finds a home. 🏠",
+      image: StudentOrg
     }
   ];
 
@@ -58,6 +66,8 @@ export const UnisalaLandingPage = () => {
         ))}
       </IonRow>
       <IonCard>
+      <div className=' font-bold text-lg text-center'>Values</div>
+
         <IonRow>
           <IonCol>
             <RoadMap before={'Applying'} after={'University'} />

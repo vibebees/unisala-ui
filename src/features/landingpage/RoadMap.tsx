@@ -25,7 +25,7 @@ export const RoadMap = ({before, after}) => (
           transition={{ duration: 0.5 }}
         ></motion.div>
         <motion.div
-          className='relative z-10 grid w-10 h-10 font-bold text-white transition-all duration-300 bg-gray-900 rounded-full place-items-center'
+          className='relative z-10 grid w-10 h-10 font-bold text-white transition-all duration-300 bg-blue-500 rounded-full place-items-center'
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
@@ -78,7 +78,7 @@ export const RoadMap = ({before, after}) => (
           </div>
         </motion.div>
         <motion.div
-          className='relative z-10 grid w-10 h-10 font-bold text-white transition-all duration-300 bg-gray-900 rounded-full place-items-center'
+          className='relative z-10 grid w-10 h-10 font-bold text-white transition-all duration-300 bg-purple-900 rounded-full place-items-center'
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >

@@ -34,6 +34,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
   const { isMobile } = useWindowWidth();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("");
+
   const handleTabClick = (e: any, path: string) => {
     if (e.detail.tab === "Profile" && authenticated) {
       setShowPopover(!showPopover);
@@ -49,22 +50,8 @@ export const Navigation: React.FC<NavigationProps> = () => {
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location]);
-  const desktopViewCss = {
-    marginRight: "0px",
-    paddingStart: "0px",
-    paddingEnd: "0px",
-    maxWidth: "10%",
-  };
-  const styleForIcon = {
-    flex: "0 0 auto",
-    padding: 0,
-    height: "100%",
-    width: "50px",
-  };
+
   const styleForSearch = { flex: "0 0 auto", width: "100%" };
-  const navBarStyle = isMobile
-    ? { width: "100%", height: "50px", border: "none", boxShadow: "none" }
-    : { width: "50%", height: "55px", border: "none", boxShadow: "none" };
 
   return (
     <>

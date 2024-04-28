@@ -47,6 +47,7 @@ const SignUpVerification = () => {
             return {
               ...prev,
               state: "resetPassword",
+              code: Number(input.verificationCode),
             };
           }
           return {

@@ -84,6 +84,16 @@ export const Login = gql`
       }
     }
   `,
+  ChangePassword = gql`
+    mutation changePassword($email: String!, $password: String!, $code: Int!) {
+      changePassword(email: $email, password: $password, code: $code) {
+        status {
+          success
+          message
+        }
+      }
+    }
+  `,
   AddComment = gql`
     mutation addComment(
       $postId: String!
@@ -1611,7 +1621,7 @@ export const Login = gql`
       }
     }
   `,
-   GetUserPost = gql`
+  GetUserPost = gql`
     query getDicussionUniWall($userId: String, $page: Float!, $unitId: Float) {
       getDicussionUniWall(
         userId: $userId
@@ -1642,62 +1652,62 @@ export const Login = gql`
         careerAndAlumniResourceRating
       }
     }
-  `,
-  GetAllPostBySpaceCategoryID = gql`
-  query getAllPostBySpaceCategoryID($id: ID, $limit: Int, $page: Int) {
-    getAllPostBySpaceCategoryID(id: $id, limit: $limit, page: $page) {
-      status {
-        success
-        message
-      }
-      posts {
-        _id
-        images
-        postText
-        postImage
-        date
-        upVoteCount
-        postCommentsCount
-        upVoted
-        saved
-        videoURL
-        user {
-          _id
-          username
-          firstName
-          lastName
-          picture
-          username
-        }
-      }
-    }
-  }
-`,
-AddTestScore = (testScores:any) =>
-  gql`
-          mutation addTestScore($testScores: ${testScores}) {
-              addTestScore(testScore: $testScores) {
-              status {
-                  message
-                  success
-              }
-              testScore {
-                  scores {
-                  SAT_SCORE {
-                      maths
-                      english
-                  }
-                  ACT_SCORE {
-                      maths
-                      english
-                  }
-                  IELTS_SCORE {
-                      score
-                  }
-                  TOEFL_SCORE {
-                      score
-                  }
-                  }
-              }
-              }
-          }`
+  `;
+// GetAllPostBySpaceCategoryID = gql`
+//   query getAllPostBySpaceCategoryID($id: ID, $limit: Int, $page: Int) {
+//     getAllPostBySpaceCategoryID(id: $id, limit: $limit, page: $page) {
+//       status {
+//         success
+//         message
+//       }
+//       posts {
+//         _id
+//         images
+//         postText
+//         postImage
+//         date
+//         upVoteCount
+//         postCommentsCount
+//         upVoted
+//         saved
+//         videoURL
+//         user {
+//           _id
+//           username
+//           firstName
+//           lastName
+//           picture
+//           username
+//         }
+//       }
+//     }
+//   }
+// `;
+// AddTestScore = (testScores: any) =>
+//   gql`
+//         mutation addTestScore($testScores: ${testScores}) {
+//             addTestScore(testScore: $testScores) {
+//             status {
+//                 message
+//                 success
+//             }
+//             testScore {
+//                 scores {
+//                 SAT_SCORE {
+//                     maths
+//                     english
+//                 }
+//                 ACT_SCORE {
+//                     maths
+//                     english
+//                 }
+//                 IELTS_SCORE {
+//                     score
+//                 }
+//                 TOEFL_SCORE {
+//                     score
+//                 }
+//                 }
+//             }
+//             }
+//         }`;

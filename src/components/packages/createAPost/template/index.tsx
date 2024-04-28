@@ -10,6 +10,8 @@ import CreateAPostModal from "../molecules/modal";
 const CreateAPostCard = () => {
   const [meta, setMeta] = useState({});
   const pathname = usePathName(0) === "feed" ? "home" : "feed";
+
+  
   useEffect(() => {
     const cacheKey = "metadata-all";
     const cachedMeta = getCache(cacheKey) || false;

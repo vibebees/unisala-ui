@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
 import "./Home.css";
 import useDocTitle from "../../hooks/useDocTitile";
-import { Card } from "../../components/defaults";
 const FloatingButton = lazy(
   () => import("../../components/packages/floatingButton/index")
 );

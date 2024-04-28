@@ -12,8 +12,11 @@ interface IUser {
   id: string;
   firstName: string;
   lastName: string;
-  email?: string;
   username: string;
+  oneLinerBio?: string;
+  coverPicture?: string;
+  picture?: string;
+  location?: string;
 }
 
 interface IAuthData extends IUser {

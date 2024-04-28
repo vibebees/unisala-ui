@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch } from "react-redux";
 // Interfaces for Apollo and Redux actions might need to be defined or imported if not already
 import { UniFilterResults } from "../../datasource/graphql/uni";
-import { Search } from "../../datasource/graphql/user";
+import { Search } from "@datasource/graphql/user";
 import {
   UNIVERSITY_SERVICE_GQL,
   USER_SERVICE_GQL,
@@ -14,7 +14,6 @@ import SearchTab from "./atoms/SearchTab";
 import { UserResults } from "./orgamism/UserList";
 import { UniversityResults } from "./orgamism/UniversityResults";
 import UniSearchResult from "./uni";
-import { ExploreFilterPopupContext } from "./uni/ExploreUniFilterPopupContext";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
@@ -23,6 +22,7 @@ import { SpaceList } from "./orgamism/SpaceList";
 import { Col, Row } from "../../components/defaults";
 import { getAllQueryParams } from "./uni/filters/utility";
 import { AnimatePresence } from "framer-motion";
+import { SearchQuery } from "src/types/gqlTypes/graphql";
 
 export const SearchTemplate: React.FC = () => {
   const location = useLocation();
@@ -34,10 +34,13 @@ export const SearchTemplate: React.FC = () => {
 
   useDocTitle(`Search ᛫ ${query}`);
 
-  const { data: searchData, loading: userLoading } = useQuery(Search, {
-    variables: { q: query, user: true, org: true, space: true, school: true },
-    context: { server: USER_SERVICE_GQL },
-  });
+  const { data: searchData, loading: userLoading } = useQuery<SearchQuery>(
+    Search,
+    {
+      variables: { q: query, user: true, org: true, space: true, school: true },
+      context: { server: USER_SERVICE_GQL },
+    }
+  );
 
   const [getUniversityResults, { data: uniData, loading: uniLoading }] =
     useLazyQuery(UniFilterResults, {
@@ -98,7 +101,7 @@ export const SearchTemplate: React.FC = () => {
             {tab === "user" && (
               <UserResults
                 key={"user-result"}
-                users={users}
+                users={users as IUser[]}
                 loading={userLoading}
               />
             )}

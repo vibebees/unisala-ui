@@ -1538,8 +1538,22 @@ export const Login = gql`
     }
   `,
   Search = gql`
-    query Search($q: String!) {
-      search(q: $q) {
+    query Search(
+      $q: String!
+      $user: Boolean
+      $school: Boolean
+      $space: Boolean
+      $org: Boolean
+      $orgId: ID
+    ) {
+      search(
+        q: $q
+        user: $user
+        school: $school
+        space: $space
+        org: $org
+        orgId: $orgId
+      ) {
         totalItems
         items {
           name
@@ -1556,6 +1570,8 @@ export const Login = gql`
           username
           oneLinerBio
           picture
+          name
+          coverPicture
         }
         orgs {
           name

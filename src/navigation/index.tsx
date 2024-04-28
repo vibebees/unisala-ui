@@ -14,6 +14,9 @@ import useRoutes from "../hooks/useRoutes";
 import { cn } from "../utils";
 import useWindowWidth from "../hooks/useWindowWidth";
 import logo from "@assets/icon/UniSala.gif";
+import { createPortal } from "react-dom";
+import ProfilePop from "@components/packages/profilePop";
+import { useAuth } from "@context/AuthContext";
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
   // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
@@ -23,14 +26,20 @@ type RouteParams = {
 };
 
 export const Navigation: React.FC<NavigationProps> = () => {
+  const { authenticated } = useAuth();
   const routes = useRoutes();
-  const [active, setActive] = useState<string>("home");
-  const { isMobile } = useWindowWidth();
   const history = useHistory();
+  const [active, setActive] = useState<string>("home");
+  const [showPopover, setShowPopover] = useState(false);
+  const { isMobile } = useWindowWidth();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("");
-  const handleTabClick = (path: string) => {
-    history.push(path);
+  const handleTabClick = (e: any, path: string) => {
+    if (e.detail.tab === "Profile" && authenticated) {
+      setShowPopover(!showPopover);
+    } else {
+      history.push(path);
+    }
   };
 
   useEffect(() => {
@@ -91,16 +100,17 @@ export const Navigation: React.FC<NavigationProps> = () => {
             <TabButton
               key={name}
               tab={name}
-              onClick={() => handleTabClick(link)}
+              onClick={(e) => handleTabClick(e, link)}
               selected={activeTab === link}
               className={cn(
-                " max-w-[10%] max-md:max-w-full ion-no-padding px-0 mx-0  ion-no-margin",
+                " max-w-[10%] max-md:max-w-full relative ion-no-padding px-0 mx-0  ion-no-margin",
                 activeTab === link
                   ? "tab-button-active "
                   : "tab-button-inactive"
               )}
             >
               <Icon />
+              <div id={name} className="overflow-auto relative"></div>
               <Label className="font-semibold text-black max-md:text-smm">
                 {name}
               </Label>
@@ -108,6 +118,16 @@ export const Navigation: React.FC<NavigationProps> = () => {
           ))}
         </TabBar>
       </Tabs>
+      {window !== undefined &&
+        document.getElementById("root") &&
+        showPopover &&
+        createPortal(
+          <ProfilePop
+            setShowPopover={setShowPopover}
+            showPopover={showPopover}
+          />,
+          document.getElementById("root")!
+        )}
     </>
   );
 };

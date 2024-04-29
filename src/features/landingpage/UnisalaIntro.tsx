@@ -12,15 +12,19 @@ import {
   IonRow
 } from '@ionic/react';
 import incomingStudents from '@assets/question.jpeg';
-import currentStudents from '@assets/currentStudents.jpeg';
+import currentStudents from '@assets/currentStudents.png';
 import alumini from '@assets/alumini.jpeg';
 import StudentOrg from '@assets/studentOrg.webp';
+import ExploreUniversities from '@assets/ExploreUniversity.png';
+import UnisalaLightBulb from '@assets/unisala-bulb.webp';
+import DiscoverUni from '@assets/disoveruni.webp';
 
 import './css/templatemo-scholar.css';
 import { image } from 'ionicons/icons';
 import { RoadMap } from './RoadMap';
 import { FAQ } from './FAQ';
 import { SingleCard } from './SingleCard';
+import { Article } from './Article';
 
 export const UnisalaLandingPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,13 +51,44 @@ export const UnisalaLandingPage = () => {
     {
       title: 'Student Organziations 🎓',
       description:
-      "Unisala empowers student organizations by unlocking the potential of their alumni networks 🌟 Small groups can showcase their rich history and connections, while larger ones unite past and present members. 🤝 It's where every organization's story finds a home. 🏠",
+        "Unisala empowers student organizations by unlocking the potential of their alumni networks 🌟 Small groups can showcase their rich history and connections, while larger ones unite past and present members. 🤝 It's where every organization's story finds a home. 🏠",
       image: StudentOrg
     }
   ];
+  const articleContentFirst = [
+    {
+      imgsrc: DiscoverUni,
+      tag: 'Your University Journey Starts Here',
+      title: 'Simplify your search. Discover Universities. ',
+      description: 'Find Your University Fit with Unisala 🎓🔍 Choose from your programs, Search by major, and filter by fees or state. Simple, quick, and tailored to you. Discover the place where you\'ll flourish both academically and personally!'
+    }
+  ]
+
+  const articleContentLast = [
+    {
+      imgsrc: UnisalaLightBulb,
+      tag: 'Connect. Collaborate. Create 🚀',
+      title: 'Bring your projects to life with a community that shares your vision',
+      description: 'Share your ideas, articles, or projects on Unisala.com 📝💡 and find like-minded peers or teammates 👥. Collaborate, inspire, and grow together in a community that turns collective aspirations into reality 🚀🌐.'
+    }
+  ]
 
   return (
     <IonGrid>
+        {articleContentFirst.map((article, index) => (
+        <IonRow>
+          <IonCol>
+            <Article
+              imgsrc={article?.imgsrc}
+              tag={article?.tag}
+              title={article?.title}
+              description={article?.description}
+            />
+          </IonCol>
+        </IonRow>
+        ))}
+
+
       <IonRow>
         {cardContent.map((content, index) => (
           <IonCol key={index}>
@@ -66,7 +101,7 @@ export const UnisalaLandingPage = () => {
         ))}
       </IonRow>
       <IonCard>
-      <div className=' font-bold text-lg text-center'>Values</div>
+        <div className=' font-bold text-lg text-center'>Values</div>
 
         <IonRow>
           <IonCol>
@@ -84,10 +119,23 @@ export const UnisalaLandingPage = () => {
       <IonRow>
         <IonCol>
           <IonCard>
-          <FAQ />
+            <FAQ />
           </IonCard>
         </IonCol>
       </IonRow>
+
+      {articleContentLast.map((article, index) => (
+        <IonRow>
+          <IonCol>
+            <Article
+              imgsrc={article?.imgsrc}
+              tag={article?.tag}
+              title={article?.title}
+              description={article?.description}
+            />
+          </IonCol>
+        </IonRow>
+      ))}
     </IonGrid>
   );
 };

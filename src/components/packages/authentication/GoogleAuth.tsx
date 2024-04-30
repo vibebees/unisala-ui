@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useIonToast } from "@ionic/react";
-
 import "./auth.css";
-import { useDispatch } from "react-redux";
+
 import { googleAuthAction } from "../../../datasource/store/action/authenticationAction";
 import { useHistory } from "react-router";
 import { useScript } from "../../../hooks/useScript";
@@ -10,7 +9,6 @@ import { useScript } from "../../../hooks/useScript";
 export const GoogleAuth = () => {
   const [present, dismiss] = useIonToast();
   const googlebuttonref = useRef(),
-    dispatch = useDispatch(),
     history = useHistory();
 
   const params = new URLSearchParams(window.location.search);

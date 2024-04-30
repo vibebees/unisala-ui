@@ -69,7 +69,7 @@ export const SearchTemplate: React.FC = () => {
 
   // const { setPopUp } = useContext(ExploreFilterPopupContext);
 
-  const { users, orgs, spaces } = searchData?.search ?? {};
+  const { users, orgs, spaces, items } = searchData?.search ?? {};
 
   return (
     <>
@@ -88,11 +88,13 @@ export const SearchTemplate: React.FC = () => {
                   gap: "2rem",
                 }}
               >
-                <UserResults users={users} loading={uniLoading} />
-                <UniversityResults
-                  universities={uniData?.searchSchool}
-                  loading={uniLoading}
-                />
+                {users && (
+                  <UserResults
+                    users={users as unknown as IUser[]}
+                    loading={uniLoading}
+                  />
+                )}
+                <UniversityResults universities={items} loading={uniLoading} />
                 <h3 style={{ marginBottom: "1rem", color: "#4d4d4d" }}>
                   Posts
                 </h3>

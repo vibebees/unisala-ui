@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -9,18 +9,18 @@ import {
   IonIcon,
   useIonToast,
   IonChip,
-  IonButton
-} from "@ionic/react"
-import { eyeOff, eye, add } from "ionicons/icons"
-import { useMutation } from "@apollo/client"
-import { getUserGql, ToggleView } from "../../../../datasource/graphql/user"
-import EditTestScore from "./editTestScore"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+  IonButton,
+} from "@ionic/react";
+import { eyeOff, eye, add } from "ionicons/icons";
+import { useMutation } from "@apollo/client";
+import { getUserGql, ToggleView } from "../../../../datasource/graphql/user";
+import EditTestScore from "./editTestScore";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
 
 const TestScore = ({ testScore, myProfile, username }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { scores } = testScore ?? {}
-  const [present, dismiss] = useIonToast()
+  const [isOpen, setIsOpen] = useState(false);
+  const { scores } = testScore ?? {};
+  const [present, dismiss] = useIonToast();
 
   const [toggleView] = useMutation(ToggleView, {
     context: { server: USER_SERVICE_GQL },
@@ -28,8 +28,8 @@ const TestScore = ({ testScore, myProfile, username }) => {
     update: (cache, { data: { toggleView } }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -40,12 +40,12 @@ const TestScore = ({ testScore, myProfile, username }) => {
               ...getUser.user,
               testScore: {
                 ...getUser.user.testScore,
-                private: toggleView.private
-              }
-            }
-          }
-        }
-      })
+                private: toggleView.private,
+              },
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       if (data.toggleView.status.success) {
@@ -56,8 +56,8 @@ const TestScore = ({ testScore, myProfile, username }) => {
             : "View made private",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
     },
     onError: (error) => {
@@ -66,10 +66,10 @@ const TestScore = ({ testScore, myProfile, username }) => {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   // eslint-disable-next-line complexity
   const ComponentToRender = () => {
@@ -94,7 +94,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
             Add Scores
           </IonButton>
         </IonCardContent>
-      )
+      );
     }
 
     if (
@@ -113,7 +113,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                   style={{
                     borderRight:
                       (scores.ACT_SCORE.maths || scores.SAT_SCORE.maths) &&
-                      "solid 2px #ddd"
+                      "solid 2px #ddd",
                   }}
                 >
                   <IonText color="dark" style={{ textAlign: "center" }}>
@@ -126,7 +126,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          width: "fit-content"
+                          width: "fit-content",
                         }}
                       >
                         <IonText color="primary">
@@ -140,7 +140,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                               alignItems: "center",
                               borderRadius: "50%",
                               fontSize: "1.5rem",
-                              fontWeight: "bold"
+                              fontWeight: "bold",
                             }}
                           >
                             {scores.IELTS_SCORE.score}
@@ -157,7 +157,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          width: "fit-content"
+                          width: "fit-content",
                         }}
                       >
                         <IonText color="secondary">
@@ -171,7 +171,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                               alignItems: "center",
                               borderRadius: "50%",
                               fontSize: "1.5rem",
-                              fontWeight: "bold"
+                              fontWeight: "bold",
                             }}
                           >
                             {scores.TOEFL_SCORE.score}
@@ -200,7 +200,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          width: "fit-content"
+                          width: "fit-content",
                         }}
                       >
                         <IonText color="tertiary">
@@ -214,7 +214,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                               alignItems: "center",
                               borderRadius: "50%",
                               fontSize: "1.5rem",
-                              fontWeight: "bold"
+                              fontWeight: "bold",
                             }}
                           >
                             {scores.ACT_SCORE.maths + scores.ACT_SCORE.english}
@@ -234,7 +234,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          width: "fit-content"
+                          width: "fit-content",
                         }}
                       >
                         <IonText color="success">
@@ -248,7 +248,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                               alignItems: "center",
                               borderRadius: "50%",
                               fontSize: "1.5rem",
-                              fontWeight: "bold"
+                              fontWeight: "bold",
                             }}
                           >
                             {scores.SAT_SCORE.maths + scores.SAT_SCORE.english}
@@ -265,14 +265,14 @@ const TestScore = ({ testScore, myProfile, username }) => {
             </IonRow>
           </IonGrid>
         </IonCardContent>
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
       <IonCard className="mb-2 max-md:mx-1">
-        <IonCardContent className="card-bb  flex">
+        <IonCardContent className="card-bb  flex justify-between">
           <h1>Test Score</h1>
           {myProfile && (
             <div className="inline-flex">
@@ -280,7 +280,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
                 className="grey-icon-32 mr-1"
                 icon={testScore?.private ? eyeOff : eye}
                 onClick={() => {
-                  toggleView()
+                  toggleView();
                 }}
               />
               <IonIcon
@@ -301,7 +301,7 @@ const TestScore = ({ testScore, myProfile, username }) => {
         username={username}
       />
     </>
-  )
-}
+  );
+};
 
-export default TestScore
+export default TestScore;

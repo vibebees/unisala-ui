@@ -15,13 +15,15 @@ import ProfileBody from "./profileBody";
 import ProfileHeader from "./profileHeader";
 import Saved from "./saved";
 import Threads from "./threads";
+import { getCache } from "@utils/cache";
+import { User } from "src/types/gqlTypes/graphql";
 
 const ProfilePage = () => {
   console.log("profile page");
   const [tab, setTab] = useState(0);
   const { username } = useParams();
   const history = useHistory();
-  const { user: loggedInUser } = useSelector((state) => state.userProfile);
+  const loggedInUser = getCache("authData") as User;
   console.log({ username });
   const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
@@ -75,8 +77,6 @@ const ProfilePage = () => {
     testScore,
     myProfile,
   };
-
-  const locate = useLocation();
 
   const tabMap = {
     0: "profile",
@@ -132,6 +132,7 @@ const ProfilePage = () => {
   if (!getUser?.user) {
     return <NoResultFound />;
   }
+
   return (
     <>
       <Grid className="max-width-container max-md:px-0">

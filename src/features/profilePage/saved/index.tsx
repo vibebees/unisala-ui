@@ -1,19 +1,19 @@
-import { useState } from "react"
+import { Query } from "@apollo/client/react/components";
+import emptyState from "@assets/emptyState.png";
 import {
   IonCard,
   IonInfiniteScroll,
-  IonInfiniteScrollContent
-} from "@ionic/react"
-import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { Query } from "@apollo/client/react/components"
-import StateMessage from "@components/packages/stateMessage"
-import emptyState from "@assets/emptyState.png"
-import { GetSavedList } from "@datasource/graphql/user"
-import Thread from "@components/packages/thread"
-import CourseCard from "@components/packages/courseCard"
-import {ThreadSkeleton} from "@components/packages/skeleton/threadSkeleton"
-import { USER_SERVICE_GQL } from "@datasource/servers/types"
+  IonInfiniteScrollContent,
+} from "@ionic/react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import CourseCard from "../../../components/packages/courseCard";
+import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
+import StateMessage from "../../../components/packages/stateMessage";
+import Thread from "../../../components/packages/thread";
+import { GetSavedList } from "../../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 
 function index({ userId, firstName }) {
   return (
@@ -24,10 +24,10 @@ function index({ userId, firstName }) {
       context={{ server: USER_SERVICE_GQL }}
     >
       {({ data, loading, fetchMore }) => {
-        const { Posts } = data?.savedList || []
-        const { totalPosts } = data?.savedList || 0
-        const { user } = useSelector((state) => state.userProfile)
-        const [page, setPage] = useState(0)
+        const { Posts } = data?.savedList || [];
+        const { totalPosts } = data?.savedList || 0;
+        const { user } = useSelector((state) => state.userProfile);
+        const [page, setPage] = useState(0);
 
         if (!data?.savedList.totalPosts) {
           return (
@@ -43,7 +43,7 @@ function index({ userId, firstName }) {
                 <img src={emptyState} alt="empty state" className="state-img" />
               </StateMessage>
             </IonCard>
-          )
+          );
         }
 
         return (
@@ -52,61 +52,61 @@ function index({ userId, firstName }) {
               Posts.map((item, index) => {
                 return item.type === "university" ? (
                   <Link key={index} to={`/university/${index}`}>
-                    <CourseCard allProps={item}/>
+                    <CourseCard allProps={item} />
                   </Link>
                 ) : (
                   <div
                     style={{
                       width: "100%",
                       marginTop: "10px",
-                      borderTop: "1px solid #e0e0e0"
+                      borderTop: "1px solid #e0e0e0",
                     }}
                     className="thread-card"
                     key={index}
                   >
                     <Thread thread={item} id={item?._id} />
                   </div>
-                )
+                );
               })}
 
             {loading &&
               ["0", "1", "2"].map((item) => {
-                return <ThreadSkeleton key={item} />
+                return <ThreadSkeleton key={item} />;
               })}
 
             {totalPosts > Posts.length && (
               <IonInfiniteScroll
                 onIonInfinite={(e) => {
-                  setPage(page + 1)
+                  setPage(page + 1);
                   fetchMore({
                     variables: {
                       userId,
-                      page: page + 1
+                      page: page + 1,
                     },
                     updateQuery: (prev, { fetchMoreResult }) => {
-                      if (!fetchMoreResult) return prev
+                      if (!fetchMoreResult) return prev;
                       return Object.assign({}, prev, {
                         savedList: {
                           ...prev.savedList,
                           Posts: [
                             ...prev.savedList.Posts,
-                            ...fetchMoreResult.savedList.Posts
-                          ]
-                        }
-                      })
-                    }
-                  })
-                  setTimeout(() => e.target.complete(), 500)
+                            ...fetchMoreResult.savedList.Posts,
+                          ],
+                        },
+                      });
+                    },
+                  });
+                  setTimeout(() => e.target.complete(), 500);
                 }}
               >
                 <IonInfiniteScrollContent loadingText=""></IonInfiniteScrollContent>
               </IonInfiniteScroll>
             )}
           </div>
-        )
+        );
       }}
     </Query>
-  )
+  );
 }
 
-export default index
+export default index;

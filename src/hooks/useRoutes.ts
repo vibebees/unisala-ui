@@ -9,7 +9,8 @@ import { getCache, userName } from "../utils/cache";
 
 const useRoutes = () => {
   const authenticated = getCache("refreshToken");
-  let profileLink = authenticated ? "/@/" + userName : "/login";
+  // TODO: check issue here
+  let profileLink = authenticated ? "/@/" + userName : "/profile";
   const routes = useMemo(
     () => [
       {

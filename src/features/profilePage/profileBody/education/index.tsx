@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -8,18 +8,22 @@ import {
   IonLabel,
   IonIcon,
   IonButton,
-  useIonToast
-} from "@ionic/react"
-import { create, eyeOff, add, eye, trash } from "ionicons/icons"
-import EducationPop from "./EducationPop"
-import { useMutation } from "@apollo/client"
-import { ToggleView, DeleteEducation, getUserGql } from "../../../../datasource/graphql/user"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+  useIonToast,
+} from "@ionic/react";
+import { create, eyeOff, add, eye, trash } from "ionicons/icons";
+import EducationPop from "./EducationPop";
+import { useMutation } from "@apollo/client";
+import {
+  ToggleView,
+  DeleteEducation,
+  getUserGql,
+} from "../../../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
 
 function Education({ education, myProfile, username }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
-  const { schools } = education ?? {}
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const { schools } = education ?? {};
 
   const [toggleView] = useMutation(ToggleView, {
     context: { server: USER_SERVICE_GQL },
@@ -27,8 +31,8 @@ function Education({ education, myProfile, username }) {
     update: (cache, { data: { toggleView } }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -39,12 +43,12 @@ function Education({ education, myProfile, username }) {
               ...getUser.user,
               education: {
                 ...getUser.user.education,
-                private: toggleView.private
-              }
-            }
-          }
-        }
-      })
+                private: toggleView.private,
+              },
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       if (data.toggleView.status.success) {
@@ -53,8 +57,8 @@ function Education({ education, myProfile, username }) {
           message: education.private ? "View made public" : "View made private",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
     },
     onError: (error) => {
@@ -63,18 +67,18 @@ function Education({ education, myProfile, username }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const [deleteEducation] = useMutation(DeleteEducation, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -83,11 +87,11 @@ function Education({ education, myProfile, username }) {
             ...getUser,
             user: {
               ...getUser.user,
-              education: data?.deleteEducation?.education
-            }
-          }
-        }
-      })
+              education: data?.deleteEducation?.education,
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       if (data.deleteEducation.status.success) {
@@ -96,8 +100,8 @@ function Education({ education, myProfile, username }) {
           message: "Education Deleted",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
     },
     onError: (error) => {
@@ -106,24 +110,24 @@ function Education({ education, myProfile, username }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const [input, setInput] = useState({
     school: "",
     degree: "",
     major: "",
     startDate: "",
-    graduationDate: ""
-  })
+    graduationDate: "",
+  });
 
-  const [present, dismiss] = useIonToast()
+  const [present, dismiss] = useIonToast();
 
   return (
     <IonCard className="mb-2 max-md:mx-1">
-      <IonCardContent className="card-bb flex">
+      <IonCardContent className="card-bb flex justify-between">
         <h1>Education</h1>
         {myProfile && (
           <div className="inline-flex">
@@ -131,22 +135,22 @@ function Education({ education, myProfile, username }) {
               className="grey-icon-32 mr-1"
               icon={education.private ? eyeOff : eye}
               onClick={() => {
-                toggleView()
+                toggleView();
               }}
             />
             <IonIcon
               className="grey-icon-32 mr-1"
               icon={add}
               onClick={() => {
-                setIsOpen(true)
-                setIsEdit(false)
+                setIsOpen(true);
+                setIsEdit(false);
                 setInput({
                   school: "",
                   degree: "",
                   major: "",
                   startDate: "",
-                  graduationDate: ""
-                })
+                  graduationDate: "",
+                });
               }}
             />
           </div>
@@ -176,8 +180,8 @@ function Education({ education, myProfile, username }) {
                   degree,
                   major,
                   startDate,
-                  graduationDate
-                } = education
+                  graduationDate,
+                } = education;
                 return (
                   <IonItem key={i}>
                     <IonAvatar slot="start">
@@ -204,9 +208,9 @@ function Education({ education, myProfile, username }) {
                           icon={create}
                           color="secondary"
                           onClick={() => {
-                            setIsOpen(true)
-                            setIsEdit(true)
-                            setInput(education)
+                            setIsOpen(true);
+                            setIsEdit(true);
+                            setInput(education);
                           }}
                         />
                         <IonIcon
@@ -215,14 +219,14 @@ function Education({ education, myProfile, username }) {
                           color="danger"
                           onClick={() => {
                             deleteEducation({
-                              variables: { id: education._id }
-                            })
+                              variables: { id: education._id },
+                            });
                           }}
                         />
                       </>
                     )}
                   </IonItem>
-                )
+                );
               })}
           </IonList>
         </IonCardContent>
@@ -239,7 +243,7 @@ function Education({ education, myProfile, username }) {
         username={username}
       />
     </IonCard>
-  )
+  );
 }
 
-export default Education
+export default Education;

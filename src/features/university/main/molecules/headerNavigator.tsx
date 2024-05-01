@@ -3,19 +3,18 @@ import {
   IonButtons,
   IonHeader,
   IonTitle,
-  IonToolbar
-} from "@ionic/react"
-import React from "react"
-import { chevronBack } from "ionicons/icons"
+  IonToolbar,
+} from "@ionic/react";
+import { chevronBack } from "ionicons/icons";
 
 export const HeaderNavigator = ({ allProps }) => {
-  const { data } = allProps
+  const { data } = allProps;
   return (
     <IonHeader
       style={{
         position: "sticky",
         top: 0,
-        borderBottom: "1px solid #e0e0e0"
+        borderBottom: "1px solid #e0e0e0",
       }}
     >
       <IonToolbar>
@@ -24,7 +23,7 @@ export const HeaderNavigator = ({ allProps }) => {
         </IonButtons>
         <IonTitle
           style={{
-            fontSize: "1rem"
+            fontSize: "1rem",
           }}
           className="text-center w-full text-red-700"
         >
@@ -32,5 +31,5 @@ export const HeaderNavigator = ({ allProps }) => {
         </IonTitle>
       </IonToolbar>
     </IonHeader>
-  )
-}
+  );
+};

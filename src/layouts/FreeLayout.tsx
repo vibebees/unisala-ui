@@ -1,19 +1,16 @@
 import React from "react";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
-  Content,
+  CardHeader,
   CardSubtitle,
-  Row,
-  Col,
+  CardTitle,
+  Content,
   Page,
+  Row,
 } from "../components/defaults";
 
 import "./index.css";
-import { IonPage, IonCard } from "@ionic/react";
-import { Test } from "vitest";
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;
@@ -78,9 +75,9 @@ let mainContentStyle = {
   mainRowStyle = { maxWidth: "1128px", width: "100%", flexWrap: "nowrap" };
 
 const Layout: React.FC<LayoutProps> = ({
-  leftSidebar ,
+  leftSidebar,
   children,
-  rightSidebar ,
+  rightSidebar,
 }) => {
   return (
     <Page style={{ backgroundColor: "#F0F2F5" }}>

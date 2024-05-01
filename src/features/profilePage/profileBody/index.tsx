@@ -1,11 +1,11 @@
-import AboutUser from "./aboutUser"
+import AboutUser from "./aboutUser";
 // import Badges from "./badges"
-import TestScore from "./testScore"
-import Education from "./education"
+import TestScore from "./testScore";
+import Education from "./education";
 
 function index({ data }) {
-  const { about, badges, education, testScore, myProfile, username } = data
-  console.log((myProfile),   (!myProfile && !about.private && about.text))
+  const { about, badges, education, testScore, myProfile, username } = data;
+  console.log({ data, myProfile });
   return (
     <>
       {(myProfile || (!myProfile && !about.private && about.text)) && (
@@ -34,7 +34,7 @@ function index({ data }) {
         />
       )}
     </>
-  )
+  );
 }
 
-export default index
+export default index;

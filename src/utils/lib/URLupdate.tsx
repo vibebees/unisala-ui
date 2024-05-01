@@ -23,3 +23,7 @@ export const URLdelete = (key) => {
   params.delete(key)
   return params.toString()
 }
+
+export const  redirectTo = (url: string) => {
+  window.location.href = url
+}

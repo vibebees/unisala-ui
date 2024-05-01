@@ -10,7 +10,7 @@ import List from "../../components/packages/list";
 import { getUserGql } from "../../datasource/graphql/user";
 import { USER_SERVICE_GQL } from "../../datasource/servers/types";
 import useDocTitle from "../../hooks/useDocTitile";
-import { URLgetter, URLupdate } from "../../utils/lib/URLupdate";
+import { URLgetter, URLupdate, redirectTo } from "../../utils/lib/URLupdate";
 import Guestbook from "./guestbook";
 import ProfileBody from "./profileBody";
 import ProfileHeader from "./profileHeader";
@@ -18,23 +18,21 @@ import Saved from "./saved";
 import Threads from "./threads";
 
 const ProfilePage = () => {
-  console.log("profile page");
   const [tab, setTab] = useState(0);
   const { username } = useParams();
+
   const history = useHistory();
   const loggedInUser = getCache("authData") as User;
-  console.log({ username });
   const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username },
     fetchPolicy: "cache-first",
+    skip: !username,
   });
   useDocTitle(username);
-  console.log({ username });
   const { getUser } = data || {};
 
   const myProfile = username === loggedInUser?.username;
-
   const {
     firstName,
     lastName,
@@ -132,6 +130,9 @@ const ProfilePage = () => {
     return <NoResultFound />;
   }
 
+  if (!username) {
+    redirectTo('/login')
+  }
   return (
     <>
       <Grid className="max-width-container max-md:px-0">

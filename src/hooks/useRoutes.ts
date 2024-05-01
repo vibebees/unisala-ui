@@ -6,17 +6,30 @@ import {
   MessageIcon,
 } from "./../components/packages/icons";
 import { getCache, userName } from "../utils/cache";
+import { useAuth } from "@context/AuthContext";
 
 const useRoutes = () => {
-  const authenticated = getCache("refreshToken");
+
+
+  const { username, authenticated } = useAuth();
   // TODO: check issue here
-  let profileLink = authenticated ? "/@/" + userName : "/profile";
-  const routes = useMemo(
-    () => [
+  let profileLink = '/profile/' + username
+  const home = {
+    link: authenticated ? "/feed" : "/home",
+    name: authenticated ? "Feed" : "Home",
+  };
+
+  const profile = {
+    link: authenticated ? `/profile/${username}` : "/login",
+    name: authenticated ? "Profile" : "Login",
+  };
+
+  const routes = useMemo(() => {
+    const baseRoutes = [
       {
-        name: "Home",
+        name: home.name,
         Icon: HomeIcon,
-        link: "/home",
+        link: home.link,
       },
       {
         name: "Explore Universities",
@@ -24,24 +37,30 @@ const useRoutes = () => {
         link: "/search?tab=uni",
       },
       {
-        name: " Network",
+        name: profile.name,
         Icon: PeopleIcon,
-        link: "/mynetwork",
+        link: profile.link,
       },
-      {
+    ];
+
+    // Add Messages only if the user is authenticated
+    if (authenticated) {
+      baseRoutes.push({
         name: "Messages",
         Icon: MessageIcon,
         link: "/messages",
-        count: 0,
-      },
-      {
-        name: "Profile",
+       });
+
+      baseRoutes.push( {
+        name: "Network",
         Icon: PeopleIcon,
-        link: profileLink,
-      },
-    ],
-    [authenticated]
-  );
+        link: "/mynetwork",
+      },)
+    }
+
+    return baseRoutes;
+  }, [authenticated ]) // Dependencies on which useMemo depends
+
   return routes;
 };
 

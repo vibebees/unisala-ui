@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "../../../defaults/index";
 import { usePathName } from "@hooks/usePathname";
 import { PostCardForClick } from "../organisim/PostCardForClick";

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { NodeDetailsFragment } from "./metaData.Fragment";
 
 export const Login = gql`
     mutation login(
@@ -1726,4 +1727,36 @@ export const Login = gql`
                 }
             }
             }
-        }`;
+        }`,
+         GET_METADATA_TAGS = gql`
+
+         query GetMetadataTags {
+         getMetadataTags {
+          data {
+            home {
+              addAPost {
+                suggestMeUniversity {
+                  id
+                  name
+                  type
+                  options
+                  api
+                  conditionalEdges {
+                    name
+                    type
+                  }
+                  edges{
+                    id
+                    name
+                    type
+                    validation{
+                      min
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      `;

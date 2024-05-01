@@ -10,7 +10,6 @@ import { useMutation } from "@apollo/client";
 import { useAuth } from "@context/AuthContext";
 import { useHistory } from "react-router";
 import { AuthenticationContext } from "@features/login";
-import { redirectTo } from "@utils/lib/URLupdate";
 
 const SignInForm = () => {
   const { setauth } = useContext(AuthenticationContext)!;
@@ -63,7 +62,7 @@ const SignInForm = () => {
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
         });
-      redirectTo("/feed");
+        history.push("/feed");
       }
     },
     onError: (error) => {

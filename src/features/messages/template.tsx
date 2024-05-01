@@ -1,36 +1,27 @@
 // Messaging System Entry Point
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useQuery, useApolloClient } from "@apollo/client";
-import { useDispatch, useSelector } from "react-redux";
-import { IonContent, IonGrid, IonRow, IonCol } from "@ionic/react";
+import { IonGrid, IonRow, IonCol } from "@ionic/react";
 import { useParams } from "react-router-dom";
 
 import { ContactList } from "./contactList";
 import { MessagingStation } from "./chats";
 import useDocTitle from "../../hooks/useDocTitile";
 import {
-  MESSAGE_SERVICE_GQL,
   USER_SERVICE_GQL,
 } from "../../datasource/servers/types";
-import { ConnectedList, getFriends } from "../../datasource/graphql/user";
-import { messageSocket } from "../../datasource/servers/endpoints";
-import {
-  setMyNetworkRecentMessages,
-  updateUnreadMessages,
-} from "../../datasource/store/action/userProfile";
-import {
-  addSeenEye,
-  removeSeenEye,
-} from "../../datasource/store/action/userActivity";
-import { userInfo } from "../../utils/cache";
+import { ConnectedList, getFriends } from "@datasource/graphql/user";
+
 import "./index.css";
+import { useAuth } from "@context/AuthContext";
+import { messageSocket } from "@datasource/servers/endpoints";
 
 const MessagingSystem = () => {
   useDocTitle("Messages");
 
   const { friendUserName } = useParams();
-  const { username, id: userId } = userInfo || {};
+  const { user } = useAuth(),
+  {username, id: userId } = user || {};
 
   const {
     data: friendsData,
@@ -43,6 +34,41 @@ const MessagingSystem = () => {
   });
   const friends = friendsData?.connectedList?.connectionList || [];
 
+  const socket = useRef(null);
+
+  useEffect(() => {
+    if (friends?.length > 0) {
+      socket.current = messageSocket()
+      socket.current.emit("queryRecentMessageForNetwork", {
+        userId: user?.id,
+        connectedList: friends.map((o) => {
+          return {
+            senderId: user?.id,
+            receiverId: o?.user?._id
+          }
+        })
+      })
+
+      socket.current.on(
+        "fetchRecentMessageForNetwork",
+        (recentMessagesWithNetwork: any) => {
+          const mergedData =
+            friends.map((conn) => {
+              const userId = conn?.user?._id
+              if (!userId) return ""
+              const userMessages = recentMessagesWithNetwork.filter(
+                (msg) => msg?.senderId === userId || msg?.receiverId === userId
+              )
+              return { ...conn, recentMessage: userMessages?.[0] }
+            }) || []
+          console.log("mergedData", mergedData)
+          // dispatch(setMyNetworkRecentMessages(mergedData))
+        }
+      )
+    }
+  }, [ friends ])
+
+
   // find out friend id from friendUserName
 
   const messagingTo = friends?.find(
@@ -50,21 +76,10 @@ const MessagingSystem = () => {
     )?.user,
     messagingToId = messagingTo?._id;
 
-  // const {
-  //     data,
-  //     loading: friendConvoLoading,
-  //     error: friendConvoError,
-  //   } = useQuery(getMessagesByIdGql, {
-  //     skip: !messagingToId,
-  //     variables: { senderId: userId, receiverId: messagingToId },
-  //     context: { server: MESSAGE_SERVICE_GQL },
-  //     fetchPolicy: "cache-and-network",
-  //   }),
-  //   friendConversation = data?.getMessagesByIdGql || [];
-
   const friendConversation = {};
   const friendConvoLoading = true;
   const friendConvoError = {};
+
 
   const chatProps = {
     friends,

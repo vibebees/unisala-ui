@@ -131,7 +131,7 @@ const ProfilePage = () => {
   }
 
   if (!username) {
-    redirectTo('/login')
+    redirectTo('/login')()
   }
   return (
     <>

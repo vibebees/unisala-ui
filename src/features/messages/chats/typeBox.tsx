@@ -6,8 +6,8 @@ import {
   IonRow
 } from '@ionic/react';
 import { send } from 'ionicons/icons';
-import { userInfo } from '@utils/cache';
-import './index.css';
+ import './index.css';
+import { useAuth } from '@context/AuthContext';
 
 type MessagingToType = {
   _id: string;
@@ -23,7 +23,7 @@ type TypeBoxProps = {
 export const TypeBox = memo(({ socket, messagingTo }: TypeBoxProps) => {
   const [messageInput, setMessageInput] = useState('');
   const inputRef = useRef<HTMLIonTextareaElement>(null);
-
+  const {user: userInfo} = useAuth()
   useEffect(() => {
     if (messageInput === '') {
       setTimeout(() => {

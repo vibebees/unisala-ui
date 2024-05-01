@@ -13,23 +13,12 @@ const useRoutes = () => {
 
   const { username, authenticated } = useAuth();
   // TODO: check issue here
-  let profileLink = '/profile/' + username
-  const home = {
-    link: authenticated ? "/feed" : "/home",
-    name: authenticated ? "Feed" : "Home",
-  };
-
-  const profile = {
-    link: authenticated ? `/profile/${username}` : "/login",
-    name: authenticated ? "Profile" : "Login",
-  };
-
   const routes = useMemo(() => {
     const baseRoutes = [
       {
-        name: home.name,
+        name: authenticated ? "Feed" : "Home",
         Icon: HomeIcon,
-        link: home.link,
+        link: authenticated ? "/feed" : "/home",
       },
       {
         name: "Explore Universities",
@@ -37,29 +26,25 @@ const useRoutes = () => {
         link: "/search?tab=uni",
       },
       {
-        name: profile.name,
+        name: "Network",
         Icon: PeopleIcon,
-        link: profile.link,
+        link: authenticated ? "/mynetwork" : null,  // Hide or disable this link based on authenticated status
+      },
+      {
+        name: "Messages",
+        Icon: MessageIcon,
+        link: authenticated ? "/messages" : null,  // Hide or disable this link based on authenticated status
+      },
+      {
+        name: authenticated ? "Profile" : "Login",
+        Icon: PeopleIcon,
+        link: authenticated ? `/profile/${username}` : "/login",
       },
     ];
 
-    // Add Messages only if the user is authenticated
-    if (authenticated) {
-      baseRoutes.push({
-        name: "Messages",
-        Icon: MessageIcon,
-        link: "/messages",
-       });
-
-      baseRoutes.push( {
-        name: "Network",
-        Icon: PeopleIcon,
-        link: "/mynetwork",
-      },)
-    }
-
-    return baseRoutes;
-  }, [authenticated ]) // Dependencies on which useMemo depends
+    // Filter out routes that should not be displayed for unauthenticated users
+    return baseRoutes.filter(route => route.link !== null);
+  }, [authenticated, username]);
 
   return routes;
 };

@@ -1,3 +1,5 @@
+import { useHistory } from "react-router"
+
 export const URLupdate = (key, value) => {
   const url = new URL(window.location.href)
   const params = new URLSearchParams(url.search)
@@ -24,6 +26,9 @@ export const URLdelete = (key) => {
   return params.toString()
 }
 
-export const  redirectTo = (url: string) => {
-  window.location.href = url
+export const  redirectTo = () => {
+  return (url: string) => {
+    const history = useHistory()
+    history.push(url)
+  }
 }

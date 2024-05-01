@@ -62,6 +62,7 @@ const MessagingSystem = () => {
               return { ...conn, recentMessage: userMessages?.[0] }
             }) || []
           console.log("mergedData", mergedData)
+          //need to store messages in storage
           // dispatch(setMyNetworkRecentMessages(mergedData))
         }
       )

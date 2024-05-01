@@ -2,7 +2,7 @@ import axios from "axios"
 import {jwtDecode} from "jwt-decode"
 import {userServer} from "../servers/endpoints"
 import {getUserProfile} from "../store/action/userProfile"
-import {getCache, removeCache, setCache} from "../../utils/cache"
+import {getCache, removeCache, setCache} from "@utils/cache"
 
 export const getNewToken = async (dispatch = () => {}) => {
   let prevRefreshToken = getCache("refreshToken")

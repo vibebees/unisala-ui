@@ -15,7 +15,10 @@ import {
   USER_SERVICE_GQL,
 } from "./types";
 import getServiceConfig from "./index";
-import { getCache, removeCache } from "../../utils/cache";
+import { getCache } from "../../utils/cache";
+import config from "./config";
+
+
 const {
     messagingServiceAddress,
     universityServiceAddress,
@@ -114,10 +117,17 @@ export const client = new ApolloClient({
     },
     cache: new InMemoryCache(),
   }),
-  messageSocket = () =>
-    io(messageSocketAddress, {
-      path: "/msg/socket/socket.io",
-    }),
+  messageSocket = () => {
+    const socketOptions = {
+      path:''
+    };
+
+    if (config.NODE_ENV !== 'DEVELOPMENT') {
+      socketOptions['path'] = "/msg/socket/socket.io";
+    }
+
+    return io(messageSocketAddress, socketOptions);
+  },
   callSocket = () => io(callSocketAddress),
   userServer = userServiceAddress,
   messageServer = messagingServiceAddress,

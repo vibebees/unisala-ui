@@ -15,6 +15,8 @@ const Notifications = lazy(() => import("../pages/notification"));
 // Assuming StudyAbroadRoadmapInput is a component, if it's not, you can't lazy load it
 // const StudyAbroadRoadmapInput = lazy(() => import("features/roadmap/template"))
 const Discover = lazy(() => import("../pages/discover"));
+const Search = lazy(() => import("../pages/search"));
+
 const SpacePage = lazy(() => import("../pages/space"));
 const Org = lazy(() => import("../pages/org"));
 
@@ -81,9 +83,15 @@ export const PageRoute = () => {
       </Route>
 
       <Route path="/search" exact>
+        <Search />
+      </Route>
+      <Route path="/discover" exact>
         <Discover />
       </Route>
 
+      <Route path="/search" exact>
+        <Discover />
+      </Route>
       {/* <Route path="/space" exact></Route> */}
       {/* <Route path="/space/:category" exact>
         <SpacePage />

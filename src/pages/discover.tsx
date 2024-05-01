@@ -1,22 +1,14 @@
 import React from "react";
-import SearchPage from "../features/search/index.js";
+import SearchPage from "../features/discover/index.js";
 import Layout from "../layouts/FreeLayout.js";
-import { ExploreFilterPopupProvider } from "../features/search/uni/ExploreUniFilterPopupContext.js";
+import { ExploreFilterPopupProvider } from "../features/discover/uni/ExploreUniFilterPopupContext.js";
+import { IonContent } from "@ionic/react";
 
 const DiscoverPage = () => {
   return (
-    <Layout
-      leftSidebar={
-        <div
-          id="filter-container"
-          className=" min-w-[279px] top-0 sticky"
-        ></div>
-      }
-    >
-      <ExploreFilterPopupProvider>
-        <SearchPage />
-      </ExploreFilterPopupProvider>
-    </Layout>
+    <IonContent>
+      <SearchPage />
+    </IonContent>
   );
 };
 export default DiscoverPage;

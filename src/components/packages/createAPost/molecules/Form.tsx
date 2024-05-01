@@ -26,9 +26,9 @@ import AsyncSelectAtom from "../atoms/AsyncSelect";
 import SelectAtom from "../atoms/Select";
 import ImageUpload from "./ImageUpload";
 
-const Form = ({ metaData, postData, setPostData, allProps }) => {
+const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }) => {
   const { setCreateAPostPopUp, createAPostPopUp, tags } = allProps;
-  const { user } = useSelector((state) => state.userProfile);
+  const { user } = useSelector((state) => state?.userProfile);
   const [files, setFiles] = useState(null);
   const [present, dismiss] = useIonToast();
   const [popoverOpen, setPopoverOpen] = useState(false);

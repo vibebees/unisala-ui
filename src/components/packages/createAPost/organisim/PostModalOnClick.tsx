@@ -61,7 +61,6 @@ export const PostModalOnClick = ({ metaData }) => {
                   metaData={metaData[selectedTab]}
                   postData={postData}
                   setPostData={setPostData}
-                  allProps={allProps}
                 />
               )}
             </>

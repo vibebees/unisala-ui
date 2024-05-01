@@ -19,7 +19,7 @@ const SelectAtom = ({ options, item, setPostData, postData }) => {
       zIndex: 100
     })
   }
-  const modifiedOptions = options.map((option) => ({
+  const modifiedOptions = options?.map((option) => ({
     value: option,
     label: option
   }))

@@ -90,7 +90,7 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
 
   if (error) return <ApiError />;
   if (loading && posts.length === 0) return <FeedSkeleton />;
-  if (posts.length === 0) return <NoContentCard />;
+  if (posts.length === 0 && loading === false) return <NoContentCard />;
 
   return (
     <div>

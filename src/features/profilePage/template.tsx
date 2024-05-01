@@ -1,7 +1,8 @@
 import { useQuery } from "@apollo/client";
+import { getCache } from "@utils/cache";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
+import { User } from "src/types/gqlTypes/graphql";
 import { Col, Grid, Row } from "../../components/defaults";
 import { ApiError } from "../../components/packages/errorHandler/ApiError";
 import { NoResultFound } from "../../components/packages/errorHandler/NoResultFound";
@@ -15,8 +16,6 @@ import ProfileBody from "./profileBody";
 import ProfileHeader from "./profileHeader";
 import Saved from "./saved";
 import Threads from "./threads";
-import { getCache } from "@utils/cache";
-import { User } from "src/types/gqlTypes/graphql";
 
 const ProfilePage = () => {
   console.log("profile page");
@@ -136,7 +135,7 @@ const ProfilePage = () => {
   return (
     <>
       <Grid className="max-width-container max-md:px-0">
-        <Row>
+        <Row className="lg:px-24">
           <Col className="w-2/5 max-md:px-0">
             <ProfileHeader tab={tab} setTab={setTab} data={profileHeaderData} />
             {tab === 0 && getUser?.user && (

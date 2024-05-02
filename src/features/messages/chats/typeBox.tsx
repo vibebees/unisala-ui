@@ -35,13 +35,13 @@ export const TypeBox = memo(({ socket, messagingTo }: TypeBoxProps) => {
   const sendMessage = useCallback(() => {
     const messageText = messageInput.trim();
     if (messageText === '') return;
-
     const messageData = {
       senderId: userInfo?.id,
       receiverId: messagingTo._id,
-      message: { text: messageText },
-      seen: false,
+      text: messageText,
+      seen: false
     };
+    console.log('sending message', messageData);
 
     socket.emit('createMessage', messageData);
     setMessageInput('');

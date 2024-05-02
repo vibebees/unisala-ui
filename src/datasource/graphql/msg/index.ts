@@ -8,10 +8,9 @@ export const fetchMessageHistory = gql`
         _id
         senderId
         receiverId
-        message {
-          text
-          image
-        }
+        text
+        image
+        video
         seen
         createdAt
       }

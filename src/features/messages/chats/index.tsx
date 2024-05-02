@@ -25,50 +25,50 @@ export const MessagingStation = ({
   friendConversation,
   messagingTo,
   messagingToId,
-  friendsMsgData,
-  friendsMsgLoading,
-  friendsMsgError
+  previousMessages
 }) => {
-  const dispatch = useDispatch()
-  const messageSeenBy = []
+  console.log({
+    friendConversation,
+    messagingTo,
+    messagingToId,
+    previousMessages
+  });
+  const dispatch = useDispatch();
+  const messageSeenBy = [];
 
   const chatRef = useRef(null);
   const socket = useRef(null);
-  const [messages, setMessages] = useState([]);
-  const {user: userInfo} = useAuth()
+  const [messages, setMessages] = useState(previousMessages);
+  const { user: userInfo } = useAuth();
+
   useEffect(() => {
-    if (friendConversation?.length > 0) {
-      setMessages(friendConversation[0].messages);
-    }
-  }, [friendConversation]);
+    setMessages(previousMessages);
+  }, [previousMessages]);
 
   useEffect(() => {
     socket.current = messageSocket();
-    socket.current.emit('joinRoom', { senderId: userInfo?.id, receiverId: messagingToId });
-
-    socket.current.emit('queryRecentMessageForNetwork', { senderId: userInfo?.id, receiverId: messagingToId });
-
+    socket.current.emit('joinRoom', {
+      senderId: userInfo?.id,
+      receiverId: messagingToId
+    });
     socket.current.on('getMessage', (message) => {
-      console.log('message', message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    socket.current.on('messageRead', (seenMsg) => {
-      dispatch(addSeenEye(seenMsg.receiverId));
-    });
+    // socket.current.on('messageRead', (seenMsg) => {
+    //   dispatch(addSeenEye(seenMsg.receiverId));
+    // });
 
     return () => socket.current?.disconnect();
-  }, [messagingToId, dispatch]);
+  }, [messagingToId]);
 
-
-
-     // Scroll to bottom whenever messages update
-     useEffect(() => {
-      setTimeout(() => {
-          if (chatRef.current) {
-              chatRef.current.scrollTop = chatRef.current.scrollHeight;
-          }
-      }, 100);  // Delay of 100ms
+  // Scroll to bottom whenever messages update
+  useEffect(() => {
+    setTimeout(() => {
+      if (chatRef.current) {
+        chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      }
+    }, 100); // Delay of 100ms
   }, [messages]);
 
   const MessageHistory = () => (
@@ -109,5 +109,9 @@ export const MessagingStation = ({
     </IonCard>
   );
 
-  return messagingTo?.username ? <MessageHistory /> : <DefaultChatMessage messageImg={messageImg} />;
+  return messagingTo?.username ? (
+    <MessageHistory />
+  ) : (
+    <DefaultChatMessage messageImg={messageImg} />
+  );
 };

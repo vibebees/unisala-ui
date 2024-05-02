@@ -1,105 +1,117 @@
 // Messaging System Entry Point
-import React, { useEffect, useRef } from "react";
-import { useQuery, useApolloClient } from "@apollo/client";
-import { IonGrid, IonRow, IonCol } from "@ionic/react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import { useParams, useHistory } from 'react-router-dom';
 
-import { ContactList } from "./contactList";
-import { MessagingStation } from "./chats";
-import useDocTitle from "../../hooks/useDocTitile";
+import { ContactList } from './contactList';
+import { MessagingStation } from './chats';
 import {
-  USER_SERVICE_GQL,
-} from "../../datasource/servers/types";
-import { ConnectedList, getFriends } from "@datasource/graphql/user";
+  MESSAGE_SERVICE_GQL,
+  USER_SERVICE_GQL
+} from '@datasource/servers/types';
+import { ConnectedList } from '@datasource/graphql/user';
 
-import "./index.css";
-import { useAuth } from "@context/AuthContext";
-import { messageSocket } from "@datasource/servers/endpoints";
+import './index.css';
+import { useAuth } from '@context/AuthContext';
+import { fetchMessageHistory } from '@datasource/graphql/msg';
+import useDocTitle from '@hooks/useDocTitile';
+import { set } from 'cypress/types/lodash';
+import { generateConvesationId } from '@utils/lib/messageUtility';
 
 const MessagingSystem = () => {
-  useDocTitle("Messages");
+  useDocTitle('Messages');
 
   const { friendUserName } = useParams();
-  const { user } = useAuth(),
-  {username, id: userId } = user || {};
+  const history = useHistory();
+  const { user } = useAuth();
+  const { username, id: userId } = user || {};
 
   const {
     data: friendsData,
     loading: friendsLoading,
-    error: friendsError,
+    error: friendsError
   } = useQuery(ConnectedList, {
     variables: { userId },
     context: { server: USER_SERVICE_GQL },
-    skip: !userId,
+    skip: !userId
   });
+
   const friends = friendsData?.connectedList?.connectionList || [];
 
-  const socket = useRef(null);
-
+  // Redirect to the first friend if no specific friend is selected
   useEffect(() => {
-    if (friends?.length > 0) {
-      socket.current = messageSocket()
-      socket.current.emit("queryRecentMessageForNetwork", {
-        userId: user?.id,
-        connectedList: friends.map((o) => {
-          return {
-            senderId: user?.id,
-            receiverId: o?.user?._id
-          }
-        })
-      })
-
-      socket.current.on(
-        "fetchRecentMessageForNetwork",
-        (recentMessagesWithNetwork: any) => {
-          const mergedData =
-            friends.map((conn) => {
-              const userId = conn?.user?._id
-              if (!userId) return ""
-              const userMessages = recentMessagesWithNetwork.filter(
-                (msg) => msg?.senderId === userId || msg?.receiverId === userId
-              )
-              return { ...conn, recentMessage: userMessages?.[0] }
-            }) || []
-          console.log("mergedData", mergedData)
-          //need to store messages in storage
-          // dispatch(setMyNetworkRecentMessages(mergedData))
-        }
-      )
+    if (!friendUserName && friends.length > 0) {
+      const firstFriendUsername = friends[0]?.user?.username;
+      history.push(`/messages/${firstFriendUsername}`); // Update the route
     }
-  }, [ friends ])
+  }, [friendUserName, friends, history]);
 
+  const {
+    loading: friendMessageLoading,
+    error: friendMessageError,
+    data: friendsMessages
+  } = useQuery(fetchMessageHistory, {
+    variables: {
+      userId,
+      connectedList: friends.map((friend) => friend?.user?._id)
+    },
+    context: { server: MESSAGE_SERVICE_GQL },
+    skip: !userId || !friends.length
+  });
 
-  // find out friend id from friendUserName
+  const [conversationId, setConversationId] = useState(null);
+  const [messages, setMessages] = useState([]);
 
-  const messagingTo = friends?.find(
-      (friend) => friend?.user?.username === friendUserName
+  const getConversationId = (friendId) => {
+    return generateConvesationId([userId, friendId]);
+  };
+  useEffect(() => {
+    const selectedFriend = friends.find(
+      (friend) => friend.user.username === friendUserName
+    );
+    const selectedFriendId = selectedFriend?.user?._id;
+
+    // Find the conversation history for the selected friend
+    const conversationForSelectedFriend =
+      friendsMessages?.getMessageHistories?.find(
+        (convo) => convo?.conversationId === getConversationId(selectedFriendId)
+      ) || null;
+    if (conversationForSelectedFriend) {
+      setConversationId(conversationForSelectedFriend.conversationId);
+      setMessages(conversationForSelectedFriend.messages);
+    } else {
+      // If no conversation exists with this friend, reset to default values
+      setConversationId(null);
+      setMessages([]);
+    }
+  }, [friendUserName, friendsData, friendsMessages]);
+
+  const selectedFriendToMessage = friends?.find(
+      (o) => o.user.username === friendUserName
     )?.user,
-    messagingToId = messagingTo?._id;
-
-  const friendConversation = {};
-  const friendConvoLoading = true;
-  const friendConvoError = {};
-
-
+    messagingToId = selectedFriendToMessage?._id,
+    messagingTo = selectedFriendToMessage;
   const chatProps = {
     friends,
     friendsLoading,
     friendsError,
-    friendConversation,
-    friendConvoLoading,
-    friendConvoError,
+    friendConvoLoading: friendMessageLoading,
+    friendConvoError: friendMessageError,
     messagingToId,
     messagingTo,
+    previousMessages: messages
   };
+
+  if (friendsLoading || friendMessageLoading) return <div>Loading...</div>;
   return (
-    <IonGrid className="messagingGrid">
+    <IonGrid className='messagingGrid'>
       <IonRow>
-        <IonCol>
+        <IonCol size='3'>
           <ContactList {...chatProps} />
         </IonCol>
-        <IonCol className="messages-wrapper">
-          <MessagingStation {...chatProps} />
+        <IonCol size='9' className='messages-wrapper'>
+          {userId && messagingToId && <MessagingStation {...chatProps} />}
         </IonCol>
       </IonRow>
     </IonGrid>

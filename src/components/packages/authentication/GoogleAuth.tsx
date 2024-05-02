@@ -6,33 +6,32 @@ import { useScript } from "../../../hooks/useScript";
 import { useMutation } from "@apollo/client";
 import { GoogleLogin } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
-import { LoginMutation } from "src/types/gqlTypes/graphql";
+import { GoogleMutation } from "src/types/gqlTypes/graphql";
 import { useAuth } from "@context/AuthContext";
-import { AnyObject } from "chart.js/dist/types/basic";
 
 export const GoogleAuth = () => {
   const { UpdateAuth } = useAuth();
   const [present, dismiss] = useIonToast();
-  const googlebuttonref = useRef<AnyObject>(),
+  const googlebuttonref = useRef<any>(),
     history = useHistory();
 
   const params = new URLSearchParams(window.location.search);
 
-  const [Googlelogin, { loading }] = useMutation<LoginMutation>(GoogleLogin, {
+  const [Googlelogin, { loading }] = useMutation<GoogleMutation>(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       console.log("login data", data);
-      if (data.login?.status?.success && data.login && data.login.data) {
-        console.log("login data", data.login.data);
+      if (data.google?.status?.success && data.google && data.google.data) {
+        console.log("login data", data.google.data);
         UpdateAuth({
-          id: data.login?.data.id!,
-          firstName: data.login.data?.firstName!,
-          lastName: data.login.data.lastName!,
-          username: data.login.data?.username!,
-          accessToken: data.login.data?.accessToken!,
-          refreshToken: data.login.data?.refreshToken!,
-          newUser: data.login.data?.newUser!,
-          role: data.login.data?.role!,
+          id: data.google?.data.id!,
+          firstName: data.google.data?.firstName!,
+          lastName: data.google.data.lastName!,
+          username: data.google.data?.username!,
+          accessToken: data.google.data?.accessToken!,
+          refreshToken: data.google.data?.refreshToken!,
+          newUser: data.google.data?.newUser!,
+          role: data.google.data?.role!,
         });
         present({
           message: "Login Successful",
@@ -54,7 +53,7 @@ export const GoogleAuth = () => {
     },
   });
 
-  const onGoogleSignIn = (user) => {
+  const onGoogleSignIn = (user: any) => {
     const { credential } = user;
     let payload = {
       email: params.get("email"),

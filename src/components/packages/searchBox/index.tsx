@@ -1,19 +1,10 @@
-import React, { useState, useRef } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { IonInput, IonSearchbar } from "@ionic/react";
-import { useLazyQuery } from "@apollo/client";
-import { UniSearchDataList } from "../../../datasource/graphql/uni";
-
+import React, { useState, useRef, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { IonSearchbar } from "@ionic/react";
 import { SearchBarResultList } from "./searchResultList";
 import "./index.css";
 import { searchUniFromBar } from "../../../datasource/store/action/userActivity";
-import {
-  UNIVERSITY_SERVICE_GQL,
-  USER_SERVICE_GQL,
-} from "../../../datasource/servers/types";
 import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
-import { SearchIcon } from "../icons";
-import { getCache } from "../../../utils/cache";
 import { trashBin } from "ionicons/icons";
 
 export const SearchBar = () => {
@@ -21,89 +12,60 @@ export const SearchBar = () => {
   const [dropDownOptions, setDropDownOptions] = useState(false);
   const history = useHistory();
   const [options, setOptions] = useState([]);
-  const [GetUni, unidata] = useLazyQuery(UniSearchDataList, {
-    context: { server: UNIVERSITY_SERVICE_GQL },
-    skip: true,
-  });
-  const dropdownRef = useRef(null);
-  const token = getCache("accessToken");
-
-  const handleSearch = () => {
-    if (searchValue) {
-      GetUni({ variables: { searchValue } });
-      // GetUser({ variables: { searchValue } })
-    }
-  };
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useDebouncedEffect(
-    searchUniFromBar(searchValue, 5, setOptions, token),
+    searchUniFromBar(searchValue, 5, setOptions),
     [searchValue],
     300
   );
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setDropDownOptions(false);
     }
   };
 
-  useState(() => {
-    window.addEventListener("mousedown", handleClickOutside);
+  useEffect(() => {
+    if (dropDownOptions) {
+      window.addEventListener("mousedown", handleClickOutside);
+    }
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [dropDownOptions]);
 
-  const SearchBar = () => {
-    return (
+  return (
+    <>
       <IonSearchbar
         type="text"
-        placeholder="   Search universities, people..."
+        placeholder="Search universities, people..."
         onKeyUp={(e) => {
           if (e.key === "Enter") {
             setDropDownOptions(false);
             history.push(searchValue ? `/search?q=${searchValue}` : "#");
-            handleSearch(searchValue);
           }
         }}
         value={searchValue}
-        onIonInput={(e) => {
+        onIonInput={(e: any) => {
           setSearchValue(e.detail.value);
           setDropDownOptions(true);
-        }}
-        onKeyDown={(e) => {
-          if (searchValue && e.keyCode === 27) {
-            setDropDownOptions(false);
-          }
         }}
         style={{
           marginTop: "-5px",
           padding: "0px",
-          borderColor: "red",
           borderRadius: "10px",
         }}
         animated={true}
         clearIcon={trashBin}
-        class="custom"
-        autocomplete="on"
-        debounce={500}
+        class="custom  "
       />
-    );
-  };
-  return (
-    <>
-      {/* <Link
-          to={searchValue ? `/search?q=${searchValue}` : "#"}
-          className="search-box__search-icon flex justify-center items-center "
-        >
-        </Link> */}
-      {SearchBar()}
       {dropDownOptions && Array.isArray(options) && options.length > 0 && (
         <div
           className="recommend-search"
           ref={dropdownRef}
           style={{
-            zIndex: 1000, // ensure it's above other content
+            zIndex: 1000,
           }}
         >
           {Array.isArray(options) &&

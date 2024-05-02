@@ -331,3 +331,50 @@ export const CommentIcon = ({ className }: { className?: string }) => (
     <path d="M76.83 480a25.69 25.69 0 01-25.57-25.74 29.13 29.13 0 011.2-7.63L70.88 380c.77-2.46-.1-4.94-1.23-6.9l-.22-.4c-.08-.13-.46-.66-.73-1.05s-.58-.81-.86-1.22l-.19-.27A215.66 215.66 0 0132 251.37c-.18-57.59 22.35-112 63.46-153.28C138 55.47 194.9 32 255.82 32A227.4 227.4 0 01398 81.84c39.45 31.75 66.87 76 77.21 124.68a213.5 213.5 0 014.78 45c0 58.93-22.64 114.28-63.76 155.87-41.48 42-97.18 65.06-156.83 65.06-21 0-47.87-5.36-60.77-9-15.52-4.34-30.23-10-31.85-10.6a15.12 15.12 0 00-5.37-1 14.75 14.75 0 00-5.8 1.15l-.85.33-67.48 24.38A29.44 29.44 0 0176.83 480zm-2-31.8zM87.48 380z"></path>
   </svg>
 );
+export const BookMarkIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={cn("w-5 h-5", className)}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <path d="M400 480a16 16 0 01-10.63-4L256 357.41 122.63 476A16 16 0 0196 464V96a64.07 64.07 0 0164-64h192a64.07 64.07 0 0164 64v368a16 16 0 01-16 16z"></path>
+  </svg>
+);
+export const ShareIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={cn("w-5 h-5", className)}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <circle
+      cx="128"
+      cy="256"
+      r="48"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="ionicon-fill-none ionicon-stroke-width"
+    ></circle>
+    <circle
+      cx="384"
+      cy="112"
+      r="48"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="ionicon-fill-none ionicon-stroke-width"
+    ></circle>
+    <circle
+      cx="384"
+      cy="400"
+      r="48"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="ionicon-fill-none ionicon-stroke-width"
+    ></circle>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94"
+      className="ionicon-fill-none ionicon-stroke-width"
+    ></path>
+  </svg>
+);

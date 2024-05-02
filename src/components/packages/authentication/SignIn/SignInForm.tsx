@@ -62,6 +62,7 @@ const SignInForm = () => {
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
         });
+        history.push("/feed");
       }
     },
     onError: (error) => {

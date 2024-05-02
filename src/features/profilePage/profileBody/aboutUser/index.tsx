@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { eyeOff, create, eye } from "ionicons/icons"
+import { useState } from "react";
+import { eyeOff, create, eye } from "ionicons/icons";
 import {
   IonCard,
   IonCardContent,
@@ -13,26 +13,30 @@ import {
   IonTitle,
   IonTextarea,
   useIonToast,
-  IonSpinner
-} from "@ionic/react"
-import { useMutation } from "@apollo/client"
-import { EditAbout, ToggleView, getUserGql } from "../../../../datasource/graphql/user"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+  IonSpinner,
+} from "@ionic/react";
+import { useMutation } from "@apollo/client";
+import {
+  EditAbout,
+  ToggleView,
+  getUserGql,
+} from "../../../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
 
 function AboutUser({ about, myProfile, username }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const [input, setInput] = useState({
-    text: about?.text
-  })
+    text: about?.text,
+  });
   const [editAbout, { loading }] = useMutation(EditAbout, {
     context: { server: USER_SERVICE_GQL },
     variables: { about: input.text },
     update: (cache, { data: { editAbout } }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -43,12 +47,12 @@ function AboutUser({ about, myProfile, username }) {
               ...getUser.user,
               about: {
                 ...getUser.user.about,
-                text: editAbout.about.text
-              }
-            }
-          }
-        }
-      })
+                text: editAbout.about.text,
+              },
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       if (data?.editAbout.status.success) {
@@ -57,9 +61,9 @@ function AboutUser({ about, myProfile, username }) {
           message: data.editAbout.status.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
-        setIsOpen(false)
+          mode: "ios",
+        });
+        setIsOpen(false);
       }
     },
     onError: (error) => {
@@ -68,10 +72,10 @@ function AboutUser({ about, myProfile, username }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const [toggleView] = useMutation(ToggleView, {
     context: { server: USER_SERVICE_GQL },
@@ -79,8 +83,8 @@ function AboutUser({ about, myProfile, username }) {
     update: (cache, { data: { toggleView } }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -91,12 +95,12 @@ function AboutUser({ about, myProfile, username }) {
               ...getUser.user,
               about: {
                 ...getUser.user.about,
-                private: toggleView.private
-              }
-            }
-          }
-        }
-      })
+                private: toggleView.private,
+              },
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       if (data.toggleView.status.success) {
@@ -105,8 +109,8 @@ function AboutUser({ about, myProfile, username }) {
           message: about.private ? "View made public" : "View made private",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
     },
     onError: (error) => {
@@ -115,25 +119,25 @@ function AboutUser({ about, myProfile, username }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const handleChange = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value })
-  }
-  const [present, dismiss] = useIonToast()
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+  const [present, dismiss] = useIonToast();
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    editAbout()
-  }
+    e.preventDefault();
+    editAbout();
+  };
 
   return (
     <>
       <IonCard className="mb-2 max-md:mx-1">
-        <IonCardContent className="card-bb flex">
+        <IonCardContent className="card-bb flex  justify-between">
           <h1>About</h1>
           {myProfile && (
             <div className="inline-flex">
@@ -141,7 +145,7 @@ function AboutUser({ about, myProfile, username }) {
                 className="grey-icon-32 mr-1"
                 icon={about.private ? eyeOff : eye}
                 onClick={() => {
-                  toggleView()
+                  toggleView();
                 }}
               />
               <IonIcon
@@ -154,7 +158,7 @@ function AboutUser({ about, myProfile, username }) {
         </IonCardContent>
 
         {myProfile && !about?.text ? (
-          <IonCardContent className="center-text">
+          <IonCardContent className="center-text ">
             <p>Share something about yourself</p>
             <IonButton
               color="primary"
@@ -208,7 +212,7 @@ function AboutUser({ about, myProfile, username }) {
         </IonContent>
       </IonModal>
     </>
-  )
+  );
 }
 
-export default AboutUser
+export default AboutUser;

@@ -1,11 +1,8 @@
-import React from "react";
 import { lazy, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router";
-import { ProtectedRoute } from "../utils/lib/protectedRoute";
+import { Redirect, Route } from "react-router";
 import { PreLoader } from "../components/packages/preloader";
-import { useSelector } from "react-redux";
-import { getCache } from "../utils/cache";
-import { Chats } from "@features/messages/whatsapp/Chats";
+import { ProtectedRoute } from "../utils/lib/protectedRoute";
+import { useAuth } from "@context/AuthContext";
 
 const ProfilePage = lazy(() => import("../pages/userProfile"));
 const Messages = lazy(() => import("../pages/message"));
@@ -30,7 +27,7 @@ const ThreadDetail = lazy(() => import("../pages/thread.detail"));
 const PageNotFound = lazy(() => import("./PageNotFound"));
 const LandingPage = lazy(() => import("../pages/landingPage"));
 const Standard = lazy(() => import("../pages/standard"));
-const HomePage = lazy(() => import("../pages/Home"));
+const NewsFeed = lazy(() => import("../pages/Home"));
 
 const messagingRoutes = () => (
   // <>
@@ -54,42 +51,44 @@ const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 // )
 
 export const PageRoute = () => {
-  const authenticated = true;
   return (
     <Suspense fallback={<PreLoader />}>
-      <Route path="/login" exact>
+      <Route path='/login' exact>
         <AuthPage />
       </Route>
-      <Route path="/feed" exact>
-        {authenticated ? <HomePage /> : <Redirect to="/" />}
+      <Route path='/feed' exact>
+        <NewsFeed />
       </Route>
-      <Route path="/" exact>
+      <Route path='/' exact>
+        <LandingPage />
+      </Route>
+      <Route path='/home' exact>
         <LandingPage />
       </Route>
       {/* Protected routes example */}
-      <Route path="/profile" exact>
-        {authenticated ? <ProfilePage /> : <Redirect to="/login" />}
+      <Route path='/profile/:username' exact>
+        {/* <ProfilePage /> */}
       </Route>
-      <Route path="/standard" exact>
+      <Route path='/standard' exact>
         <Standard />
       </Route>
 
-      <Route exact path="/thread/:id">
+      <Route exact path='/thread/:id'>
         <ThreadDetail />
       </Route>
 
-      <Route path="/@/:username" exact>
+      <Route path='/@/:username' exact>
         <ProfilePage />
       </Route>
 
-      <Route path="/search" exact>
+      <Route path='/search' exact>
         <Search />
       </Route>
-      <Route path="/discover" exact>
+      <Route path='/discover' exact>
         <Discover />
       </Route>
 
-      <Route path="/search" exact>
+      <Route path='/search' exact>
         <Discover />
       </Route>
       {/* <Route path="/space" exact></Route> */}
@@ -97,25 +96,23 @@ export const PageRoute = () => {
         <SpacePage />
       </Route> */}
 
-      <Route exact path="/university/:id">
+      <Route exact path='/university/:id'>
         <UniversityPage />
       </Route>
 
-      <Route path="/mynetwork" exact>
+      <Route path='/mynetwork' exact>
         <MyNetwork />
       </Route>
-      <Route path="/messages" exact>
+      <Route path='/messages' exact>
         <Messages />
       </Route>
-      <Route path="/messages/:friendUserName" exact>
+      <Route path='/messages/:friendUserName' exact>
         <Messages />
       </Route>
 
-      <Route path="/landingPage" exact>
+      <Route path='/landingPage' exact>
         <LandingPage />
       </Route>
-
-      <Route exact path="/home" component={HomePage} />
       {/* <Route path="/org/:category" exact>
         <Org />
       </Route> */}

@@ -4,7 +4,7 @@ import { IonButton, IonCard, IonCardContent, IonList, IonListHeader, IonSearchba
 import './index.css';
 import MessageItem from '../messagePop/MessageItem';
 import { useDispatch } from 'react-redux';
-import { sendMessageTo } from '../../../datasource/store/action/userActivity';
+import { sendMessageTo } from '@datasource/store/action/userActivity';
 
 export const ContactList = ({  friends = [] }) => {
     const dispatch = useDispatch();

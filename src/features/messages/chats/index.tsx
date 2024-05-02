@@ -11,7 +11,6 @@ import {
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { messageSocket } from '@datasource/servers/endpoints';
-import { userInfo } from '@utils/cache';
 import { addSeenEye } from '@datasource/store/action/userActivity';
 import { messageSeen } from '../../../utils';
 
@@ -20,20 +19,20 @@ import { MessageItem } from './messageItem';
 import messageImg from '@assets/messages.png';
 import './index.css';
 import { DefaultChatMessage } from './defaultMessage';
+import { useAuth } from '@context/AuthContext';
 
 export const MessagingStation = ({
   friendConversation,
   messagingTo,
   messagingToId
 }) => {
-  const dispatch = useDispatch();
-  const { recentMessages, messageSeenBy } = useSelector(
-    (store) => store.userProfile
-  );
+  const dispatch = useDispatch()
+  const messageSeenBy = []
+
   const chatRef = useRef(null);
   const socket = useRef(null);
   const [messages, setMessages] = useState([]);
-
+  const {user: userInfo} = useAuth()
   useEffect(() => {
     if (friendConversation?.length > 0) {
       setMessages(friendConversation[0].messages);
@@ -44,7 +43,10 @@ export const MessagingStation = ({
     socket.current = messageSocket();
     socket.current.emit('joinRoom', { senderId: userInfo?.id, receiverId: messagingToId });
 
+    socket.current.emit('queryRecentMessageForNetwork', { senderId: userInfo?.id, receiverId: messagingToId });
+
     socket.current.on('getMessage', (message) => {
+      console.log('message', message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 

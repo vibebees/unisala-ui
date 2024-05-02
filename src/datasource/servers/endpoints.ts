@@ -18,6 +18,7 @@ import getServiceConfig from "./index";
 import { getCache } from "../../utils/cache";
 
 const authData: IAuthData | null = getCache("authData");
+import config from "./config";
 
 const {
     messagingServiceAddress,
@@ -31,9 +32,6 @@ const {
       graphQLErrors.forEach(({ message, locations, path }) => {
         if (message === "You are not logged in. Please login") {
           alert("You are not logged in. Please login");
-          // removeCache("accessToken")
-          // removeCache("refreshToken")
-          // window.location.href = "/login"
         }
       });
     }
@@ -116,10 +114,17 @@ export const client = new ApolloClient({
     },
     cache: new InMemoryCache(),
   }),
-  messageSocket = () =>
-    io(messageSocketAddress, {
-      path: "/msg/socket/socket.io",
-    }),
+  messageSocket = () => {
+    const socketOptions = {
+      path: "",
+    };
+
+    if (config.NODE_ENV !== "DEVELOPMENT") {
+      socketOptions["path"] = "/msg/socket/socket.io";
+    }
+
+    return io(messageSocketAddress, socketOptions);
+  },
   callSocket = () => io(callSocketAddress),
   userServer = userServiceAddress,
   messageServer = messagingServiceAddress,

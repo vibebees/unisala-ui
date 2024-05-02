@@ -6,16 +6,19 @@ import {
   MessageIcon,
 } from "./../components/packages/icons";
 import { getCache, userName } from "../utils/cache";
+import { useAuth } from "@context/AuthContext";
 
 const useRoutes = () => {
-  const authenticated = getCache("refreshToken");
-  let profileLink = authenticated ? "/@/" + userName : "/login";
-  const routes = useMemo(
-    () => [
+
+
+  const { username, authenticated } = useAuth();
+  // TODO: check issue here
+  const routes = useMemo(() => {
+    const baseRoutes = [
       {
-        name: "Home",
+        name: authenticated ? "Feed" : "Home",
         Icon: HomeIcon,
-        link: "/home",
+        link: authenticated ? "/feed" : "/home",
       },
       {
         name: "Explore Universities",
@@ -23,24 +26,26 @@ const useRoutes = () => {
         link: "/search?tab=uni",
       },
       {
-        name: " Network",
+        name: "Network",
         Icon: PeopleIcon,
-        link: "/mynetwork",
+        link: authenticated ? "/mynetwork" : null,  // Hide or disable this link based on authenticated status
       },
       {
         name: "Messages",
         Icon: MessageIcon,
-        link: "/messages",
-        count: 0,
+        link: authenticated ? "/messages" : null,  // Hide or disable this link based on authenticated status
       },
       {
-        name: "Profile",
+        name: authenticated ? "Profile" : "Login",
         Icon: PeopleIcon,
-        link: profileLink,
+        link: authenticated ? `/profile/${username}` : "/login",
       },
-    ],
-    [authenticated]
-  );
+    ];
+
+    // Filter out routes that should not be displayed for unauthenticated users
+    return baseRoutes.filter(route => route.link !== null);
+  }, [authenticated, username]);
+
   return routes;
 };
 

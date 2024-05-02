@@ -24,7 +24,7 @@ Each commit message should follow this format:
 ### Fixing a Bug
 
 ```
-fix(auth): Fix login button not working
+  git commit -m "fix(renaming semantic config): renaming release.config"
 ```
 
 ### Refactoring Code
@@ -42,7 +42,7 @@ docs(readme): Update installation instructions
 ### Adding a New Feature
 
 ```
-feat(auth): Add password reset functionality
+ git commit -m "feat(adding semantic release): add Semantic Release for versioningfix"
 ```
 
 ## Additional Notes

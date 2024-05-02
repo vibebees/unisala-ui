@@ -1,85 +1,76 @@
-import React from "react"
-import { useEffect, useState } from "react"
-import {  Spinner } from "../../../defaults/index"
-import { useLazyQuery, useQuery } from "@apollo/client"
-import { Link } from "react-router-dom"
-import Comment from "../Comment"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
-import { GetCommentList } from "../../../../datasource/graphql/user"
+import React from "react";
+import { useEffect, useState } from "react";
+import { Spinner } from "../../../defaults/index";
+import { useLazyQuery } from "@apollo/client";
+import { Link } from "react-router-dom";
+import Comment from "../comment/Comment";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
+import { GetCommentList } from "../../../../datasource/graphql/user";
+import { CommentListQuery } from "src/types/gqlTypes/graphql";
+
+interface ShowOtherCommentsProps {
+  postId?: string;
+  parentId?: string;
+  singlePost?: boolean;
+  postCommentsCount?: number;
+}
 
 function ShowOtherComments({
   postId = "",
   parentId = "",
-  user,
-  setRefetchPosts,
-  numberOfComments,
   singlePost = false,
-  postCommentsCount
-}) {
-  const [showMore, setShowMore] = useState(false)
-
-  const [refetchComments, setRefetchComments] = useState(false)
-  const [getCommentList, { data, loading, refetch }] = useLazyQuery(
-    GetCommentList,
-    {
-      context: { server: USER_SERVICE_GQL }
-    }
-  )
+  postCommentsCount,
+}: ShowOtherCommentsProps) {
+  const [refetchComments, setRefetchComments] = useState(false);
+  const [getCommentList, { data, loading, refetch }] =
+    useLazyQuery<CommentListQuery>(GetCommentList, {
+      context: { server: USER_SERVICE_GQL },
+    });
 
   useEffect(() => {
-    // Check if postId and parentId are not null/undefined before executing the query
     if (postId !== null && parentId !== null) {
       getCommentList({
         variables: {
           postId,
-          parentId
-        }
-      })
+          parentId,
+        },
+      });
     }
-  }, [postId, parentId, getCommentList])
-
+  }, [postId, parentId, getCommentList]);
 
   useEffect(() => {
     if (refetchComments) {
-      refetch()
-      setRefetchComments(false)
+      refetch();
+      setRefetchComments(false);
     }
-  }, [refetchComments, refetch])
+  }, [refetchComments, refetch]);
 
-  if (loading) return <Spinner />
+  if (loading) return <Spinner />;
 
   if (singlePost) {
     return (
       <>
-        {data?.commentList?.data?.map((reply, i) => {
-          return (
-            <Comment
-              comment={reply}
-              key={i}
-              singlePost={singlePost}
-              postId={postId}
-              parentId={parentId}
-              setRefetchComments={setRefetchComments}
-            />
-          )
+        {data?.commentList?.data?.map((reply: any, i) => {
+          console.log("reply", reply);
+          return <Comment {...reply} singlePost={singlePost} key={i} />;
         })}
       </>
-    )
+    );
   }
 
   return (
     <>
-      {data?.commentList?.data?.slice(0, numberOfComments).map((reply, i) => {
+      {data?.commentList?.data?.slice(0, 1).map((reply, i) => {
         return (
           <Comment
-            comment={reply}
+            {...(reply as any)}
             key={i}
             singlePost={singlePost}
             postId={postId}
             parentId={parentId}
             setRefetchComments={setRefetchComments}
           />
-        )
+        );
       })}
       {!singlePost && postCommentsCount && postCommentsCount > 1 && (
         <Link
@@ -90,7 +81,7 @@ function ShowOtherComments({
         </Link>
       )}
     </>
-  )
+  );
 }
 
-export default ShowOtherComments
+export default ShowOtherComments;

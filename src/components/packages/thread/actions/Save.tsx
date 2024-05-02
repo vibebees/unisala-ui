@@ -1,12 +1,23 @@
-import { Icon, Buttons, useIonToast } from "../../../defaults"
-import { bookmark } from "ionicons/icons"
-import { useMutation } from "@apollo/client"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
-import { GetSavedList, SavePost, UnSavePost } from "../../../../datasource/graphql/user"
+import { Icon, Buttons, useIonToast } from "../../../defaults";
+import { bookmark } from "ionicons/icons";
+import { useMutation } from "@apollo/client";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
+import {
+  GetSavedList,
+  SavePost,
+  UnSavePost,
+} from "../../../../datasource/graphql/user";
+import React, { FC } from "react";
 
-function Save({ postId, saved, thread }) {
-  const userId =""
-  const [present, dismiss] = useIonToast()
+interface SaveProps {
+  postId: string;
+  saved: boolean;
+  thread: any;
+}
+
+const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
+  const userId = "";
+  const [present, dismiss] = useIonToast();
   const [save] = useMutation(saved ? UnSavePost : SavePost, {
     variables: { postId },
     context: { server: USER_SERVICE_GQL },
@@ -14,18 +25,18 @@ function Save({ postId, saved, thread }) {
       cache.modify({
         id: cache.identify({
           __typename: "Post",
-          id: postId
+          id: postId,
         }),
         fields: {
-          saved: () => data?.save?.message === "saved"
-        }
-      })
+          saved: () => data?.save?.message === "saved",
+        },
+      });
       if (data?.save?.message === "saved") {
         const data = cache.readQuery({
           query: GetSavedList,
           variables: { userId, page: 0 },
-          context: { server: USER_SERVICE_GQL }
-        })
+          context: { server: USER_SERVICE_GQL },
+        });
         data &&
           cache.writeQuery({
             query: GetSavedList,
@@ -34,10 +45,10 @@ function Save({ postId, saved, thread }) {
               ...data,
               savedList: {
                 ...data.savedList,
-                Posts: [{ ...thread, saved: true }, ...data.savedList.Posts]
-              }
-            }
-          })
+                Posts: [{ ...thread, saved: true }, ...data.savedList.Posts],
+              },
+            },
+          });
       }
     },
     onCompleted: () => {
@@ -46,8 +57,8 @@ function Save({ postId, saved, thread }) {
         message: saved ? "Unsaved" : "Saved",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "primary",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     },
     onError: (error) => {
       present({
@@ -55,10 +66,10 @@ function Save({ postId, saved, thread }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "primary",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   return (
     <Buttons
@@ -69,13 +80,13 @@ function Save({ postId, saved, thread }) {
       <Icon
         color={saved ? "secondary" : "medium"}
         style={{
-          margin: "0px"
+          margin: "0px",
         }}
         className="text-2xl max-md:text-lg"
         icon={bookmark}
       />
     </Buttons>
-  )
-}
+  );
+};
 
-export default Save
+export default Save;

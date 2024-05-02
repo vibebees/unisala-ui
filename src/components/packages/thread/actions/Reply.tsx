@@ -1,33 +1,52 @@
-import React from "react"
-import { Icon, Buttons, Text } from "../../../defaults"
-import { chatbubble } from "ionicons/icons"
+import React, { FC } from "react";
+import { Buttons, Typography } from "../../../defaults";
+import ModalCustom from "@components/packages/reusable/modal";
+import ReplyInput from "@components/packages/replyInput";
+import { CommentIcon } from "@components/packages/icons";
+import { cn } from "@utils/index";
 
-function Reply({ repliesCount, setReply }) {
-  return (
-    <Buttons
-      className="post-button cursor-pointer"
-      onClick={() => setReply((state) => !state)}
-    >
-      <Icon
-        color="medium"
-        style={{
-          margin: "0px"
-        }}
-        icon={chatbubble}
-        className="text-2xl max-md:text-lg"
-      />
-      <Text style={{ marginLeft: "5px" }}>
-        <p
-          style={{
-            margin: "0px",
-            padding: "0px"
-          }}
-        >
-          {repliesCount}
-        </p>
-      </Text>
-    </Buttons>
-  )
+interface ReplyProps {
+  repliesCount: number | null | undefined;
+  postId?: string;
+  isReply: boolean;
+  parentId?: string;
+  singlePost?: boolean;
+  replyTo: string;
 }
 
-export default Reply
+const Reply: FC<ReplyProps> = ({
+  repliesCount,
+  isReply,
+  replyTo,
+  singlePost = false,
+  parentId,
+  postId,
+}) => {
+  return (
+    <div>
+      <ModalCustom
+        header="Add a Comment"
+        ModalData={
+          <ReplyInput
+            isReply={isReply}
+            replyTo={replyTo}
+            singlePost={singlePost}
+            parentId={parentId}
+            postId={postId}
+          />
+        }
+      >
+        <Buttons className="active:scale-90  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200">
+          <CommentIcon className={cn("w-6 fill-neutral-400")} />
+          {!isReply && (
+            <Typography variant="p" className={cn("blocktext-gray-600")}>
+              {repliesCount || 0}
+            </Typography>
+          )}
+        </Buttons>
+      </ModalCustom>
+    </div>
+  );
+};
+
+export default Reply;

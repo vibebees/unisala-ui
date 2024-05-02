@@ -1,9 +1,23 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import moment from "moment"
-import { Avatar } from "../../../defaults"
+import React, { FC } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { Avatar } from "../../../defaults";
 
-const ThreadHeader = ({ username, profilePic, firstName, lastName, date }) => {
+interface ThreadHeaderProps {
+  username: string;
+  profilePic: string;
+  firstName: string;
+  lastName: string;
+  date: string;
+}
+
+const ThreadHeader: FC<ThreadHeaderProps> = ({
+  username,
+  profilePic,
+  firstName,
+  lastName,
+  date,
+}) => {
   return (
     <Link to={`/@/${username}`} className=" h-fit block max-md:px-2">
       <div className="thread-header gap-2">
@@ -15,7 +29,7 @@ const ThreadHeader = ({ username, profilePic, firstName, lastName, date }) => {
             style={{
               color: "#222428",
               fontSize: "14px",
-              textTransform: "capitalize"
+              textTransform: "capitalize",
             }}
           >
             {firstName + " " + lastName}
@@ -32,7 +46,7 @@ const ThreadHeader = ({ username, profilePic, firstName, lastName, date }) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default ThreadHeader
+export default ThreadHeader;

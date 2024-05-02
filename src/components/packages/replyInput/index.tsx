@@ -1,45 +1,33 @@
-import { useMutation } from "@apollo/client"
-import {
-  IonButton,
-  IonButtons,
-  IonHeader,
-  IonIcon,
-  IonModal,
-  IonText,
-  IonTitle,
-  IonToolbar,
-  useIonToast
-} from "@ionic/react"
-import RichTextInput from "../input/RichTextInput"
-import { ThreadHeader } from "../thread/organism"
-import { AddComment, GetCommentList } from "../../../datasource/graphql/user"
-import { sendOutline } from "ionicons/icons"
-import { useEffect, useState } from "react"
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
-import "./index.css"
-import { userInfo } from "../../../utils/cache"
-import { useSelector } from "react-redux"
+import React, { FormEvent, useState } from "react";
+import { useMutation } from "@apollo/client";
+import { IonButton, IonIcon, IonText, useIonToast } from "@ionic/react";
+import RichTextInput from "../input/RichTextInput";
+import { ThreadHeader } from "../thread/organism";
+import { AddComment, GetCommentList } from "../../../datasource/graphql/user";
+import { sendOutline } from "ionicons/icons";
+import { useAuth } from "@context/AuthContext";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import "./index.css";
+import { Content } from "@components/defaults";
+
+interface ReplyInputProps {
+  postId?: string;
+  isReply: boolean;
+  parentId?: string;
+  singlePost: boolean;
+  replyTo: string;
+}
 
 function ReplyInput({
-  setReply,
   postId = "",
   isReply,
   parentId = "",
   singlePost,
-  setNumberOfComments,
   replyTo,
-  reply = false
-}) {
-  const { user } =  useSelector(state => state.userProfile)
-  const [commentText, setCommentText] = useState("")
-  const [present, dismiss] = useIonToast()
-  const [modalOpen, setModalOpen] = useState(reply)
-
-  useEffect(() => {
-    if (reply) {
-      setModalOpen(true)
-    }
-  }, [reply])
+}: ReplyInputProps) {
+  const [commentText, setCommentText] = useState("");
+  const [present, dismiss] = useIonToast();
+  const { user } = useAuth();
 
   const [addComment] = useMutation(AddComment, {
     context: { server: USER_SERVICE_GQL },
@@ -51,12 +39,12 @@ function ReplyInput({
             : singlePost
             ? "PostNewsFeed"
             : "Post",
-          id: postId
+          id: postId,
         }),
         fields: {
-          postCommentsCount: (prev) => prev + 1
-        }
-      })
+          postCommentsCount: (prev) => prev + 1,
+        },
+      });
       cache.modify({
         id: cache.identify({
           __typename: isReply
@@ -64,35 +52,38 @@ function ReplyInput({
             : singlePost
             ? "PostComment"
             : "PostNewsFeed",
-          id: parentId
+          id: parentId,
         }),
         fields: {
-          repliesCount: (prev) => prev + 1
-        }
-      })
+          repliesCount: (prev) => prev + 1,
+        },
+      });
       const post = cache.readQuery({
         query: GetCommentList,
         variables: {
           postId: postId,
-          parentId
-        }
-      })
+          parentId,
+        },
+      });
       post &&
         cache.writeQuery({
           query: GetCommentList,
           variables: {
             postId,
-            parentId
+            parentId,
           },
           data: {
             commentList: {
               __typename: "commentList",
               success: true,
               message: "comments found",
-              comments: [addComment.comment, ...(post.commentList.data || [])]
-            }
-          }
-        })
+              comments: [
+                addComment.comment,
+                ...(post?.commentList?.data || []),
+              ],
+            },
+          },
+        });
     },
     onCompleted: () => {
       present({
@@ -100,13 +91,9 @@ function ReplyInput({
         message: "Comment added",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "primary",
-        mode: "ios"
-      })
-      setCommentText("")
-      if (!singlePost && setNumberOfComments) {
-        setNumberOfComments((prev) => prev + 1)
-      }
-      setReply((state) => !state)
+        mode: "ios",
+      });
+      setCommentText("");
     },
     onError: (error) => {
       present({
@@ -114,66 +101,47 @@ function ReplyInput({
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
-  const submitReply = (e) => {
-    e.preventDefault()
+  const submitReply = (e: FormEvent) => {
+    e.preventDefault();
     const variables = {
       postId: postId,
-      commentText: commentText
-    }
+      commentText: commentText,
+    };
 
-    if (isReply) {
-      variables.replyTo = replyTo
-      parentId && (variables.parentId = parentId)
-    }
-    setModalOpen(false)
-    addComment({ variables })
-  }
+    // if (isReply) {
+    //   variables?.replyTo = replyTo;
+    //   parentId && variables?.parentId = parentId;
+    // }
+    addComment({ variables });
+  };
 
-  if (!reply) return null
   return (
-    <IonModal isOpen={modalOpen} mode="ios">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Add comment</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => setModalOpen(false)}>Close</IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <form
-        className="reply-input_form  h-40   block  pr-8"
-        onSubmit={submitReply}
-      >
+    <Content>
+      <form className="  border   flex flex-col  px-5" onSubmit={submitReply}>
         <div
           className="my-3
          "
         >
-          <ThreadHeader
-            firstName={user?.firstName}
-            username={user?.username}
-            lastName={user?.lastName}
-            profilePic={user?.profilePic}
-          />
+          {user && (
+            <ThreadHeader
+              date=""
+              firstName={user?.firstName}
+              username={user?.username}
+              lastName={user?.lastName}
+              profilePic={user?.picture || ""}
+            />
+          )}
         </div>
 
         <div>
           <RichTextInput
             onChange={(e) => setCommentText(e)}
-            showUniversityListOnAt={true}
             value={commentText}
-            searchText={commentText.split("@").pop().split("<")[0]}
-            handleUniversitySelect={(e) => {
-              const removeTextafter = commentText.split("@")[0]
-              setCommentText(
-                removeTextafter +
-                  `<a href="https://unisala.com/university/${e}" rel="noopener noreferrer" target="_blank">${e}</a></p>`
-              )
-            }}
           />
         </div>
         <div>
@@ -183,8 +151,8 @@ function ReplyInput({
           </IonButton>
         </div>
       </form>
-    </IonModal>
-  )
+    </Content>
+  );
 }
 
-export default ReplyInput
+export default ReplyInput;

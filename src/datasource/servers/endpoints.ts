@@ -15,7 +15,10 @@ import {
   USER_SERVICE_GQL,
 } from "./types";
 import getServiceConfig from "./index";
-import { getCache, removeCache } from "../../utils/cache";
+import { getCache } from "../../utils/cache";
+
+const authData: IAuthData | null = getCache("authData");
+
 const {
     messagingServiceAddress,
     universityServiceAddress,
@@ -86,11 +89,10 @@ const {
     server: USER_SERVICE_GQL,
   }),
   authLink = setContext((_, { headers }) => {
-    const token = getCache("accessToken");
     return {
       headers: {
         ...headers,
-        authorization: token ? `${token}` : "",
+        authorization: authData?.accessToken || "",
       },
     };
   }),
@@ -110,7 +112,7 @@ const {
 export const client = new ApolloClient({
     link: errorLink.concat(authLink.concat(httpLink)),
     headers: {
-      authorization: getCache("accessToken") || "",
+      authorization: authData?.accessToken || "",
     },
     cache: new InMemoryCache(),
   }),

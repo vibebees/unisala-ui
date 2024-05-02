@@ -31,3 +31,8 @@
     width: 100%;
     max-width: 900px;
 }
+
+.ql-container,
+.ql-blank {
+    min-height: 200px;
+}

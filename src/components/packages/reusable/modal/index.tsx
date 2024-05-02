@@ -1,24 +1,39 @@
-import React, { useEffect, useState } from "react"
+import React, { FC, useState } from "react";
 import {
   Buttons,
   Button,
   Modal,
   Header,
-  Content,
   Toolbar,
-  Title
-} from  "../../../defaults"
+  Title,
+} from "../../../defaults";
 
-const index = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
-  const [isOpen, setIsOpen] = useState(false)
+interface ModalCustomProps {
+  children: React.ReactNode;
+  ModalData: React.ReactNode;
+  header?: string;
+}
+
+const ModalCustom: FC<ModalCustomProps> = ({
+  children,
+  ModalData,
+  header = "Modal",
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <div className="ion-padding p-0">
         <div onClick={() => setIsOpen(true)} className="cursor-pointer p-0">
-          {ModalButton}
+          {children}
         </div>
-        <Modal mode="ios" isOpen={isOpen}>
+        <Modal
+          mode="ios"
+          isOpen={isOpen}
+          onDidDismiss={() => {
+            setIsOpen(false);
+          }}
+        >
           <Header>
             <Toolbar>
               <Title>{header}</Title>
@@ -32,11 +47,11 @@ const index = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
               </Buttons>
             </Toolbar>
           </Header>
-          <Content className="ion-padding">{ModalData}</Content>
+          {ModalData}
         </Modal>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default index
+export default ModalCustom;

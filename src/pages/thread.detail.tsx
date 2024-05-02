@@ -1,8 +1,12 @@
 import React from "react";
 import ThreadPage from "../features/thread/index";
-import Layout from "../layouts/FreeLayout";
+import FixedLayout from "@layouts/FixedLayout";
 const ThreadDetail = () => {
-  return <Layout mainContent={<ThreadPage />} />;
+  return (
+    <FixedLayout>
+      <ThreadPage />
+    </FixedLayout>
+  );
 };
 
 export default ThreadDetail;

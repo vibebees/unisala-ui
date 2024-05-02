@@ -1,3 +1,4 @@
+import React from "react"
 import propTypes from "prop-types"
 import { Link } from "react-router-dom"
 import { IonCard, IonCardSubtitle, IonText, IonIcon } from "@ionic/react"
@@ -19,7 +20,7 @@ import { useEffect, useState } from "react"
 import { getImage } from "../../../datasource/servers/s3.configs"
 import { AvatarProfile } from "../../../components/packages/Avatar"
 
-const ProfileHeader = ({ tab, setTab, data }) => {
+const ProfileHeader = ({ tab, setTab, data }: { tab: any, setTab: any, data: any }) => {
   const [coverImage, setCoverImage] = useState("")
   const [percentage, setPercentage] = useState(0)
   const {

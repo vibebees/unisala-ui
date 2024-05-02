@@ -16,13 +16,14 @@ import ProfileBody from "./profileBody";
 import ProfileHeader from "./profileHeader";
 import Saved from "./saved";
 import Threads from "./threads";
+import { useAuth } from "@context/AuthContext";
 
 const ProfilePage = () => {
   const [tab, setTab] = useState(0);
   const { username } = useParams();
 
   const history = useHistory();
-  const loggedInUser = getCache("authData") as User;
+  const {user} = useAuth()
   const { data, error } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username },
@@ -32,7 +33,7 @@ const ProfilePage = () => {
   useDocTitle(username);
   const { getUser } = data || {};
 
-  const myProfile = username === loggedInUser?.username;
+  const myProfile = username === user?.username;
   const {
     firstName,
     lastName,

@@ -17,6 +17,7 @@ import ProfileHeader from "./profileHeader";
 import Saved from "./saved";
 import Threads from "./threads";
 import { useAuth } from "@context/AuthContext";
+import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
 
 const ProfilePage = () => {
   const [tab, setTab] = useState(0);
@@ -24,7 +25,7 @@ const ProfilePage = () => {
 
   const history = useHistory();
   const {user} = useAuth()
-  const { data, error } = useQuery(getUserGql, {
+  const { data, error, loading } = useQuery(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username },
     fetchPolicy: "cache-first",
@@ -127,9 +128,11 @@ const ProfilePage = () => {
   if (error) {
     return <ApiError />;
   }
-  if (!getUser?.user) {
+
+  if (!getUser?.user &&  !loading) {
     return <NoResultFound />;
   }
+
 
   if (!username) {
     redirectTo('/login')()
@@ -139,7 +142,7 @@ const ProfilePage = () => {
       <Grid className="max-width-container max-md:px-0">
         <Row className="lg:px-24">
           <Col className="w-2/5 max-md:px-0">
-            <ProfileHeader tab={tab} setTab={setTab} data={profileHeaderData} />
+            <ProfileHeader tab={tab} setTab={setTab} data={profileHeaderData} loading ={loading} />
             {tab === 0 && getUser?.user && (
               <ProfileBody data={profileBodyData} />
             )}

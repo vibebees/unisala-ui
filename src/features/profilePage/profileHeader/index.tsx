@@ -19,8 +19,9 @@ import "./index.css"
 import { useEffect, useState } from "react"
 import { getImage } from "../../../datasource/servers/s3.configs"
 import { AvatarProfile } from "../../../components/packages/Avatar"
+import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton"
 
-const ProfileHeader = ({ tab, setTab, data }: { tab: any, setTab: any, data: any }) => {
+const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, data: any, loading:Boolean }) => {
   const [coverImage, setCoverImage] = useState("")
   const [percentage, setPercentage] = useState(0)
   const {
@@ -66,6 +67,12 @@ const ProfileHeader = ({ tab, setTab, data }: { tab: any, setTab: any, data: any
   const radius = width >= 768 ? 66.6 : 47
   const dashArray = radius * Math.PI * 2
   const dataOffset = dashArray - (dashArray * percentage) / 100
+
+
+  if (loading) {
+    <ThreadSkeleton/>
+  }
+
   return (
     <IonCard className="profile-header mb-2 max-md:mx-1">
       <div className="user-banner">

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "ionic serve -p 3000",
-    "dev": "vite",
+    "dev": "vite --port 3000",
     "build": "ionic build --prod",
     "preview": "vite preview",
     "test.e2e": "cypress run",

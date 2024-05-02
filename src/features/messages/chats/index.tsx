@@ -24,7 +24,10 @@ import { useAuth } from '@context/AuthContext';
 export const MessagingStation = ({
   friendConversation,
   messagingTo,
-  messagingToId
+  messagingToId,
+  friendsMsgData,
+  friendsMsgLoading,
+  friendsMsgError
 }) => {
   const dispatch = useDispatch()
   const messageSeenBy = []

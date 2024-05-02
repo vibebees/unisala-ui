@@ -7,6 +7,12 @@ const ThreadRating = ({
   academicProgramsAndDepartmentRatingm,
   studentLifeAndServiceRating,
   careerAndAlumniResourceRating
+}: {
+  admissionAndApplicationRating: number,
+  financialAidAndScholarshipRating: number,
+  academicProgramsAndDepartmentRatingm: number,
+  studentLifeAndServiceRating: number,
+  careerAndAlumniResourceRating: number
 }) => {
   if (
     admissionAndApplicationRating ||

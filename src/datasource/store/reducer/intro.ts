@@ -4,7 +4,7 @@ import { PRE_LOADING } from "../action/types"
 export const initial = {
     test: [],
     loading: false,
-    accessToken:  getCache("accessToken")
+    accessToken: ""
 }
 const intro = (state = initial, action) => {
     switch (action.type) {

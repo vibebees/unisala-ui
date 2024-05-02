@@ -9,12 +9,17 @@ import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
 import { userName } from "../../../../utils/cache"
 
 const ThreadOptions = ({
-  loggedinUser,
   username,
   _id,
   setEditable,
   feedType,
   feedId
+}: {
+  username: string,
+  _id: string,
+  setEditable: Function,
+  feedType: string,
+  feedId: string
 }) => {
   const pathname = useLocation().pathname
   const [showOptions, setShowOptions] = useState(false)

@@ -10,12 +10,12 @@ import {
   IonList
 } from "@ionic/react"
 import { heart, location } from "ionicons/icons"
-import useRating from "../../../../hooks/useRating"
-import Modal from "../../../../components/packages/reusable/modal"
-import SeeMoreButton from "../../../../components/packages/reusable/buttons/SeeMoreButton"
-import ListItemValue from "../../../../components/packages/reusable/listValueItem"
-import ShareButton from "../../../../components/packages/share"
-import { Typography } from "../../../../components/defaults"
+import useRating from "@hooks/useRating"
+import Modal from "@components/packages/reusable/modal"
+import SeeMoreButton from "@components/packages/reusable/buttons/SeeMoreButton"
+import ListItemValue from "@components/packages/reusable/listValueItem"
+import {ShareButton} from "@components/packages/share"
+import { Typography } from "@components/defaults"
 
 export const BioDetails = ({ allProps }) => {
   const { width, uniData, handleResize } = allProps

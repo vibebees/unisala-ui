@@ -8,16 +8,15 @@ import {useParams} from "react-router"
 import {USER_SERVICE_GQL} from "../../datasource/servers/types"
 import {getAllProps} from "./getAllProps"
 import {Spaces} from "./template"
-import {userInfo} from "../../utils/cache"
+import { useAuth } from "@context/AuthContext";
 
 export default function SpacePage() {
   const params = useParams(),
+   {user, authenticated: loggedIn} = useAuth(),
     { data: topSpaceData } = useQuery(GetTopActiveSpaces, {
       variables: { limit: 6 },
       context: { server: USER_SERVICE_GQL }
     }),
-    {loggedIn} = userInfo,
-    user = userInfo,
     profileData =
       loggedIn
      ,

@@ -1,10 +1,10 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { Avatar } from "../../../defaults"
-import { userInfo } from "../../../../utils/cache"
+import { useAuth } from "@context/AuthContext"
 
 const FormAvatar = () => {
-  const { user } = useSelector(state => state.userProfile)
+  const { user } = useAuth()
   return (
     <div className="thread-header gap-2">
       <div className="thread_profile-pic ">

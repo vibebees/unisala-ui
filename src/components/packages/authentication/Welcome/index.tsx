@@ -4,8 +4,8 @@ import Indicators from "./Steps/Indicators";
 import StepsButtons from "./Steps/StepsButtons";
 import clsx from "clsx";
 import "./index.css";
-import { authInstance } from "../../../../datasource/api/axiosInstance";
-import { userServer } from "../../../../datasource/servers/endpoints";
+import { authInstance } from "@datasource/api/axiosInstance";
+import { userServer } from "@datasource/servers/endpoints";
 import Step from "./Steps/Step";
 import { PreLoader } from "../../preloader";
 

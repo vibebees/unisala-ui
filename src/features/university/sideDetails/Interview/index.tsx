@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { IonCard, IonButton } from "@ionic/react"
 import { useQuery } from "@apollo/client"
-import { GetInterviewExperience } from "../../../../datasource/graphql/user"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
- import { Button, CardHeader } from "../../../../components/defaults"
-import { InterviewExperienceCard } from "../../../../components/packages/interviewExperienceCard"
+import { GetInterviewExperience } from "@datasource/graphql/user"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
+ import { Button, CardHeader } from "@components/defaults"
+import { InterviewExperienceCard } from "@components/packages/interviewExperienceCard"
 
 export default function index({ unitId }) {
   const [page, setPage] = useState(1)

@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useRef } from "react"
 import { useLocation } from "react-router"
 import AsyncSelect from "react-select/async"
-import { universityServer } from "../../../../datasource/servers/endpoints"
+import { universityServer } from "@datasource/servers/endpoints"
 import { htmlForEditor } from "../utils/htmlForEditor"
 
 const AsyncSelectAtom = ({ item, setPostData, postData }) => {

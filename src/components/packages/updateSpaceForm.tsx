@@ -11,8 +11,8 @@ import {
 } from "@ionic/react"
  import React, { useEffect, useRef, useState } from "react"
   import { useHistory } from "react-router"
-import {USER_SERVICE_GQL} from "../../datasource/servers/types"
-import { EditSpace } from "../../datasource/graphql/user"
+import {USER_SERVICE_GQL} from "@datasource/servers/types"
+import { EditSpace } from "@datasource/graphql/user"
 
 const UpdateSpace = ({ spaceDetails, setIsOpen }) => {
   const [editSpaceDetails, setEditSpaceDetails] = useState(spaceDetails)

@@ -2,8 +2,8 @@ import React from "react"
 import { IonIcon, useIonToast } from "@ionic/react"
 import { closeOutline } from "ionicons/icons"
 import { useMutation } from "@apollo/client"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
-import { DeleteEventById } from "../../../../datasource/graphql/user"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
+import { DeleteEventById } from "@datasource/graphql/user"
 
 const DeleteEvent = ({ id }) => {
   const [present, dismiss] = useIonToast()

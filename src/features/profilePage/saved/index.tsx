@@ -8,12 +8,12 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import CourseCard from "../../../components/packages/courseCard";
-import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
-import StateMessage from "../../../components/packages/stateMessage";
-import Thread from "../../../components/packages/thread";
-import { GetSavedList } from "../../../datasource/graphql/user";
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import CourseCard from "@components/packages/courseCard";
+import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
+import StateMessage from "@components/packages/stateMessage";
+import Thread from "@components/packages/thread";
+import { GetSavedList } from "@datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
 
 function index({ userId, firstName }) {
   return (

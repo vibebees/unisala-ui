@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useContext } from "react"
 import Inputbox from "../atom/Inputbox"
-import { useDebouncedEffect } from "../../../../../hooks/useDebouncedEffect"
-import { universityServer } from "../../../../../datasource/servers/endpoints"
-import { authInstance } from "../../../../../datasource/api/axiosInstance"
+import { useDebouncedEffect } from "@hooks/useDebouncedEffect"
+import { universityServer } from "@datasource/servers/endpoints"
+import { authInstance } from "@datasource/api/axiosInstance"
 import SearchResults from "./SearchResults"
 import { WelcomeData } from ".."
 

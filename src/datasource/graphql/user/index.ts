@@ -95,6 +95,38 @@ export const Login = gql`
       }
     }
   `,
+  GoogleLogin = gql`
+    mutation google(
+      $token: String!
+      $type: String
+      $spaceOrgName: String
+      $code: String
+    ) {
+      google(
+        token: $token
+        type: $type
+        spaceOrgName: $spaceOrgName
+        code: $code
+      ) {
+        status {
+          success
+          message
+        }
+        data {
+          accessToken
+          refreshToken
+          firstName
+          lastName
+          username
+          role
+          newUser
+          id
+          userAddedToOrg
+          spaceOrgName
+        }
+      }
+    }
+  `,
   AddComment = gql`
     mutation addComment(
       $postId: String!
@@ -1774,30 +1806,28 @@ export const Login = gql`
             }
             }
         }`,
-         GET_METADATA_TAGS = gql`
-
-         query GetMetadataTags {
-         getMetadataTags {
-          data {
-            home {
-              addAPost {
-                suggestMeUniversity {
+  GET_METADATA_TAGS = gql`
+    query GetMetadataTags {
+      getMetadataTags {
+        data {
+          home {
+            addAPost {
+              suggestMeUniversity {
+                id
+                name
+                type
+                options
+                api
+                conditionalEdges {
+                  name
+                  type
+                }
+                edges {
                   id
                   name
                   type
-                  options
-                  api
-                  conditionalEdges {
-                    name
-                    type
-                  }
-                  edges{
-                    id
-                    name
-                    type
-                    validation{
-                      min
-                    }
+                  validation {
+                    min
                   }
                 }
               }
@@ -1805,4 +1835,5 @@ export const Login = gql`
           }
         }
       }
-      `;
+    }
+  `;

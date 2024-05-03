@@ -1,7 +1,4 @@
-import { IonCard } from "@ionic/react";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import ReplyInput from "../replyInput";
+import React, { FC, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
@@ -15,7 +12,13 @@ import {
 } from "./organism";
 import { Card } from "../../defaults";
 
-const Thread = ({ thread, feedType, feedId }) => {
+interface ThreadProps {
+  thread: IPost;
+  feedType: string;
+  feedId?: string;
+}
+
+const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
   const {
     _id,
     date,
@@ -25,41 +28,18 @@ const Thread = ({ thread, feedType, feedId }) => {
     upVoted,
     images,
     saved,
-    user,
     tags,
-    postImage,
+    user,
     admissionAndApplicationRating,
     financialAidAndScholarshipRating,
-    academicProgramsAndDepartmentRatingm,
+    academicProgramsAndDepartmentRating,
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
   } = thread;
-  const [reply, setReply] = useState(false);
+
+  console.log("thread", thread);
+
   const [editable, setEditable] = useState(false);
-  const [numberOfComments, setNumberOfComments] = useState(1);
-  const { user: loggedinUser } = useSelector((state) => state.userProfile);
-
-  // useEffect(() => {
-  //   getImage("user", image, setImage)
-  //   getImage("user", profilePic, setProfilePic)
-  // }, [profilePic])
-
-  const renderContent = () => {
-    if (editable) {
-      return (
-        <ThreadEditable
-          _id={_id}
-          postText={postText}
-          setEditable={setEditable}
-        />
-      );
-    }
-    return (
-      <div className="thread_comment">
-        <ThreadExpand htmlText={postText} _id={_id} thread={thread} />
-      </div>
-    );
-  };
 
   return (
     <>
@@ -69,17 +49,28 @@ const Thread = ({ thread, feedType, feedId }) => {
             firstName={user?.firstName}
             lastName={user?.lastName}
             date={date}
-            profilePic={user?.profilePic}
+            profilePic={user?.picture!}
             username={user?.username}
           />
         </div>
 
         <div className="thread_content ">
-          {renderContent()}
+          {editable ? (
+            <ThreadEditable
+              _id={_id}
+              postText={postText}
+              setEditable={setEditable}
+            />
+          ) : (
+            <div className="thread_comment">
+              <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+            </div>
+          )}
+
           <div className="px-4 py-2">
             <ThreadRating
               academicProgramsAndDepartmentRatingm={
-                academicProgramsAndDepartmentRatingm
+                academicProgramsAndDepartmentRating
               }
               admissionAndApplicationRating={admissionAndApplicationRating}
               careerAndAlumniResourceRating={careerAndAlumniResourceRating}
@@ -99,31 +90,26 @@ const Thread = ({ thread, feedType, feedId }) => {
             upVoted={upVoted}
             postCommentsCount={postCommentsCount}
             saved={saved}
-            setReply={setReply}
-          />
-          <ReplyInput
-            setReply={setReply}
-            postId={_id}
             isReply={false}
-            singlePost={true}
-            setNumberOfComments={setNumberOfComments}
-            reply={reply}
+            parentId=""
+            replyTo=""
+            singlePost={false}
           />
+
           <ThreadOptions
             setEditable={setEditable}
-            loggedinUser={loggedinUser}
             username={user?.username}
             feedType={feedType}
-            feedId={feedId}
+            feedId={feedId!}
             _id={_id}
           />
+
           {postCommentsCount > 0 && (
             <ShowPeopleComments
               postId={_id}
-              user={user}
-              isReply={false}
+              parentId=""
+              singlePost={false}
               postCommentsCount={postCommentsCount}
-              numberOfComments={numberOfComments}
             />
           )}
         </div>

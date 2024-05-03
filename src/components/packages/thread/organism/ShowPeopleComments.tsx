@@ -45,7 +45,14 @@ function ShowOtherComments({
     }
   }, [refetchComments, refetch]);
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <div className="w-full h-10 grid place-content-center">
+        <div className="w-fit h-fit scale-75">
+          <Spinner />;
+        </div>
+      </div>
+    );
 
   if (singlePost) {
     return (

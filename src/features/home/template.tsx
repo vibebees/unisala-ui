@@ -8,9 +8,9 @@ const CreateAPostCard = lazy(
   () => import("../../components/packages/createAPost/template")
 );
 import InfiniteFeed from "../../components/packages/feed/Feed";
-const FolderStructure = lazy(
-  () => import("../../components/packages/folderStructure/index")
-);
+// const FolderStructure = lazy(
+//   () => import("../../components/packages/folderStructure/index")
+// );
 
 export const Home = () => {
   useDocTitle("Unisala");

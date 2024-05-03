@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
-import { Post } from "./Post"; // Assuming this is the right import for your Post component
 import { University } from "./University";
 import { SuggestedSpace } from "./SuggestedSpace";
 import { getNewsFeed } from "../../../datasource/graphql/user";
@@ -10,6 +9,8 @@ import { Event } from "../events";
 import { ApiError } from "../errorHandler/ApiError";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 import { motion } from "framer-motion";
+import Thread from "../thread";
+import { FetchFeedV2Query } from "src/types/gqlTypes/graphql";
 
 const NoContentCard = () => (
   <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg BorderCard h-52 md:h-64 border border-gray-200">
@@ -25,27 +26,26 @@ interface FeedProps {
   feedId?: string;
 }
 
-interface IPost {
-  _id?: string;
-  type: "post" | "event" | "university" | "suggestedSpace" | "suggestedOrgs";
-  event?: any;
-  suggestedSpace?: { spaces: any[] };
-  suggestedOrgs?: { spaces: any[] };
-}
 const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState<IPost[] | null>(null);
   const fetchedPages = useRef(new Set()); // To track fetched pages
-  const { data, loading, fetchMore, error } = useQuery(getNewsFeed, {
-    variables: { feedQuery: { feedType, feedId, page } },
-    context: { server: USER_SERVICE_GQL },
-  });
+  const { data, loading, fetchMore, error } = useQuery<FetchFeedV2Query>(
+    getNewsFeed,
+    {
+      variables: { feedQuery: { feedType, feedId, page } },
+      context: { server: USER_SERVICE_GQL },
+    }
+  );
 
   useEffect(() => {
     if (data?.fetchFeedV2?.data && !fetchedPages.current.has(page)) {
       setPosts((currentPosts) => {
-        if (!currentPosts) return data.fetchFeedV2.data;
-        return [...currentPosts, ...data.fetchFeedV2.data];
+        if (!currentPosts) return data.fetchFeedV2?.data as unknown as IPost[];
+        return [
+          ...currentPosts,
+          ...(data?.fetchFeedV2?.data as unknown as IPost[]),
+        ];
       });
       fetchedPages.current.add(page); // Mark this page number as fetched
     }
@@ -69,15 +69,19 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
               ...prev?.fetchFeedV2,
               data: [
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                ...prev?.fetchFeedV2?.data,
+                ...(prev?.fetchFeedV2?.data || []),
                 // eslint-disable-next-line no-unsafe-optional-chaining
-                ...fetchMoreResult?.fetchFeedV2?.data,
+                ...(fetchMoreResult?.fetchFeedV2?.data || []),
               ],
             },
           };
         },
       });
-      if (result.data.fetchFeedV2.data.length > 0) {
+      if (
+        result?.data?.fetchFeedV2 &&
+        result.data.fetchFeedV2.data &&
+        result.data.fetchFeedV2.data.length > 0
+      ) {
         setPage(nextPage); // Only update the page if new data was fetched
       }
     } catch (error) {
@@ -105,12 +109,7 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
           >
             {post.type === "event" && <Event event={post.event} />}
             {post.type === "post" && (
-              <Post
-                post={post}
-                index={index}
-                feedType={feedType}
-                feedId={feedId}
-              />
+              <Thread thread={post} feedId={feedId} feedType={feedType} />
             )}
             {post.type === "university" && (
               <University studyLevel={post.studyLevel} post={post} />

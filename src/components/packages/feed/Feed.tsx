@@ -2,24 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { University } from "./University";
-import { SuggestedSpace } from "./SuggestedSpace";
+import SuggestedSpace from "./SuggestedSpace";
 import { getNewsFeed } from "../../../datasource/graphql/user";
 import { FeedSkeleton } from "../skeleton/feedSkeleton";
-import { Event } from "../events";
+import Event from "../events";
 import { ApiError } from "../errorHandler/ApiError";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 import { motion } from "framer-motion";
 import Thread from "../thread";
 import { FetchFeedV2Query } from "src/types/gqlTypes/graphql";
-
-const NoContentCard = () => (
-  <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg BorderCard h-52 md:h-64 border border-gray-200">
-    <span className="text-5xl md:text-6xl">📭</span>
-    <p className="text-gray-800 text-md md:text-lg mt-4">
-      No content on this page
-    </p>
-  </div>
-);
 
 interface FeedProps {
   feedType: string;
@@ -111,14 +102,12 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
             {post.type === "post" && (
               <Thread thread={post} feedId={feedId} feedType={feedType} />
             )}
-            {post.type === "university" && (
-              <University studyLevel={post.studyLevel} post={post} />
-            )}
+            {post.type === "university" && <University post={post} />}
             {post.type === "suggestedSpace" && (
-              <SuggestedSpace spaces={post.suggestedSpace.spaces} />
+              <SuggestedSpace data={post?.suggestedSpace?.spaces} />
             )}
             {post.type === "suggestedOrgs" && (
-              <SuggestedSpace spaces={post.suggestedOrgs.spaces} />
+              <SuggestedSpace data={post?.suggestedOrgs?.spaces} />
             )}
           </motion.div>
         ))}
@@ -130,3 +119,12 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
 };
 
 export default InfiniteFeed;
+
+const NoContentCard = () => (
+  <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg BorderCard h-52 md:h-64 border border-gray-200">
+    <span className="text-5xl md:text-6xl">📭</span>
+    <p className="text-gray-800 text-md md:text-lg mt-4">
+      No content on this page
+    </p>
+  </div>
+);

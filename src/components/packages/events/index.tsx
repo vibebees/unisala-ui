@@ -1,10 +1,9 @@
-import React from "react"
-import { lazy } from "react"
-import "./index.css"
-import { EventCard } from "./organisms"
-const DeleteEvent = lazy(() => import("./atoms/DeleteEvent"))
+import React from "react";
+import "./index.css";
+import { EventCard } from "./organisms";
 
-export const Event = ({ events }) => {
-  return events?.map((event) => <EventCard key={event?.id} event={event} />)
-}
+const Event = ({ events }: { events: IEvent[] }) => {
+  return events?.map((event) => <EventCard key={event._id} event={event} />);
+};
 
+export default Event;

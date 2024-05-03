@@ -1,12 +1,15 @@
-import React from "react";
-import {
-  IonCardContent,
-  IonCardHeader
-} from "@ionic/react";
+import React, { FC } from "react";
+import { IonCardContent, IonCardHeader } from "@ionic/react";
 import { Button, Card } from "../../defaults";
 import { Link } from "react-router-dom";
 
-export const SuggestedSpace = ({ data, title, type }) => {
+interface ISuggestedSpaceProps {
+  data: ISpaceOrg[];
+  type?: string;
+  title?: string;
+}
+
+const SuggestedSpace: FC<ISuggestedSpaceProps> = ({ data, title, type }) => {
   return (
     <Card className="ion-no-margin">
       <IonCardHeader>
@@ -19,7 +22,7 @@ export const SuggestedSpace = ({ data, title, type }) => {
             key={space._id}
             style={{
               width: "100%",
-              marginTop: "10px"
+              marginTop: "10px",
               // borderTop: "1px solid #e0e0e0"
             }}
             className="max-md:border-none  "
@@ -52,3 +55,5 @@ export const SuggestedSpace = ({ data, title, type }) => {
     </Card>
   );
 };
+
+export default SuggestedSpace;

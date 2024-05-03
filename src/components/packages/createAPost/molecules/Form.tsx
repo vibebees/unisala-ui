@@ -29,8 +29,6 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
    const [files, setFiles] = useState(null);
   const [present, dismiss] = useIonToast();
   const { user} = useAuth()
-  console.log("user", user)
-  const formData = new FormData();
   let RatingData = [
     {
       value: 1,

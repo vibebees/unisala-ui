@@ -3,10 +3,10 @@ import { useMutation } from "@apollo/client";
 import { IonButton, IonIcon, IonText, useIonToast } from "@ionic/react";
 import RichTextInput from "../input/RichTextInput";
 import { ThreadHeader } from "../thread/organism";
-import { AddComment, GetCommentList } from "../../../datasource/graphql/user";
+import { AddComment, GetCommentList } from "@datasource/graphql/user";
 import { sendOutline } from "ionicons/icons";
 import { useAuth } from "@context/AuthContext";
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
 

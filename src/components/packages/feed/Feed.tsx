@@ -20,7 +20,6 @@ interface FeedProps {
 const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState<IPost[] | null>(null);
-  const fetchedPages = useRef(new Set()); // To track fetched pages
   const { data, loading, fetchMore, error } = useQuery<FetchFeedV2Query>(
     getNewsFeed,
     {
@@ -30,24 +29,14 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   );
 
   useEffect(() => {
-    if (data?.fetchFeedV2?.data && !fetchedPages.current.has(page)) {
-      setPosts((currentPosts) => {
-        if (!currentPosts) return data.fetchFeedV2?.data as unknown as IPost[];
-        return [
-          ...currentPosts,
-          ...(data?.fetchFeedV2?.data as unknown as IPost[]),
-        ];
-      });
-      fetchedPages.current.add(page); // Mark this page number as fetched
+    if (data?.fetchFeedV2?.data) {
+      setPosts(data?.fetchFeedV2?.data);
     }
   }, [data?.fetchFeedV2?.data, page]);
 
   const loadMore = async (event: any) => {
     const nextPage = page + 1;
-    if (fetchedPages.current.has(nextPage)) {
-      event?.target?.complete(); // Complete the event if the page has already been fetched
-      return;
-    }
+
 
     try {
       const result = await fetchMore({

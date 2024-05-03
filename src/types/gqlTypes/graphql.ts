@@ -1982,13 +1982,13 @@ export type MultiTests = {
 };
 
 export type NewPost = {
-  __typename?: 'newPost';
+  __typename?: 'PostNewsFeed';
   post?: Maybe<NewlyAddedPost>;
   status?: Maybe<ResStatus>;
 };
 
 export type NewlyAddedPost = {
-  __typename?: 'newlyAddedPost';
+  __typename?: 'PostNewsFeed';
   _id?: Maybe<Scalars['ID']['output']>;
   date?: Maybe<Scalars['ISODate']['output']>;
   postImage?: Maybe<Scalars['String']['output']>;
@@ -2005,7 +2005,7 @@ export type RootMutation = {
   addList?: Maybe<AddListQuery>;
   addMember?: Maybe<ResStatus>;
   addOrgSpaceEvent?: Maybe<SpaceOrgEventResponse>;
-  addPost?: Maybe<NewPost>;
+  addPost?: Maybe<NewlyAddedPost>;
   /** Space Category Mutation. */
   addQuestions?: Maybe<Response>;
   /** Space Category Mutation. */
@@ -3122,7 +3122,7 @@ export type AddPostMutationVariables = Exact<{
 }>;
 
 
-export type AddPostMutation = { __typename?: 'rootMutation', addPost?: { __typename?: 'newPost', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null, post?: { __typename?: 'newlyAddedPost', _id?: string | null, postText?: string | null, date?: any | null } | null } | null };
+export type AddPostMutation = { __typename?: 'rootMutation', addPost?: { __typename?: 'newPost', status?: { __typename?: 'ResStatus', success?: boolean | null, message?: string | null } | null, post?: { __typename?: 'PostNewsFeed', _id?: string | null, postText?: string | null, date?: any | null } | null } | null };
 
 export type GetPostByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];

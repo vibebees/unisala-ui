@@ -253,10 +253,190 @@ export const Login = gql`
           message
         }
         post {
-          _id
+          section
           postText
-          # postImage
+          admissionAndApplicationRating
+          financialAidAndScholarshipRating
+          academicProgramsAndDepartmentRating
+          studentLifeAndServiceRating
+          careerAndAlumniResourceRating
+          upVoted
+          upVoteCount
+          postCommentsCount
+          type
+          saved
+          videoURL
+          event {
+            _id
+            title
+            description
+            isRegistered
+            address
+            eventDate
+            interestedUsers {
+              userId
+            }
+            images
+          }
+          tags {
+            _id
+            name
+            parentId
+            image
+            description
+          }
           date
+          _id
+          images
+          user {
+            firstName
+            lastName
+            picture
+            username
+            _id
+          }
+          elevatorInfo {
+            tags
+            ownType
+            name
+            tags
+            majors {
+              title
+            }
+            pictures
+            address {
+              streetAddressOrPOBox
+              city
+              stateAbbreviation
+              zipCode
+            }
+            name
+          }
+          studentCharges {
+            combinedChargeForRoomAndBoard
+            undergraduateApplicationFee
+            graduateApplicationFee
+            unitId
+            undergraduate {
+              inState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              outOfState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              inDistrict {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              onCampus {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              offCampusWithFamily {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              offCampusNotWithFamily {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              booksAndSupplies
+            }
+
+            graduate {
+              inState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              outOfState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              inDistrict {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+            }
+          }
+          suggestedOrgs {
+            name
+            type
+            spaces {
+              _id
+              name
+              description
+              image
+            }
+          }
+          suggestedSpace {
+            type
+            name
+            spaces {
+              _id
+              name
+              description
+              image
+            }
+          }
+          userEvaluation {
+            unitId
+            rankings {
+              rank
+              title
+              totalPlayers
+            }
+            report {
+              academics
+              average
+              value
+              diversity
+              campus
+              atheltics
+              partyScene
+              professors
+              location
+              dorms
+              campusFood
+              studentLife
+              safety
+            }
+            reviews {
+              rating
+              type
+              votes
+            }
+          }
+
+          unitId
+          applied_level
+          status
+          attempt
+          university
+          conversation
+          major
         }
       }
     }

@@ -36,7 +36,7 @@ const Reply: FC<ReplyProps> = ({
           />
         }
       >
-        <Buttons className="active:scale-90  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200">
+        <Buttons className="ThreadFooterBtn">
           <CommentIcon className={cn("w-6 fill-neutral-400")} />
           {!isReply && (
             <Typography variant="p" className={cn("blocktext-gray-600")}>

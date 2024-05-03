@@ -46,16 +46,19 @@ const ThreadFooter: FC<ThreadFooterProps> = ({
       {!isReply && <Save postId={_id} saved={saved} thread={{}} />}
 
       {!isReply && (
-        <Buttons className="post-button w-full h-full max-md:scale-75">
+        <Buttons className="ThreadFooterBtn h-7">
           <Share
             allProps={{
               link: `${BASEURL}/thread/${_id}`,
               btnstyle: {
                 width: "55px",
                 height: "55px",
+                backgroundColor: "transparent",
               },
               Iconstyle: {
-                color: "gray",
+                color: "gray ",
+                width: "18px",
+                height: "18px",
               },
               showAddList: false,
             }}

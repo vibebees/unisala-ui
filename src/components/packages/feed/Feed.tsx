@@ -1,25 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@apollo/client";
-import {
-  IonAlert,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-} from "@ionic/react";
-import { useSelector } from "react-redux";
+import { IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { Post } from "./Post"; // Assuming this is the right import for your Post component
 import { University } from "./University";
 import { SuggestedSpace } from "./SuggestedSpace";
-import { getNewsFeed, getUserGql } from "../../../datasource/graphql/user";
+import { getNewsFeed } from "../../../datasource/graphql/user";
 import { FeedSkeleton } from "../skeleton/feedSkeleton";
 import { Event } from "../events";
 import { ApiError } from "../errorHandler/ApiError";
-import { userName } from "../../../utils/cache";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
-import { Card } from "../../defaults";
-import { unstable_batchedUpdates } from "react-dom";
+import { motion } from "framer-motion";
 
 const NoContentCard = () => (
-  <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg shadow-lg h-52 md:h-64 border border-gray-200">
+  <div className="flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg BorderCard h-52 md:h-64 border border-gray-200">
     <span className="text-5xl md:text-6xl">📭</span>
     <p className="text-gray-800 text-md md:text-lg mt-4">
       No content on this page
@@ -32,7 +25,7 @@ interface FeedProps {
   feedId?: string;
 }
 
-interface Post {
+interface IPost {
   _id?: string;
   type: "post" | "event" | "university" | "suggestedSpace" | "suggestedOrgs";
   event?: any;
@@ -41,7 +34,7 @@ interface Post {
 }
 const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[] | null>(null);
   const fetchedPages = useRef(new Set()); // To track fetched pages
   const { data, loading, fetchMore, error } = useQuery(getNewsFeed, {
     variables: { feedQuery: { feedType, feedId, page } },
@@ -50,12 +43,15 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
 
   useEffect(() => {
     if (data?.fetchFeedV2?.data && !fetchedPages.current.has(page)) {
-      setPosts((currentPosts) => [...currentPosts, ...data.fetchFeedV2.data]);
+      setPosts((currentPosts) => {
+        if (!currentPosts) return data.fetchFeedV2.data;
+        return [...currentPosts, ...data.fetchFeedV2.data];
+      });
       fetchedPages.current.add(page); // Mark this page number as fetched
     }
   }, [data?.fetchFeedV2?.data, page]);
-  console.log(posts?.length, "posts");
-  const loadMore = async (event: CustomEvent<void>) => {
+
+  const loadMore = async (event: any) => {
     const nextPage = page + 1;
     if (fetchedPages.current.has(nextPage)) {
       event?.target?.complete(); // Complete the event if the page has already been fetched
@@ -72,7 +68,9 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
             fetchFeedV2: {
               ...prev?.fetchFeedV2,
               data: [
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 ...prev?.fetchFeedV2?.data,
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 ...fetchMoreResult?.fetchFeedV2?.data,
               ],
             },
@@ -88,34 +86,43 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
     event?.target?.complete(); // Ensure the IonInfiniteScroll is reset
   };
 
-  if (error) return <ApiError />;
-  if (loading && posts.length === 0) return <FeedSkeleton />;
-  if (posts.length === 0 && loading === false) return <NoContentCard />;
+  console.log("error", error);
+
+  if (error && !loading) return <ApiError />;
+  if (loading && !posts) return <FeedSkeleton />;
+  if (!loading && posts && posts?.length == 0) return <NoContentCard />;
 
   return (
     <div>
-      {posts.map((post, index) => (
-        <div key={`${post._id}-${index}`} className="mt-5">
-          {post.type === "event" && <Event event={post.event} />}
-          {post.type === "post" && (
-            <Post
-              post={post}
-              index={index}
-              feedType={feedType}
-              feedId={feedId}
-            />
-          )}
-          {post.type === "university" && (
-            <University studyLevel={post.studyLevel} post={post} />
-          )}
-          {post.type === "suggestedSpace" && (
-            <SuggestedSpace spaces={post.suggestedSpace.spaces} />
-          )}
-          {post.type === "suggestedOrgs" && (
-            <SuggestedSpace spaces={post.suggestedOrgs.spaces} />
-          )}
-        </div>
-      ))}
+      {posts &&
+        posts.map((post, index) => (
+          <motion.div
+            className="mt-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            key={`${post._id}-${index}`}
+          >
+            {post.type === "event" && <Event event={post.event} />}
+            {post.type === "post" && (
+              <Post
+                post={post}
+                index={index}
+                feedType={feedType}
+                feedId={feedId}
+              />
+            )}
+            {post.type === "university" && (
+              <University studyLevel={post.studyLevel} post={post} />
+            )}
+            {post.type === "suggestedSpace" && (
+              <SuggestedSpace spaces={post.suggestedSpace.spaces} />
+            )}
+            {post.type === "suggestedOrgs" && (
+              <SuggestedSpace spaces={post.suggestedOrgs.spaces} />
+            )}
+          </motion.div>
+        ))}
       <IonInfiniteScroll threshold="50px" onIonInfinite={loadMore}>
         <IonInfiniteScrollContent loadingText="Loading more posts..." />
       </IonInfiniteScroll>

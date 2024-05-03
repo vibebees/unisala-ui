@@ -342,7 +342,7 @@ export const BookMarkIcon = ({ className }: { className?: string }) => (
 );
 export const ShareIcon = ({ className }: { className?: string }) => (
   <svg
-    className={cn("w-5 h-5", className)}
+    className={cn("w-15 h-15", className)}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
   >

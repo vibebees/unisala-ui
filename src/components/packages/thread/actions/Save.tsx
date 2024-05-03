@@ -8,6 +8,8 @@ import {
   UnSavePost,
 } from "../../../../datasource/graphql/user";
 import React, { FC } from "react";
+import { BookMarkIcon } from "@components/packages/icons";
+import { cn } from "@utils/index";
 
 interface SaveProps {
   postId: string;
@@ -73,17 +75,20 @@ const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
 
   return (
     <Buttons
-      className="post-button"
+      className="ThreadFooterBtn"
       onClick={save}
       style={{ cursor: "pointer" }}
     >
-      <Icon
+      {/* <Icon
         color={saved ? "secondary" : "medium"}
         style={{
           margin: "0px",
         }}
         className="text-2xl max-md:text-lg"
         icon={bookmark}
+      /> */}
+      <BookMarkIcon
+        className={cn("w-6 ", saved ? "fill-blue-600" : "fill-neutral-400")}
       />
     </Buttons>
   );

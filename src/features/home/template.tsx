@@ -7,7 +7,7 @@ const FloatingButton = lazy(
 const CreateAPostCard = lazy(
   () => import("../../components/packages/createAPost/template")
 );
-const InfiniteFeed = lazy(() => import("../../components/packages/feed/Feed"));
+import InfiniteFeed from "../../components/packages/feed/Feed";
 const FolderStructure = lazy(
   () => import("../../components/packages/folderStructure/index")
 );

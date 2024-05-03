@@ -1,42 +1,41 @@
-import React, { useRef, useState } from "react"
-import { IonIcon, IonButton, IonContent, IonPopover } from "@ionic/react"
-import { shareSocialOutline } from "ionicons/icons"
-import ListOptions from "../organism/ListOptions"
+import React, { useRef, useState } from "react";
+import { IonIcon, IonButton, IonContent, IonPopover } from "@ionic/react";
+import { shareSocialOutline } from "ionicons/icons";
+import ListOptions from "../organism/ListOptions";
+import { Button, Buttons } from "@components/defaults";
 
 const ShareButton = ({ allProps }) => {
   const {
     link,
     btnstyle = {
       width: "40px",
-      height: "40px"
+      height: "40px",
     },
     Iconstyle = {
-      color: "blue"
-    }
-  } = allProps
-  const popover = useRef(null)
-  const [popoverOpen, setPopoverOpen] = useState(false)
+      color: "blue",
+    },
+  } = allProps;
+  const popover = useRef(null);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const openPopover = (e) => {
-    popover.current.event = e
-    setPopoverOpen(true)
-  }
+    popover.current.event = e;
+    setPopoverOpen(true);
+  };
 
   return (
     <div>
-      <IonButton
-        fill="clear"
-        color="primary"
+      <Buttons
         onClick={openPopover}
         style={{ ...btnstyle }}
-        className="  rounded-full  overflow-hidden ion-no-margin ion-no-padding  outline-none"
+        className="  rounded-full  grid place-content-center active:bg-none  overflow-hidden ion-no-margin ion-no-padding  outline-none"
       >
         <IonIcon
           style={{ ...Iconstyle }}
-          className=" rounded-full p-2 h-full ion-no-padding ion-no-margin  text-3xl w-full block  "
+          className=" rounded-full  h-full  ion-no-padding ion-no-margin   w-full block  "
           icon={shareSocialOutline}
         />
-      </IonButton>
+      </Buttons>
       <IonPopover
         ref={popover}
         isOpen={popoverOpen}
@@ -47,7 +46,7 @@ const ShareButton = ({ allProps }) => {
         </IonContent>
       </IonPopover>
     </div>
-  )
-}
+  );
+};
 
-export default ShareButton
+export default ShareButton;

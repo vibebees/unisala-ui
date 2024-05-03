@@ -27,15 +27,11 @@ import SelectAtom from "../atoms/Select";
 import ImageUpload from "./ImageUpload";
 
 const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }) => {
-  const { setCreateAPostPopUp, createAPostPopUp, tags } = allProps;
+  const { tags } = allProps;
   const { user } = useSelector((state) => state?.userProfile);
   const [files, setFiles] = useState(null);
   const [present, dismiss] = useIonToast();
-  const [popoverOpen, setPopoverOpen] = useState(false);
   const location = useLocation();
-  const histroy = useHistory();
-  const params = new URLSearchParams(location.search);
-  console.log({ fromForm: metaData.edges });
   const client = useApolloClient();
 
   const formData = new FormData();
@@ -142,6 +138,8 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
         images: addPost?.post.images || [],
         __typename: "PostNewsFeed",
       };
+
+      // Handling when no tags are associated with the post
       if (!tags) {
         console.log("no tags");
         const cachedData = cache.readQuery({
@@ -153,7 +151,9 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
             },
           },
         });
-        cachedData &&
+
+        // Prepending the new post to the existing newsfeed data
+        if (cachedData) {
           cache.writeQuery({
             query: getNewsFeed,
             variables: {
@@ -162,23 +162,37 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
                 page: 0,
               },
             },
-            context: { server: USER_SERVICE_GQL },
             data: {
-              fetchFeedV2: [post, ...(cachedData?.fetchFeedV2?.data || [])],
+              fetchFeedV2: [post, ...(cachedData.fetchFeedV2.data)],
             },
           });
+        } else {
+          // If no existing data is found, initialize with the new post
+          cache.writeQuery({
+            query: getNewsFeed,
+            variables: {
+              feedQuery: {
+                feedType: "newsfeed",
+                page: 0,
+              },
+            },
+            data: {
+              fetchFeedV2: [post]
+            },
+          });
+        }
       } else {
+        // Handling when tags are associated with the post
         const data = cache.readQuery({
           query: GetAllPostBySpaceCategoryID,
-          variables: { id: tags[0] }, // tags array is made such that the 0th index is space id and 1st index is parent id
-          context: { server: USER_SERVICE_GQL },
+          variables: { id: tags[0] },  // Assuming tags[0] is the space ID
         });
 
-        data &&
+        // Prepending the new post to the specific category data
+        if (data) {
           cache.writeQuery({
             query: GetAllPostBySpaceCategoryID,
             variables: { id: tags[0] },
-            context: { server: USER_SERVICE_GQL },
             data: {
               getAllPostBySpaceCategoryID: {
                 ...data.getAllPostBySpaceCategoryID,
@@ -186,6 +200,18 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
               },
             },
           });
+        } else {
+          // If no existing data is found, initialize with the new post
+          cache.writeQuery({
+            query: GetAllPostBySpaceCategoryID,
+            variables: { id: tags[0] },
+            data: {
+              getAllPostBySpaceCategoryID: {
+                posts: [post]
+              },
+            },
+          });
+        }
       }
     },
 
@@ -226,7 +252,6 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
         color: "primary",
         mode: "ios",
       });
-      setCreateAPostPopUp(false);
       // setfile("")
     },
     onError: (error) => {
@@ -249,9 +274,6 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
       // Attempt to read the existing query from the cache
       const cachedData = cache.readQuery({
         query: GetSpaceEvents,
-        context: {
-          server: USER_SERVICE_GQL,
-        },
         variables: {
           spaceId: tags[0],
         },
@@ -316,8 +338,6 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
         color: "primary",
         mode: "ios",
       });
-      setCreateAPostPopUp(false);
-      // setfile("")
     },
   });
 
@@ -425,7 +445,6 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
     <div className="px-2">
       <form onSubmit={handleSubmit}>
         {metaData?.edges?.map((item, index: number) => {
-          console.log({ item });
           return (
             <React.Fragment key={index}>
               <div className="mt-4">{item && generateHTML(item)}</div>

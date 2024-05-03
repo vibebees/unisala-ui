@@ -1807,33 +1807,78 @@ export const Login = gql`
             }
         }`,
   GET_METADATA_TAGS = gql`
-    query GetMetadataTags {
-      getMetadataTags {
-        data {
-          home {
-            addAPost {
-              suggestMeUniversity {
-                id
-                name
-                type
-                options
-                api
-                conditionalEdges {
-                  name
-                  type
-                }
-                edges {
-                  id
-                  name
-                  type
-                  validation {
-                    min
-                  }
-                }
-              }
-            }
+  fragment AddAPostDetails on AddAPostQuery {
+    suggestMeUniversity {
+      ...NodeDetails
+    }
+    questionAboutUniversity {
+      ...NodeDetails
+    }
+    reviewUniversity {
+      ...NodeDetails
+    }
+    others {
+      ...NodeDetails
+    }
+  }
+
+  fragment NodeDetails on NodeQuery {
+    id
+    name
+    type
+    api
+    edges {
+      id
+      name
+      type
+      options
+      validation {
+        min
+        max
+      }
+      api
+      rating
+      color
+      placeholder
+      initialVisible
+      userAnswer
+    }
+    rating
+    color
+    icon
+  }
+
+  query GetMetadataTags {
+    getMetadataTags {
+      data {
+        home {
+          addAPost {
+            ...AddAPostDetails
+          }
+        }
+        feed {
+          addAPost {
+            ...AddAPostDetails
+          }
+        }
+        org {
+          addAPost {
+            ...AddAPostDetails
+          }
+        }
+        space {
+          addAPost {
+            ...AddAPostDetails
+          }
+        }
+        university {
+          addAPost {
+            ...AddAPostDetails
           }
         }
       }
     }
+  }
+
+
   `;

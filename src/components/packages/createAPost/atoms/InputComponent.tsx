@@ -1,7 +1,7 @@
+import React from "react";
 import { Input, Typography } from "@components/defaults";
 
 export const InputComponent = (item, postData, setPostData) => {
-  console.log({ item });
 
   return (
     <>

@@ -2,7 +2,6 @@ import { Typography } from "@components/defaults";
 import RichTextInput from "@components/packages/input/RichTextInput";
 
 export const Textarea = (item, postData, setPostData) => {
-  console.log({ textarea: item });
   return (
     <>
       <Typography className="text-sm mb-1">{item?.name}</Typography>

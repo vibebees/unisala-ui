@@ -54,8 +54,6 @@ const CreateAPostCard = () => {
     }
   }, [data, pathname]);
 
-  console.log({ data, loading, error });
-  // console.log({data, loading, error})
   return (
     <Card
       className="BorderCard ion-no-margin ion-no-padding"

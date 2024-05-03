@@ -37,10 +37,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     careerAndAlumniResourceRating,
   } = thread;
 
-  console.log("thread", thread);
-
   const [editable, setEditable] = useState(false);
-
   return (
     <>
       <Card className=" BorderCard shadow-none  pt-4 pb-3 max-md:my-1 ion-no-margin">

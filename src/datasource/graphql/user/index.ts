@@ -1881,52 +1881,7 @@ export const Login = gql`
       }
     }
   `,
-  getMetaData = gql`
-    query {
-      getMetadataTags {
-        status {
-          success
-          message
-        }
-        data {
-          home {
-            addAPost {
-              suggestMeUniversity {
-                id
-                name
-                type
-                options
-                api
-                validation
-                edges {
-                  id
-                  name
-                  type
-                  options
-                  api
-                  validation
-                  condition
-                  userAnswer
-                  initialVisible
-                  placeholder
-                  rating
-                  color
-                  icon
-                }
-                conditionalEdges
-                userAnswer
-                initialVisible
-                placeholder
-                rating
-                color
-                icon
-              }
-            }
-          }
-        }
-      }
-    }
-  `,
+
   GetAllPostBySpaceCategoryID = gql`
     query getAllPostBySpaceCategoryID($id: ID, $limit: Int, $page: Int) {
       getAllPostBySpaceCategoryID(id: $id, limit: $limit, page: $page) {
@@ -1997,6 +1952,9 @@ export const Login = gql`
       ...NodeDetails
     }
     others {
+      ...NodeDetails
+    }
+    event {
       ...NodeDetails
     }
   }

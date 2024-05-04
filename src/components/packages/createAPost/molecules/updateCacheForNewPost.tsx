@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetAllPostBySpaceCategoryID, getNewsFeed } from "@datasource/graphql/user";
+import { GetAllPostBySpaceCategoryID, GetSpaceEvents, getNewsFeed } from "@datasource/graphql/user";
 import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
 
@@ -12,10 +12,7 @@ export const updateCacheForNewPost = ({ cache, post }) => {
   }
 };
 
-
 const prependPostToCategory = (cache, post, feedType ) => {
-
-
   const query = { query: getNewsFeed, variables: { feedQuery: { feedType: "specificOrg", page: 0 , feedId:feedType?._id} } };
   const existingData = cache.readQuery(query);
   // Extract existing posts from the existing data
@@ -32,7 +29,6 @@ const prependPostToCategory = (cache, post, feedType ) => {
     }
   });
 };
-
 
 const prependPostToNewsFeed = (cache, post) => {
   const query = { query: getNewsFeed, variables: { feedQuery: { feedType: "newsfeed", page: 0 } } };
@@ -55,13 +51,6 @@ const prependPostToNewsFeed = (cache, post) => {
   });
 
 };
-
-
-
-
-
-
-
 const uploadPostImages = async (files, postId) => {
   const formData = new FormData();
   files.forEach(file => formData.append("image", file));
@@ -99,4 +88,56 @@ export const handlePostCompletion = (data, files, present, dismiss) => {
 };
 export const handleMutationError = (error, present, dismiss) => {
   present({ duration: 5000, message: error.message, buttons: [ { text: "X", handler: () => dismiss() } ], color: "danger", mode: "ios" });
+};
+
+
+
+// Exported function to update the cache after adding an event
+export const updateEventCache = ({ cache, event }) => {
+  const cachedData = cache.readQuery({
+    query: GetSpaceEvents,
+    variables: { spaceId: event.spaceId }, // Ensure 'spaceId' is correctly passed
+  });
+
+  if (cachedData && cachedData.getAllEventBySpaceId) {
+    cache.writeQuery({
+      query: GetSpaceEvents,
+      variables: { spaceId: event.spaceId },
+      data: {
+        getAllEventBySpaceId: {
+          ...cachedData.getAllEventBySpaceId,
+          events: [...cachedData.getAllEventBySpaceId.events, event],
+        }
+      }
+    });
+  } else {
+    console.log("Cached data is not available or invalid");
+  }
+};
+
+// Exported function to handle completion of adding an event
+export const handleEventCompletion = (data, files, present, dismiss) => {
+  // Logic to execute upon successful completion of the event addition
+  if (files && files.length > 0) {
+    // Assume some logic to handle files if necessary
+  }
+
+  present({
+    duration: 3000,
+    message: "New event created successfully!",
+    buttons: [{ text: "X", handler: () => dismiss() }],
+    color: "primary",
+    mode: "ios"
+  });
+};
+
+// Exported function to handle errors during the event mutation
+export const handleEventMutationError = (error, present, dismiss) => {
+  present({
+    duration: 3000,
+    message: error?.message || "An error occurred during event creation",
+    buttons: [{ text: "X", handler: () => dismiss() }],
+    color: "danger",
+    mode: "ios"
+  });
 };

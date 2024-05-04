@@ -1,4 +1,4 @@
-import { Datetime, Item } from "@components/defaults";
+import { Datetime, Item, Typography } from "@components/defaults";
 
 export const DateComponent = (item, postData, setPostData) => {
   return (

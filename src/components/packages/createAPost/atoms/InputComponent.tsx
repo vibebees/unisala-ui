@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Typography } from "@components/defaults";
+import { htmlForEditor } from "../utils/htmlForEditor";
 
 export const InputComponent = (item, postData, setPostData) => {
 

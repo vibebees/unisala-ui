@@ -1,15 +1,11 @@
 import React, { lazy } from "react";
 import "./Home.css";
-import useDocTitle from "../../hooks/useDocTitile";
-const FloatingButton = lazy(
-  () => import("../../components/packages/floatingButton/index")
-);
-const CreateAPostCard = lazy(
-  () => import("../../components/packages/createAPost/template")
-);
-import InfiniteFeed from "../../components/packages/feed/Feed";
+import useDocTitle from "@hooks/useDocTitile";
+const FloatingButton = lazy(() => import("@components/packages/floatingButton/index"));
+const CreateAPostCard = lazy(() => import("@components/packages/createAPost/template"));
+import InfiniteFeed from "@components/packages/feed/Feed";
 // const FolderStructure = lazy(
-//   () => import("../../components/packages/folderStructure/index")
+//   () => import("@components/packages/folderStructure/index")
 // );
 
 export const Home = () => {

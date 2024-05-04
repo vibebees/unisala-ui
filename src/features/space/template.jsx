@@ -42,7 +42,7 @@ export const Spaces = ({allProps}) => {
   }
 
   return (
-    <div color="light">
+    <div className="w-full mx-3 overflow-x-hidden">
       <SpaceHeader spaceDetails={searchSpaceCategory?.data} />
       <CreateAPostCard allProps={allProps} />
       <InfiniteFeed feedId={spaceId} feedType={"specificSpace"} />

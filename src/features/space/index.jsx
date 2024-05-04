@@ -32,7 +32,6 @@ export default function SpacePage() {
     topSpaceData,
     loading
   })
-
   return <Spaces allProps={allProps} />
 }
 

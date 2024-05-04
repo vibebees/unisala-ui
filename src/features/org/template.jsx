@@ -105,7 +105,7 @@ export const Orgs = ({ allProps }) => {
   )
 
   return (
-    <Content className="h-full" color="light">
+    <div className="h-full" color="light">
       <Grid className="gridStyle">
         <Row className="flex flex-nowrap">
 
@@ -115,6 +115,6 @@ export const Orgs = ({ allProps }) => {
       <button className="scrollButton" onClick={scrollToTop}>
         <Icon icon={arrowUpOutline} className="scrollIcon" />
       </button>
-    </Content>
+    </div>
   )
 }

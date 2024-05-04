@@ -19,8 +19,8 @@ interface FeedProps {
 
 const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
-  const [posts, setPosts] = useState<IPost[] | null>([]);
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [posts, setPosts] = useState<IPost[] | null>(null);
+  const fetchedPages = useRef(new Set()); // To track fetched pages
   const { data, loading, fetchMore, error } = useQuery<FetchFeedV2Query>(
     getNewsFeed,
     {
@@ -30,32 +30,24 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   );
 
   useEffect(() => {
-    if (data?.fetchFeedV2?.data) {
-      setPosts(prevPosts => {
-        // Create a set of existing post IDs for quick lookup
-        const existingIds = new Set(prevPosts.map(post => post._id));
-
-        // Filter out duplicates from new data
-        const newPosts = data?.fetchFeedV2?.data.filter(post => !existingIds.has(post?._id));
-
-        // Append non-duplicate posts to the existing posts
-        return [...prevPosts, ...newPosts];
+    if (data?.fetchFeedV2?.data && !fetchedPages.current.has(page)) {
+      setPosts((currentPosts) => {
+        if (!currentPosts) return data.fetchFeedV2?.data as unknown as IPost[];
+        return [
+          ...currentPosts,
+          ...(data?.fetchFeedV2?.data as unknown as IPost[]),
+        ];
       });
-      setIsLoading(false); // Reset loading state on data receipt
+      fetchedPages.current.add(page); // Mark this page number as fetched
     }
-  }, [data?.fetchFeedV2?.data]);
-
-  const [lastFetchedPage, setLastFetchedPage] = useState(0);
+  }, [data?.fetchFeedV2?.data, page]);
 
   const loadMore = async (event: any) => {
-    const nextPage = lastFetchedPage + 1;
-
-    if (isLoading) {
-      event?.target?.complete();
-      return; // Prevent fetching if already loading
+    const nextPage = page + 1;
+    if (fetchedPages.current.has(nextPage)) {
+      event?.target?.complete(); // Complete the event if the page has already been fetched
+      return;
     }
-
-    setIsLoading(true); // Set loading before the operation
 
     try {
       const result = await fetchMore({
@@ -65,27 +57,31 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
           return {
             ...prev,
             fetchFeedV2: {
-              ...prev.fetchFeedV2,
+              ...prev?.fetchFeedV2,
               data: [
-                ...(prev.fetchFeedV2.data || []),
-                ...(fetchMoreResult.fetchFeedV2.data || []),
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                ...(prev?.fetchFeedV2?.data || []),
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                ...(fetchMoreResult?.fetchFeedV2?.data || []),
               ],
             },
           };
         },
       });
-      if (result?.data?.fetchFeedV2 && result.data.fetchFeedV2.data.length > 0) {
-        setLastFetchedPage(nextPage); // Update the last fetched page
+      if (
+        result?.data?.fetchFeedV2 &&
+        result.data.fetchFeedV2.data &&
+        result.data.fetchFeedV2.data.length > 0
+      ) {
+        setPage(nextPage); // Only update the page if new data was fetched
       }
-      setIsLoading(false);
     } catch (error) {
       console.error("Error loading more posts:", error);
-      setIsLoading(false);
     }
-    event?.target?.complete();
+    event?.target?.complete(); // Ensure the IonInfiniteScroll is reset
   };
 
-
+  console.log("error", error);
 
   if (error && !loading) return <ApiError />;
   if (loading && !posts) return <FeedSkeleton />;

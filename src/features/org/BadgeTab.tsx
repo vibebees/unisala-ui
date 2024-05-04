@@ -1,17 +1,17 @@
 // eslint-disable-next-line no-use-before-define
 import React from "react"
-import { IonCol, IonGrid, IonRow, IonText } from "@ionic/react"
+import { Col, Grid, Row, Text } from "@components/defaults"
 
 export const BadgesTab = ({ activeTab, setActiveTab }) => {
     return (
-        <IonGrid
+        <Grid
             style={{
                 margin: "auto",
                 width: "100%"
             }}
             className="w-full"
         >
-            <IonRow
+            <Row
                 size="auto"
                 style={{
                     margin: "auto",
@@ -29,7 +29,7 @@ export const BadgesTab = ({ activeTab, setActiveTab }) => {
                     }
                 ].map((tab, index) => {
                     return (
-                        <IonCol
+                        <Col
                             style={{
                                 textAlign: "center",
                                 borderBottom: "2px solid",
@@ -37,29 +37,29 @@ export const BadgesTab = ({ activeTab, setActiveTab }) => {
                                     activeTab === index ? "#3880ff" : "#c4c4c4",
                                 padding: "5px 3%",
                                 cursor: "pointer",
-                                transition: "all 0.3s ease-in-out"
+                                transit: "all 0.3s ease-in-out"
                             }}
                             key={index}
                             onClick={() => {
                                 setActiveTab(index)
                             }}
                         >
-                            <IonText
+                            <Text
                                 color={activeTab === index ? "primary" : "dark"}
                             >
                                 <p
                                     style={{
-                                        transition: "all 0.3s ease-in-out"
+                                        transit: "all 0.3s ease-in-out"
                                     }}
                                 >
                                     {tab.name}
                                 </p>
-                            </IonText>
-                        </IonCol>
+                            </Text>
+                        </Col>
                     )
                 })}
-            </IonRow>
-        </IonGrid>
+            </Row>
+        </Grid>
     )
 }
 export default BadgesTab

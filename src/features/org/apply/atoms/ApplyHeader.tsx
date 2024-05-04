@@ -1,10 +1,11 @@
-import { IonText } from "@ionic/react"
+import React from "react";
+import { Text } from "@components/defaults";
 
 const ApplyHeader = () => {
   return (
-    <IonText className="text-lg font-semibold text-neutral-900">
+    <Text className="text-lg font-semibold text-neutral-900">
       <h1>Apply to join</h1>
-    </IonText>
+    </Text>
   )
 }
 

@@ -27,7 +27,7 @@ const ThreadDetail = lazy(() => import("../pages/thread.detail"));
 const PageNotFound = lazy(() => import("./PageNotFound"));
 const LandingPage = lazy(() => import("../pages/landingPage"));
 const Standard = lazy(() => import("../pages/standard"));
-const NewsFeed = lazy(() => import("../pages/Home"));
+const NewsFeed = lazy(() => import("../pages/home"));
 
 const messagingRoutes = () => (
   // <>

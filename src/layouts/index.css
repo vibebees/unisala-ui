@@ -28,9 +28,15 @@
   width: 100%;
   /* Allows responsive width */
   margin: auto;
+  margin-top: 20px;
   /* Centers the Row */
 }
 
+@media (max-width: 768px) {
+  .layout-row {
+    margin-top: 80px; /* Increased top margin for mobile */
+  }
+}
 .layout-col {
   display: flex;
   justify-content: center;

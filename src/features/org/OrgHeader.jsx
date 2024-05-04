@@ -15,20 +15,20 @@ import {
 } from "@ionic/react"
 import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useSelector } from "react-redux"
-import { DeleteSpace } from "../../datasource/graphql/user"
-import { USER_SERVICE_GQL } from "../../datasource/servers/types"
+import { DeleteSpace } from "@datasource/graphql/user"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
 import { useMutation } from "@apollo/client"
 import { useHistory } from "react-router"
 import { useState } from "react"
-import UpdateSpaceForm from "../../components/packages/updateSpaceForm"
-import SpaceHeaderImg from "../../assets/space-header.jpg"
-import "./Space.css"
+import UpdateSpaceForm from "@components/packages/updateSpaceForm"
+import OrgHeaderImg from "@assets/space-header.jpg"
+import "./Org.css"
 
 const linearGradientStyle = {
   background: "linear-gradient(90deg, rgba(0,0,0) 20%, rgba(99,96,96,1) 62%)"
 }
 
-const SpaceHeader = ({ spaceDetails }) => {
+const OrgHeader = ({ spaceDetails }) => {
   const { user: loggedinUser } = useSelector((state) => state.userProfile)
 
   //   the user who created this space
@@ -121,7 +121,7 @@ const SpaceHeader = ({ spaceDetails }) => {
       <IonCardHeader>
         <img
           className="profile-header-img"
-          src={spaceDetails?.image || SpaceHeaderImg}
+          src={spaceDetails?.image || OrgHeaderImg}
           alt={`${spaceDetails?.name} Header`}
           style={{ height: "auto", maxWidth: "100%", borderRadius: "10px" }}
         />
@@ -138,4 +138,4 @@ const SpaceHeader = ({ spaceDetails }) => {
   )
 }
 
-export default SpaceHeader
+export default OrgHeader

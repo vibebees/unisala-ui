@@ -12,7 +12,7 @@ import { USER_SERVICE_GQL } from "servers/types"
 import UnisalaIntro from "../UnisalaIntro"
 import { screenGreaterThan1000 } from "../screens.greater.1000"
 import { screenLessThan768 } from "../screens.lessThan768"
-import "./Space.css"
+import "./Org.css"
 import SpaceIndexFeed from "./SpaceIndexFeed"
 import SpaceIndexLeftBar from "./SpaceIndexLeftBar"
 

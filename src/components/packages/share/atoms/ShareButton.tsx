@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { IonIcon, IonButton, IonContent, IonPopover } from "@ionic/react";
 import { shareSocialOutline } from "ionicons/icons";
 import ListOptions from "../organism/ListOptions";
-import { Button, Buttons } from "@components/defaults";
+import {  Buttons } from "@components/defaults";
 
 const ShareButton = ({ allProps }) => {
   const {

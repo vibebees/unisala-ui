@@ -5,8 +5,8 @@ import { lazy, useEffect } from "react"
  import Tabs from "./tabs"
 import Invitation from "./Invitation/Invitations"
 import NotJoinedWrapper from "./NotJoinedWrapper"
-import "./Space.css"
-import SpaceHeader from "./SpaceHeader"
+import "./Org.css"
+import OrgHeader from "./OrgHeader"
 import { History } from "./org/history"
 import { InvitationRequest } from "./org/invitationRequest"
 import { Members } from "./org/members"
@@ -98,7 +98,7 @@ export const Orgs = ({ allProps }) => {
   }
   const Org = () => (
     <IonCol className="colStyle ThreadContainer">
-      <SpaceHeader spaceDetails={orgData} />
+      <OrgHeader spaceDetails={orgData} />
       <IonRow class="bg-white mt-4 sticky top-0 z-[1000] max-md:top-16">
         <Tabs config={configSegment} />
       </IonRow>

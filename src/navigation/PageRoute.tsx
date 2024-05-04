@@ -113,9 +113,9 @@ export const PageRoute = () => {
       <Route path='/landingPage' exact>
         <LandingPage />
       </Route>
-      {/* <Route path="/org/:category" exact>
+      <Route path="/org/:category" exact>
         <Org />
-      </Route> */}
+      </Route>
       {/* <Route path="/org/:category/:admin/:requestor/:orgId/:role">
         <Org />
       </Route> */}

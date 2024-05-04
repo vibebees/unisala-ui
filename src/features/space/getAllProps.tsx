@@ -1,5 +1,5 @@
-import unisalaImg from "../../assets/unisala-intro.png"
-import useDocTitle from "../../hooks/useDocTitile"
+import unisalaImg from "@assets/unisala-intro.png"
+import useDocTitle from "@hooks/useDocTitile"
 import { useState } from "react"
 import { useHistory, useParams } from "react-router"
 

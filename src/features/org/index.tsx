@@ -1,12 +1,12 @@
 import {useQuery} from "@apollo/client"
-import {GetOrgSpace, GetTopOrgs, getUserGql} from "../../datasource/graphql/user"
+import {GetOrgSpace, GetTopOrgs, getUserGql} from "@datasource/graphql/user"
 import {createContext} from "react"
 import {useSelector} from "react-redux"
 import {useParams} from "react-router"
  import {getAllProps} from "./getAllProps"
 import {Orgs} from "./template"
-import {USER_SERVICE_GQL} from "../../datasource/servers/types"
-import {userName} from "../../utils/cache"
+import {USER_SERVICE_GQL} from "@datasource/servers/types"
+import {userName} from "@utils/cache"
 
 export const OrgContext = createContext()
 

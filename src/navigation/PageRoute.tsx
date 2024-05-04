@@ -92,9 +92,9 @@ export const PageRoute = () => {
         <Discover />
       </Route>
       {/* <Route path="/space" exact></Route> */}
-      {/* <Route path="/space/:category" exact>
+      <Route path="/space/:category" exact>
         <SpacePage />
-      </Route> */}
+      </Route>
 
       <Route exact path='/university/:id'>
         <UniversityPage />

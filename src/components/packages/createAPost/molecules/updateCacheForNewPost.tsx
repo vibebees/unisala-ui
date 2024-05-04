@@ -3,8 +3,9 @@ import { GetAllPostBySpaceCategoryID, getNewsFeed } from "@datasource/graphql/us
 import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
 
-export const updateCacheForNewPost = ({cache, post, tags}) => {
-  if (!tags) {
+export const updateCacheForNewPost = ({ cache, post }) => {
+  const tags = post?.tags ?? [];
+  if (tags?.length === 0) {
     prependPostToNewsFeed(cache, post);
   } else {
     prependPostToCategory(cache, post, tags[ 0 ]); // Assuming tags[0] is the space ID
@@ -12,14 +13,15 @@ export const updateCacheForNewPost = ({cache, post, tags}) => {
 };
 
 
-/*
- const existingData = cache.readQuery(query);
+const prependPostToCategory = (cache, post, feedType ) => {
+
+
+  const query = { query: getNewsFeed, variables: { feedQuery: { feedType: "specificOrg", page: 0 , feedId:feedType?._id} } };
+  const existingData = cache.readQuery(query);
   // Extract existing posts from the existing data
   const existingPosts = existingData ? existingData.fetchFeedV2.data : [];
   // Add the new post to the beginning of the array
   const updatedPosts = [post, ...existingPosts];
-  // Write the updated posts back to the cache
-
   cache.writeQuery({
     ...query,
     data: {
@@ -29,8 +31,7 @@ export const updateCacheForNewPost = ({cache, post, tags}) => {
       }
     }
   });
-
-  */
+};
 
 
 const prependPostToNewsFeed = (cache, post) => {
@@ -60,15 +61,7 @@ const prependPostToNewsFeed = (cache, post) => {
 
 
 
-const prependPostToCategory = (cache, post, categoryId) => {
-  const query = { query: GetAllPostBySpaceCategoryID, variables: { id: categoryId } };
-  const data = cache.readQuery(query);
-  const newData = data ? [ post, ...data.getAllPostBySpaceCategoryID.posts ] : [ post ];
-  cache.writeQuery({
-    ...query,
-    data: { getAllPostBySpaceCategoryID: { posts: newData } },
-  });
-};
+
 const uploadPostImages = async (files, postId) => {
   const formData = new FormData();
   files.forEach(file => formData.append("image", file));

@@ -112,7 +112,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
 
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) => updateCacheForNewPost({cache, post: addPost.post, tags}),
+    update: (cache, { data: { addPost } }) => updateCacheForNewPost({cache, post: addPost.post}),
     onCompleted: (data) => handlePostCompletion(data, files, present, dismiss),
     onError: (error) => handleMutationError(error, present, dismiss),
   });
@@ -141,6 +141,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
         description: postData.postText,
         address: postData.address,
         eventDate: postData.eventDate,
+        ...postData
       };
       addEvent({
         variables: data,
@@ -148,6 +149,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
       /* eslint-disable */
     } else {
       if (postData?.postText?.length > 0 || files?.length > 0) {
+
         addPost({
           variables: {
             ...postData,

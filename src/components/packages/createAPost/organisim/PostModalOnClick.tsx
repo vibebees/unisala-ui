@@ -9,21 +9,25 @@ import FormTab from "./FormTab";
 import NotLogggedModal from "./NotLogggedModal";
 import SelectionTab from "./SelectionTab";
 
-export const PostModalOnClick = ({ metaData }) => {
+export const PostModalOnClick = ({ metaData, tags }) => {
+
+  console.log(" ---> tags", tags);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [selectedTab, setSelectedTab] = useState(null);
   const [allowPost, setAllowPost] = useState(true);
-  const [postData, setPostData] = useState({
+  const [ postData, setPostData ] = useState({
+    tags,
     id: selectedTab,
   });
 
   useEffect(() => {
     setPostData((prevPostData) => {
       return {
+        ...postData,
         ...prevPostData,
         id: selectedTab,
-        unitId: parseFloat(params.get("unitId")) || null,
+        unitId: parseFloat(params.get("unitId")) ?? '',
         // tags: allProps.tags && tags,
       };
     });
@@ -31,7 +35,7 @@ export const PostModalOnClick = ({ metaData }) => {
 
   const handleTabSelection = (item) => {
     setSelectedTab(item);
-    setPostData({ id: item });
+    setPostData((prevPostData) => ({...prevPostData, id: item}));
     // params.append("type", item)
     // history.push({ search: params.toString() })
     // ButtonTrack(`${item} button clicked while creating a post`)

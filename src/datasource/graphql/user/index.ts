@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { NodeDetailsFragment } from "./metaData.Fragment";
 
 export const Login = gql`
     mutation login(

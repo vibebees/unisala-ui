@@ -20,7 +20,7 @@ interface FeedProps {
 const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState<IPost[] | null>(null);
-  const fetchedPages = useRef(new Set()); // To track fetched pages
+  const fetchedPages = useRef(new Set());
   const { data, loading, fetchMore, error } = useQuery<FetchFeedV2Query>(
     getNewsFeed,
     {

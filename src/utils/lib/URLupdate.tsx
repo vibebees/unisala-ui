@@ -1,34 +1,34 @@
-import { useHistory } from "react-router"
+import { useHistory } from "react-router";
 
-export const URLupdate = (key, value) => {
-  const url = new URL(window.location.href)
-  const params = new URLSearchParams(url.search)
-  let search = params.get(key)
+export const URLupdate = (key: string, value: string) => {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  let search = params.get(key);
   if (search) {
-    params.delete(key)
-    params.set(key, value)
+    params.delete(key);
+    params.set(key, value);
   } else {
-    params.set(key, value)
+    params.set(key, value);
   }
-  return params.toString()
-}
+  return params.toString();
+};
 
 export const URLgetter = (key) => {
-  const url = new URL(window.location.href)
-  const params = new URLSearchParams(url.search)
-  return params.get(key)
-}
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  return params.get(key);
+};
 
 export const URLdelete = (key) => {
-  const url = new URL(window.location.href)
-  const params = new URLSearchParams(url.search)
-  params.delete(key)
-  return params.toString()
-}
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  params.delete(key);
+  return params.toString();
+};
 
-export const  redirectTo = () => {
+export const redirectTo = () => {
   return (url: string) => {
-    const history = useHistory()
-    history.push(url)
-  }
-}
+    const history = useHistory();
+    history.push(url);
+  };
+};

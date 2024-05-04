@@ -6,9 +6,10 @@ import { LeftArrow, RightArrow } from "../icons";
 interface SliderProps {
   CustomclassName: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
-const Slider: FC<SliderProps> = ({ CustomclassName, children }) => {
+const Slider: FC<SliderProps> = ({ CustomclassName, children, className }) => {
   const handleRightScrollClick = () => {
     const container = document.querySelector(`.${CustomclassName}`);
     container?.scrollBy({
@@ -26,7 +27,9 @@ const Slider: FC<SliderProps> = ({ CustomclassName, children }) => {
   };
 
   return (
-    <CardContent className="p-0 ion-no-padding ion-no-margin w-full ">
+    <CardContent
+      className={cn("p-0 ion-no-padding ion-no-margin w-full ", className)}
+    >
       <Grid className=" flex ion-no-padding h-full gap-0 ion-no-margin">
         <button
           onClick={handleLeftScrollClick}
@@ -36,7 +39,7 @@ const Slider: FC<SliderProps> = ({ CustomclassName, children }) => {
         </button>
         <Row
           className={cn(
-            "flex mt-2 h-full flex-nowrap bg-transparent flex-row w-full gap-4",
+            "flex mt-2 h-full flex-nowrap slider overflow-hidden overflow-x-auto  bg-transparent flex-row w-full gap-4",
             CustomclassName
           )}
         >

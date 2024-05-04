@@ -73,16 +73,15 @@ export const SearchTemplate: React.FC = () => {
 
   return (
     <>
-
-          <AnimatePresence mode="sync">
-          {tab === "uni" && (
-              <UniSearchResult
-                key={"uni-result"}
-                query={query}
-                loading={uniLoading}
-              />
-            )}
-          </AnimatePresence>
+      <AnimatePresence mode="sync">
+        {tab === "uni" && (
+          <UniSearchResult
+            key={"uni-result"}
+            query={query}
+            loading={uniLoading}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

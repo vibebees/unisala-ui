@@ -40,3 +40,26 @@
 .ql-blank {
     min-height: 200px;
 }
+
+
+
+
+
+.slider::-webkit-scrollbar-track {
+    background: transparent;
+    height: 2px;
+
+}
+
+.slider::-webkit-scrollbar {
+    width: 2px;
+    border-radius: 10px;
+    height: 1px;
+}
+
+.slider::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+
+
+}

@@ -93,7 +93,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
                 " max-w-[10%] max-md:max-w-full relative ion-no-padding px-0 mx-0  ion-no-margin",
                 activeTab === link
                   ? "tab-button-active "
-                  : "tab-button-inactive",
+                  : "tab-button-inactive"
               )}
             >
               <Icon />

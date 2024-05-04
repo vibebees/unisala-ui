@@ -6,6 +6,7 @@ import "./index.css";
 import { searchUniFromBar } from "../../../datasource/store/action/userActivity";
 import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
 import { trashBin } from "ionicons/icons";
+import { URLupdate } from "@utils/lib/URLupdate";
 
 export const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -43,7 +44,8 @@ export const SearchBar = () => {
         onKeyUp={(e) => {
           if (e.key === "Enter") {
             setDropDownOptions(false);
-            history.push(searchValue ? `/search?q=${searchValue}` : "#");
+            const updatedURl = URLupdate("q", searchValue);
+            history.push({ pathname: "/search", search: updatedURl });
           }
         }}
         value={searchValue}

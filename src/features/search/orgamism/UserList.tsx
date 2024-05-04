@@ -5,10 +5,12 @@ import Slider from "@components/packages/Slider/Slider";
 
 interface UserResultsProps {
   users: IUser[];
-  loading: boolean;
 }
 
-export const UserResults: FC<UserResultsProps> = ({ users, loading }) => {
+const UserResults: FC<UserResultsProps> = ({ users }) => {
+  if (!users) return null;
+  if (users.length === 0) return null;
+
   return (
     <div className=" mt-4">
       <Typography variant="h2" className="text-base font-semibold">
@@ -24,3 +26,5 @@ export const UserResults: FC<UserResultsProps> = ({ users, loading }) => {
     </div>
   );
 };
+
+export default UserResults;

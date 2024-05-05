@@ -105,19 +105,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
         </div>
 
         <div className='p-6'>
-        <ThreadRating
-              academicProgramsAndDepartmentRating={
-                academicProgramsAndDepartmentRating
-              }
-              admissionAndApplicationRating={admissionAndApplicationRating}
-              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
-              financialAidAndScholarshipRating={
-                financialAidAndScholarshipRating
-              }
-              studentLifeAndServiceRating={studentLifeAndServiceRating}
-          />
-
-
 
           <div className='inline-flex flex-wrap items-center gap-3 mt-8 group'>
             <Upvote

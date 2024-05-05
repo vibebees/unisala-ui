@@ -94,10 +94,10 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   if (!loading && posts && posts?.length == 0) return <NoContentCard />;
 
   return (
-<div className="w-full bg-black">
+<div className="w-full">
       {posts?.map((post, index) => (
         <motion.div key={post._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
-          className="first:mt-0 mt-5">
+          className="first:mt-0 mt-3">
           {post.type === "event" && <Event event={post.event} />}
           {post.type === "post" && <Thread thread={post} feedId={feedId} feedType={feedType} />}
           {post.type === "university" && <University post={post} />}

@@ -9,6 +9,7 @@ import {
   ThreadEditable,
   ThreadImages,
   ThreadOptions,
+  ThreadRating,
 } from "../organism";
 
 interface SingleThreadProps {
@@ -104,8 +105,10 @@ const SingleThread: FC<SingleThreadProps> = ({
             />
             {images && images.length > 0 && (
               <ThreadImages images={images} _id={_id} />
-            )}
+              )}
+
           </>
+
         )}
       </div>
     );
@@ -124,7 +127,20 @@ const SingleThread: FC<SingleThreadProps> = ({
           />
         </div>
 
-        <div className="thread_content">{threadContent()}</div>
+        <div className="thread_content">
+          {threadContent()}
+          <ThreadRating
+              academicProgramsAndDepartmentRating={
+                academicProgramsAndDepartmentRating
+              }
+              admissionAndApplicationRating={admissionAndApplicationRating}
+              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
+              financialAidAndScholarshipRating={
+                financialAidAndScholarshipRating
+              }
+              studentLifeAndServiceRating={studentLifeAndServiceRating}
+          />
+        </div>
         <ThreadFooter
           _id={_id}
           postCommentsCount={postCommentsCount!}

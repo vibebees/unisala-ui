@@ -1033,6 +1033,8 @@ export const Login = gql`
           postCommentsCount
           type
           saved
+          postType
+          levelOfStudy
           videoURL
           event {
             _id

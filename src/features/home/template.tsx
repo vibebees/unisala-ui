@@ -47,12 +47,9 @@ export const Home = () => {
   // }, [loggedIn, newUser]);
 
   return (
-    <div className="w-full mx-3 overflow-x-hidden">
-      <FloatingButton />
       <div>
         <CreateAPostCard />
         <InfiniteFeed feedType="newsfeed" />
       </div>
-    </div>
   );
 };

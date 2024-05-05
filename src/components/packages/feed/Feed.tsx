@@ -94,31 +94,19 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
   if (!loading && posts && posts?.length == 0) return <NoContentCard />;
 
   return (
-    <div>
-      {posts &&
-        posts.map((post, index) => (
-          <motion.div
-            className="mt-5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            key={`${post._id}-${index}`}
-          >
-            {post.type === "event" && <Event event={post.event} />}
-            {post.type === "post" && (
-              <Thread thread={post} feedId={feedId} feedType={feedType} />
-            )}
-            {post.type === "university" && <University post={post} />}
-            {post.type === "suggestedSpace" && (
-              <SuggestedSpace data={post?.suggestedSpace?.spaces} />
-            )}
-            {post.type === "suggestedOrgs" && (
-              <SuggestedSpace data={post?.suggestedOrgs?.spaces} />
-            )}
-          </motion.div>
-        ))}
+<div className="w-full bg-black">
+      {posts?.map((post, index) => (
+        <motion.div key={post._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
+          className="first:mt-0 mt-5">
+          {post.type === "event" && <Event event={post.event} />}
+          {post.type === "post" && <Thread thread={post} feedId={feedId} feedType={feedType} />}
+          {post.type === "university" && <University post={post} />}
+          {post.type === "suggestedSpace" && <SuggestedSpace data={post?.suggestedSpace?.spaces} />}
+          {post.type === "suggestedOrgs" && <SuggestedSpace data={post?.suggestedOrgs?.spaces} />}
+        </motion.div>
+      ))}
       <IonInfiniteScroll threshold="50px" onIonInfinite={loadMore}>
-        <IonInfiniteScrollContent loadingText="Loading more posts..." />
+        <IonInfiniteScrollContent loadingText="Loading more posts..."/>
       </IonInfiniteScroll>
     </div>
   );

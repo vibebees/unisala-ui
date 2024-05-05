@@ -54,7 +54,7 @@ const ThreadRating = ({
         <div className='flex flex-col mt-3'>
           <h2 className='font-medium text-blue-800 text-base text-center'>
             🌟 Ratings 🌟{' '}
-          </h2>{' '}
+          </h2>
           <section className='mt-5 w-full'>
             {ratings.map((item, index) => (
               <Rating

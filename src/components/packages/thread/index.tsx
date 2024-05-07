@@ -10,7 +10,7 @@ import {
   ThreadOptions,
   ThreadRating
 } from './organism';
-import { Buttons, Card } from '@components/defaults';
+import { Buttons, Card, Item, ItemDivider } from '@components/defaults';
 import { Reply, Save, Upvote } from './actions';
 import Share from '@components/packages/share';
 import ImageCollage from './ImageCollages';
@@ -69,8 +69,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         </div>
 
-
-
         {dummyImages.length > 0 && <ImageCollage images={dummyImages} />}
 
         <div className='p-6 bg-white'>
@@ -89,9 +87,8 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             />
           </div>
         </div>
-
-        <div className='p-6'>
-          <div className='inline-flex flex-wrap items-center gap-3 mt-8 group'>
+        <div className='pt-0 pb-5 border '>
+          <div className='inline-flex flex-wrap items-center gap-3 mt-3 group '>
             <Upvote
               upVoteCount={upVoteCount}
               postId={_id}
@@ -128,7 +125,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
                 />
               </Buttons>
             )}
-
             <ThreadOptions
               setEditable={setEditable}
               username={user?.username}

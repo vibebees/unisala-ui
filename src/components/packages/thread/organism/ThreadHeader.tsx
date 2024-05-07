@@ -20,7 +20,7 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
 }) => {
   return (
     <Link to={`/@/${username}`} className=" h-fit block max-md:px-2">
-      <div className="thread-header gap-2">
+      <div className="thread-header gap-2 " >
         <div className="thread_profile-pic ">
           <Avatar profilePic={profilePic} username={firstName + lastName} />
         </div>

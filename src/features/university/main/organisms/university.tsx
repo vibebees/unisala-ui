@@ -22,6 +22,8 @@ export const UniversityBuild = ({ allProps }) => {
     })
   }
   return (
+    <div
+    className="w-full">
       <section
         ref={app}
         onScroll={() => {
@@ -55,5 +57,6 @@ export const UniversityBuild = ({ allProps }) => {
             </div>
           )}
       </section>
+      </div>
   )
 }

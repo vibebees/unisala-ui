@@ -296,7 +296,7 @@ const SideDetails = ({
 
   return (
     <IonGrid>
-      <IonRow className="w-[calc(100%-270px)] block" style={{ flex: 1, margin: 0 }}>
+      <IonRow className=" block" style={{ flex: 1, margin: 0 }}>
         {sections.map(({ ref, id, component }) => (
           <section ref={ref} id={id} key={id}>
             {component}

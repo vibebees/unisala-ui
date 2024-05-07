@@ -1,5 +1,6 @@
 // InvitationTypesCheckbox.jsx
-import {IonCol, IonRadioGroup, IonRow, IonText} from "@ionic/react"
+import React from "react"
+import { Col, RadioGroup, Row, Text } from "@components/defaults"
 import InvitationType from "../atoms/InvitationType"
 
 const InvitationTypesCheckbox = ({ allProps }) => {
@@ -10,18 +11,18 @@ const InvitationTypesCheckbox = ({ allProps }) => {
   }
 
   return (
-    <IonCol className="flex w-full my-3 ion-no-margin ion-no-padding h-full flex-col ">
-      <IonText className="ion-no-margin mt-3">
+    <Col className="flex w-full my-3 ion-no-margin ion-no-padding h-full flex-col ">
+      <Text className="ion-no-margin mt-3">
         <h1 className="text-base font-semibold text-neutral-800">
           current status
         </h1>
-      </IonText>
-      <IonRow className="mt-3 ">
-        <IonRadioGroup
+      </Text>
+      <Row className="mt-3 ">
+        <RadioGroup
           allowEmptySelection={false}
           className="flex flex-row gap-6"
           value={invitationType}
-          onIonChange={handleCheckbox}
+          onChange={handleCheckbox}
         >
           {admin && (
             <InvitationType
@@ -46,9 +47,9 @@ const InvitationTypesCheckbox = ({ allProps }) => {
               value: "alumini"
             }}
           />
-        </IonRadioGroup>
-      </IonRow>
-    </IonCol>
+        </RadioGroup>
+      </Row>
+    </Col>
   )
 }
 

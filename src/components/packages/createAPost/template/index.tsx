@@ -8,36 +8,11 @@ import { GET_METADATA_TAGS } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useQuery } from "@apollo/client";
 
-const CreateAPostCard = () => {
-  const [meta, setMeta] = useState({
-    allProps: {},
-  });
+const CreateAPostCard = ({ allProps}) => {
+
+  const [meta, setMeta] = useState({  });
   const pathname = usePathName(0);
-
-  // useEffect(() => {
-  //   const cacheKey = "metadata-all";
-  //   const cachedMeta = getCache(cacheKey) || false;
-  //   const fn = async () => {
-  //     if (cachedMeta) {
-  //       setMeta(cachedMeta[pathname]["addAPost"]); // Use the pathname to select the right metadata
-  //     } else {
-  //       try {
-  //         const response = await axios.get(`${userServer}/getMetadataTags`, {
-  //           headers: { authorization: getCache("accessToken") },
-  //         });
-  //         const allMetaData = response.data?.data || {};
-  //         setCache(cacheKey, allMetaData); // Cache all metadata once
-  //         console.log('----> actual data to set meta')
-  //         console.log(allMetaData[pathname]["addAPost"])
-  //         setMeta(allMetaData[pathname]["addAPost"]); // Use the pathname to select the right metadata
-  //       } catch (error) {
-  //         console.error("Failed to fetch metadata", error);
-  //       }
-  //     }
-  //   };
-
-  //   fn();
-  // }, [pathname]);
+  const tags = allProps?.tags || [];
 
   const { data, loading, error } = useQuery(GET_METADATA_TAGS, {
     context: { server: USER_SERVICE_GQL },
@@ -46,10 +21,8 @@ const CreateAPostCard = () => {
   useEffect(() => {
     if (!loading && data) {
       const addApost = data.getMetadataTags?.data?.[pathname]?.addAPost;
-
       console.log("----> actual data to set meta");
       console.log(addApost);
-
       setMeta(addApost ?? {});
     }
   }, [data, pathname]);
@@ -61,7 +34,7 @@ const CreateAPostCard = () => {
       onClick={() => {}}
     >
       <CreateAPostModal
-        ModalData={<PostModalOnClick metaData={meta} />}
+        ModalData={<PostModalOnClick metaData={meta} tags = {tags} />}
         ModalButton={<PostCardForClick />}
         header="Create a Post"
       />

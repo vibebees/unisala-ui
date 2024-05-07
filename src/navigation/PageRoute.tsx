@@ -27,7 +27,7 @@ const ThreadDetail = lazy(() => import("../pages/thread.detail"));
 const PageNotFound = lazy(() => import("./PageNotFound"));
 const LandingPage = lazy(() => import("../pages/landingPage"));
 const Standard = lazy(() => import("../pages/standard"));
-const NewsFeed = lazy(() => import("../pages/Home"));
+const NewsFeed = lazy(() => import("../pages/feed"));
 
 const messagingRoutes = () => (
   // <>
@@ -92,9 +92,7 @@ export const PageRoute = () => {
         <Discover />
       </Route>
       {/* <Route path="/space" exact></Route> */}
-      {/* <Route path="/space/:category" exact>
-        <SpacePage />
-      </Route> */}
+
 
       <Route exact path='/university/:id'>
         <UniversityPage />
@@ -113,9 +111,14 @@ export const PageRoute = () => {
       <Route path='/landingPage' exact>
         <LandingPage />
       </Route>
-      {/* <Route path="/org/:category" exact>
+      <Route path="/org/:category" exact>
         <Org />
-      </Route> */}
+      </Route>
+
+      <Route path="/space/:category" exact>
+        <SpacePage />
+      </Route>
+
       {/* <Route path="/org/:category/:admin/:requestor/:orgId/:role">
         <Org />
       </Route> */}

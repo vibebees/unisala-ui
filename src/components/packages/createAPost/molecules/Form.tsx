@@ -21,11 +21,11 @@ import {
 import AsyncSelectAtom from "../atoms/AsyncSelect";
 import SelectAtom from "../atoms/Select";
 import ImageUpload from "./ImageUpload";
-import { updateCacheForNewPost, handlePostCompletion, handleMutationError } from "./updateCacheForNewPost";
+import { updateCacheForNewPost, handlePostCompletion, handleMutationError, updateEventCache, handleEventCompletion, handleEventMutationError } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
 
-const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }) => {
-  const { tags } = allProps;
+const Form = ({ metaData = {}, postData, setPostData = () => {}}) => {
+  const { tags } = postData;
    const [files, setFiles] = useState(null);
   const [present, dismiss] = useIonToast();
   const { user} = useAuth()
@@ -112,11 +112,18 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
 
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) => updateCacheForNewPost({cache, post: addPost.post, tags}),
+    update: (cache, { data: { addPost } }) => updateCacheForNewPost({cache, post: addPost.post}),
     onCompleted: (data) => handlePostCompletion(data, files, present, dismiss),
     onError: (error) => handleMutationError(error, present, dismiss),
   });
 
+
+  const [addEvent] = useMutation(AddSpaceEvent, {
+    context: { server: USER_SERVICE_GQL },
+    update: (cache, { data: { addOrgSpaceEvent } }) => updateEventCache({ cache, event: addOrgSpaceEvent.data }),
+    onCompleted: (data) => handleEventCompletion(data, files, present, dismiss),
+    onError: (error) => handleEventMutationError(error, present, dismiss),
+  });
 
 
 
@@ -141,6 +148,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
         description: postData.postText,
         address: postData.address,
         eventDate: postData.eventDate,
+        ...postData
       };
       addEvent({
         variables: data,
@@ -148,6 +156,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}, allProps = {} }
       /* eslint-disable */
     } else {
       if (postData?.postText?.length > 0 || files?.length > 0) {
+
         addPost({
           variables: {
             ...postData,

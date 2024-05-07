@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client"
-import { IonCol, IonContent, IonGrid, IonRow } from "@ionic/react"
+import { Col, Content, Grid, Row } from  "@components/defaults"
 import {
   GenerateSpaceNewsFeed,
   GetOwnSpace,
@@ -12,9 +12,9 @@ import { USER_SERVICE_GQL } from "servers/types"
 import UnisalaIntro from "../UnisalaIntro"
 import { screenGreaterThan1000 } from "../screens.greater.1000"
 import { screenLessThan768 } from "../screens.lessThan768"
-import "./Space.css"
-import SpaceIndexFeed from "./SpaceIndexFeed"
-import SpaceIndexLeftBar from "./SpaceIndexLeftBar"
+import "./Org.css"
+import SpaceIndexFeed from "./OrgIndexFeed"
+import SpaceIndexLeftBar from "./OrgIndexLeftBar"
 
 const SpaceIndex = () => {
   const { user, loggedIn } = useSelector((store) => store?.userProfile)
@@ -72,16 +72,16 @@ const SpaceIndex = () => {
   }
 
   return (
-    <IonContent color="light">
+    <Content color="light">
       {width < 768 && views.lessThan768}
-      <IonGrid
+      <Grid
         style={{
           width: width >= 768 ? "95%" : "100%",
           margin: "auto",
           maxWidth: "1200px"
         }}
       >
-        <IonRow
+        <Row
           style={{
             justifyContent: "flex-start",
             margin: "0 auto"
@@ -89,7 +89,7 @@ const SpaceIndex = () => {
           className="max-width-container"
         >
           {width > 768 && views.greaterThan768}
-          <IonCol
+          <Col
             style={{
               maxWidth: "700px",
               margin: "auto",
@@ -101,14 +101,14 @@ const SpaceIndex = () => {
             ) : (
               <UnisalaIntro />
             )}
-          </IonCol>
+          </Col>
 
-          <IonCol className="max-w-max">
+          <Col className="max-w-max">
             {width > 1000 && views.greaterThan1000}
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
+          </Col>
+        </Row>
+      </Grid>
+    </Content>
   )
 }
 export default SpaceIndex

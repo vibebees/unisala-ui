@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { Buttons } from "../../../defaults/index";
-import Share from "../../../packages/share";
+import { Buttons } from "@components/defaults/index";
+import Share from "@components/packages/share";
 import { Reply, Save, Upvote } from "../actions";
 
 interface ThreadFooterProps {

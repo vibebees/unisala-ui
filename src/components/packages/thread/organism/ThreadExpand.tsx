@@ -93,7 +93,7 @@ const ThreadExpand: FC<ThreadExpandProps> = ({
   return (
     <div>
       <PostBodyText />
-      <TagsList />
+      {/* <TagsList /> */}
       {videoURL && (
         <div className="mobile-video-style">
           <iframe

@@ -1,34 +1,24 @@
 import {IonCol, IonContent, IonGrid, IonIcon, IonRow} from "@ionic/react"
 import {arrowUpOutline} from "ionicons/icons"
 import {lazy, useEffect} from "react"
-import CreateAPostCard from "../../components/packages/createAPost/template"
+import CreateAPostCard from "@components/packages/createAPost/template"
 import "./Space.css"
 import SpaceHeader from "./SpaceHeader"
 import UnisalaIntro from "./UnisalaIntro"
 import PageNotFound from "../../navigation/PageNotFound"
-import {PreLoader} from "../../components/packages/preloader"
-import InfiniteFeed from "../../components/packages/feed/Feed"
+import {PreLoader} from "@components/packages/preloader"
+import InfiniteFeed from "@components/packages/feed/Feed"
 
 export const Spaces = ({allProps}) => {
 
   const {
-    handleResize,
-    loggedIn,
     spaceId,
     tags,
     loading,
     spaceCategory,
     searchSpaceCategory,
-    width,
-    views,
     setTab
   } = allProps
-  useEffect(() => {
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
 
   useEffect(() => {
     const queryString = window.location.search
@@ -52,7 +42,7 @@ export const Spaces = ({allProps}) => {
   }
 
   return (
-    <div color="light">
+    <div className="w-full mx-3 overflow-x-hidden">
       <SpaceHeader spaceDetails={searchSpaceCategory?.data} />
       <CreateAPostCard allProps={allProps} />
       <InfiniteFeed feedId={spaceId} feedType={"specificSpace"} />

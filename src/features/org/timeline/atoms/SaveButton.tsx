@@ -1,4 +1,5 @@
-import { IonSpinner } from "@ionic/react"
+import React from "react"
+import { Spinner } from "@components/defaults"
  import {Button} from "../../../../components/defaults"
 import {cn} from "../../../../utils"
 
@@ -17,7 +18,7 @@ const HistoryButton = ({
         className
       )}
     >
-      {loading ? <IonSpinner name="lines" /> : label}
+      {loading ? <Spinner name="lines" /> : label}
     </Button>
   )
 }

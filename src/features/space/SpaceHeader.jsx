@@ -12,16 +12,15 @@ import {
   IonToolbar,
   useIonToast
 } from "@ionic/react"
-import SpaceHeaderImg from "../../assets/space-header.jpg"
-import UpdateSpaceForm from "../../components/packages/updateSpaceForm"
+import SpaceHeaderImg from "@assets/space-header.jpg"
+import UpdateSpaceForm from "@components/packages/updateSpaceForm"
  import { create, ellipsisHorizontalOutline, trash } from "ionicons/icons"
 import { useState } from "react"
-import { useSelector } from "react-redux"
 import { useHistory } from "react-router"
-import { USER_SERVICE_GQL } from "../../datasource/servers/types"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
 import "./Space.css"
-import {DeleteSpace} from "../../datasource/graphql/user"
-import {userInfo} from "../../utils/cache"
+import {DeleteSpace} from "@datasource/graphql/user"
+import {userInfo} from "@utils/cache"
 
 const linearGradientStyle = {
   background: "linear-gradient(90deg, rgba(0,0,0) 20%, rgba(99,96,96,1) 62%)"

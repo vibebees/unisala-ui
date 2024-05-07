@@ -1,4 +1,5 @@
-import {IonToast} from "@ionic/react"
+import React from "react"
+import { Toast } from "@components/defaults"
  import {useEffect, useState} from "react"
 import {useHistory, useParams} from "react-router"
 import {handleSendInvitation} from "../Invitation/utility"
@@ -28,14 +29,14 @@ export const InvitationRequest = () => {
 
     return (
         <>
-            <IonToast
+            <Toast
                 isOpen={isOpen}
                 onDidDismiss={() => setIsOpen(false)}
                 message="Bridge sent successfully"
                 duration={3000}
                 color="primary"
                 mode="ios">
-            </IonToast>
+            </Toast>
             <FeedSkeleton />
         </>
     )

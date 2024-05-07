@@ -5,7 +5,8 @@
     flex-direction: column;
     height: 100vh;
     background-color: white;
-    gap:5px
+    gap:5px;
+    width: 100%;
 }
 .preloader_content img{
     width: 50px;

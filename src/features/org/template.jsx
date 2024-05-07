@@ -1,30 +1,26 @@
-import { IonCol, IonContent, IonGrid, IonIcon, IonRow } from "@ionic/react"
+import React from "react"
+import {Col, Content, Grid, Icon, Row} from "@components/defaults"
 import { arrowUpOutline } from "ionicons/icons"
 import { lazy, useEffect } from "react"
- import CreateAPostCard  from "../../components/packages/createAPost/template"
+ import CreateAPostCard  from "@components/packages/createAPost/template"
  import Tabs from "./tabs"
 import Invitation from "./Invitation/Invitations"
 import NotJoinedWrapper from "./NotJoinedWrapper"
-import "./Space.css"
-import SpaceHeader from "./SpaceHeader"
+import "./Org.css"
+import OrgHeader from "./OrgHeader"
 import { History } from "./org/history"
 import { InvitationRequest } from "./org/invitationRequest"
 import { Members } from "./org/members"
 import {SpaceNotFound} from "../../navigation/PageNotFound"
-import {PreLoader} from "../../components/packages/preloader"
-const InfiniteFeed = lazy(() => import("../../components/packages/feed/Feed"))
+import {PreLoader} from "@components/packages/preloader"
+const InfiniteFeed = lazy(() => import("@components/packages/feed/Feed"))
 export const Orgs = ({ allProps }) => {
   const {
     handleResize,
-    loggedIn,
     orgId,
     tags,
     loading,
     orgData,
-    user,
-    width,
-    views,
-    isJoined,
     configSegment,
     tab,
     setTab
@@ -81,10 +77,10 @@ export const Orgs = ({ allProps }) => {
     history: <History />,
     apply: (
       <div className="bg-white">
-        <IonCol>
+        <Col>
           <h4 className="font-semibold pl-4">Your next steps</h4>
           <div className="h-full mt-4 px-4 border border-neutral-400 border-opacity-20 rounded-md py-6"></div>
-        </IonCol>
+        </Col>
       </div>
     ),
     invite: <Invitation orgId={orgId} />,
@@ -97,28 +93,28 @@ export const Orgs = ({ allProps }) => {
     return tabs[tab]
   }
   const Org = () => (
-    <IonCol className="colStyle ThreadContainer">
-      <SpaceHeader spaceDetails={orgData} />
-      <IonRow class="bg-white mt-4 sticky top-0 z-[1000] max-md:top-16">
+    <Col className="colStyle ThreadContainer">
+      <OrgHeader spaceDetails={orgData} />
+      <Row class="bg-white mt-4 sticky top-0 z-[1000] max-md:top-16">
         <Tabs config={configSegment} />
-      </IonRow>
+      </Row>
       <div className="min-h-[50vh] ">
         <OrgBody />
       </div>
-    </IonCol>
+    </Col>
   )
 
   return (
-    <IonContent className="h-full" color="light">
-      <IonGrid className="gridStyle">
-        <IonRow className="flex flex-nowrap">
+    <div className="h-full" color="light">
+      <Grid className="gridStyle">
+        <Row className="flex flex-nowrap">
 
           <Org />
-        </IonRow>
-      </IonGrid>
+        </Row>
+      </Grid>
       <button className="scrollButton" onClick={scrollToTop}>
-        <IonIcon icon={arrowUpOutline} className="scrollIcon" />
+        <Icon icon={arrowUpOutline} className="scrollIcon" />
       </button>
-    </IonContent>
+    </div>
   )
 }

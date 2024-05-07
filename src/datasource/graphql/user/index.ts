@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { NodeDetailsFragment } from "./metaData.Fragment";
 
 export const Login = gql`
     mutation login(
@@ -1034,6 +1033,8 @@ export const Login = gql`
           postCommentsCount
           type
           saved
+          postType
+          levelOfStudy
           videoURL
           event {
             _id
@@ -1882,52 +1883,6 @@ export const Login = gql`
       }
     }
   `,
-  getMetaData = gql`
-    query {
-      getMetadataTags {
-        status {
-          success
-          message
-        }
-        data {
-          home {
-            addAPost {
-              suggestMeUniversity {
-                id
-                name
-                type
-                options
-                api
-                validation
-                edges {
-                  id
-                  name
-                  type
-                  options
-                  api
-                  validation
-                  condition
-                  userAnswer
-                  initialVisible
-                  placeholder
-                  rating
-                  color
-                  icon
-                }
-                conditionalEdges
-                userAnswer
-                initialVisible
-                placeholder
-                rating
-                color
-                icon
-              }
-            }
-          }
-        }
-      }
-    }
-  `,
   GetAllPostBySpaceCategoryID = gql`
     query getAllPostBySpaceCategoryID($id: ID, $limit: Int, $page: Int) {
       getAllPostBySpaceCategoryID(id: $id, limit: $limit, page: $page) {
@@ -2000,10 +1955,22 @@ export const Login = gql`
       others {
         ...NodeDetails
       }
-    }
 
+      questionAboutUniversity {
+        ...NodeDetails
+      }
+      reviewUniversity {
+        ...NodeDetails
+      }
+      others {
+        ...NodeDetails
+      }
+      event {
+        ...NodeDetails
+      }
+    }
     fragment NodeDetails on NodeQuery {
-      id
+      idW
       name
       type
       api

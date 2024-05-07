@@ -1,10 +1,12 @@
+import React from "react"
 import { useMutation } from "@apollo/client"
-import { IonCol, IonInput, IonRow, useIonToast } from "@ionic/react"
- import { EditHistory, GetAllHistory } from "../../../../datasource/graphql/user"
+import { useIonToast } from "@ionic/react"
+import {Col, Input, Row} from "@components/defaults"
+ import { EditHistory, GetAllHistory } from "@datasource/graphql/user"
 import { useContext, useState } from "react"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
-import {EditIcon, CloseIcon, Tick} from "../../../../components/packages/icons"
- import {Button} from "../../../../components/defaults"
+import { USER_SERVICE_GQL } from "@datasource/servers/types"
+import {EditIcon, CloseIcon, Tick} from "@components/packages/icons"
+ import {Button} from "@components/defaults"
 import { OrgContext } from "@features/org"
 
 const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
@@ -69,16 +71,16 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
   }
 
   return (
-    <IonRow className="ion-no-padding ion-no-margin w-full">
-      <IonCol className="ion-no-padding ion-no-margin">
-        <IonInput
+    <Row className="ion-no-padding ion-no-margin w-full">
+      <Col className="ion-no-padding ion-no-margin">
+        <Input
           className="text-sm opacity-70 ion-no-padding !pl-2 ion-no-margin w-full h-full"
           placeholder="Edit History"
           value={value}
           onIonChange={(e) => setvalue(e.target.value)}
-        ></IonInput>
-      </IonCol>
-      <IonCol size="auto" className="h-full">
+        ></Input>
+      </Col>
+      <Col size="auto" className="h-full">
         <Button fill="clear" onClick={() => setedit(!edit)} className="">
           {edit ? (
             <CloseIcon width={20} height={20} />
@@ -91,8 +93,8 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
             <Tick width={20} height={20} />
           </Button>
         )}
-      </IonCol>
-    </IonRow>
+      </Col>
+    </Row>
   )
 }
 

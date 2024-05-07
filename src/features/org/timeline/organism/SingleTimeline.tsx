@@ -1,10 +1,11 @@
-import { IonCol, IonRow } from "@ionic/react"
+import React from "react"
+import { Col, Row } from "@components/defaults"
 import DateList from "../atoms/DateList"
 
 const SingleTimeline = ({ data }) => {
   return (
-    <IonRow className=" !px-0   ion-no-margin ion-no-padding h-full rounded-md  pt-2">
-      <IonCol className="w-full ion-no-margin ion-no-padding h-full ion-no-margin  px-0">
+    <Row className=" !px-0   ion-no-margin ion-no-padding h-full rounded-md  pt-2">
+      <Col className="w-full ion-no-margin ion-no-padding h-full ion-no-margin  px-0">
         {data &&
           data.length > 0 &&
           data.map((item, index) => (
@@ -15,8 +16,8 @@ const SingleTimeline = ({ data }) => {
               _id={item._id}
             />
           ))}
-      </IonCol>
-    </IonRow>
+      </Col>
+    </Row>
   )
 }
 

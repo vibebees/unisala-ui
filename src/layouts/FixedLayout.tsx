@@ -80,30 +80,24 @@ const FixedLayout: React.FC<LayoutProps> = ({
 }) => {
   return (
     <Content className="layout-content">
-      <Row
-        className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
-        style={style}
-      >
-        {/* Only visible on medium and larger screens */}
-        <Col sizeMd="3" className="ion-hide-md-down layout-col">
+      <Row className="layout-row flex flex-nowrap">
+        <Col sizeMd="3" className="ion-hide-md-down">
           <div
             className={cn("w-full", leftSideBarSticky && "sticky top-0")}
-            style={{ width: "100%", maxWidth: "300px" }}
+            style={{ maxWidth: "300px" }}
           >
             {leftSidebar}
           </div>
         </Col>
 
-        {/* Always visible, but spans more columns on small screens */}
-        <Col sizeSm="12" sizeMd="6" className="layout-col">
+        <Col sizeSm="12" sizeMd="6">
           {children}
         </Col>
-        {/* Only visible on medium and larger screens */}
-        <Col sizeMd="3" className=" ion-hide-md-down layout-col">
+
+        <Col sizeMd="3" className="ion-hide-md-down">
           <div
-            className={cn("w-full", rightSideBarSticky && "sticky top-0")}
-            style={{ width: "100%", maxWidth: "300px" }}
-          >
+           className={cn("w-full", rightSideBarSticky && "sticky top-0")}
+           style={{ maxWidth: "300px" }}>
             {rightSidebar}
           </div>
         </Col>

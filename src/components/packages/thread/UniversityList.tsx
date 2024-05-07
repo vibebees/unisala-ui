@@ -2,9 +2,9 @@ import { IonIcon, IonInput, IonItem } from "@ionic/react";
 import { arrowBackOutline } from "ionicons/icons";
 import { useState } from "react";
 import NoImageFound from "@assets/no_image_found.png";
-import { authInstance } from "../../../datasource/api/axiosInstance";
-import { universityServer } from "../../../datasource/servers/endpoints";
-import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
+import { authInstance } from "@datasource/api/axiosInstance";
+import { universityServer } from "@datasource/servers/endpoints";
+import { useDebouncedEffect } from "@hooks/useDebouncedEffect";
 import SearchLoadingSkeleton from "../authentication/Welcome/atom/SearchLoadingSkeleton";
 import ImageWithLoader from "../reusable/Image/ImageWithLoader";
 const UniversityList = ({

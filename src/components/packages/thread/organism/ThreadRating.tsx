@@ -1,59 +1,75 @@
-import React from "react"
-import { Rating } from "../actions"
+import React from 'react';
+import { Rating } from '../actions';
 
 const ThreadRating = ({
   admissionAndApplicationRating,
   financialAidAndScholarshipRating,
-  academicProgramsAndDepartmentRatingm,
+  academicProgramsAndDepartmentRating,
   studentLifeAndServiceRating,
   careerAndAlumniResourceRating
 }: {
-  admissionAndApplicationRating: number,
-  financialAidAndScholarshipRating: number,
-  academicProgramsAndDepartmentRatingm: number,
-  studentLifeAndServiceRating: number,
-  careerAndAlumniResourceRating: number
+  admissionAndApplicationRating: number;
+  financialAidAndScholarshipRating: number;
+  academicProgramsAndDepartmentRating: number;
+  studentLifeAndServiceRating: number;
+  careerAndAlumniResourceRating: number;
 }) => {
+  const ratings = [
+    {
+      label: 'Admission & Application',
+      rating: admissionAndApplicationRating,
+      ratingKey: 'admissionAndApplicationRating'
+    },
+    {
+      label: 'Financial Aid & Scholarships',
+      rating: financialAidAndScholarshipRating,
+      ratingKey: 'financialAidAndScholarshipRating'
+    },
+    {
+      label: 'Academic Programs & Department',
+      rating: academicProgramsAndDepartmentRating,
+      ratingKey: 'academicProgramsAndDepartmentRating'
+    },
+    {
+      label: 'Student Life & Services',
+      rating: studentLifeAndServiceRating,
+      ratingKey: 'studentLifeAndServiceRating'
+    },
+    {
+      label: 'Career & Alumni Resources',
+      rating: careerAndAlumniResourceRating,
+      ratingKey: 'careerAndAlumniResourceRating'
+    }
+  ];
+
   if (
     admissionAndApplicationRating ||
     financialAidAndScholarshipRating ||
-    academicProgramsAndDepartmentRatingm ||
+    academicProgramsAndDepartmentRating ||
     studentLifeAndServiceRating ||
     careerAndAlumniResourceRating
   ) {
     return (
-      <div className="flex flex-col mt-3">
-        <h2 className="font-medium text-blue-800 text-base">Rating</h2>{" "}
-        <section className="mt-1 w-[60%] flex flex-col gap-3">
-          <Rating
-            label="Admission & Application"
-            rating={admissionAndApplicationRating}
-          />
-
-          <Rating
-            label="Financial Aid & Scholarships"
-            rating={financialAidAndScholarshipRating}
-          />
-
-          <Rating
-            label="Academic Programs & Department"
-            rating={academicProgramsAndDepartmentRatingm}
-          />
-
-          <Rating
-            label="Student Life & Services"
-            rating={studentLifeAndServiceRating}
-          />
-
-          <Rating
-            label="Career & Alumni Resources"
-            rating={careerAndAlumniResourceRating}
-          />
-        </section>
-      </div>
-    )
+      <>
+        <div className='flex flex-col mt-3'>
+          <h2 className='font-medium text-blue-800 text-base text-center'>
+            🌟 Ratings 🌟{' '}
+          </h2>
+          <section className='mt-5 w-full'>
+            {ratings.map((item, index) => (
+              <Rating
+                key={index}
+                label={item.label}
+                rating={item.rating}
+                ratingKey={item.ratingKey}
+              />
+            ))}
+          </section>
+        </div>
+      </>
+    );
   }
-  return null
-}
+  return null;
+};
 
-export default ThreadRating
+export default ThreadRating;

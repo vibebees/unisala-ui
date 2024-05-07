@@ -1,11 +1,12 @@
-import { IonText } from "@ionic/react"
+import React from "react"
+import { Text } from "@components/defaults"
 
 const ApplySubHeader = () => {
   return (
     <div className="my-2 text-base">
-      <IonText className="">
+      <Text className="">
         <p>If you arre interested in learning more about our webinars</p>
-      </IonText>
+      </Text>
     </div>
   )
 }

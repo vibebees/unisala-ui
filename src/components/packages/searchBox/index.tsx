@@ -3,8 +3,8 @@ import { useHistory } from "react-router-dom";
 import { IonSearchbar } from "@ionic/react";
 import { SearchBarResultList } from "./searchResultList";
 import "./index.css";
-import { searchUniFromBar } from "../../../datasource/store/action/userActivity";
-import { useDebouncedEffect } from "../../../hooks/useDebouncedEffect";
+import { searchUniFromBar } from "@datasource/store/action/userActivity";
+import { useDebouncedEffect } from "@hooks/useDebouncedEffect";
 import { trashBin } from "ionicons/icons";
 import { URLupdate } from "@utils/lib/URLupdate";
 

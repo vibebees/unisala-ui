@@ -1,7 +1,7 @@
-import React from "react"
-import propTypes from "prop-types"
-import { Link } from "react-router-dom"
-import { IonCard, IonCardSubtitle, IonText, IonIcon } from "@ionic/react"
+import React from "react";
+import propTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { IonCard, IonCardSubtitle, IonText, IonIcon } from "@ionic/react";
 import {
   location,
   calendar,
@@ -11,19 +11,25 @@ import {
   logoYoutube,
   logoTwitter,
   logoInstagram,
-  logoLinkedin
-} from "ionicons/icons"
-import UserCtaBtns from "./userCtaBtns/UserCtaBtns"
+  logoLinkedin,
+} from "ionicons/icons";
+import UserCtaBtns from "./userCtaBtns/UserCtaBtns";
 
-import "./index.css"
-import { useEffect, useState } from "react"
-import { getImage } from "../../../datasource/servers/s3.configs"
-import { AvatarProfile } from "../../../components/packages/Avatar"
-import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton"
+import "./index.css";
+import { AvatarProfile } from "../../../components/packages/Avatar";
+import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
 
-const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, data: any, loading:Boolean }) => {
-  const [coverImage, setCoverImage] = useState("")
-  const [percentage, setPercentage] = useState(0)
+const ProfileHeader = ({
+  tab,
+  setTab,
+  data,
+  loading,
+}: {
+  tab: any;
+  setTab: any;
+  data: any;
+  loading: Boolean;
+}) => {
   const {
     firstName,
     lastName,
@@ -33,9 +39,8 @@ const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, 
     oneLinerBio,
     location: userLocation,
     doj,
-    socialLinks
-  } = data
-  const width = window.innerWidth
+    socialLinks,
+  } = data;
 
   const icons = {
     twitter: logoTwitter,
@@ -44,8 +49,8 @@ const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, 
     youtube: logoYoutube,
     twitch: logoTwitch,
     instagram: logoInstagram,
-    linkedin: logoLinkedin
-  }
+    linkedin: logoLinkedin,
+  };
 
   const tabMenu = [
     { id: 0, menu: username },
@@ -53,34 +58,24 @@ const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, 
     { id: 2, menu: "List" },
     { id: 3, menu: "Saved" },
     { id: 4, menu: "Roadmap" },
-    { id: 5, menu: "Guestbook" }
-  ]
+    { id: 5, menu: "Guestbook" },
+  ];
 
   const changeTab = (tabs) => {
-    setTab(tabs)
-  }
-
-  useEffect(() => {
-    getImage("user", coverPicture, setCoverImage)
-  }, [coverPicture])
-
-  const radius = width >= 768 ? 66.6 : 47
-  const dashArray = radius * Math.PI * 2
-  const dataOffset = dashArray - (dashArray * percentage) / 100
-
+    setTab(tabs);
+  };
 
   if (loading) {
-    <ThreadSkeleton/>
+    <ThreadSkeleton />;
   }
 
   return (
     <IonCard className="profile-header mb-2 max-md:mx-1">
       <div className="user-banner">
-        <div></div>
         <div className="user-banner__cover">
           <img
             src={
-              coverImage ||
+              coverPicture ||
               "https://img.freepik.com/premium-photo/back-school-education-banner-background_8087-1192.jpg?w=1380"
             }
             className="user-banner__cover--img"
@@ -91,36 +86,9 @@ const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, 
         <div className="user-profile">
           <AvatarProfile profilePic={profilePic} username={username} />
           <div className="border-[7px] border-neutral-300  absolute left-0 top-0 bottom-0  right-0 rounded-full z-10" />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            version="1.1"
-            width="160px"
-            height="160px"
-            className="progress_container"
-          >
-            <defs>
-              <linearGradient id="GradientColor">
-                <stop offset="0%" stopColor="#e91e63" />
-                <stop offset="100%" stopColor="#673ab7" />
-              </linearGradient>
-            </defs>
-            <circle
-              cx="80"
-              cy="80"
-              r={radius}
-              strokeLinecap="round"
-              style={{
-                fill: "none",
-                stroke: "url(#GradientColor)",
-                strokeWidth: "7px",
-                strokeDasharray: dashArray,
-                strokeDashoffset: dataOffset
-              }}
-            />
-          </svg>
         </div>
 
-        <UserCtaBtns profileHeader={data} myProfile={data.myProfile} />
+        <UserCtaBtns data={data} />
       </div>
 
       <div className="short-info-wrapper">
@@ -149,40 +117,40 @@ const ProfileHeader = ({ tab, setTab, data , loading}: { tab: any, setTab: any, 
         <div className="inline-1">
           {Array.isArray(socialLinks) &&
             socialLinks.map((social, i) => {
-              const { name, url } = social
+              const { name, url } = social;
               return (
                 <Link to={url} key={i}>
                   <IonIcon className="black-icon-28" icon={icons[name]} />
                 </Link>
-              )
+              );
             })}
         </div>
 
         <ul className="inline-2 profile-header__tab-menu">
           {tabMenu.map((tabItem) => {
-            const { id, menu } = tabItem
+            const { id, menu } = tabItem;
             return (
               <li
                 key={id}
                 onClick={() => {
-                  changeTab(id)
+                  changeTab(id);
                 }}
                 className={id === tab ? "profile-header__tab-menu--active" : ""}
               >
                 <h4 className="profile-header__tab-menu--h4">{menu}</h4>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
     </IonCard>
-  )
-}
+  );
+};
 
 ProfileHeader.propTypes = {
   setTab: propTypes.func.isRequired,
   tab: propTypes.number.isRequired,
-  data: propTypes.object.isRequired
-}
+  data: propTypes.object.isRequired,
+};
 
-export default ProfileHeader
+export default ProfileHeader;

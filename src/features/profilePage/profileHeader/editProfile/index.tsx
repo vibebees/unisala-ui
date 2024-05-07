@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react";
 import {
   IonButtons,
   IonButton,
@@ -10,21 +10,22 @@ import {
   IonIcon,
   IonInput,
   useIonToast,
-  IonSpinner
-} from "@ionic/react"
-import { create, logOut } from "ionicons/icons"
-import { useMutation } from "@apollo/client"
-import { EditProfile, getUserGql } from "@datasource/graphql/user"
-import { USER_SERVICE_GQL } from "@datasource/servers/types"
- import { awsBucket, bucketName } from "@datasource/servers/s3.configs"
-import "./index.css"
-import { useDispatch } from "react-redux"
-import { updateUserProfile } from "@datasource/store/action/userProfile"
-import { useHistory } from "react-router-dom"
-import { Label } from "@components/defaults"
+  IonSpinner,
+} from "@ionic/react";
+import { create, logOut } from "ionicons/icons";
+import { useMutation } from "@apollo/client";
+import { EditProfile, getUserGql } from "@datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { awsBucket, bucketName } from "@datasource/servers/s3.configs";
+import "./index.css";
+import { useDispatch } from "react-redux";
+import { updateUserProfile } from "@datasource/store/action/userProfile";
+import { useHistory } from "react-router-dom";
+import { Button, Label } from "@components/defaults";
+import { EditIcon } from "@components/packages/icons";
 function index({ profileHeader }) {
   // for autocomplete location
-  const Avatar = () => "Avatar"
+  const Avatar = () => "Avatar";
 
   const {
     firstName,
@@ -33,29 +34,29 @@ function index({ profileHeader }) {
     location,
     profilePic,
     username,
-    coverPicture
-  } = profileHeader
-  const [input, setInput] = useState(profileHeader)
-  const [isOpen, setIsOpen] = useState(false)
-  const [present, dismiss] = useIonToast()
-  const [profileImage, setProfileImage] = useState(null)
-  const [coverImage, setCoverImage] = useState(null)
-  const [imageName, setImageName] = useState("")
-  const [coverImageName, setCoverImageName] = useState("")
-  const dispatch = useDispatch()
-  const history = useHistory()
+    coverPicture,
+  } = profileHeader;
+  const [input, setInput] = useState(profileHeader);
+  const [isOpen, setIsOpen] = useState(false);
+  const [present, dismiss] = useIonToast();
+  const [profileImage, setProfileImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  const [imageName, setImageName] = useState("");
+  const [coverImageName, setCoverImageName] = useState("");
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [editProfile, { loading }] = useMutation(EditProfile, {
     context: { server: USER_SERVICE_GQL },
     variables: {
       ...input,
       profilePicture: profileImage ? imageName : profilePic,
-      coverPicture: coverImage ? coverImageName : coverPicture
+      coverPicture: coverImage ? coverImageName : coverPicture,
     },
     update: (cache, { data: { editProfile } }) => {
       const { getUser } = cache.readQuery({
         query: getUserGql,
-        variables: { username }
-      })
+        variables: { username },
+      });
       cache.writeQuery({
         query: getUserGql,
         variables: { username },
@@ -64,37 +65,37 @@ function index({ profileHeader }) {
             ...getUser,
             user: {
               ...getUser.user,
-              ...editProfile.user
-            }
-          }
-        }
-      })
+              ...editProfile.user,
+            },
+          },
+        },
+      });
     },
     onCompleted: (data) => {
       // update uesr details in redux
       if (data?.editProfile?.status?.success) {
         // if username is changed just refresh the page
         if (profileHeader?.username !== input.username) {
-          history.push("/@/" + input?.username)
+          history.push("/@/" + input?.username);
         }
         //  change user details in store
-        dispatch(updateUserProfile({ user: { ...input }, loggedIn: true }))
+        dispatch(updateUserProfile({ user: { ...input }, loggedIn: true }));
 
         present({
           duration: 3000,
           message: "Profile Updated",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       } else {
         present({
           duration: 3000,
           message: data?.editProfile?.status.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
     },
     onError: (error) => {
@@ -103,36 +104,36 @@ function index({ profileHeader }) {
         message: error.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const handleChange = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value })
-  }
-  let windowWidth = window.innerWidth
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+  let windowWidth = window.innerWidth;
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    editProfile()
-    profileImage && fileUpdate()
-    coverImage && coverImageUpload()
-    setIsOpen(false)
-    setProfileImage(null)
-  }
+    e.preventDefault();
+    editProfile();
+    profileImage && fileUpdate();
+    coverImage && coverImageUpload();
+    setIsOpen(false);
+    setProfileImage(null);
+  };
 
   let handleProfileImage = (e) => {
-    setProfileImage(e.target.files[0])
-    let filename = e.target.files[0].name.split(".") || ""
-    setImageName(filename[0] + Date.now() + "." + filename[1] || "")
-  }
+    setProfileImage(e.target.files[0]);
+    let filename = e.target.files[0].name.split(".") || "";
+    setImageName(filename[0] + Date.now() + "." + filename[1] || "");
+  };
 
   let handleCoverImage = (e) => {
-    setCoverImage(e.target.files[0])
-    let filename = e.target.files[0].name.split(".") || ""
-    setCoverImageName(filename[0] + Date.now() + "." + filename[1] || "")
-  }
+    setCoverImage(e.target.files[0]);
+    let filename = e.target.files[0].name.split(".") || "";
+    setCoverImageName(filename[0] + Date.now() + "." + filename[1] || "");
+  };
 
   const fileUpdate = async () => {
     if (profileImage) {
@@ -140,8 +141,8 @@ function index({ profileHeader }) {
         Bucket: bucketName("user"),
         Key: imageName,
         ContentType: profileImage.type,
-        ACL: "public-read"
-      }
+        ACL: "public-read",
+      };
 
       // Generate a pre-signed URL
       await awsBucket("user").getSignedUrl(
@@ -149,8 +150,8 @@ function index({ profileHeader }) {
         params,
         async (err, url) => {
           if (err) {
-            console.error(err)
-            return
+            console.error(err);
+            return;
           }
 
           // Upload the file to S3 using the pre-signed URL
@@ -158,20 +159,20 @@ function index({ profileHeader }) {
             method: "PUT",
             body: profileImage,
             headers: {
-              "Content-Type": profileImage.type
-            }
-          })
+              "Content-Type": profileImage.type,
+            },
+          });
 
           if (result.ok) {
             // If the upload is successful, add the post with the S3 image URL
-            console.log(url)
+            console.log(url);
           } else {
-            console.error("Failed to upload image to S3")
+            console.error("Failed to upload image to S3");
           }
         }
-      )
+      );
     }
-  }
+  };
 
   const coverImageUpload = async () => {
     if (coverImage) {
@@ -179,8 +180,8 @@ function index({ profileHeader }) {
         Bucket: bucketName("user"),
         Key: coverImageName,
         ContentType: coverImage.type,
-        ACL: "public-read"
-      }
+        ACL: "public-read",
+      };
 
       // Generate a pre-signed URL
       await awsBucket("user").getSignedUrl(
@@ -188,8 +189,8 @@ function index({ profileHeader }) {
         params,
         async (err, url) => {
           if (err) {
-            console.error(err)
-            return
+            console.error(err);
+            return;
           }
 
           // Upload the file to S3 using the pre-signed URL
@@ -197,46 +198,42 @@ function index({ profileHeader }) {
             method: "PUT",
             body: coverImage,
             headers: {
-              "Content-Type": coverImage.type
-            }
-          })
+              "Content-Type": coverImage.type,
+            },
+          });
 
           if (result.ok) {
             // If the upload is successful, add the post with the S3 image URL
           } else {
-            console.error("Failed to upload image to S3")
+            console.error("Failed to upload image to S3");
           }
         }
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
-      <IonButton
-        color="light"
-        mode="ios"
-        className="icon-text font-bold tracking-wide text-lg flex"
-        onClick={() => setIsOpen(true)}
-      >
-        <IonIcon className="grey-icon-10 mr-1" color="" icon={create} />
+      <Button>
+        <EditIcon />
         <span>{"Edit"}</span>
-      </IonButton>
+      </Button>
+
       <IonButtons
-          onClick={() => {
-            localStorage.clear()
-            window.location.reload()
-          }}
-          className="profile-drop-btn"
-          lines="none"
-        >
-          <IonIcon slot="start" icon={logOut} />
-          <Label color="dark">Log out</Label>
-        </IonButtons>
+        onClick={() => {
+          localStorage.clear();
+          window.location.reload();
+        }}
+        className="profile-drop-btn"
+        lines="none"
+      >
+        <IonIcon slot="start" icon={logOut} />
+        <Label color="dark">Log out</Label>
+      </IonButtons>
       <IonModal
         onDidDismiss={() => {
-          setIsOpen(false)
-          setProfileImage(null)
+          setIsOpen(false);
+          setProfileImage(null);
         }}
         isOpen={isOpen}
         mode="ios"
@@ -247,8 +244,8 @@ function index({ profileHeader }) {
             <IonButtons slot="end">
               <IonButton
                 onClick={() => {
-                  setIsOpen(false)
-                  setProfileImage(null)
+                  setIsOpen(false);
+                  setProfileImage(null);
                 }}
               >
                 Close
@@ -372,7 +369,7 @@ function index({ profileHeader }) {
         </IonContent>
       </IonModal>
     </>
-  )
+  );
 }
 
-export default index
+export default index;

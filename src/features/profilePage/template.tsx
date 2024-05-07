@@ -1,31 +1,29 @@
 import { useQuery } from "@apollo/client";
-import { getCache } from "@utils/cache";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { User } from "src/types/gqlTypes/graphql";
-import { Col, Grid, Row } from "../../components/defaults";
-import { ApiError } from "../../components/packages/errorHandler/ApiError";
-import { NoResultFound } from "../../components/packages/errorHandler/NoResultFound";
-import List from "../../components/packages/list";
-import { getUserGql } from "../../datasource/graphql/user";
-import { USER_SERVICE_GQL } from "../../datasource/servers/types";
-import useDocTitle from "../../hooks/useDocTitile";
-import { URLgetter, URLupdate, redirectTo } from "../../utils/lib/URLupdate";
+import { Col, Grid, Row } from "@components/defaults";
+import { ApiError } from "@components/packages/errorHandler/ApiError";
+import { NoResultFound } from "@components/packages/errorHandler/NoResultFound";
+import List from "@components/packages/list";
+import { getUserGql } from "@datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import useDocTitle from "@hooks/useDocTitile";
+import { URLgetter, URLupdate } from "../../utils/lib/URLupdate";
 import Guestbook from "./guestbook";
 import ProfileBody from "./profileBody";
 import ProfileHeader from "./profileHeader";
 import Saved from "./saved";
 import Threads from "./threads";
 import { useAuth } from "@context/AuthContext";
-import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
+import { GetUserQuery } from "src/types/gqlTypes/graphql";
 
 const ProfilePage = () => {
   const [tab, setTab] = useState(0);
-  const { username } = useParams();
+  const { username } = useParams() as any;
 
   const history = useHistory();
-  const {user} = useAuth()
-  const { data, error, loading } = useQuery(getUserGql, {
+  const { user } = useAuth();
+  const { data, error, loading } = useQuery<GetUserQuery>(getUserGql, {
     context: { server: USER_SERVICE_GQL },
     variables: { username: username },
     fetchPolicy: "cache-first",
@@ -42,7 +40,6 @@ const ProfilePage = () => {
     coverPicture,
     oneLinerBio,
     location,
-    socialLinks,
     about,
     badges,
     education,
@@ -62,7 +59,6 @@ const ProfilePage = () => {
     coverPicture,
     oneLinerBio,
     location,
-    socialLinks,
     myProfile,
     doj,
     connectionType: getUser?.connectionType,
@@ -129,20 +125,21 @@ const ProfilePage = () => {
     return <ApiError />;
   }
 
-  if (!getUser?.user &&  !loading) {
+  if (!getUser?.user && !loading) {
     return <NoResultFound />;
   }
 
-
-  if (!username) {
-    redirectTo('/login')()
-  }
   return (
     <>
       <Grid className="max-width-container max-md:px-0">
         <Row className="lg:px-24">
           <Col className="w-2/5 max-md:px-0">
-            <ProfileHeader tab={tab} setTab={setTab} data={profileHeaderData} loading ={loading} />
+            <ProfileHeader
+              tab={tab}
+              setTab={setTab}
+              data={profileHeaderData}
+              loading={loading}
+            />
             {tab === 0 && getUser?.user && (
               <ProfileBody data={profileBodyData} />
             )}

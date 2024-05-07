@@ -1987,78 +1987,76 @@ export const Login = gql`
             }
         }`,
   GET_METADATA_TAGS = gql`
-  fragment AddAPostDetails on AddAPostQuery {
-    suggestMeUniversity {
-      ...NodeDetails
+    fragment AddAPostDetails on AddAPostQuery {
+      suggestMeUniversity {
+        ...NodeDetails
+      }
+      questionAboutUniversity {
+        ...NodeDetails
+      }
+      reviewUniversity {
+        ...NodeDetails
+      }
+      others {
+        ...NodeDetails
+      }
     }
-    questionAboutUniversity {
-      ...NodeDetails
-    }
-    reviewUniversity {
-      ...NodeDetails
-    }
-    others {
-      ...NodeDetails
-    }
-  }
 
-  fragment NodeDetails on NodeQuery {
-    id
-    name
-    type
-    api
-    edges {
+    fragment NodeDetails on NodeQuery {
       id
       name
       type
-      options
-      validation {
-        min
-        max
-      }
       api
+      edges {
+        id
+        name
+        type
+        options
+        validation {
+          min
+          max
+        }
+        api
+        rating
+        color
+        placeholder
+        initialVisible
+        userAnswer
+      }
       rating
       color
-      placeholder
-      initialVisible
-      userAnswer
+      icon
     }
-    rating
-    color
-    icon
-  }
 
-  query GetMetadataTags {
-    getMetadataTags {
-      data {
-        home {
-          addAPost {
-            ...AddAPostDetails
+    query GetMetadataTags {
+      getMetadataTags {
+        data {
+          home {
+            addAPost {
+              ...AddAPostDetails
+            }
           }
-        }
-        feed {
-          addAPost {
-            ...AddAPostDetails
+          feed {
+            addAPost {
+              ...AddAPostDetails
+            }
           }
-        }
-        org {
-          addAPost {
-            ...AddAPostDetails
+          org {
+            addAPost {
+              ...AddAPostDetails
+            }
           }
-        }
-        space {
-          addAPost {
-            ...AddAPostDetails
+          space {
+            addAPost {
+              ...AddAPostDetails
+            }
           }
-        }
-        university {
-          addAPost {
-            ...AddAPostDetails
+          university {
+            addAPost {
+              ...AddAPostDetails
+            }
           }
         }
       }
     }
-  }
-
-
   `;

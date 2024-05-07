@@ -3,30 +3,35 @@ import { useState } from "react";
 import { chatbubbles, personAdd } from "ionicons/icons";
 import { IonButton, IonIcon, useIonToast } from "@ionic/react";
 import { useMutation } from "@apollo/client";
-import { SendConnectRequest, AcceptConnectRequest, getUserGql } from "@datasource/graphql/user";
+import {
+  SendConnectRequest,
+  AcceptConnectRequest,
+  getUserGql,
+} from "@datasource/graphql/user";
 import EditProfile from "../editProfile";
 import "./UserCtaBtns.css";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useAuth } from "@context/AuthContext";
 import { useHistory } from "react-router";
 
-function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
-
+function UserCtaBtns({ data }: { data: any }) {
   const [present, dismiss] = useIonToast();
-  const [connectionType, setConnectionType] = useState(profileHeader.connectionType || {});
+  const [connectionType, setConnectionType] = useState(
+    data.connectionType || {}
+  );
   const { user } = useAuth();
   const history = useHistory();
 
   const [sendConnectRequest] = useMutation(SendConnectRequest, {
     onCompleted: (data) => {
       if (data.sendConnectRequest && data.sendConnectRequest.success) {
-        setConnectionType({ status: "pending", receiverId: profileHeader._id });
+        setConnectionType({ status: "pending", receiverId: data._id });
         present({
           duration: 3000,
           message: "Connect request sent",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
+          mode: "ios",
         });
       }
     },
@@ -36,10 +41,10 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
         message: `Error sending connect request: ${error.message}`,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
+        mode: "ios",
       });
     },
-    context: { server: USER_SERVICE_GQL }
+    context: { server: USER_SERVICE_GQL },
   });
 
   const [acceptConnectRequest] = useMutation(AcceptConnectRequest, {
@@ -47,7 +52,7 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
     update: (cache) => {
       const getUser = cache.readQuery({
         query: getUserGql,
-        variables: { username: user?.username }
+        variables: { username: user?.username },
       });
       if (getUser) {
         cache.writeQuery({
@@ -58,11 +63,11 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
               ...getUser.getUser,
               connectionType: {
                 ...getUser.getUser.connectionType,
-                status: "accepted"
+                status: "accepted",
               },
-              user: getUser.getUser.user
-            }
-          }
+              user: getUser.getUser.user,
+            },
+          },
         });
       }
     },
@@ -74,7 +79,7 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
           message: "Connect request accepted. You can now send messages.",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "success",
-          mode: "ios"
+          mode: "ios",
         });
       }
     },
@@ -84,14 +89,19 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
         message: `Error accepting connect request: ${error.message}`,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
+        mode: "ios",
       });
-    }
+    },
   });
 
   const AcceptedState = () => {
     return (
-      <IonButton color="light" mode="ios" className="icon-text" onClick={() => history.push('/messages')}>
+      <IonButton
+        color="light"
+        mode="ios"
+        className="icon-text"
+        onClick={() => history.push("/messages")}
+      >
         <IonIcon className="grey-icon-32 mr-1" icon={chatbubbles} />
         {"Message"}
       </IonButton>
@@ -101,18 +111,13 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
   const ButtonToShow = () => {
     if (!connectionType) return null; // Defensive check
 
-    if (myProfile) {
-      return (
-        <EditProfile
-          profileHeader={profileHeader}
-          setProfileHeader={setProfileHeader}
-        />
-      );
+    if (data) {
+      return <EditProfile profileHeader={data} setProfileHeader={data} />;
     }
 
     switch (connectionType.status) {
       case "pending":
-        return connectionType.receiverId === profileHeader._id ? (
+        return connectionType.receiverId === data._id ? (
           <IonButton color="light" mode="ios" className="icon-text">
             <IonIcon className="grey-icon-32 mr-1" icon={personAdd} />
             {"Requested"}
@@ -124,8 +129,8 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
             className="icon-text"
             onClick={() => {
               acceptConnectRequest({
-                variables: { requestorId: profileHeader._id }
-              })
+                variables: { requestorId: data._id },
+              });
             }}
           >
             <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
@@ -140,9 +145,11 @@ function UserCtaBtns({ profileHeader, setProfileHeader, myProfile }) {
             color="secondary"
             mode="ios"
             className="icon-text"
-            onClick={() => sendConnectRequest({
-              variables: { receiverId: profileHeader._id }
-            })}
+            onClick={() =>
+              sendConnectRequest({
+                variables: { receiverId: data._id },
+              })
+            }
           >
             <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
             {"Connect"}

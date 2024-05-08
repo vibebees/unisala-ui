@@ -10,6 +10,7 @@ import { AnimatePresence } from "framer-motion";
 const TopOrg = () => {
   const { data, loading, error } = useQuery<GetTopOrgSpaceQuery>(GetTopOrgs, {
     context: { server: USER_SERVICE_GQL },
+    variables: { limit: 2 },
   });
 
   return (
@@ -33,16 +34,12 @@ const TopOrg = () => {
           !loading &&
           data?.getTopOrgSpace &&
           data.getTopOrgSpace.data &&
-          data?.getTopOrgSpace?.data?.length > 0 &&
-          data?.getTopOrgSpace?.data.map((space) => {
-            return (
-              <SpaceReference
-                key={space?._id}
-                spaceCard={false}
-                references={data.getTopOrgSpace?.data as ITopSpace[]}
-              />
-            );
-          })}
+          data?.getTopOrgSpace?.data?.length > 0 && (
+            <SpaceReference
+              spaceCard={false}
+              references={data.getTopOrgSpace?.data.slice(0, 3) as ITopSpace[]}
+            />
+          )}
       </AnimatePresence>
     </div>
   );

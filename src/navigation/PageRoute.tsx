@@ -53,62 +53,61 @@ const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 export const PageRoute = () => {
   return (
     <Suspense fallback={<PreLoader />}>
-      <Route path='/login' exact>
+      <Route path="/login" exact>
         <AuthPage />
       </Route>
-      <Route path='/feed' exact>
+      <Route path="/feed" exact>
         <NewsFeed />
       </Route>
-      <Route path='/' exact>
+      <Route path="/" exact>
         <LandingPage />
       </Route>
-      <Route path='/home' exact>
+      <Route path="/home" exact>
         <LandingPage />
       </Route>
       {/* Protected routes example */}
-      <Route path='/profile/:username' exact>
+      <Route path="/profile/:username" exact>
         {/* <ProfilePage /> */}
       </Route>
-      <Route path='/standard' exact>
+      <Route path="/standard" exact>
         <Standard />
       </Route>
 
-      <Route exact path='/thread/:id'>
+      <Route exact path="/thread/:id">
         <ThreadDetail />
       </Route>
 
-      <Route path='/@/:username' exact>
+      <Route path="/@/:username" exact>
         <ProfilePage />
       </Route>
 
-      <Route path='/search' exact>
+      <Route path="/search" exact>
         <Search />
       </Route>
-      <Route path='/discover' exact>
+      <Route path="/discover" exact>
         <Discover />
       </Route>
 
-      <Route path='/search' exact>
+      <Route path="/search" exact>
         <Discover />
       </Route>
       {/* <Route path="/space" exact></Route> */}
 
-
-      <Route exact path='/university/:id'>
+      <Route exact path="/university/:id">
         <UniversityPage />
       </Route>
 
-      <Route path='/mynetwork' exact>
+      <Route path="/mynetwork" exact>
         <MyNetwork />
       </Route>
-      <Route path='/messages' exact>
+      <Route path="/messages" exact>
         <Messages />
       </Route>
-      <Route path='/messages/:friendUserName' exact>
+      <Route path="/messages/:friendUserName" exact>
         <Messages />
       </Route>
 
-      <Route path='/landingPage' exact>
+      <Route path="/landingPage" exact>
         <LandingPage />
       </Route>
       <Route path="/org/:category" exact>

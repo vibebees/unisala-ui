@@ -13,6 +13,8 @@ import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
 import { UpVote } from "../../../../datasource/graphql/user";
 import { UpVoteIcon } from "@components/packages/icons";
 import { cn } from "@utils/index";
+import { URLupdate } from "@utils/lib/URLupdate";
+import { useHistory } from "react-router";
 
 interface UpvoteProps {
   upVoteCount: number;
@@ -23,6 +25,7 @@ interface UpvoteProps {
 
 const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
   const [present, dismiss] = useIonToast();
+  const history = useHistory();
   const [voted, setVoted] = useState({
     upVoted: upVoted,
     upVoteCount: upVoteCount,
@@ -77,8 +80,11 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
 
   return (
     <Buttons
-      className=" active:scale-90  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200"
-      onClick={debouncedClick}
+      className=" active:scale-90 select-none  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200"
+      onClick={() => {
+        const updatedURL = URLupdate("auth", "y");
+        history.push({ search: updatedURL });
+      }}
       style={{ cursor: "pointer" }}
     >
       <UpVoteIcon

@@ -9,7 +9,7 @@ export const SignIn = () => {
     <div className="sign-content">
       <Typography
         variant="h2"
-        className="text-2xl font-semibold auth-start border-b-4 border-blue-500 pb-2 mb-4 w-fit"
+        className="text-2xl font-semibold auth-start border-b-4 text-neutral-900 border-blue-500 pb-2 mb-4 w-fit"
       >
         Sign in
       </Typography>
@@ -28,7 +28,7 @@ export const SignIn = () => {
       </div> */}
 
       <div className="auth-or">
-        <Typography variant="p" className="auth-or-p">
+        <Typography variant="p" className="auth-or-p text-neutral-700">
           or Sign in with Email!
         </Typography>
       </div>

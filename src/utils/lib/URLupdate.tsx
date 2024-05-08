@@ -19,7 +19,7 @@ export const URLgetter = (key) => {
   return params.get(key);
 };
 
-export const URLdelete = (key) => {
+export const URLdelete = (key: string) => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   params.delete(key);

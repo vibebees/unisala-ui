@@ -39,6 +39,7 @@ export const GoogleAuth = () => {
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
         });
+        document.getElementById("close-auth-modal")?.click();
         history.push("/feed");
       }
     },

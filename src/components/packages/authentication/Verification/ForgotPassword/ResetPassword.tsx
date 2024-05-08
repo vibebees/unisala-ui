@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { IonButton, IonText, IonSpinner, useIonToast } from "@ionic/react";
 import AuthInput from "../../AuthInput";
 import "../../auth.css";
-import { AuthenticationContext } from "@features/login";
+import { AuthenticationContext } from "../../Authentication";
 import { ChangePasswordMutation } from "src/types/gqlTypes/graphql";
 import { ChangePassword } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";

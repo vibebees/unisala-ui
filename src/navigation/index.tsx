@@ -22,6 +22,7 @@ import logo from "@assets/icon/UniSala.gif";
 import { createPortal } from "react-dom";
 import ProfilePop from "@components/packages/profilePop";
 import { useAuth } from "@context/AuthContext";
+import AuthModal from "@components/packages/authentication/AuthModal";
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
   // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
@@ -34,8 +35,8 @@ export const Navigation: React.FC<NavigationProps> = () => {
   const { authenticated } = useAuth();
   const routes = useRoutes();
   const history = useHistory();
-  const [active, setActive] = useState<string>("home");
   const [showPopover, setShowPopover] = useState(false);
+  const [active, setActive] = useState<string>("home");
   const { isMobile } = useWindowWidth();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("");
@@ -54,7 +55,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
 
   useEffect(() => {
     setActiveTab(location.pathname);
-  }, [location]);
+  }, [location.search, location.pathname]);
 
   const styleForSearch = { flex: "0 0 auto", width: "100%" };
 
@@ -83,7 +84,6 @@ export const Navigation: React.FC<NavigationProps> = () => {
           </IonRow>
         </IonGrid>
       </IonHeader>
-
       <Tabs>
         <RouterOutlet id="main-content" className=" max-md:mt-12">
           <PageRoute />
@@ -125,6 +125,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
           />,
           document.getElementById("root")!
         )}
+      <AuthModal />
     </>
   );
 };

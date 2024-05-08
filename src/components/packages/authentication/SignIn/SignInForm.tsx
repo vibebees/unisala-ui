@@ -8,20 +8,21 @@ import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { LoginMutation } from "src/types/gqlTypes/graphql";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "@context/AuthContext";
-import { useHistory } from "react-router";
-import { AuthenticationContext } from "@features/login";
+import { useHistory, useLocation } from "react-router";
+import { AuthenticationContext } from "../Authentication";
 
 const SignInForm = () => {
   const { setauth } = useContext(AuthenticationContext)!;
   const params = new URLSearchParams(window.location.search);
   const { UpdateAuth, authenticated } = useAuth();
   const history = useHistory();
+  const location = useLocation();
   const spaceOrgName = params.get("org");
   const [errors, setErrors] = useState<ILoginInputErrors>({});
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
-    if (authenticated) {
+    if (authenticated && !location.search.includes("auth")) {
       history.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,6 +63,7 @@ const SignInForm = () => {
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
         });
+        document.getElementById("close-auth-modal")?.click();
         history.push("/feed");
       }
     },

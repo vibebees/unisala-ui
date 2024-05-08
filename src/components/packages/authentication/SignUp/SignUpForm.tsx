@@ -4,7 +4,7 @@ import { useState } from "react";
 import { validateSignup } from "@utils/components/validate";
 import AuthInput from "../AuthInput";
 import "../auth.css";
-import { AuthenticationContext } from "@features/login";
+import { AuthenticationContext } from "../Authentication";
 import { useMutation } from "@apollo/client";
 import { Register } from "@datasource/graphql/user";
 import { RegisterMutation } from "src/types/gqlTypes/graphql";

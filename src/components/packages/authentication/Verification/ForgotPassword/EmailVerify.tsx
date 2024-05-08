@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import AuthInput from "../../AuthInput";
 import "../../auth.css";
-import { AuthenticationContext } from "@features/login";
+import { AuthenticationContext } from "../../Authentication";
 
 export const EmailVerify = () => {
   const { setauth } = useContext(AuthenticationContext)!;

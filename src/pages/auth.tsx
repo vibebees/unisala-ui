@@ -1,10 +1,10 @@
 import React from "react";
 import LayoutSplit from "@layouts/FixedLayout";
-import LoginPage from "../features/login";
+import Authentication from "@components/packages/authentication/Authentication";
 const AuthPage = () => {
   return (
     <LayoutSplit>
-      <LoginPage />
+      <Authentication />
     </LayoutSplit>
   );
 };

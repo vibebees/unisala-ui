@@ -8,7 +8,7 @@ import {
 import { SendVerificationMail, VerifyEmail } from "@datasource/graphql/user";
 import { useMutation } from "@apollo/client";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
-import { AuthenticationContext } from "@features/login";
+import { AuthenticationContext } from "../Authentication";
 import { Typography } from "@components/defaults";
 import AuthInput from "../AuthInput";
 

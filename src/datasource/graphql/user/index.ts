@@ -632,6 +632,7 @@ export const Login = gql`
           success
           message
         }
+        validToken
         data {
           _id
           userId
@@ -1020,6 +1021,7 @@ export const Login = gql`
   getNewsFeed = gql`
     query fetchFeedV2($feedQuery: FeedQueryInput) {
       fetchFeedV2(feedQuery: $feedQuery) {
+        validToken
         data {
           section
           postText

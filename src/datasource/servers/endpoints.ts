@@ -1,9 +1,12 @@
 import {
   ApolloClient,
+  ApolloLink,
   HttpLink,
   InMemoryCache,
+  from,
   fromPromise,
   split,
+  Observable
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
@@ -27,9 +30,67 @@ const {
     userServiceAddress,
     callSocketAddress,
   } = getServiceConfig(),
+  responseLink = new ApolloLink((operation, forward) => {
+    return new Observable(observer => {
+      let handle;
+      Promise.resolve(operation)
+        .then(oper => forward(oper))
+        .then(observable => {
+          handle = observable.subscribe({
+            next: response => {
+              console.log("Response received:", response)
+              const {validToken }= response?.data?.fetchFeedV2 ?? {};
+              // Check for the validToken flag in the response
+              if (validToken === false) {
+                console.log("Token is invalid or expired, refreshing token...");
+
+                // Suspend the current response and attempt to refresh the token
+                fromPromise(
+                  getNewToken()
+                    .then(newToken => {
+                      localStorage.setItem('accessToken', newToken); // Save the new token
+                      operation.setContext(({ headers = {} }) => ({
+                        headers: {
+                          ...headers,
+                          authorization: `Bearer ${newToken}`
+                        }
+                      }));
+
+                      // Retry the original request with the new token
+                      return forward(operation);
+                    })
+                    .catch(error => {
+                      // Handle errors, like refreshing token failure
+                      console.error('Error refreshing token:', error);
+                      observer.error(error); // Pass the error on
+                      return Observable.throw(error);
+                    })
+                ).subscribe({
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer),
+                });
+              } else {
+                // If the token is valid, pass the response as is
+                observer.next(response);
+              }
+            },
+            error: err => observer.error(err),
+            complete: () => observer.complete(),
+          });
+        })
+        .catch(observer.error.bind(observer));
+
+      // Cleanup function
+      return () => {
+        if (handle) handle.unsubscribe();
+      };
+    });
+  }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message, locations, path }) => {
+        console.log('----------->')
         if (message === "You are not logged in. Please login") {
           alert("You are not logged in. Please login");
         }
@@ -108,7 +169,7 @@ const {
   );
 
 export const client = new ApolloClient({
-    link: errorLink.concat(authLink.concat(httpLink)),
+  link: from([responseLink, errorLink, authLink, httpLink]),
     headers: {
       authorization: authData?.accessToken || "",
     },

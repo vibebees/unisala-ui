@@ -177,12 +177,6 @@ export const University: FC<IUniversityProps> = ({ post }) => {
           </div>
         </div>
 
-        <div className='p-6'>
-          <div className='my-2 flex min-w-[240px] flex-col gap-1 p-0 font-sans text-base font-normal text-blue-gray-700'>
-
-          </div>
-        </div>
-
 
         <div className='p-6 pt-0 space-x-10'>
           <button

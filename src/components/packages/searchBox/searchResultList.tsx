@@ -1,27 +1,22 @@
-import React from "react"
-import { Item, Label } from "../../defaults"
-import { useState} from "react"
-import {Link} from "react-router-dom"
-import {universityDefaultImage} from "../../../datasource/servers/s3.configs"
+import React from "react";
+import { Item, Label } from "../../defaults";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { universityDefaultImage } from "../../../datasource/servers/s3.configs";
 
-export const SearchBarResultList = ({item, key, setDropDownOptions}) => {
-  const [profileImage, setProfileImage] = useState(item?.pictures?.[0] || item?.picture || universityDefaultImage)
-
+export const SearchBarResultList = ({ item, key, setDropDownOptions }) => {
+  const [profileImage, setProfileImage] = useState(
+    item?.pictures?.[0] || item?.picture || universityDefaultImage
+  );
 
   return (
     <Link
-      to={
-        item?.username
-          ? `/@/${item?.username}`
-          : `/university/${item?.name}`
-      }
+      to={item?.username ? `/@/${item?.username}` : `/university/${item?.name}`}
       key={key}
+      className=" block cursor-pointe"
       onClick={() => setDropDownOptions(false)}
     >
-      <Item
-        lines="none"
-        key={key}
-      >
+      <Item lines="none" key={key}>
         {/* <IonAvatar slot="start">
           <img
             src={
@@ -30,18 +25,18 @@ export const SearchBarResultList = ({item, key, setDropDownOptions}) => {
             }
           />
         </IonAvatar> */}
-        <Label >
+        <Label>
           <h2
             style={{
               margin: 0,
-              width: "100%"
+              width: "100%",
             }}
           >
             {item?.name || `${item?.firstName} ${item?.lastName}`}
           </h2>
           <p
             style={{
-              margin: 0
+              margin: 0,
             }}
           >
             {item?.city || item?.location}
@@ -49,5 +44,5 @@ export const SearchBarResultList = ({item, key, setDropDownOptions}) => {
         </Label>
       </Item>
     </Link>
-  )
-}
+  );
+};

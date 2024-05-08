@@ -2,11 +2,8 @@ import React, { FC, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
-  ThreadEditable,
   ThreadExpand,
-  ThreadFooter,
   ThreadHeader,
-  ThreadImages,
   ThreadOptions,
   ThreadRating,
 } from "./organism";

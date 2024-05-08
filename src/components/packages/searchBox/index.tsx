@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { IonIcon, IonMenuToggle, IonSearchbar } from "@ionic/react";
+import { IonSearchbar } from "@ionic/react";
 import { SearchBarResultList } from "./searchResultList";
 import "./index.css";
 import { searchUniFromBar } from "@datasource/store/action/userActivity";
@@ -9,7 +9,6 @@ import { trashBin } from "ionicons/icons";
 import { URLgetter, URLupdate } from "@utils/lib/URLupdate";
 import FilterIcon from "../icons/FilterIcon";
 import { MenuToggle } from "@components/defaults";
-import { cn } from "@utils/index";
 import clsx from "clsx";
 
 export const SearchBar = () => {
@@ -88,7 +87,7 @@ export const SearchBar = () => {
 
       {dropDownOptions && Array.isArray(options) && options.length > 0 && (
         <div
-          className="recommend-search"
+          className="recommend-search BorderCard"
           ref={dropdownRef}
           style={{
             zIndex: 1000,

@@ -1970,7 +1970,7 @@ export const Login = gql`
       }
     }
     fragment NodeDetails on NodeQuery {
-      idW
+      id
       name
       type
       api

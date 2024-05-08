@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import './index.css';
+import React, { FC, useState } from "react";
+import "./index.css";
 import {
   ShowPeopleComments,
   ThreadEditable,
@@ -8,12 +8,12 @@ import {
   ThreadHeader,
   ThreadImages,
   ThreadOptions,
-  ThreadRating
-} from './organism';
-import { Buttons, Card, Item, ItemDivider } from '@components/defaults';
-import { Reply, Save, Upvote } from './actions';
-import Share from '@components/packages/share';
-import ImageCollage from './ImageCollages';
+  ThreadRating,
+} from "./organism";
+import { Buttons, Card, Item, ItemDivider } from "@components/defaults";
+import { Reply, Save, Upvote } from "./actions";
+import Share from "@components/packages/share";
+import ImageCollage from "./ImageCollages";
 
 interface ThreadProps {
   thread: IPost;
@@ -39,27 +39,26 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
     postType,
-    levelOfStudy
+    levelOfStudy,
   } = thread;
   const BASEURL = window.location.origin;
   const [editable, setEditable] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const postTypes = {
-    suggestMeUniversity: 'Suggest Me University',
-    questionAboutUniversity: 'Question About University',
-    reviewUniversity: 'Review University'
+    suggestMeUniversity: "Suggest Me University",
+    questionAboutUniversity: "Question About University",
+    reviewUniversity: "Review University",
   };
   let dummyImages = [
-    'https://cdn.britannica.com/85/13085-050-C2E88389/Corpus-Christi-College-University-of-Cambridge-England.jpg',
-    'https://www.creighton.edu/sites/default/files/styles/hero_mobile/public/2024-05/may-commencement-hero-9.jpg?itok=3Mu4dsF2',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDLci5lWs5pqELaAP_LDOMzqLF8QzsBt_j9nEto30DVw&s',
-    'https://www.purdue.edu/home/wp-content/uploads/2023/07/16_2022_RM13902-2.jpg'
-
-  ]
+    "https://cdn.britannica.com/85/13085-050-C2E88389/Corpus-Christi-College-University-of-Cambridge-England.jpg",
+    "https://www.creighton.edu/sites/default/files/styles/hero_mobile/public/2024-05/may-commencement-hero-9.jpg?itok=3Mu4dsF2",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDLci5lWs5pqELaAP_LDOMzqLF8QzsBt_j9nEto30DVw&s",
+    "https://www.purdue.edu/home/wp-content/uploads/2023/07/16_2022_RM13902-2.jpg",
+  ];
   return (
     <>
-      <div className='relative flex flex-col bg-white bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem]'>
-        <div className='p-6 bg-white border'>
+      <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
+        <div className="p-6 bg-white border">
           <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}
@@ -71,9 +70,9 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
 
         {dummyImages.length > 0 && <ImageCollage images={dummyImages} />}
 
-        <div className='p-6 bg-white'>
+        <div className="p-6 bg-white">
           <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
-          <div className='relative flex w-full max-w-[26rem] flex-col rounded-xl  bg-clip-border text-gray-700 shadow-none'>
+          <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl  bg-clip-border text-gray-700 shadow-none">
             <ThreadRating
               academicProgramsAndDepartmentRating={
                 academicProgramsAndDepartmentRating
@@ -87,8 +86,8 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             />
           </div>
         </div>
-        <div className='pt-0 pb-5 border '>
-          <div className='inline-flex flex-wrap items-center gap-3 mt-3 group '>
+        <div className="pt-0 pb-5 border ">
+          <div className="inline-flex flex-wrap items-center gap-3 mt-3 group ">
             <Upvote
               upVoteCount={upVoteCount}
               postId={_id}
@@ -98,29 +97,29 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             <Reply
               repliesCount={postCommentsCount}
               isReply={isReply}
-              replyTo=''
+              replyTo=""
               singlePost={false}
-              parentId={''}
+              parentId={""}
               postId={_id}
             />
             {!isReply && <Save postId={_id} saved={saved} thread={{}} />}
 
             {!isReply && (
-              <Buttons className='ThreadFooterBtn h-7'>
+              <Buttons className="ThreadFooterBtn h-7">
                 <Share
                   allProps={{
                     link: `${BASEURL}/thread/${_id}`,
                     btnstyle: {
-                      width: '55px',
-                      height: '55px',
-                      backgroundColor: 'transparent'
+                      width: "55px",
+                      height: "55px",
+                      backgroundColor: "transparent",
                     },
                     Iconstyle: {
-                      color: 'gray ',
-                      width: '18px',
-                      height: '18px'
+                      color: "gray ",
+                      width: "18px",
+                      height: "18px",
                     },
-                    showAddList: false
+                    showAddList: false,
                   }}
                 />
               </Buttons>
@@ -143,71 +142,15 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           </button>
         </div> */}
       </div>
-    </>
-  );
-  return (
-    <>
-      <Card className=' BorderCard shadow-none  pt-4 pb-3 max-md:my-1 ion-no-margin'>
-        <div className='px-4'>
-          <ThreadHeader
-            firstName={user?.firstName}
-            lastName={user?.lastName}
-            date={date}
-            profilePic={user?.picture!}
-            username={user?.username}
-          />
-        </div>
 
-        <div className='thread_content '>
-          <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
-
-          <div className='px-4 py-2'>
-            <ThreadRating
-              academicProgramsAndDepartmentRating={
-                academicProgramsAndDepartmentRating
-              }
-              admissionAndApplicationRating={admissionAndApplicationRating}
-              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
-              financialAidAndScholarshipRating={
-                financialAidAndScholarshipRating
-              }
-              studentLifeAndServiceRating={studentLifeAndServiceRating}
-            />
-          </div>
-          <div>
-            <ThreadImages _id={_id} images={images} />
-          </div>
-
-          <ThreadFooter
-            _id={_id}
-            upVoteCount={upVoteCount}
-            upVoted={upVoted}
-            postCommentsCount={postCommentsCount}
-            saved={saved}
-            isReply={false}
-            parentId=''
-            replyTo=''
-            singlePost={false}
-          />
-
-          <ThreadOptions
-            setEditable={setEditable}
-            username={user?.username}
-            feedType={feedType}
-            feedId={feedId!}
-            _id={_id}
-          />
-
-          {postCommentsCount > 0 && (
-            <ShowPeopleComments
-              postId={_id}
-              parentId=''
-              singlePost={false}
-              postCommentsCount={postCommentsCount}
-            />
-          )}
-        </div>
-      </Card>
+      {postCommentsCount > 0 && (
+        <ShowPeopleComments
+          postId={_id}
+          parentId=""
+          singlePost={false}
+          postCommentsCount={postCommentsCount}
+        />
+      )}
     </>
   );
 };

@@ -14,6 +14,7 @@ import { Buttons, Card, Item, ItemDivider } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
 import Share from "@components/packages/share";
 import ImageCollage from "./ImageCollages";
+import AuthValidator from "../authentication/AuthValidator";
 
 interface ThreadProps {
   thread: IPost;
@@ -88,12 +89,15 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
         </div>
         <div className="pt-0 pb-5 border ">
           <div className="inline-flex flex-wrap items-center gap-3 mt-3 group ">
-            <Upvote
-              upVoteCount={upVoteCount}
-              postId={_id}
-              upVoted={upVoted}
-              isReply={isReply}
-            />
+            <AuthValidator>
+              <Upvote
+                upVoteCount={upVoteCount}
+                postId={_id}
+                upVoted={upVoted}
+                isReply={isReply}
+              />
+            </AuthValidator>
+
             <Reply
               repliesCount={postCommentsCount}
               isReply={isReply}
@@ -102,7 +106,13 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               parentId={""}
               postId={_id}
             />
-            {!isReply && <Save postId={_id} saved={saved} thread={{}} />}
+            <AuthValidator>
+              {!isReply ? (
+                <Save postId={_id} saved={saved} thread={{}} />
+              ) : (
+                <></>
+              )}
+            </AuthValidator>
 
             {!isReply && (
               <Buttons className="ThreadFooterBtn h-7">

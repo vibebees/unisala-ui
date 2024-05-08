@@ -81,10 +81,7 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
   return (
     <Buttons
       className=" active:scale-90 select-none  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200"
-      onClick={() => {
-        const updatedURL = URLupdate("auth", "y");
-        history.push({ search: updatedURL });
-      }}
+      onClick={debouncedClick}
       style={{ cursor: "pointer" }}
     >
       <UpVoteIcon

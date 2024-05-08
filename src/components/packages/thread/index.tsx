@@ -66,7 +66,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         </div>
 
-        {dummyImages.length > 0 && <ImageCollage images={dummyImages} />}
+        {images.length > 0 && <ImageCollage images={images} />}
 
         <div className="p-6 bg-white">
           <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
@@ -84,7 +84,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             />
           </div>
         </div>
-        <div className="pt-0 pb-5 border ">
+        <div className="pt-0 pb-5  ">
           <div className="inline-flex flex-wrap items-center gap-3 mt-3 group ">
             <AuthValidator>
               <Upvote
@@ -148,16 +148,18 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             {postTypes[postType]}
           </button>
         </div> */}
+
+        {postCommentsCount > 0 && (
+          <ShowPeopleComments
+            postId={_id}
+            parentId=""
+            singlePost={false}
+            postCommentsCount={postCommentsCount}
+          />
+        )}
       </div>
 
-      {postCommentsCount > 0 && (
-        <ShowPeopleComments
-          postId={_id}
-          parentId=""
-          singlePost={false}
-          postCommentsCount={postCommentsCount}
-        />
-      )}
+     
     </>
   );
 };

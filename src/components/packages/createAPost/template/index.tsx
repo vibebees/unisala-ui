@@ -21,8 +21,6 @@ const CreateAPostCard = ({ allProps}) => {
   useEffect(() => {
     if (!loading && data) {
       const addApost = data.getMetadataTags?.data?.[pathname]?.addAPost;
-      console.log("----> actual data to set meta");
-      console.log(addApost);
       setMeta(addApost ?? {});
     }
   }, [data, pathname]);

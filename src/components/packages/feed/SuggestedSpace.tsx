@@ -7,9 +7,13 @@ interface ISuggestedSpaceProps {
   data: ISpaceOrg[];
   type?: string;
   title?: string;
+  __typename?: string;
 }
 
-const SuggestedSpace: FC<ISuggestedSpaceProps> = ({ data, title, type }) => {
+const SuggestedSpace: FC<ISuggestedSpaceProps> = ({ data, title }) => {
+
+  const { __typename } = data[ 0 ]
+  const type = __typename === "spaceCategory" ? "space" : "org"
   return (
     <Card className="ion-no-margin">
       <IonCardHeader>

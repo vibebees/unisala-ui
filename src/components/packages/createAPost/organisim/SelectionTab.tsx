@@ -9,8 +9,12 @@ const SelectionTab = ({ metaData, onClick }) => {
   return (
     <div className="grid place-items-center gap-y-8 mt-5">
       {metaData &&
-        Object.keys(metaData).map((item, i) => (
-          <div key={i}>
+        Object.keys(metaData).map((item, i) => {
+          let postTypeSelectionIsValid = metaData[ item ]?.name
+          if (!postTypeSelectionIsValid) {
+            return ''
+          }
+          return ( <div key={i}>
             <Button
               className={`mt-0 hover:scale-95 transition-all ease-in`}
               onClick={() => {
@@ -20,8 +24,8 @@ const SelectionTab = ({ metaData, onClick }) => {
             >
               {metaData[item]?.name}
             </Button>
-          </div>
-        ))}
+          </div>)
+        })}
     </div>
   )
 }

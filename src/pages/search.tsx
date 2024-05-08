@@ -9,7 +9,7 @@ const DiscoverPage = () => {
       leftSidebar={
         <div
           id="filter-container"
-          className=" min-w-[279px] top-0 sticky"
+          className=" min-w-[279px] max-md:hidden top-0 sticky"
         ></div>
       }
     >

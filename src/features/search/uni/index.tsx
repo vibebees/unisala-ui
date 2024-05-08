@@ -33,6 +33,13 @@ const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
           <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
           document.getElementById("filter-container")!
         )}
+      {window !== undefined &&
+        document.getElementById("menu-content") &&
+        createPortal(
+          <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
+          document.getElementById("menu-content")!
+        )}
+
       <ResultsColumn
         activeSubTab={activeSubTab}
         filterPage={filterPage}

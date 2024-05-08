@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
+  Content,
+  Header,
   Label,
+  Menu,
   RouterOutlet,
   TabBar,
   TabButton,
   Tabs,
+  Title,
+  Toolbar,
 } from "../components/defaults/";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { PageRoute } from "./PageRoute";
@@ -55,10 +60,15 @@ export const Navigation: React.FC<NavigationProps> = () => {
 
   return (
     <>
-      <IonHeader className="w-1/2 h-14 border-none shadow-none max-md:w-full max-md:h-12 ">
-        <IonGrid className="position-sticky bg-white  top-0 mb-3">
-          <IonRow>
-            <IonCol className="ion-no-padding h-full " size="1">
+      <Menu type="overlay" contentId="main-content">
+        <Content id="menu-content">
+          {/* pass content inside it using react portal */}
+        </Content>
+      </Menu>
+      <IonHeader className="w-1/2 h-14 flex items-center shadow-none  max-md:w-full max-md:h-12 ">
+        <IonGrid className=" bg-white   ion-no-margin ion-no-padding">
+          <IonRow className="ion-no-margin ion-no-padding">
+            <IonCol className="ion-no-padding h-full ion-no-margin" size="1">
               <Link to="/">
                 <img
                   src={logo}
@@ -75,7 +85,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
       </IonHeader>
 
       <Tabs>
-        <RouterOutlet>
+        <RouterOutlet id="main-content" className=" max-md:mt-12">
           <PageRoute />
         </RouterOutlet>
 

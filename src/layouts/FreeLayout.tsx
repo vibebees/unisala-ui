@@ -86,7 +86,7 @@ const Layout: React.FC<LayoutProps> = ({
       "
       >
         <Row
-          className="layout-row px-5 justify-center  mx-auto flex flex-nowrap "
+          className="layout-row px-5 max-md:px-0 justify-center ion-no-padding ion-no-margin  mx-auto flex flex-nowrap "
           style={style}
         >
           {/* Only visible on medium and larger screens */}

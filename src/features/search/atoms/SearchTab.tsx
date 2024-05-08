@@ -74,23 +74,23 @@ const SearchTab = () => {
           }}
         >
           {tabs.map((t, index) => (
-            <Typography key={index} className="w-fit ">
-              <h4
-                onClick={() => {
-                  const urldata = URLupdate("tab", t.value);
-                  history.push({ search: urldata });
-                  // ButtonTrack(`${t.value} search tab clicked`)
-                }}
-                className="max-md:text-xs"
-                style={{
-                  cursor: "pointer",
+            <Typography
+              variant="h5"
+              key={index}
+              style={{
+                cursor: "pointer",
 
-                  color: t.value === tab ? "#3171e0" : "",
-                  borderBottom: t.value === tab ? "2px solid #3171e0" : "",
-                }}
-              >
-                {t.name}
-              </h4>
+                color: t.value === tab ? "#3171e0" : "",
+                borderBottom: t.value === tab ? "2px solid #3171e0" : "",
+              }}
+              className="w-fit  max-md:!text-[11px] max-md:text-neutral-800 max-md:font-medium"
+              onClick={() => {
+                const urldata = URLupdate("tab", t.value);
+                history.push({ search: urldata });
+                // ButtonTrack(`${t.value} search tab clicked`)
+              }}
+            >
+              {t.name}
             </Typography>
           ))}
         </div>

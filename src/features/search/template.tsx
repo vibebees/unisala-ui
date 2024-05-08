@@ -31,7 +31,7 @@ export const SearchTemplate: React.FC = () => {
 
   return (
     <>
-      <Row className=" max-w-[900px] ion-no-margin ion-no-padding  px-4">
+      <Row className=" max-w-[900px] ion-no-margin ion-no-padding max-md:px-0  px-4">
         <Col className="min-h-[100vh] relative ion-no-padding ion-no-margin  overflow-hidden w-full">
           <AnimatePresence mode="sync">
             <SearchTab />

@@ -13,7 +13,7 @@ import {
 import ImageWithLoader from '../reusable/Image/ImageWithLoader';
 import { Card, Col, Grid, Row } from '../../defaults';
 import { location, schoolOutline } from 'ionicons/icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { defaultUniImages } from './default.images';
 import { MoneyIcon } from '../icons/money';
 import { CheckIcon } from '../icons/check';
@@ -38,6 +38,7 @@ const getRandomColor = () => {
 };
 export const University: FC<IUniversityProps> = ({ post }) => {
   const { elevatorInfo } = post;
+  const {pictures} = elevatorInfo;
   const { studentCharges } = post;
   const formattedAddress = `${elevatorInfo.address.city}, ${elevatorInfo.address.stateAbbreviation}, ${elevatorInfo.address.streetAddressOrPOBox}`;
   const universityInfo = {
@@ -70,10 +71,11 @@ export const University: FC<IUniversityProps> = ({ post }) => {
       }
     ]
   };
+  const history = useHistory()
 
   return (
     <>
-      <div className='relative flex flex-col bg-white bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem]'>
+      <div className='relative flex flex-col bg-white bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem]' >
         <div className='flex gap-2'>
           <div className='relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white'>
             <span className=''>Suggested University</span>
@@ -81,14 +83,17 @@ export const University: FC<IUniversityProps> = ({ post }) => {
         </div>
 
         <div className='relative w-full m-0 overflow-hidden text-gray-700 bg-white rounded-r-none bg-clip-border rounded-xl shrink-0'>
-          <img
-            src='https://unisala-university-images.s3.amazonaws.com/University%20of%20North%20Alabama_101879-3.jpg?AWSAccessKeyId=AKIAUVJSKU37Y2K4OLYR&Expires=1714951779&Signature=Z%2FZolnja%2BftxjhOzR%2BNe7c0xdtQ%3D'
+         {pictures?.length > 0 && <img
+            src={pictures[0]}
             alt='card-image'
             className='object-cover w-full h-full'
-          />
+            onClick={() => history.push('/university/' + elevatorInfo.name)}
+            />}
         </div>
 
-        <div className='p-6'>
+        <div className='p-6'
+          onClick={() => history.push('/university/' + elevatorInfo.name)}
+        >
           <div className='flex items-center justify-between mb-3'>
             <h4 className='block font-sans text-xl antialiased font-medium leading-snug tracking-normal text-blue-gray-900'>
               {elevatorInfo.name}

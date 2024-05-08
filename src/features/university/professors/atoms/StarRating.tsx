@@ -14,8 +14,6 @@ const StarRating = ({ professorName, overallRating }) => {
               color: "#F8B64C",
               margin: "0 3px",
               padding: "0",
-              fontWeight: "bold",
-              fontSize: "25px"
             }}
             icon={index <= overallRating ? star : starOutline}
           />

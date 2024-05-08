@@ -10,9 +10,10 @@ import {
   ThreadOptions,
   ThreadRating
 } from './organism';
-import { Buttons, Card } from '@components/defaults';
+import { Buttons, Card, Item, ItemDivider } from '@components/defaults';
 import { Reply, Save, Upvote } from './actions';
 import Share from '@components/packages/share';
+import ImageCollage from './ImageCollages';
 
 interface ThreadProps {
   thread: IPost;
@@ -48,30 +49,30 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     questionAboutUniversity: 'Question About University',
     reviewUniversity: 'Review University'
   };
+  let dummyImages = [
+    'https://cdn.britannica.com/85/13085-050-C2E88389/Corpus-Christi-College-University-of-Cambridge-England.jpg',
+    'https://www.creighton.edu/sites/default/files/styles/hero_mobile/public/2024-05/may-commencement-hero-9.jpg?itok=3Mu4dsF2',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDLci5lWs5pqELaAP_LDOMzqLF8QzsBt_j9nEto30DVw&s',
+    'https://www.purdue.edu/home/wp-content/uploads/2023/07/16_2022_RM13902-2.jpg'
+
+  ]
   return (
     <>
       <div className='relative flex flex-col bg-white bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem]'>
-      <div className='p-6 bg-white'>
-      <ThreadHeader
-                firstName={user?.firstName}
-                lastName={user?.lastName}
-                date={date}
-                profilePic={user?.picture!}
-                username={user?.username}
-              />
-        </div>
-
-        <div className='relative w-full m-0 overflow-hidden text-gray-700 bg-white rounded-r-none bg-clip-border rounded-xl shrink-0'>
-          <img
-            src='https://unisala-user.s3.ap-south-1.amazonaws.com/3663ea17-7efc-44de-b5c9-263808602c2c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAUVJSKU37VIW3RYP6%2F20240505%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20240505T193839Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFMaCmFwLXNvdXRoLTEiSDBGAiEAmx1eryhwlMENA4GVgnssDmK9%2B7z0w49vdBvYbSuwM7ICIQDwSTJ1rPjO9zdKWKtz5x7%2Fz5YQIslmX7YxsvPU122qmCrIBQis%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAEaDDMyMDYxNzQ5MDE3NSIMntBzPR9w%2BcEbuvrWKpwFsKofnorR1rfMjiPrhc2zQeuivlPwW3Cyik%2BwZD%2BFDBBm%2FIUYCCO%2Bx16JVyap5lO8HHRiArrHo7Se49pfUFAC%2BMTvcBZy8FIk3FkO3RMY7v%2Fa7UeBYN12%2BI7qX3MMbF%2BoWcKXOOm8bCNI%2FWkCvQRAux33aGjVbnYwR5fBQsTatA5VhwymqSufgSX0tBYAC18M%2B0Zuryqj7wRsPxahpA4%2BX9ltkpxapFqVbT5JtoNhL5BntFZsI%2FfkT4zKHildR5TgtsE9PTUb2b69J%2FHTP5cwXG4OZ3SysEuBTlmTqkdi7MBxkhDNM%2FEb0dNksjoZGi3RaaW4cJREzs1q%2BaglBIW9XkXVJ16sQFaNtXOJpvFgD8dLzkWgDvRV9PJFNJyV66bfmY4uYQuDgpw3Sc46lT1oAUFd%2BjQf2ShezTuMjok8PTX7zSCY71tcSrxZZGeDvQYu%2FEV42payeGtZGlW25EddUDGlxeq7MHGfBooM8ABy82eeX0dzwRFsQTqjrnr7RcApofTbGZ%2BeING1KRPd1PENB1uBJXvX00PzI%2B6cfQfPJHrUIREcAHReElEJbXbonCJLoPk0ipk%2F7LBjFVZHVCBpfQ87Wk4Suda6kQffoEKsO7DRai4YDWbWydWNqPVs9Tn%2FW%2F8U0u9WmNba5q1VJB8v%2B7BWnS8%2FEdoZDzLCMTkKkD%2F5h%2BLo7HUZERCe3hdbLdm2WCEQhMjnphyCsw3iuE6xPY6Rq8Ehp4VJiz6%2BEKPQX%2BLyMwQpWtf6fHRuJFMHxClzrqr%2FG8osQzL4%2B6q5bJ4OSxBChAqyeXEYcSL%2FCo8Vu4C%2Bf7PzJPkKcs6ijicDTyEvl9bRYefpkZE3SQ95jQVucpIwKScOGF44tbnnaoONXCGvwsLXc21El86QKsgwhrbfsQY6sAHMJc5XNaQxh0OydsJHeUKDnK3ELpt1Xx492WglGdUpmb451%2BHHObDfsiuyOBA5IfBywvlZ4swkF%2F%2BMfNb4ykfLnLBcoC5LjRRjUjW8k%2FsMXQ28W%2FuhWw5qPBXrtLldp3p9iCa%2FaC3P6o3zjwSi5PwVkHP%2Fn%2BSEiTONsteuwzxoeXYchNzF%2Ft7TTqWNeLYFE6eu8rSRKUNq01FT38zffhb0MlQKhVy6Rbgf37mmvp5Apw%3D%3D&X-Amz-Signature=fb56e9420b62e0c706080b30fe9f8cb4100a00475d0ac723ae58d852ec6d179b&X-Amz-SignedHeaders=host'
-            alt='card-image'
-            className='object-cover w-full h-full'
+        <div className='p-6 bg-white border'>
+          <ThreadHeader
+            firstName={user?.firstName}
+            lastName={user?.lastName}
+            date={date}
+            profilePic={user?.picture!}
+            username={user?.username}
           />
         </div>
 
+        {dummyImages.length > 0 && <ImageCollage images={dummyImages} />}
 
         <div className='p-6 bg-white'>
-        <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+          <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           <div className='relative flex w-full max-w-[26rem] flex-col rounded-xl  bg-clip-border text-gray-700 shadow-none'>
             <ThreadRating
               academicProgramsAndDepartmentRating={
@@ -83,12 +84,11 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
                 financialAidAndScholarshipRating
               }
               studentLifeAndServiceRating={studentLifeAndServiceRating}
-          />
+            />
           </div>
         </div>
-
-        <div className='p-6'>
-          <div className='inline-flex flex-wrap items-center gap-3 mt-8 group'>
+        <div className='pt-0 pb-5 border '>
+          <div className='inline-flex flex-wrap items-center gap-3 mt-3 group '>
             <Upvote
               upVoteCount={upVoteCount}
               postId={_id}
@@ -125,16 +125,13 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
                 />
               </Buttons>
             )}
-
-
-          <ThreadOptions
-            setEditable={setEditable}
-            username={user?.username}
-            feedType={feedType}
-            feedId={feedId!}
-            _id={_id}
-          />
-
+            <ThreadOptions
+              setEditable={setEditable}
+              username={user?.username}
+              feedType={feedType}
+              feedId={feedId!}
+              _id={_id}
+            />
           </div>
         </div>
         {/* <div className='p-6 pt-3'>
@@ -146,8 +143,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           </button>
         </div> */}
       </div>
-
-
     </>
   );
   return (

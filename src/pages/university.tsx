@@ -1,6 +1,6 @@
-import React from "react";
-import University from "../features/university";
-import Layout from "../layouts/FreeLayout";
+import React from 'react';
+import University from '../features/university';
+import Layout from '../layouts/FixedLayout';
 import {
   schoolOutline,
   cashOutline,
@@ -10,17 +10,19 @@ import {
   homeOutline,
   desktopOutline,
   peopleOutline,
-  receiptOutline,
-} from "ionicons/icons";
+  receiptOutline
+} from 'ionicons/icons';
 import {
   IonCard,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
-  IonRow,
-} from "@ionic/react";
-import { useHistory } from "react-router-dom";
+  IonRow
+} from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import LeftSideBar from '@features/home/leftSideBar';
+import { FamousUniversities } from '@components/packages/famousUniversites';
 
 const leftBar = () => {
   return <div>Left Panel</div>;
@@ -28,79 +30,79 @@ const leftBar = () => {
 
 const sideMenu = [
   {
-    title: "Scholarships",
+    title: 'Scholarships',
     icon: schoolOutline,
-    ref: "scholarship",
+    ref: 'scholarship'
   },
   {
-    title: "Student Charges",
+    title: 'Student Charges',
     icon: cashOutline,
-    ref: "studentCharges",
+    ref: 'studentCharges'
   },
   {
-    title: "Department Ratings",
+    title: 'Department Ratings',
     icon: schoolOutline,
-    ref: "departmentRatings",
+    ref: 'departmentRatings'
   },
   {
-    title: "Admission",
+    title: 'Admission',
     icon: cashOutline,
-    ref: "admission",
+    ref: 'admission'
   },
 
   {
-    title: "Aid",
+    title: 'Aid',
     icon: thumbsUpOutline,
-    ref: "financialAid",
+    ref: 'financialAid'
   },
 
   {
-    title: "Statistics",
+    title: 'Statistics',
     icon: barChartOutline,
-    ref: "statistics",
+    ref: 'statistics'
   },
   {
-    title: "Libraries",
+    title: 'Libraries',
     icon: libraryOutline,
-    ref: "libraries",
+    ref: 'libraries'
   },
   {
-    title: "Test Score",
+    title: 'Test Score',
     icon: homeOutline,
-    ref: "testScore",
+    ref: 'testScore'
   },
   {
-    title: "Visit Website",
+    title: 'Visit Website',
     icon: desktopOutline,
-    ref: "website",
+    ref: 'website'
   },
   {
-    title: "Professors",
+    title: 'Professors',
     icon: peopleOutline,
-    ref: "Professors",
+    ref: 'Professors'
   },
 
   {
-    title: "Similar Collages",
+    title: 'Similar Collages',
     icon: thumbsUpOutline,
-    ref: "similarCollages",
+    ref: 'similarCollages'
   },
   {
-    title: "Report",
+    title: 'Report',
     icon: receiptOutline,
-    ref: "report",
+    ref: 'report'
   },
   {
-    title: "Campus Life",
+    title: 'Campus Life',
     icon: thumbsUpOutline,
-    ref: "campusLife",
+    ref: 'campusLife'
   },
 
   {
-    title: "Interview Experience",
+    title: 'Interview Experience',
     icon: receiptOutline,
-    ref: "interviewExperience",
-  },
+    ref: 'interviewExperience'
+  }
 ];
 
 const leftSidebar = () => {
@@ -113,22 +115,21 @@ const leftSidebar = () => {
   return (
     <div
       style={{
-        position: "sticky",
-        top: "70px",
-        maxHeight: "calc(100vh - 70px)",
-        overflowY: "auto",
+        top: '70px',
+        maxHeight: 'calc(100vh - 70px)',
+        overflowY: 'auto'
       }}
     >
       <IonCard>
         <IonList>
           {sideMenu.map((item, i) => (
             <IonItem
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={() => handleItemClick(item.ref)}
               key={i}
             >
-              <IonIcon color={"primary"} icon={item.icon} />
-              <IonLabel color={"primary"} className="ion-margin-start">
+              <IonIcon color={'primary'} icon={item.icon} />
+              <IonLabel color={'primary'} className='ion-margin-start'>
                 <h2>{item.title}</h2>
               </IonLabel>
             </IonItem>
@@ -139,6 +140,8 @@ const leftSidebar = () => {
   );
 };
 const UniversityPage = () => (
-  <Layout leftSidebar={leftSidebar()} mainContent={<University />} />
+  <Layout leftSidebar={leftSidebar()} rightSidebar={<FamousUniversities />}>
+    <University />
+  </Layout>
 );
 export default UniversityPage;

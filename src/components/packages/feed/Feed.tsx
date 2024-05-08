@@ -41,7 +41,12 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
 
         // Append non-duplicate posts to the existing posts
         //new post should alwasy be on the top
-        return [...newPosts, ...prevPosts ];
+        if (newPosts.length === 1) {
+          // new post should always be on the top
+          return [...newPosts, ...prevPosts ];
+        }
+        // fetched posts should be appended to the end
+        return [ ...prevPosts, ...newPosts ];
       });
       setIsLoading(false); // Reset loading state on data receipt
     }

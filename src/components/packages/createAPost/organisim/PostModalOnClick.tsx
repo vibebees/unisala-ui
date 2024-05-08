@@ -11,7 +11,6 @@ import SelectionTab from "./SelectionTab";
 
 export const PostModalOnClick = ({ metaData, tags }) => {
 
-  console.log(" ---> tags", tags);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [selectedTab, setSelectedTab] = useState(null);

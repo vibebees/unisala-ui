@@ -20,9 +20,6 @@ export const SearchBar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchTab = URLgetter("tab");
 
-  console.log("currentLocation", location);
-  console.log("searhTab", searchTab);
-
   useDebouncedEffect(
     searchUniFromBar(searchValue, 5, setOptions),
     [searchValue],

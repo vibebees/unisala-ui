@@ -12,6 +12,8 @@ import {
 
 import "./index.css";
 import { cn } from "@utils/index";
+import LeftSideBar from "@features/home/leftSideBar";
+import { FamousUniversities } from "@components/packages/famousUniversites";
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;
@@ -72,9 +74,9 @@ const rightSidebarDefault = (
 const style = { backgroundColor: "#F0F2F5" };
 
 const FixedLayout: React.FC<LayoutProps> = ({
-  leftSidebar = leftSidebarDefault,
+  leftSidebar = <LeftSideBar />,
   children,
-  rightSidebar = rightSidebarDefault,
+  rightSidebar = <FamousUniversities />,
   leftSideBarSticky = true,
   rightSideBarSticky = true,
 }) => {

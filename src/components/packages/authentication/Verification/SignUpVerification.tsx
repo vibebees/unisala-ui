@@ -125,7 +125,6 @@ const SignUpVerification = () => {
       <button
         disabled={loading}
         type="submit"
-        onSubmit={submitHandler}
         className="block mt-5 text-center bg-blue-600 w-full outline-none text-sm text-white uppercase rounded-2xl tracking-wide py-2 text-opacity-90 hover:opacity-90"
       >
         {loading ? <IonSpinner></IonSpinner> : "Next"}

@@ -84,7 +84,6 @@ export const EmailVerify = () => {
         className="ion-margin-top"
         expand="full"
         shape="round"
-        onClick={submitHandler}
       >
         {loading ? <IonSpinner></IonSpinner> : "Next"}
       </IonButton>

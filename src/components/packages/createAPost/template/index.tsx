@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Card } from "../../../defaults/index";
 import { usePathName } from "@hooks/usePathname";
@@ -8,13 +9,12 @@ import { GET_METADATA_TAGS } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useQuery } from "@apollo/client";
 
-const CreateAPostCard = ({ allProps}) => {
-
-  const [meta, setMeta] = useState({  });
+const CreateAPostCard = ({ allProps }) => {
+  const [meta, setMeta] = useState({});
   const pathname = usePathName(0);
   const tags = allProps?.tags || [];
 
-  const { data, loading, error } = useQuery(GET_METADATA_TAGS, {
+  const { data, loading } = useQuery(GET_METADATA_TAGS, {
     context: { server: USER_SERVICE_GQL },
   });
 
@@ -32,7 +32,7 @@ const CreateAPostCard = ({ allProps}) => {
       onClick={() => {}}
     >
       <CreateAPostModal
-        ModalData={<PostModalOnClick metaData={meta} tags = {tags} />}
+        ModalData={<PostModalOnClick metaData={meta} tags={tags} />}
         ModalButton={<PostCardForClick />}
         header="Create a Post"
       />

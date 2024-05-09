@@ -1,14 +1,8 @@
-import { useApolloClient, useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 import clsx from "clsx";
 import React, { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import { useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
-import {
-  AddPost,
-  AddSpaceEvent,
-  GetSpaceEvents,
-} from "@datasource/graphql/user";
+import { AddPost, AddSpaceEvent } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { Typography } from "../../../defaults";
 import { Button, Label, useIonToast } from "../../../defaults/index";
@@ -21,14 +15,22 @@ import {
 import AsyncSelectAtom from "../atoms/AsyncSelect";
 import SelectAtom from "../atoms/Select";
 import ImageUpload from "./ImageUpload";
-import { updateCacheForNewPost, handlePostCompletion, handleMutationError, updateEventCache, handleEventCompletion, handleEventMutationError } from "./updateCacheForNewPost";
+import {
+  updateCacheForNewPost,
+  handlePostCompletion,
+  handleMutationError,
+  updateEventCache,
+  handleEventCompletion,
+  handleEventMutationError,
+} from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
 
-const Form = ({ metaData = {}, postData, setPostData = () => {}}) => {
+const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   const { tags } = postData;
-   const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
-  const { user} = useAuth()
+  const { user } = useAuth();
+  const client = useApolloClient();
   let RatingData = [
     {
       value: 1,
@@ -112,25 +114,25 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}}) => {
 
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) => updateCacheForNewPost({cache, post: addPost.post}),
-    onCompleted: (data) => handlePostCompletion(data, files, present, dismiss),
+    update: (cache, { data: { addPost } }) =>
+      updateCacheForNewPost({ cache, post: addPost.post }),
+    onCompleted: (data) =>
+      handlePostCompletion(data, files, present, dismiss, client),
     onError: (error) => handleMutationError(error, present, dismiss),
   });
 
-
   const [addEvent] = useMutation(AddSpaceEvent, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addOrgSpaceEvent } }) => updateEventCache({ cache, event: addOrgSpaceEvent.data }),
+    update: (cache, { data: { addOrgSpaceEvent } }) =>
+      updateEventCache({ cache, event: addOrgSpaceEvent.data }),
     onCompleted: (data) => handleEventCompletion(data, files, present, dismiss),
     onError: (error) => handleEventMutationError(error, present, dismiss),
   });
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (files?.length > 4) {
+    if (files && files?.length > 4) {
       present({
         duration: 3000,
         message: "Maximum allowed files is 4.",
@@ -148,19 +150,18 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}}) => {
         description: postData.postText,
         address: postData.address,
         eventDate: postData.eventDate,
-        ...postData
+        ...postData,
       };
       addEvent({
         variables: data,
       });
       /* eslint-disable */
     } else {
-      if (postData?.postText?.length > 0 || files?.length > 0) {
-
+      if (postData?.postText?.length > 0 || (files && files?.length > 0)) {
         addPost({
           variables: {
             ...postData,
-            user
+            user,
           },
         });
       } else {
@@ -173,8 +174,10 @@ const Form = ({ metaData = {}, postData, setPostData = () => {}}) => {
         });
       }
     }
-    const btn = document.querySelector(".modal-close-btn");
-    btn.click();
+    const btn = document.querySelector(
+      ".modal-close-btn"
+    ) as HTMLButtonElement | null;
+    btn && btn.click();
     // setCreateAPostPopUp(false)
     // params.delete("create")
     // params.delete("type")

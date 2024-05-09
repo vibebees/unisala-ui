@@ -1,39 +1,43 @@
-import {useEffect, useMemo, useState} from "react"
-import {createAvatar} from "@dicebear/core"
-import {thumbs} from "@dicebear/collection"
-import {getImage} from "../../datasource/servers/s3.configs"
+import React, { FC } from "react";
+import { createAvatar } from "@dicebear/core";
+import { thumbs } from "@dicebear/collection";
 
-export function AvatarProfile ({profilePic, username = "anon"}) {
-  const [profileImage, setProfileImage] = useState()
+interface AvatarProfileProps {
+  profilePic: string | null | undefined;
+  username?: string;
+}
 
-  useEffect(() => {
-    if (profileImage) {
-      setProfileImage(profilePic)
-    }
-  }, [])
+const AvatarProfile: FC<AvatarProfileProps> = ({
+  profilePic,
+  username = "user",
+}) => {
+  const picture = profilePic
+    ? profilePic
+    : createAvatar(thumbs, {
+        size: 128,
+        seed: username,
 
-  const avatar = useMemo(() => {
-    // eslint-disable-next-line no-sync
-    return username && createAvatar(thumbs, {
-      size: 128,
-      seed: username
+        // ... other options
+      })?.toDataUriSync();
 
-      // ... other options
-    })?.toDataUriSync()
-  }, [profilePic, username])
-  useEffect(() => {
-    getImage("user", profilePic, setProfileImage)
-  }, [])
   return (
     <img
-      src={profileImage || avatar || ""}
+      src={picture}
       className="user-profile__img"
-      alt={"unisala"}
+      onError={(e) => {
+        e.currentTarget.src = createAvatar(thumbs, {
+          size: 128,
+          seed: username,
+        })?.toDataUriSync();
+      }}
+      alt={username}
       style={{
         width: "100%",
         height: "100%",
-        objectFit: "cover"
+        objectFit: "cover",
       }}
     />
-  )
-}
+  );
+};
+
+export default AvatarProfile;

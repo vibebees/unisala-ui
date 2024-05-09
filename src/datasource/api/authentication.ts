@@ -29,40 +29,49 @@ function updateToken(updatedToken, key = "accessToken") {
 
 // Example usage: Assuming you have a new refresh token to store
 
-export const getNewToken = async (dispatch = () => { }) => {
+export const getNewToken = async () => {
   try {
     let authData = getCache('authData') || {refreshToken: false},
       { refreshToken : currentRefreshToken } = authData || { refreshToken: false};
    if (!currentRefreshToken) {
     // let them scroll
-    console.log("No refresh token found")
     // window.location.assign("/login")
   }
-    console.log({refreshToken: currentRefreshToken})
-    const {data = {}} = await axios.post(userServer + "/refreshToken", {}, {
+    const {data = {}} = currentRefreshToken?.length > 0 && await axios.post(userServer + "/refreshToken", {}, {
       headers: {
         "Authorization": `Bearer ${currentRefreshToken}`
       }
     })
-    const {accessToken, refreshToken} = data.data
-    // if (!data.success) {
-    //   const { error } = data || {}
-    //   if (error?.name === "TokenExpiredError") {
-    //     removeCache("refreshToken")
-    //     removeCache("accessToken")
-    //     window.location.assign("/login")
-    //   }
-    //   dispatch(getUserProfile({ user: {}, loggedIn: false }))
-    // }
-    console.log("New token received:", {accessToken, refreshToken})
-    data?.refreshToken &&  updateToken(refreshToken, "refreshToken");
+    const {accessToken, refreshToken} = data?.data ?? {};
+    if (!data.success) {
+      const { error } = data || {}
+      if (error?.name === "TokenExpiredError") {
+        window.location.assign("/login")
+      }
+    }
+    refreshToken &&  updateToken(refreshToken, "refreshToken");
+    accessToken && updateToken(accessToken, "accessToken");
 
-    data?.accessToken && updateToken(accessToken, "accessToken");
-    // const decode = jwtDecode(accessToken)
-
-    // dispatch(getUserProfile({ user: { ...decode }, loggedIn: Boolean(decode) }))
-    return data?.accessToken
+    return accessToken
   } catch (error) {
     console.log(error)
+  }
+}
+
+
+export async function refreshTokenAndRetry(operation) {
+  try {
+    const newToken = await getNewToken();
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: `Bearer ${newToken}`
+      }
+    }));
+
+    return forward(operation);
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw error; // Rethrow to be caught by subscriber's error handler
   }
 }

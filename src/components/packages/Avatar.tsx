@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC } from "react";
 import { createAvatar } from "@dicebear/core";
 import { thumbs } from "@dicebear/collection";
-import { getImage } from "../../datasource/servers/s3.configs";
 
 interface AvatarProfileProps {
-  profilePic: string;
+  profilePic: string | null | undefined;
   username?: string;
 }
 
@@ -25,6 +24,12 @@ const AvatarProfile: FC<AvatarProfileProps> = ({
     <img
       src={picture}
       className="user-profile__img"
+      onError={(e) => {
+        e.currentTarget.src = createAvatar(thumbs, {
+          size: 128,
+          seed: username,
+        })?.toDataUriSync();
+      }}
       alt={username}
       style={{
         width: "100%",

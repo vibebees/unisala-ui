@@ -1772,9 +1772,11 @@ export const Login = gql`
       ) {
         totalItems
         items {
+          _id
           name
           type
           username
+          picture
         }
         spaces {
           name

@@ -17,6 +17,7 @@ interface IUser {
   coverPicture?: string;
   picture?: string;
   location?: string;
+  name?: string;
 }
 
 interface IAuthData extends IUser {

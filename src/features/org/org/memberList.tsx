@@ -1,6 +1,6 @@
-import { Button, Col, Row, Typography } from "../../../components/defaults"
- import {AvatarProfile} from "../../../components/packages/Avatar"
-import {MessageIcon2} from "../../../components/packages/icons"
+import { Button, Col, Row, Typography } from "@components/defaults"
+ import AvatarProfile from "@components/packages/Avatar"
+import {MessageIcon2} from "@components/packages/icons"
 
 const memberList = ({
   profileImg,

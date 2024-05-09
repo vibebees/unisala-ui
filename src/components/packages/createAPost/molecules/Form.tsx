@@ -24,6 +24,7 @@ import {
   handleEventMutationError,
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
+import { useLocation, useParams } from "react-router";
 
 const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   const { tags } = postData;
@@ -82,7 +83,20 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
       [itemId]: value,
     }));
   };
+  let location = useLocation();
+  // feedType could be org , space or feed
+  const pathSegment = location.pathname.split('/')[ 1 ]; // Split the
 
+  let feedType =
+    pathSegment === 'org'
+      ? 'specificOrg'
+      : pathSegment === 'space'
+      ? 'specificSpace'
+      : pathSegment === 'university'
+      ? 'uniWall'
+      : 'newsfeed';
+
+  console.log("feedType", feedType)
   const generateRatingComponent = (item) => {
     return (
       <>
@@ -112,10 +126,9 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     );
   };
 
-  const [addPost] = useMutation(AddPost, {
+   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) =>
-      updateCacheForNewPost({ cache, post: addPost.post }),
+    update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),
     onCompleted: (data) =>
       handlePostCompletion(data, files, present, dismiss, client),
     onError: (error) => handleMutationError(error, present, dismiss),
@@ -123,8 +136,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
 
   const [addEvent] = useMutation(AddSpaceEvent, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addOrgSpaceEvent } }) =>
-      updateEventCache({ cache, event: addOrgSpaceEvent.data }),
+    update: (cache, { data: { addOrgSpaceEvent } }) => updateEventCache({ cache, event: addOrgSpaceEvent.data }),
     onCompleted: (data) => handleEventCompletion(data, files, present, dismiss),
     onError: (error) => handleEventMutationError(error, present, dismiss),
   });

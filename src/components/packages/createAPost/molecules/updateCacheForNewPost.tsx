@@ -7,20 +7,20 @@ import {
 import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
 
-export const updateCacheForNewPost = ({ cache, post }) => {
+export const updateCacheForNewPost = ({ cache, post, feedType }) => {
   const tags = post?.tags ?? [];
   if (tags?.length === 0) {
-    prependPostToNewsFeed(cache, post);
+    prependPostToNewsFeed(cache, post, feedType);
   } else {
-    prependPostToCategory(cache, post, tags[0]); // Assuming tags[0] is the space ID
+    prependPostToCategory(cache, post, tags[0], feedType); // Assuming tags[0] is the space ID
   }
 };
 
-const prependPostToCategory = (cache, post, feedType) => {
+const prependPostToCategory = (cache, post, tags, feedType) => {
   const query = {
     query: getNewsFeed,
     variables: {
-      feedQuery: { feedType: "specificOrg", page: 0, feedId: feedType?._id },
+      feedQuery: { feedType, page: 0, feedId: tags?._id },
     },
   };
   const existingData = cache.readQuery(query);
@@ -39,10 +39,10 @@ const prependPostToCategory = (cache, post, feedType) => {
   });
 };
 
-const prependPostToNewsFeed = (cache, post) => {
+const prependPostToNewsFeed = (cache, post, feedType) => {
   const query = {
     query: getNewsFeed,
-    variables: { feedQuery: { feedType: "newsfeed", page: 0 } },
+    variables: { feedQuery: { feedType, page: 0 } },
   };
 
   const existingData = cache.readQuery(query);

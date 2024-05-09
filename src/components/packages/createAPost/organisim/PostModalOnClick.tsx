@@ -9,13 +9,14 @@ import FormTab from "./FormTab";
 import NotLogggedModal from "./NotLogggedModal";
 import SelectionTab from "./SelectionTab";
 
-export const PostModalOnClick = ({ metaData, tags }) => {
+export const PostModalOnClick = ({ metaData, tags, unitId }) => {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [selectedTab, setSelectedTab] = useState(null);
   const [allowPost, setAllowPost] = useState(true);
   const [ postData, setPostData ] = useState({
+    unitId: unitId,
     tags,
     id: selectedTab,
   });
@@ -26,7 +27,7 @@ export const PostModalOnClick = ({ metaData, tags }) => {
         ...postData,
         ...prevPostData,
         id: selectedTab,
-        unitId: parseFloat(params.get("unitId")) ?? '',
+        unitId: unitId,
         // tags: allProps.tags && tags,
       };
     });

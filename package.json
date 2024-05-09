@@ -1,10 +1,10 @@
 {
-  "name": "demoionicapp",
+  "name": "Unisala",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "start": "ionic serve -p 3000",
@@ -112,5 +112,5 @@
     "vitest": "^0.34.6",
     "web-vitals": "^3.5.2"
   },
-  "description": "An Ionic project"
+  "description": "Unisala"
 }

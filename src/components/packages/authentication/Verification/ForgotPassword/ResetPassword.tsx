@@ -108,7 +108,6 @@ export const ResetPassword = () => {
         className="ion-margin-top"
         expand="full"
         shape="round"
-        onClick={submitHandler}
       >
         {loading ? <IonSpinner></IonSpinner> : "Change Password"}
       </IonButton>

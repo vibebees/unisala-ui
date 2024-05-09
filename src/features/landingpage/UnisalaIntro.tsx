@@ -12,6 +12,7 @@ import { RoadMap } from "./RoadMap";
 import { FAQ } from "./FAQ";
 import { SingleCard } from "./SingleCard";
 import { Article } from "./Article";
+import Authentication from "@components/packages/authentication/Authentication";
 
 export const UnisalaLandingPage = () => {
   const cardContent = [
@@ -65,7 +66,7 @@ export const UnisalaLandingPage = () => {
     <IonGrid>
       {articleContentFirst.map((article, index) => (
         <IonRow key={index}>
-          <IonCol>
+          <IonCol className="flex">
             <Article
               imgsrc={article?.imgsrc}
               tag={article?.tag}

@@ -16,7 +16,7 @@ import {
 import UserCtaBtns from "./userCtaBtns/UserCtaBtns";
 
 import "./index.css";
-import { AvatarProfile } from "../../../components/packages/Avatar";
+import AvatarProfile from "../../../components/packages/Avatar";
 import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
 
 const ProfileHeader = ({

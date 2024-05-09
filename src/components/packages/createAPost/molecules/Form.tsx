@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 import clsx from "clsx";
 import React, { useState } from "react";
 import "react-quill/dist/quill.snow.css";
@@ -30,6 +30,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
+  const client = useApolloClient();
   let RatingData = [
     {
       value: 1,
@@ -115,7 +116,8 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: { addPost } }) =>
       updateCacheForNewPost({ cache, post: addPost.post }),
-    onCompleted: (data) => handlePostCompletion(data, files, present, dismiss),
+    onCompleted: (data) =>
+      handlePostCompletion(data, files, present, dismiss, client),
     onError: (error) => handleMutationError(error, present, dismiss),
   });
 

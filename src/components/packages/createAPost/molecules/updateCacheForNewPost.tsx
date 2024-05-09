@@ -1,5 +1,9 @@
 import axios from "axios";
-import { GetAllPostBySpaceCategoryID, GetSpaceEvents, getNewsFeed } from "@datasource/graphql/user";
+import {
+  GetAllPostBySpaceCategoryID,
+  GetSpaceEvents,
+  getNewsFeed,
+} from "@datasource/graphql/user";
 import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
 
@@ -8,12 +12,17 @@ export const updateCacheForNewPost = ({ cache, post }) => {
   if (tags?.length === 0) {
     prependPostToNewsFeed(cache, post);
   } else {
-    prependPostToCategory(cache, post, tags[ 0 ]); // Assuming tags[0] is the space ID
+    prependPostToCategory(cache, post, tags[0]); // Assuming tags[0] is the space ID
   }
 };
 
-const prependPostToCategory = (cache, post, feedType ) => {
-  const query = { query: getNewsFeed, variables: { feedQuery: { feedType: "specificOrg", page: 0 , feedId:feedType?._id} } };
+const prependPostToCategory = (cache, post, feedType) => {
+  const query = {
+    query: getNewsFeed,
+    variables: {
+      feedQuery: { feedType: "specificOrg", page: 0, feedId: feedType?._id },
+    },
+  };
   const existingData = cache.readQuery(query);
   // Extract existing posts from the existing data
   const existingPosts = existingData ? existingData.fetchFeedV2.data : [];
@@ -24,14 +33,17 @@ const prependPostToCategory = (cache, post, feedType ) => {
     data: {
       fetchFeedV2: {
         ...(existingData?.fetchFeedV2 || {}),
-        data: updatedPosts
-      }
-    }
+        data: updatedPosts,
+      },
+    },
   });
 };
 
 const prependPostToNewsFeed = (cache, post) => {
-  const query = { query: getNewsFeed, variables: { feedQuery: { feedType: "newsfeed", page: 0 } } };
+  const query = {
+    query: getNewsFeed,
+    variables: { feedQuery: { feedType: "newsfeed", page: 0 } },
+  };
 
   const existingData = cache.readQuery(query);
   // Extract existing posts from the existing data
@@ -45,33 +57,39 @@ const prependPostToNewsFeed = (cache, post) => {
     data: {
       fetchFeedV2: {
         ...(existingData?.fetchFeedV2 || {}),
-        data: updatedPosts
-      }
-    }
+        data: updatedPosts,
+      },
+    },
   });
-
 };
 const uploadPostImages = async (files, postId) => {
   const formData = new FormData();
-  files.forEach(file => formData.append("image", file));
+  files &&
+    files.length > 0 &&
+    Array.from(files).forEach((file) => formData.append("image", file as any));
 
-  const response = await axios.post(`${userServer}/post/addPostImage/${postId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await axios.post(
+    `${userServer}/post/addPostImage/${postId}`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
 
   return response.data;
 };
+
 const handleUploadSuccess = (client, postId, imageLinks) => {
   client.cache.modify({
     id: client.cache.identify({ __typename: "PostNewsFeed", _id: postId }),
     fields: {
       images(existingImages = []) {
-        return [ ...existingImages, ...imageLinks ];
+        return [...existingImages, ...imageLinks];
       },
     },
   });
 };
-export const handlePostCompletion = (data, files, present, dismiss) => {
+export const handlePostCompletion = (data, files, present, dismiss, client) => {
   if (files && files.length > 0) {
     uploadPostImages(files, data.addPost.post._id)
       .then((res) => {
@@ -80,17 +98,33 @@ export const handlePostCompletion = (data, files, present, dismiss) => {
         }
       })
       .finally(() => {
-        present({ duration: 3000, message: "Post added", buttons: [ { text: "X", handler: () => dismiss() } ], color: "primary", mode: "ios" });
+        present({
+          duration: 3000,
+          message: "Post added",
+          buttons: [{ text: "X", handler: () => dismiss() }],
+          color: "primary",
+          mode: "ios",
+        });
       });
   } else {
-    present({ duration: 3000, message: "Post added", buttons: [ { text: "X", handler: () => dismiss() } ], color: "primary", mode: "ios" });
+    present({
+      duration: 3000,
+      message: "Post added",
+      buttons: [{ text: "X", handler: () => dismiss() }],
+      color: "primary",
+      mode: "ios",
+    });
   }
 };
 export const handleMutationError = (error, present, dismiss) => {
-  present({ duration: 5000, message: error.message, buttons: [ { text: "X", handler: () => dismiss() } ], color: "danger", mode: "ios" });
+  present({
+    duration: 5000,
+    message: error.message,
+    buttons: [{ text: "X", handler: () => dismiss() }],
+    color: "danger",
+    mode: "ios",
+  });
 };
-
-
 
 // Exported function to update the cache after adding an event
 export const updateEventCache = ({ cache, event }) => {
@@ -107,8 +141,8 @@ export const updateEventCache = ({ cache, event }) => {
         getAllEventBySpaceId: {
           ...cachedData.getAllEventBySpaceId,
           events: [...cachedData.getAllEventBySpaceId.events, event],
-        }
-      }
+        },
+      },
     });
   } else {
     console.log("Cached data is not available or invalid");
@@ -127,7 +161,7 @@ export const handleEventCompletion = (data, files, present, dismiss) => {
     message: "New event created successfully!",
     buttons: [{ text: "X", handler: () => dismiss() }],
     color: "primary",
-    mode: "ios"
+    mode: "ios",
   });
 };
 
@@ -138,6 +172,6 @@ export const handleEventMutationError = (error, present, dismiss) => {
     message: error?.message || "An error occurred during event creation",
     buttons: [{ text: "X", handler: () => dismiss() }],
     color: "danger",
-    mode: "ios"
+    mode: "ios",
   });
 };

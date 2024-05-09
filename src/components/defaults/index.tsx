@@ -81,7 +81,7 @@ import { CustomWrapper } from "./wrapper";
 import { forwardRef } from "react";
 import { cn } from "../../utils";
 import useCustomToast from "./apis/toast.api";
-import { AvatarProfile } from "../packages/Avatar";
+import AvatarProfile from "../packages/Avatar";
 import { ITypography } from "../../types/typography";
 // Wrap and export Ionic components
 export const Alert = CustomWrapper(IonAlert);
@@ -105,7 +105,7 @@ export const Fab = CustomWrapper(IonFab);
 export const FabButton = CustomWrapper(IonFabButton);
 export const FabList = CustomWrapper(IonFabList);
 export const Footer = CustomWrapper(IonFooter);
-export const Grid =IonGrid
+export const Grid = IonGrid;
 export const Header = CustomWrapper(IonHeader);
 export const Icon = CustomWrapper(IonIcon);
 export const Img = CustomWrapper(IonImg);

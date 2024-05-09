@@ -79,7 +79,7 @@ export const UnisalaLandingPage = () => {
 
       <IonRow>
         <IonCol>
-        <div className='relative mx-4 mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500'>
+        <div className='relative mx-4 mt-6 overflow-hidden shadow-lg bg-clip-border rounded-xl bg-blue-gray-500'>
         <Authentication />
       </div>
         </IonCol>

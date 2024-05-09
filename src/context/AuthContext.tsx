@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IAuthData | null>(null);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-
   useEffect(() => {
     const userdata: IAuthData | null = getCache("authData");
     if (userdata) {
@@ -37,6 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     setCache("authData", null);
     setAuthenticated(false);
+    window.location.replace(`/home`);
   };
 
   return (

@@ -12,9 +12,6 @@ export const Article = ({ imgsrc, tag, title, description }) => {
               className="object-cover w-full h-full max-h-64 sm:max-h-full" // Adjusted height for smaller screens
             />
           </div>
-          <div className="w-full max-w-lg bg-slate-50  ">
-            <Authentication />
-          </div>
           <div className="p-6   sm:w-2/5">
             <h6 className="block mb-4 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-gray-700 uppercase">
               {tag}

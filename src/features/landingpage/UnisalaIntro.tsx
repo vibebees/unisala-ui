@@ -66,7 +66,7 @@ export const UnisalaLandingPage = () => {
     <IonGrid>
       {articleContentFirst.map((article, index) => (
         <IonRow key={index}>
-          <IonCol className="flex">
+          <IonCol className='flex'>
             <Article
               imgsrc={article?.imgsrc}
               tag={article?.tag}
@@ -77,6 +77,13 @@ export const UnisalaLandingPage = () => {
         </IonRow>
       ))}
 
+      <IonRow>
+        <IonCol>
+        <div className='relative mx-4 mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500'>
+        <Authentication />
+      </div>
+        </IonCol>
+      </IonRow>
       <IonRow>
         {cardContent.map((content, index) => (
           <IonCol key={index}>
@@ -89,17 +96,17 @@ export const UnisalaLandingPage = () => {
         ))}
       </IonRow>
       <IonCard>
-        <div className=" font-bold text-lg text-center">Values</div>
+        <div className=' font-bold text-lg text-center'>Values</div>
 
         <IonRow>
           <IonCol>
-            <RoadMap before={"Applying"} after={"University"} />
+            <RoadMap before={'Applying'} after={'University'} />
           </IonCol>
           <IonCol>
-            <RoadMap before={"Students"} after={"Mentors"} />
+            <RoadMap before={'Students'} after={'Mentors'} />
           </IonCol>
           <IonCol>
-            <RoadMap before={"Alumini"} after={"Network"} />
+            <RoadMap before={'Alumini'} after={'Network'} />
           </IonCol>
         </IonRow>
       </IonCard>

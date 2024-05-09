@@ -42,7 +42,7 @@ export const SearchBar = () => {
   }, [dropDownOptions]);
 
   return (
-    <div className="flex border-2  rounded-md bg-neutral-100 focus-within:border-neutral-300 transition duration-100 overflow-hidden">
+<div className="flex border-2 rounded-md focus-within transition duration-100 overflow-hidden">
       <IonSearchbar
         style={{
           border: "none",

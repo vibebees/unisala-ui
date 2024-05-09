@@ -45,7 +45,8 @@ const ImageCollage = ({ images =[] }) => {
   const LargerImage = ({ image = '', index = 0 }) => (
     <div>
       <img
-        className='h-auto w-full max-w-full rounded-lg object-cover object-center md:h-[480px]'
+        className='h-auto w-full max-w-full rounded-lg object-contain object-center md:h-[480px]'
+        // className='h-auto w-full max-w-full rounded-lg object-cover object-center md:h-[480px]'
         src={image}
         alt=''
         onClick={() => openModalWithImage(index)}

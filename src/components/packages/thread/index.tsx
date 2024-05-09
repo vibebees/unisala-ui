@@ -149,17 +149,17 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           </button>
         </div> */}
 
-        {postCommentsCount > 0 && (
-          <ShowPeopleComments
-            postId={_id}
-            parentId=""
-            singlePost={false}
-            postCommentsCount={postCommentsCount}
-          />
-        )}
+        <div className="px-3">
+          {postCommentsCount > 0 && (
+            <ShowPeopleComments
+              postId={_id}
+              parentId=''
+              singlePost={false}
+              postCommentsCount={postCommentsCount}
+            />
+          )}
+        </div>
       </div>
-
-     
     </>
   );
 };

@@ -51,7 +51,6 @@ export const getNewToken = async () => {
     }
     refreshToken &&  updateToken(refreshToken, "refreshToken");
     accessToken && updateToken(accessToken, "accessToken");
-
     return accessToken
   } catch (error) {
     console.log(error)

@@ -20,7 +20,6 @@ import {
 import getServiceConfig from "./index";
 import { getCache } from "../../utils/cache";
 
-const authData: IAuthData | null = getCache("authData");
 import config from "./config";
 
 const {
@@ -70,9 +69,9 @@ const {
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message, locations, path }) => {
-        if (message === "You are not logged in. Please login") {
-          alert("You are not logged in. Please login");
-        }
+        // if (message === "You are not logged in. Please login") {
+        //   alert("You are not logged in. Please login");
+        // }
       });
     }
     try {
@@ -127,6 +126,7 @@ const {
     server: USER_SERVICE_GQL,
   }),
   authLink = setContext((_, { headers }) => {
+  const authData: IAuthData | null = getCache("authData");
     return {
       headers: {
         ...headers,
@@ -146,8 +146,8 @@ const {
       )
     )
   );
-
-export const client = new ApolloClient({
+  const authData: IAuthData | null = getCache("authData")
+  export const client = new ApolloClient({
   link: from([ responseLink, errorLink, authLink, httpLink]),
     headers: {
       authorization: authData?.accessToken || "",

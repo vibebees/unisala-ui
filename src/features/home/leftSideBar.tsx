@@ -6,7 +6,7 @@ import { IonSpinner } from "@ionic/react";
 const TopSpaces = lazy(
   () => import("@components/packages/TopSpaces/TopSpaces")
 );
-
+import UnisalaIntro from "@assets/unisala-intro.png"
 const TopOrgs = lazy(() => import("@components/packages/TopOrg/TopOrg"));
 
 const LeftSideBar = () => {
@@ -94,7 +94,7 @@ const LeftSideBar = () => {
               maxWidth: "250px",
             }}
           >
-            <img src={""} alt="unisala" />
+              <img src={UnisalaIntro} alt="unisala" loading="lazy" />
             <h5
               className="black-text"
               style={{

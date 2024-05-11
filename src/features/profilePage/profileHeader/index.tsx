@@ -16,7 +16,7 @@ import {
 import UserCtaBtns from "./userCtaBtns/UserCtaBtns";
 
 import "./index.css";
-import AvatarProfile from "../../../components/packages/Avatar";
+import AvatarProfile from "@components/packages/Avatar";
 import { ThreadSkeleton } from "@components/packages/skeleton/threadSkeleton";
 
 const ProfileHeader = ({
@@ -88,7 +88,7 @@ const ProfileHeader = ({
           <div className="border-[7px] border-neutral-300  absolute left-0 top-0 bottom-0  right-0 rounded-full z-10" />
         </div>
 
-        <UserCtaBtns data={data} />
+        <UserCtaBtns data={data} loading ={loading}/>
       </div>
 
       <div className="short-info-wrapper">

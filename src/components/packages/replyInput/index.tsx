@@ -24,7 +24,6 @@ function ReplyInput({
   isReply,
   parentId = "",
   singlePost,
-  replyTo,
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
@@ -33,57 +32,57 @@ function ReplyInput({
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, data) => {
-      console.log("data", data.data?.addComment?.data);
-      console.log("isReply", isReply);
-      console.log("singlePost", singlePost);
+      const comment = data.data?.addComment?.data;
       cache.modify({
         id: cache.identify({
-          __typename: "PostNewsFeed",
+          __typename: isReply
+            ? "Comment"
+            : singlePost
+            ? "PostComment"
+            : "PostNewsFeed",
           id: postId,
         }),
         fields: {
           postCommentsCount: (prev) => prev + 1,
         },
       });
-      // cache.modify({
-      //   id: cache.identify({
-      //     __typename: isReply
-      //       ? "Comment"
-      //       : singlePost
-      //       ? "PostComment"
-      //       : "PostNewsFeed",
-      //     id: parentId,
-      //   }),
-      //   fields: {
-      //     repliesCount: (prev) => prev + 1,
-      //   },
-      // });
-      // const post = cache.readQuery({
-      //   query: GetCommentList,
-      //   variables: {
-      //     postId: postId,
-      //     parentId,
-      //   },
-      // });
-      // post &&
-      //   cache.writeQuery({
-      //     query: GetCommentList,
-      //     variables: {
-      //       postId,
-      //       parentId,
-      //     },
-      //     data: {
-      //       commentList: {
-      //         __typename: "commentList",
-      //         success: true,
-      //         message: "comments found",
-      //         comments: [
-      //           addComment.comment,
-      //           ...(post?.commentList?.data || []),
-      //         ],
-      //       },
-      //     },
-      //   });
+      cache.modify({
+        id: cache.identify({
+          __typename: isReply
+            ? "Comment"
+            : singlePost
+            ? "PostComment"
+            : "PostNewsFeed",
+          id: parentId,
+        }),
+        fields: {
+          repliesCount: (prev) => prev + 1,
+        },
+      });
+
+      const post: any = cache.readQuery({
+        query: GetCommentList,
+        variables: {
+          postId: postId,
+          parentId: parentId,
+        },
+      });
+      post &&
+        cache.writeQuery({
+          query: GetCommentList,
+          variables: {
+            postId,
+            parentId: parentId ?? "",
+          },
+          data: {
+            commentList: {
+              __typename: "commentList",
+              success: true,
+              message: "comments found",
+              comments: [comment, ...(post?.commentList?.data || [])],
+            },
+          },
+        });
     },
     onCompleted: () => {
       present({
@@ -123,7 +122,7 @@ function ReplyInput({
 
   return (
     <Content>
-      <form className="  border   flex flex-col  px-5" onSubmit={submitReply}>
+      <form className="  border  flex flex-col  px-5" onSubmit={submitReply}>
         <div
           className="my-3
          "

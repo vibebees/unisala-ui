@@ -105,10 +105,8 @@ const SingleThread: FC<SingleThreadProps> = ({
             />
             {images && images.length > 0 && (
               <ThreadImages images={images} _id={_id} />
-              )}
-
+            )}
           </>
-
         )}
       </div>
     );
@@ -130,15 +128,13 @@ const SingleThread: FC<SingleThreadProps> = ({
         <div className="thread_content">
           {threadContent()}
           <ThreadRating
-              academicProgramsAndDepartmentRating={
-                academicProgramsAndDepartmentRating
-              }
-              admissionAndApplicationRating={admissionAndApplicationRating}
-              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
-              financialAidAndScholarshipRating={
-                financialAidAndScholarshipRating
-              }
-              studentLifeAndServiceRating={studentLifeAndServiceRating}
+            academicProgramsAndDepartmentRating={
+              academicProgramsAndDepartmentRating
+            }
+            admissionAndApplicationRating={admissionAndApplicationRating}
+            careerAndAlumniResourceRating={careerAndAlumniResourceRating}
+            financialAidAndScholarshipRating={financialAidAndScholarshipRating}
+            studentLifeAndServiceRating={studentLifeAndServiceRating}
           />
         </div>
         <ThreadFooter
@@ -149,7 +145,7 @@ const SingleThread: FC<SingleThreadProps> = ({
           upVoted={upVoted!}
           isReply={false}
           singlePost={true}
-          parentId={_id}
+          parentId={""}
           replyTo={user?.username!}
         />
         {/* <ThreadOptions

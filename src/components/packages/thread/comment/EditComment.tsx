@@ -5,7 +5,6 @@ import { useIonToast } from "@components/defaults";
 import { useMutation } from "@apollo/client";
 import { EditComment } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
-import { update } from "cypress/types/lodash";
 
 interface EditCommentsProps {
   _id: string;

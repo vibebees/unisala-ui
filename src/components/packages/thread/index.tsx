@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
+  ThreadEditable,
   ThreadExpand,
   ThreadHeader,
   ThreadOptions,
@@ -66,10 +67,20 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         </div>
 
+        {editable && (
+          <ThreadEditable
+            _id={_id}
+            postText={postText}
+            setEditable={setEditable}
+          />
+        )}
+
         {images.length > 0 && <ImageCollage images={images} />}
 
         <div className="p-6 bg-white">
-          <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+          {!editable && (
+            <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+          )}
           <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl  bg-clip-border text-gray-700 shadow-none">
             <ThreadRating
               academicProgramsAndDepartmentRating={

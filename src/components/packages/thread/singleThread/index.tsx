@@ -51,13 +51,13 @@ interface SingleThreadProps {
     commentText?: string | null;
     upVoted?: boolean | null;
     upVoteCount?: number | null;
-    user?: {
+    user: {
       __typename?: "user";
-      _id?: string;
+      _id: string;
       firstName?: string;
       lastName?: string;
       picture?: string | null;
-      username?: string;
+      username: string;
     } | null;
   } | null> | null;
 }
@@ -148,12 +148,11 @@ const SingleThread: FC<SingleThreadProps> = ({
           parentId={""}
           replyTo={user?.username!}
         />
-        {/* <ThreadOptions
-          loggedinUser={loggedinUser}
+        <ThreadOptions
           _id={_id}
           setEditable={setEditable}
-          username={user.username}
-        /> */}
+          username={user?.username!}
+        />
 
         {/* other people's replies */}
         <ShowPeopleComments postId={_id!} singlePost={true} />

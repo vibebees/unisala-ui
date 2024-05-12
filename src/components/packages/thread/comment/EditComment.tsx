@@ -5,30 +5,43 @@ import { useIonToast } from "@components/defaults";
 import { useMutation } from "@apollo/client";
 import { EditComment } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { update } from "cypress/types/lodash";
 
 interface EditCommentsProps {
   _id: string;
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
+  text: string;
 }
 
-const EditComments: FC<EditCommentsProps> = ({ _id, setEditable }) => {
-  const [commentText, setCommentText] = useState<string>("");
-
+const EditComments: FC<EditCommentsProps> = ({
+  _id,
+  setEditable,
+  text = "",
+}) => {
+  const [commentText, setCommentText] = useState<string>(text);
   const [present, dismiss] = useIonToast();
-
   const handleChange = (value: string) => {
     setCommentText(value);
   };
   const [editComment] = useMutation(EditComment, {
     context: { server: USER_SERVICE_GQL },
-    variables: { id: _id, commentText },
+    variables: { commentId: _id, commentText },
+
+    update: (cache) => {
+      cache.modify({
+        id: cache.identify({
+          __typename: "Comment",
+          id: _id,
+        }),
+        fields: {
+          commentText: () => commentText,
+        },
+      });
+    },
     onCompleted: (data) => {
       const { editComment } = data;
       setEditable(false);
       if (editComment?.status?.success) {
-        // refetch posts
-        // refetch()
-        // change editable back to false
         setEditable(false);
         present({
           duration: 3000,

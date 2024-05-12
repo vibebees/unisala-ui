@@ -2,12 +2,13 @@ import React, { FC, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
+  ThreadEditable,
   ThreadExpand,
   ThreadHeader,
   ThreadOptions,
   ThreadRating,
 } from "./organism";
-import { Buttons, Card, Item, ItemDivider } from "@components/defaults";
+import { Buttons } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
 import Share from "@components/packages/share";
 import ImageCollage from "./ImageCollages";
@@ -66,10 +67,20 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         </div>
 
+        {editable && (
+          <ThreadEditable
+            _id={_id}
+            postText={postText}
+            setEditable={setEditable}
+          />
+        )}
+
         {images.length > 0 && <ImageCollage images={images} />}
 
         <div className="p-6 bg-white">
-          <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+          {!editable && (
+            <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
+          )}
           <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl  bg-clip-border text-gray-700 shadow-none">
             <ThreadRating
               academicProgramsAndDepartmentRating={
@@ -153,7 +164,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           {postCommentsCount > 0 && (
             <ShowPeopleComments
               postId={_id}
-              parentId=''
+              parentId=""
               singlePost={false}
               postCommentsCount={postCommentsCount}
             />

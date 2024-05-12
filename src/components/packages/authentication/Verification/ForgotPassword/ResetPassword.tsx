@@ -41,6 +41,7 @@ export const ResetPassword = () => {
           }
           return {
             ...prev,
+            state: "signin",
           };
         });
       },

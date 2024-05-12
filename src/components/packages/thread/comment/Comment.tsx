@@ -60,7 +60,11 @@ const Comment: FC<CommentProps> = ({
 
         {editable ? (
           <div className="py-4">
-            <EditComments _id={_id} setEditable={setEditable} />
+            <EditComments
+              text={commentText}
+              _id={_id}
+              setEditable={setEditable}
+            />
           </div>
         ) : (
           <div className="ql-editor">

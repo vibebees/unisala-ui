@@ -52,6 +52,7 @@ const SignUpVerification = () => {
           }
           return {
             ...prev,
+            state: "signin",
           };
         });
       },

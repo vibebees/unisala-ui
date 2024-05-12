@@ -31,6 +31,8 @@ export const SignUpForm = () => {
   const [RegisterUser, { loading }] = useMutation<RegisterMutation>(Register, {
     context: { server: USER_SERVICE_GQL },
     variables: {
+      firstName: input.firstName,
+      lastName: input.lastName,
       email: input.email,
       password: input.password,
       spaceOrgName: input.spaceOrgName,

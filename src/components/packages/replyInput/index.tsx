@@ -9,6 +9,7 @@ import { useAuth } from "@context/AuthContext";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
+import { AddCommentMutation } from "src/types/gqlTypes/graphql";
 
 interface ReplyInputProps {
   postId?: string;
@@ -23,22 +24,22 @@ function ReplyInput({
   isReply,
   parentId = "",
   singlePost,
-  replyTo,
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
 
-  const [addComment] = useMutation(AddComment, {
+  const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addComment } }) => {
+    update: (cache, data) => {
+      const comment = data.data?.addComment?.data;
       cache.modify({
         id: cache.identify({
           __typename: isReply
             ? "Comment"
             : singlePost
-            ? "PostNewsFeed"
-            : "Post",
+            ? "PostComment"
+            : "PostNewsFeed",
           id: postId,
         }),
         fields: {
@@ -58,11 +59,12 @@ function ReplyInput({
           repliesCount: (prev) => prev + 1,
         },
       });
-      const post = cache.readQuery({
+
+      const post: any = cache.readQuery({
         query: GetCommentList,
         variables: {
           postId: postId,
-          parentId,
+          parentId: parentId,
         },
       });
       post &&
@@ -70,17 +72,14 @@ function ReplyInput({
           query: GetCommentList,
           variables: {
             postId,
-            parentId,
+            parentId: parentId ?? "",
           },
           data: {
             commentList: {
               __typename: "commentList",
               success: true,
               message: "comments found",
-              comments: [
-                addComment.comment,
-                ...(post?.commentList?.data || []),
-              ],
+              comments: [comment, ...(post?.commentList?.data || [])],
             },
           },
         });
@@ -93,6 +92,7 @@ function ReplyInput({
         color: "primary",
         mode: "ios",
       });
+      (document.querySelector(".modal-close-btn") as HTMLElement)?.click();
       setCommentText("");
     },
     onError: (error) => {
@@ -122,7 +122,7 @@ function ReplyInput({
 
   return (
     <Content>
-      <form className="  border   flex flex-col  px-5" onSubmit={submitReply}>
+      <form className="  border  flex flex-col  px-5" onSubmit={submitReply}>
         <div
           className="my-3
          "

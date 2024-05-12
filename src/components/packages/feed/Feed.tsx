@@ -29,10 +29,14 @@ const InfiniteFeed: React.FC<FeedProps> = ({ feedType, feedId }) => {
     }
   );
 
+  console.log("data ********* ", data?.fetchFeedV2?.data[0]?.postCommentsCount);
   useEffect(() => {
     if (data?.fetchFeedV2?.data) {
       console.log("new data arrived data", data?.fetchFeedV2?.data);
       setPosts((prevPosts) => {
+
+        console.log({prevPosts})
+        return data?.fetchFeedV2?.data
         if (!prevPosts) return data?.fetchFeedV2?.data ?? []; // Set initial posts if none exist
         // Create a set of existing post IDs for quick lookup
         const existingIds = new Set(prevPosts.map((post) => post._id));

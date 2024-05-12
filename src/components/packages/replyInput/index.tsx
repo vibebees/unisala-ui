@@ -10,6 +10,7 @@ import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
 import { AddCommentMutation } from "src/types/gqlTypes/graphql";
+import { updatePostCommentsCache } from "../createAPost/molecules/updateCacheForNewPost";
 
 interface ReplyInputProps {
   postId?: string;
@@ -31,43 +32,47 @@ function ReplyInput({
 
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
+    /*
     update: (cache, data) => {
       const comment = data.data?.addComment?.data;
-      cache.modify({
-        id: cache.identify({
-          __typename: isReply
-            ? "Comment"
-            : singlePost
-            ? "PostComment"
-            : "PostNewsFeed",
-          id: postId,
-        }),
-        fields: {
-          postCommentsCount: (prev) => prev + 1,
-        },
-      });
-      cache.modify({
-        id: cache.identify({
-          __typename: isReply
-            ? "Comment"
-            : singlePost
-            ? "PostComment"
-            : "PostNewsFeed",
-          id: parentId,
-        }),
-        fields: {
-          repliesCount: (prev) => prev + 1,
-        },
-      });
+      console.log("comment", comment);
+      // cache.modify({
+      //   id: cache.identify({
+      //     __typename: isReply
+      //       ? "Comment"
+      //       : singlePost
+      //       ? "PostComment"
+      //       : "PostNewsFeed",
+      //     id: postId,
+      //   }),
+      //   fields: {
+      //     postCommentsCount: (prev) => prev + 1,
+      //   },
+      // });
+      // cache.modify({
+      //   id: cache.identify({
+      //     __typename: isReply
+      //       ? "Comment"
+      //       : singlePost
+      //       ? "PostComment"
+      //       : "PostNewsFeed",
+      //     id: parentId,
+      //   }),
+      //   fields: {
+      //     repliesCount: (prev) => prev + 1,
+      //   },
+      // });
 
-      const post: any = cache.readQuery({
+      const commentList: any = cache.readQuery({
         query: GetCommentList,
         variables: {
           postId: postId,
           parentId: parentId,
         },
       });
-      post &&
+
+      console.log('commentList before cacheing ', commentList)
+      commentList &&
         cache.writeQuery({
           query: GetCommentList,
           variables: {
@@ -79,10 +84,32 @@ function ReplyInput({
               __typename: "commentList",
               success: true,
               message: "comments found",
-              comments: [comment, ...(post?.commentList?.data || [])],
+              comments: [comment, ...(commentList?.commentList?.data || [])],
             },
           },
         });
+
+        const commentList2: any = cache.readQuery({
+          query: GetCommentList,
+          variables: {
+            postId: postId,
+            parentId: parentId,
+          },
+        });
+        console.log('commentList2 after cacheing ', commentList2)
+
+
+    },
+
+    */
+    update: (cache, { data: { addComment } }) => {
+      console.log('-------00000----')
+      console.log("addComment", addComment.data.postId);
+      updatePostCommentsCache({
+        cache,
+        comment: addComment,
+        postId: addComment.data.postId
+      })
     },
     onCompleted: () => {
       present({

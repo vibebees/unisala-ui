@@ -7,7 +7,7 @@ import {
   ThreadOptions,
   ThreadRating,
 } from "./organism";
-import { Buttons, Card, Item, ItemDivider } from "@components/defaults";
+import { Buttons } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
 import Share from "@components/packages/share";
 import ImageCollage from "./ImageCollages";
@@ -153,7 +153,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           {postCommentsCount > 0 && (
             <ShowPeopleComments
               postId={_id}
-              parentId=''
+              parentId=""
               singlePost={false}
               postCommentsCount={postCommentsCount}
             />

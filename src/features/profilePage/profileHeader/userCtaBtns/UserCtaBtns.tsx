@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { chatbubbles, personAdd } from "ionicons/icons";
 import { IonButton, IonIcon, useIonToast } from "@ionic/react";
@@ -12,136 +12,105 @@ import EditProfile from "../editProfile";
 import "./UserCtaBtns.css";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useAuth } from "@context/AuthContext";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
+import { color } from 'framer-motion';
+import { useAcceptConnectRequest, useSendConnectRequest } from './action';
 
-function UserCtaBtns({ data }: { data: any }) {
+
+/*
+
+  1. Profile data loads
+      a. it has connectionType
+          {
+              "requestorId": "6518f0255e80b0cd4efb1ef9",
+              "receiverId": "64b96b2720785e9049ec9c5c",
+              "status": "pending",
+              "__typename": "ConnectionType"
+          }
+
+
+          
+  2.
+    a. if two username are the same, then it's the same profile i.e show logout and edit button
+    b. if user is not logged in, show no ctas
+
+  3. connectiontType is null we show connect button
+          a. once sent we show requested button
+  4. if connectionType is pending, show requested button
+  5. if connectionType is accepted, show message button
+
+
+
+
+
+
+
+
+*/
+
+
+
+
+
+
+function UserCtaBtns({ data, loading }: { data: any, loading: boolean}) {
   const [present, dismiss] = useIonToast();
   const [connectionType, setConnectionType] = useState(
     data.connectionType || {}
   );
-  const { user } = useAuth();
+  const { user } = useAuth(),
+  { username: loggedInUser} = user || {},
+  params = useParams(),
+  {username:profileBelongsTo} = params || {};
+
+  console.log(connectionType,   data.connectionType )
   const history = useHistory();
+  const [thisIsMyProfile, setThisisMyProfile] = useState(loggedInUser === profileBelongsTo);
+  const [requestSent, setRequestSent] = useState(false);
+  const [requestAccepted, setRequestAccepted] = useState(false);
 
-  const [sendConnectRequest] = useMutation(SendConnectRequest, {
-    onCompleted: (data) => {
-      if (data.sendConnectRequest && data.sendConnectRequest.success) {
-        setConnectionType({ status: "pending", receiverId: data._id });
-        present({
-          duration: 3000,
-          message: "Connect request sent",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
-      }
-    },
-    onError: (error) => {
-      present({
-        duration: 3000,
-        message: `Error sending connect request: ${error.message}`,
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "danger",
-        mode: "ios",
+  useEffect(() => {
+    setConnectionType( data.connectionType || {})
+    setThisisMyProfile(loggedInUser === profileBelongsTo)
+  },[loading])
+  
+  const [sendConnectRequest] = useSendConnectRequest({SendConnectRequest, present, dismiss, USER_SERVICE_GQL, setRequestSent});
+  const [acceptConnectRequest] = useAcceptConnectRequest({AcceptConnectRequest, getUserGql, present, dismiss, USER_SERVICE_GQL, setRequestAccepted, user, profileBelongsTo});
+
+  const MessageState = () => (
+    <IonButton
+      color="light"
+      mode="ios"
+      className="icon-text"
+      onClick={() => history.push("/messages")}
+    >
+      <IonIcon className="grey-icon-32 mr-1" icon={chatbubbles} />
+      {"Message"}
+    </IonButton>
+  );
+  const RequestedState = () => (
+    <IonButton  mode="ios" className="icon-text" color="warning" style={{color:"white"}}>
+    <IonIcon className="white-icon-32 mr-1 txt-white" icon={personAdd} />
+    Requested
+  </IonButton>
+  )
+  const AcceptCurrentRequest = () => (
+    <IonButton
+    color="success"
+    mode="ios"
+    className="icon-text"
+    onClick={() => {
+      acceptConnectRequest({
+        variables: { requestorId: data._id },
       });
-    },
-    context: { server: USER_SERVICE_GQL },
-  });
-
-  const [acceptConnectRequest] = useMutation(AcceptConnectRequest, {
-    context: { server: USER_SERVICE_GQL },
-    update: (cache) => {
-      const getUser = cache.readQuery({
-        query: getUserGql,
-        variables: { username: user?.username },
-      });
-      if (getUser) {
-        cache.writeQuery({
-          query: getUserGql,
-          variables: { username: user?.username },
-          data: {
-            getUser: {
-              ...getUser.getUser,
-              connectionType: {
-                ...getUser.getUser.connectionType,
-                status: "accepted",
-              },
-              user: getUser.getUser.user,
-            },
-          },
-        });
-      }
-    },
-    onCompleted: (data) => {
-      if (data.acceptConnectRequest && data.acceptConnectRequest.success) {
-        setConnectionType({ ...connectionType, status: "accepted" });
-        present({
-          duration: 3000,
-          message: "Connect request accepted. You can now send messages.",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "success",
-          mode: "ios",
-        });
-      }
-    },
-    onError: (error) => {
-      present({
-        duration: 3000,
-        message: `Error accepting connect request: ${error.message}`,
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "danger",
-        mode: "ios",
-      });
-    },
-  });
-
-  const AcceptedState = () => {
-    return (
-      <IonButton
-        color="light"
-        mode="ios"
-        className="icon-text"
-        onClick={() => history.push("/messages")}
-      >
-        <IonIcon className="grey-icon-32 mr-1" icon={chatbubbles} />
-        {"Message"}
-      </IonButton>
-    );
-  };
-
-  const ButtonToShow = () => {
-    if (!connectionType) return null; // Defensive check
-
-    if (data) {
-      return <EditProfile profileHeader={data} setProfileHeader={data} />;
-    }
-
-    switch (connectionType.status) {
-      case "pending":
-        return connectionType.receiverId === data._id ? (
-          <IonButton color="light" mode="ios" className="icon-text">
-            <IonIcon className="grey-icon-32 mr-1" icon={personAdd} />
-            {"Requested"}
-          </IonButton>
-        ) : (
-          <IonButton
-            color="success"
-            mode="ios"
-            className="icon-text"
-            onClick={() => {
-              acceptConnectRequest({
-                variables: { requestorId: data._id },
-              });
-            }}
-          >
-            <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
-            {"Accept"}
-          </IonButton>
-        );
-      case "accepted":
-        return AcceptedState();
-      default:
-        return (
-          <IonButton
+    }}
+  >
+    <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
+    {"Accept"}
+  </IonButton>
+  )
+  const CancelRequest = () =>(
+    <IonButton
             color="secondary"
             mode="ios"
             className="icon-text"
@@ -153,10 +122,62 @@ function UserCtaBtns({ data }: { data: any }) {
           >
             <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
             {"Connect"}
-          </IonButton>
-        );
+    </IonButton>
+  )
+
+  const Default = () =>(
+    <IonButton
+            color="secondary"
+            mode="ios"
+            className="icon-text"
+            onClick={() =>
+              sendConnectRequest({
+                variables: { receiverId: data._id },
+              })
+            }
+          >
+            <IonIcon className="white-icon-32 mr-1" icon={personAdd} />
+            {"Connect"}
+    </IonButton>
+  )
+
+
+  // const flows = {
+  //   pending: RequestedState,
+  //   accepted: MessageState,
+  //   default: Default,
+  //   approveRequest: AcceptCurrentRequest
+  // };
+
+  console.log('00000000011111')
+  console.log({requestSent, connectionType: connectionType.status , requestAccepted})
+  const ButtonToShow = () => {
+    if (!loggedInUser) {
+      return null;
     }
-  };
+    if (!connectionType) return null; // Defensive check
+
+    if (thisIsMyProfile) {
+      return <EditProfile profileHeader={data} setProfileHeader={data} />;
+    }
+
+    // either request is sent or received
+    // if request is sent, show requested button
+    // if request is received, show accept button
+    if(['pending', 'requested'].includes(connectionType?.status)  || requestSent){
+      return (connectionType.receiverId === data._id || requestSent)? (
+        <RequestedState />
+      ) : (
+        <AcceptCurrentRequest />
+      );
+    }
+    
+    if(connectionType.status  === 'accepted'|| requestAccepted){
+      return <MessageState />;
+    }
+      
+    return <Default />;
+  }
 
   return (
     <>

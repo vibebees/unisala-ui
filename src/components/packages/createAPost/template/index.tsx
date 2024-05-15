@@ -19,7 +19,6 @@ const CreateAPostCard = ({ allProps}) => {
     context: { server: USER_SERVICE_GQL },
   });
 
-console.log({tags, unitId},'---->')
   useEffect(() => {
     if (!loading && data) {
       const addApost = data.getMetadataTags?.data?.[pathname]?.addAPost;

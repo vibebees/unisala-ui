@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
@@ -54,6 +54,10 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDLci5lWs5pqELaAP_LDOMzqLF8QzsBt_j9nEto30DVw&s",
     "https://www.purdue.edu/home/wp-content/uploads/2023/07/16_2022_RM13902-2.jpg",
   ];
+
+  useEffect(() => {
+    // console.log("postCommentsCount updated 0000000000 ", postCommentsCount)
+   },[postCommentsCount])
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
@@ -113,6 +117,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               singlePost={false}
               parentId={""}
               postId={_id}
+              feedId={feedId}
             />
             <AuthValidator>
               {!isReply ? (

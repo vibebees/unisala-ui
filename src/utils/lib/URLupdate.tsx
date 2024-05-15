@@ -32,3 +32,19 @@ export const redirectTo = () => {
     history.push(url);
   };
 };
+
+export const currentFeedType = (location) => {
+  // feedType could be org , space or feed
+  const pathSegment = location.pathname.split('/')[ 1 ]; // Split the
+
+  let feedType =
+    pathSegment === 'org'
+      ? 'specificOrg'
+      : pathSegment === 'space'
+      ? 'specificSpace'
+      : pathSegment === 'university'
+      ? 'uniWall'
+          : 'newsfeed';
+
+  return feedType;
+}

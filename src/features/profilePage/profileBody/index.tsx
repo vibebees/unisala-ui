@@ -5,7 +5,6 @@ import Education from "./education";
 
 function index({ data }) {
   const { about, badges, education, testScore, myProfile, username } = data;
-  console.log({ data, myProfile });
   return (
     <>
       {(myProfile || (!myProfile && !about.private && about.text)) && (

@@ -25,6 +25,7 @@ import {
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
 import { useLocation, useParams } from "react-router";
+import { currentFeedType } from "@utils/lib/URLupdate";
 
 const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   const { tags } = postData;
@@ -83,20 +84,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
       [itemId]: value,
     }));
   };
-  let location = useLocation();
-  // feedType could be org , space or feed
-  const pathSegment = location.pathname.split('/')[ 1 ]; // Split the
 
-  let feedType =
-    pathSegment === 'org'
-      ? 'specificOrg'
-      : pathSegment === 'space'
-      ? 'specificSpace'
-      : pathSegment === 'university'
-      ? 'uniWall'
-      : 'newsfeed';
-
-  console.log("feedType", feedType)
   const generateRatingComponent = (item) => {
     return (
       <>
@@ -126,6 +114,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     );
   };
 
+  const feedType = currentFeedType(useLocation())
    const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),

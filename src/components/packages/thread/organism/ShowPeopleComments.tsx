@@ -4,8 +4,8 @@ import { Spinner } from "../../../defaults/index";
 import { useLazyQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import Comment from "../comment/Comment";
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
-import { GetCommentList } from "../../../../datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { GetCommentList } from "@datasource/graphql/user";
 import { CommentListQuery } from "src/types/gqlTypes/graphql";
 import { useAuth } from '@context/AuthContext';
 import { set } from 'cypress/types/lodash';
@@ -51,12 +51,11 @@ function ShowOtherComments({
     }
   }, [refetchComments, refetch]);
 
-  const userComment = (commentData, userId) => {
+  const userComment = (commentData = [], userId = "") => {
     // Filter the comments to find those made by the specified user
-    const userComments = commentData.filter(comment => comment.userId === userId);
-    console.log('------updated userComments------', userComments)
+    const userComments = commentData.filter(comment => comment?.userId === userId);
     // Sort the filtered comments by date in descending order to get the most recent one at the beginning
-    const sortedComments = userComments.sort((a, b) => new Date(b.date).getTime() -  new Date(a.date).getTime() );
+    const sortedComments = userComments.sort((a, b) => new Date(b?.date).getTime() -  new Date(a.date).getTime() );
 
     // Return the most recent comment if it exists
     if(sortedComments.length > 0) {
@@ -67,7 +66,6 @@ function ShowOtherComments({
   };
 
 // Example usage: Assume '64886e0066a911b4081d0166' is the userId of the user you're interested in
-  const [updateComment, setUpdatComment] = useState(false);
   useEffect(() => {
 
     if (data?.commentList?.data) {
@@ -77,7 +75,7 @@ function ShowOtherComments({
       setCommentToShow(data?.commentList?.data[0] ?? {});
       userComment(data?.commentList?.data, user?.id);
     }
-  },[data, loading, updateComment])
+  },[data, loading])
 
   if (loading)
     return (

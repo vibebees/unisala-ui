@@ -1,16 +1,15 @@
 import React, { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { IonButton, IonIcon, IonText, useIonToast } from "@ionic/react";
+import { Button, Icon, Text, useIonToast } from "@components/defaults";
 import RichTextInput from "../input/RichTextInput";
 import { ThreadHeader } from "../thread/organism";
-import { AddComment, GetCommentList } from "@datasource/graphql/user";
+import { AddComment } from "@datasource/graphql/user";
 import { sendOutline } from "ionicons/icons";
 import { useAuth } from "@context/AuthContext";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
 import { AddCommentMutation } from "src/types/gqlTypes/graphql";
-import { updatePostTotalCommentCache } from "../createAPost/molecules/updateCacheForNewPost";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { useLocation } from "react-router";
 import { updateCacheForNewComments } from "./updateCacheForCommets";
@@ -21,6 +20,7 @@ interface ReplyInputProps {
   parentId?: string;
   singlePost: boolean;
   replyTo: string;
+  feedId?: string;
 }
 
 function ReplyInput({
@@ -28,6 +28,7 @@ function ReplyInput({
   isReply,
   parentId = "",
   singlePost,
+  feedId,
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
@@ -36,7 +37,7 @@ function ReplyInput({
 
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addComment } }) => updateCacheForNewComments({ cache, addComment, feedType, parentId }),
+    update: (cache, { data: { addComment } }) => updateCacheForNewComments({ cache, addComment, feedType, parentId, feedId, user }),
     onCompleted: () => {
       present({
         duration: 3000,
@@ -49,6 +50,7 @@ function ReplyInput({
       setCommentText("");
     },
     onError: (error) => {
+      console.log(error.message)
       present({
         duration: 3000,
         message: error.message,
@@ -98,10 +100,10 @@ function ReplyInput({
           />
         </div>
         <div>
-          <IonButton expand="full" shape="round" type="submit" className="mt-2">
-            <IonText className="mr-3">Reply</IonText>{" "}
-            <IonIcon icon={sendOutline} />
-          </IonButton>
+          <Button expand="full" shape="round" type="submit" className="mt-2">
+            <Text className="mr-3">Reply</Text>{" "}
+            <Icon icon={sendOutline} />
+          </Button>
         </div>
       </form>
     </Content>

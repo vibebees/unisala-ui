@@ -117,6 +117,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               singlePost={false}
               parentId={""}
               postId={_id}
+              feedId={feedId}
             />
             <AuthValidator>
               {!isReply ? (

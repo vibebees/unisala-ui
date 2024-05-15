@@ -177,10 +177,14 @@ export const handleEventMutationError = (error, present, dismiss) => {
 };
 
 
-export const updatePostTotalCommentCache = ({ cache, comment, postId, parentId, feedType }) => {
+export const updatePostTotalCommentCache = ({ cache, postId, feedType, feedId }) => {
+  let feedQuery = { feedType, page: 0 };
+  if ([ 'specificSpace', 'specificOrg' ].includes(feedType)) {
+    feedQuery['feedId'] = feedId;
+  }
   const query = {
     query: getNewsFeed,
-    variables: { feedQuery: { feedType , page: 0 } },
+    variables: { feedQuery },
   };
 
   const existingData = cache.readQuery(query);

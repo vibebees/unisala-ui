@@ -1,38 +1,41 @@
 import { GetCommentList } from "@datasource/graphql/user";
 import { updatePostTotalCommentCache } from "@components/packages/createAPost/molecules/updateCacheForNewPost";
+import { useAuth } from "@context/AuthContext";
 
-export const updateCacheForNewComments = ({ cache, addComment, feedType, parentId }) => {
+export const updateCacheForNewComments = ({ cache, addComment,user, feedType, parentId, feedId }) => {
     const postId = addComment?.data?.postId
-    const comment = addComment?.data;
-    const commentList: any = cache.readQuery({
+    const comment = {
+        ...addComment?.data,
+        user: user
+    };
+    const existingData: any = cache.readQuery({
       query: GetCommentList,
       variables: {
         postId: postId,
         parentId: parentId,
       },
     });
+    const commentList = existingData?.commentList?.data ?? [];
 
     commentList &&
       cache.writeQuery({
         query: GetCommentList,
         variables: {
           postId,
-          parentId: parentId ?? "",
+          parentId: parentId ?? ''
         },
         data: {
           commentList: {
-            __typename: "commentList",
-            success: true,
-            message: "comments found",
-            comments: [comment, ...(commentList?.commentList?.data || [])],
-          },
-        },
+            ...(existingData.commentList),
+            data: [comment, ...commentList]
+          }
+        }
       });
 
       updatePostTotalCommentCache({
         cache,
-        comment: addComment,
         postId: addComment.data.postId,
-        feedType
+        feedType,
+        feedId
       })
   };

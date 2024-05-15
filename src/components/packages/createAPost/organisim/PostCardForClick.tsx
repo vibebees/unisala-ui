@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Avatar } from "../../../defaults";
-import { IonAvatar, IonItem } from "@ionic/react";
+import { Avatar, Item, Label, Spinner } from "@components/defaults";
 import { GalleryIcon } from "../../icons";
-import { userInfo, userName } from "../../../../utils/cache";
-import { useSelector } from "react-redux";
 import { useAuth } from "@context/AuthContext";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { useLocation } from "react-router";
+import { IonAvatar } from "@ionic/react";
+import { usePostUploading } from "../createAPostContext";
 
 export const PostCardForClick = () => {
-  const { user } =  useAuth()
+  const { isLoading } = usePostUploading();
+  const { user } = useAuth()
   const feedType = currentFeedType(useLocation())
   const [ createPostPlaceHolder, setCreatePostPlaceHolder ] = useState("Suggest a university");
-
   // if feedType is specificOrg then set the placeholder to "What is this organization about?"
   useEffect(() => {
     let placeHolder = {
@@ -24,12 +23,21 @@ export const PostCardForClick = () => {
     setCreatePostPlaceHolder(placeHolder[feedType])
   },[])
 
-
+  const UploadingPost = () => (
+    <Item>
+      <Label>Posting</Label>
+      <Spinner color='success'></Spinner>
+    </Item>
+  );
+  if (isLoading) {
+   return  UploadingPost()
+  }
   return (
-    <div style={{ padding: "1px", cursor: "pointer" }}>
-      <IonItem lines="none" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ padding: "1px", cursor: "pointer", margin: '5px' }} >
+      {/* {} */}
+      <Item lines="none" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <IonAvatar slot="start">
-          <Avatar username={userName} profilePic={user?.picture} />
+          <Avatar username={user?.username} profilePic={user?.picture} />
         </IonAvatar>
         <input
           type="text"
@@ -40,7 +48,7 @@ export const PostCardForClick = () => {
         <div style={{ flexShrink: 0 }}>
           <GalleryIcon />
         </div>
-      </IonItem>
+      </Item>
     </div>
   );
 };

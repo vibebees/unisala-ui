@@ -8,6 +8,7 @@ import CreateAPostModal from "../molecules/modal";
 import { GET_METADATA_TAGS } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useQuery } from "@apollo/client";
+import { CreateAPostProvider } from "../createAPostContext";
 
 const CreateAPostCard = ({ allProps}) => {
 
@@ -28,15 +29,19 @@ const CreateAPostCard = ({ allProps}) => {
 
   return (
     <Card
-      className="BorderCard ion-no-margin ion-no-padding"
-      style={{ marginBottom: "5px" }}
+      className='BorderCard ion-no-margin ion-no-padding'
+      style={{ marginBottom: '5px', marginTop: '5px' }}
       onClick={() => {}}
     >
-      <CreateAPostModal
-        ModalData={<PostModalOnClick metaData={meta} tags = {tags} unitId= {unitId} />}
-        ModalButton={<PostCardForClick />}
-        header="Create a Post"
-      />
+      <CreateAPostProvider>
+        <CreateAPostModal
+          ModalData={
+            <PostModalOnClick metaData={meta} tags={tags} unitId={unitId} />
+          }
+          ModalButton={<PostCardForClick />}
+          header='Create a Post'
+        />
+      </CreateAPostProvider>
     </Card>
   );
 };

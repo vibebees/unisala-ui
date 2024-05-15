@@ -26,8 +26,11 @@ import {
 import { useAuth } from "@context/AuthContext";
 import { useLocation, useParams } from "react-router";
 import { currentFeedType } from "@utils/lib/URLupdate";
+import { usePostUploading } from "../createAPostContext";
 
-const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
+const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
+  const { startLoading, stopLoading } = usePostUploading();
+
   const { tags } = postData;
   const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
@@ -131,6 +134,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   });
 
   const handleSubmit = (e) => {
+    startLoading()
     e.preventDefault();
 
     if (files && files?.length > 4) {
@@ -186,6 +190,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     // histroy.push({
     //   search: params.toString()
     // })
+    stopLoading();
   };
 
   const generateSelectTag = (item) => {

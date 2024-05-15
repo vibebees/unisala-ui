@@ -14,7 +14,7 @@ export const updateCacheForNewComments = ({ cache, addComment,user, feedType, pa
         postId: postId,
         parentId: parentId,
       },
-    });
+    }) || [];
     const commentList = existingData?.commentList?.data ?? [];
 
     commentList &&

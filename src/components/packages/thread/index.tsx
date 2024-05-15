@@ -61,7 +61,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
-        <div className="p-3 bg-white border">
+        <div className="p-4 bg-white border">
           <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}

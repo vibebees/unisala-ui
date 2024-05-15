@@ -28,7 +28,12 @@ const ThreadExpand: FC<ThreadExpandProps> = ({
   const history = useHistory();
   const [showSeeMore, setShowMore] = useState(true);
   const TextRef = useRef(null);
-  const showSeeMoreOptionAtWordCount: number = 40;
+  // if the url includes thread then increase the word count to 100, else 40
+  let showSeeMoreOptionAtWordCount: number = 40;
+
+  if (window.location.href.includes("thread")) {
+     showSeeMoreOptionAtWordCount = 100;
+  }
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);

@@ -9,43 +9,34 @@ import PageNotFound from "../../navigation/PageNotFound"
 import {PreLoader} from "@components/packages/preloader"
 import InfiniteFeed from "@components/packages/feed/Feed"
 
-export const Spaces = ({allProps}) => {
+export const Spaces = ({data = {}, loading = true}) => {
 
-  const {
-    spaceId,
-    tags,
-    loading,
-    spaceCategory,
-    searchSpaceCategory,
-    setTab
-  } = allProps
+  const {searchSpaceCategory} = data,
+    {data: spaceData} = searchSpaceCategory || {},
+    tags =  [spaceData?._id]
 
-  useEffect(() => {
-    const queryString = window.location.search
-    const queryParams = new URLSearchParams(queryString)
-    const flagValue = queryParams.get("address") || "feed"
-
-    setTab(flagValue)
-  }, [ window.location.search ])
-
-  // condition because we do not want to send null datas to backend
-  if (spaceId && !tags.includes(spaceId)) {
-    tags.push(spaceId)
-  }
+  // const {spaceData} = searchSpaceCategory || {}
+  // const {spaceId} = spaceData || {}
+  // const tags = []
+  // // condition because we do not want to send null datas to backend
+  // if (spaceId && !tags.includes(spaceId)) {
+  //   tags.push(spaceId)
+  // }
+  // console.log("----spaceData----", spaceData)
 
   if (loading) {
     return <PreLoader />
   }
 
-  if (!spaceCategory) {
+  if (!spaceData) {
     return <PageNotFound />
   }
 
   return (
     <div className="w-full mx-3 overflow-x-hidden">
-      <SpaceHeader spaceDetails={searchSpaceCategory?.data} />
-      <CreateAPostCard allProps={allProps} />
-      <InfiniteFeed feedId={spaceId} feedType={"specificSpace"} />
+      <SpaceHeader spaceDetails={spaceData} />
+      <CreateAPostCard allProps={{tags}} />
+      <InfiniteFeed feedId={spaceData?._id} feedType={"specificSpace"} />
     </div>
   )
 }

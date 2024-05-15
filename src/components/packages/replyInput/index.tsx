@@ -13,6 +13,7 @@ import { AddCommentMutation } from "src/types/gqlTypes/graphql";
 import { updatePostTotalCommentCache } from "../createAPost/molecules/updateCacheForNewPost";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { useLocation } from "react-router";
+import { updateCacheForNewComments } from "./updateCacheForCommets";
 
 interface ReplyInputProps {
   postId?: string;
@@ -35,84 +36,7 @@ function ReplyInput({
 
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    /*
-    update: (cache, data) => {
-      const comment = data.data?.addComment?.data;
-      console.log("comment", comment);
-      // cache.modify({
-      //   id: cache.identify({
-      //     __typename: isReply
-      //       ? "Comment"
-      //       : singlePost
-      //       ? "PostComment"
-      //       : "PostNewsFeed",
-      //     id: postId,
-      //   }),
-      //   fields: {
-      //     postCommentsCount: (prev) => prev + 1,
-      //   },
-      // });
-      // cache.modify({
-      //   id: cache.identify({
-      //     __typename: isReply
-      //       ? "Comment"
-      //       : singlePost
-      //       ? "PostComment"
-      //       : "PostNewsFeed",
-      //     id: parentId,
-      //   }),
-      //   fields: {
-      //     repliesCount: (prev) => prev + 1,
-      //   },
-      // });
-
-      const commentList: any = cache.readQuery({
-        query: GetCommentList,
-        variables: {
-          postId: postId,
-          parentId: parentId,
-        },
-      });
-
-      console.log('commentList before cacheing ', commentList)
-      commentList &&
-        cache.writeQuery({
-          query: GetCommentList,
-          variables: {
-            postId,
-            parentId: parentId ?? "",
-          },
-          data: {
-            commentList: {
-              __typename: "commentList",
-              success: true,
-              message: "comments found",
-              comments: [comment, ...(commentList?.commentList?.data || [])],
-            },
-          },
-        });
-
-        const commentList2: any = cache.readQuery({
-          query: GetCommentList,
-          variables: {
-            postId: postId,
-            parentId: parentId,
-          },
-        });
-        console.log('commentList2 after cacheing ', commentList2)
-
-
-    },
-
-    */
-    update: (cache, { data: { addComment } }) => {
-      updatePostTotalCommentCache({
-        cache,
-        comment: addComment,
-        postId: addComment.data.postId,
-        feedType
-      })
-    },
+    update: (cache, { data: { addComment } }) => updateCacheForNewComments({ cache, addComment, feedType, parentId }),
     onCompleted: () => {
       present({
         duration: 3000,

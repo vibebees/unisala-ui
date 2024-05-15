@@ -54,7 +54,7 @@ function ShowOtherComments({
   const userComment = (commentData, userId) => {
     // Filter the comments to find those made by the specified user
     const userComments = commentData.filter(comment => comment.userId === userId);
-    console.log({userId, commentData})
+    console.log('------updated userComments------', userComments)
     // Sort the filtered comments by date in descending order to get the most recent one at the beginning
     const sortedComments = userComments.sort((a, b) => new Date(b.date).getTime() -  new Date(a.date).getTime() );
 

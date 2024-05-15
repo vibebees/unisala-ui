@@ -177,10 +177,10 @@ export const handleEventMutationError = (error, present, dismiss) => {
 };
 
 
-export const updatePostCommentsCache = ({ cache, comment, postId, parentId }) => {
+export const updatePostTotalCommentCache = ({ cache, comment, postId, parentId, feedType }) => {
   const query = {
     query: getNewsFeed,
-    variables: { feedQuery: { feedType:"newsfeed", page: 0 } },
+    variables: { feedQuery: { feedType , page: 0 } },
   };
 
   const existingData = cache.readQuery(query);

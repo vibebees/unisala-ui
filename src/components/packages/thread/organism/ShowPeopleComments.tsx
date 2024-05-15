@@ -54,8 +54,9 @@ function ShowOtherComments({
   const userComment = (commentData, userId) => {
     // Filter the comments to find those made by the specified user
     const userComments = commentData.filter(comment => comment.userId === userId);
-    // Sort the filtered comments by date in descending order to get the most recent one at the top
-    const sortedComments = userComments.sort((a, b) => new Date(a.date).getTime() -  new Date(b.date).getTime() );
+    console.log({userId, commentData})
+    // Sort the filtered comments by date in descending order to get the most recent one at the beginning
+    const sortedComments = userComments.sort((a, b) => new Date(b.date).getTime() -  new Date(a.date).getTime() );
 
     // Return the most recent comment if it exists
     if(sortedComments.length > 0) {
@@ -66,7 +67,7 @@ function ShowOtherComments({
   };
 
 // Example usage: Assume '64886e0066a911b4081d0166' is the userId of the user you're interested in
-
+  const [updateComment, setUpdatComment] = useState(false);
   useEffect(() => {
 
     if (data?.commentList?.data) {
@@ -76,7 +77,7 @@ function ShowOtherComments({
       setCommentToShow(data?.commentList?.data[0] ?? {});
       userComment(data?.commentList?.data, user?.id);
     }
-  },[data, loading])
+  },[data, loading, updateComment])
 
   if (loading)
     return (
@@ -101,7 +102,7 @@ function ShowOtherComments({
     <>
       {
         // check if comments to show exist or not
-        
+
       commentToShow?.postId &&<Comment
         {...(commentToShow as any)}
         key={0}

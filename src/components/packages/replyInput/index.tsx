@@ -10,7 +10,9 @@ import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
 import { AddCommentMutation } from "src/types/gqlTypes/graphql";
-import { updatePostCommentsCache } from "../createAPost/molecules/updateCacheForNewPost";
+import { updatePostTotalCommentCache } from "../createAPost/molecules/updateCacheForNewPost";
+import { currentFeedType } from "@utils/lib/URLupdate";
+import { useLocation } from "react-router";
 
 interface ReplyInputProps {
   postId?: string;
@@ -29,6 +31,7 @@ function ReplyInput({
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
+  const feedType = currentFeedType(useLocation())
 
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
@@ -103,12 +106,11 @@ function ReplyInput({
 
     */
     update: (cache, { data: { addComment } }) => {
-      console.log('-------00000----')
-      console.log("addComment", addComment.data.postId);
-      updatePostCommentsCache({
+      updatePostTotalCommentCache({
         cache,
         comment: addComment,
-        postId: addComment.data.postId
+        postId: addComment.data.postId,
+        feedType
       })
     },
     onCompleted: () => {

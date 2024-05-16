@@ -59,13 +59,14 @@ const LeftSideBar = () => {
                 color="dark"
                 className="text-center  w-full my-2 font-semibold"
               >
-                Top Spaces
+                Spaces
               </Typography>
 
               <Suspense fallback={<IonSpinner></IonSpinner>}>
                 <TopSpaces />
               </Suspense>
 
+              {/* // send user to search?q=test&tab=space */}
               <Link to="/space" style={{ marginTop: "120px" }}>
                 <Typography className="max-w-[250px] py-4 text-[#3880FF] text-center  font-semibold">
                   Browse More Spaces
@@ -79,7 +80,7 @@ const LeftSideBar = () => {
                 color="dark"
                 className="text-center my-2 font-semibold"
               >
-                Top Organization
+                 Organizations
               </Typography>
               <Suspense fallback={<IonSpinner></IonSpinner>}>
                 <TopOrgs />

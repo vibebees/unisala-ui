@@ -14,7 +14,6 @@ export const CreateAPostProvider = ({ children }) => {
         setIsLoading(false);
     };
 
-console.log("isLoading",isLoading)
     return (
         <LoadingContext.Provider value={{ isLoading, startLoading, stopLoading }}>
             {children}

@@ -45,7 +45,6 @@ function Example({ feedType, feedId }) {
 
   useEffect(() => {
     if (data?.fetchFeedV2?.data) {
-      console.log('new data arrived data', data?.fetchFeedV2?.data);
       setPosts(() => {
         return data?.fetchFeedV2?.data;
       });

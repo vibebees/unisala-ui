@@ -1,78 +1,95 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import { useHistory, useLocation } from "react-router-dom";
 import "../index.css";
 import Form from "../molecules/Form";
 import FormAvatar from "../molecules/FormAvatar";
 import FormTab from "./FormTab";
 import NotLogggedModal from "./NotLogggedModal";
 import SelectionTab from "./SelectionTab";
+import CreatePortal from "@utils/CreatePortal";
+import { createPortal } from "react-dom";
+import { Buttons } from "@components/defaults";
+import { LeftArrow } from "@components/packages/icons";
 
-export const PostModalOnClick = ({ metaData, tags, unitId }) => {
-
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const [selectedTab, setSelectedTab] = useState(null);
-  const [allowPost, setAllowPost] = useState(true);
-  const [ postData, setPostData ] = useState({
-    unitId: unitId,
-    tags,
-    id: selectedTab,
-  });
+export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
+  const [selectedTab, setSelectedTab] = useState<EPostType | null>(null);
+  const [domLoaded, setDomLoaded] = useState(false);
+  const [postData, setPostData] = useState<TPostDataType>(null);
 
   useEffect(() => {
-    setPostData((prevPostData) => {
-      return {
-        ...postData,
-        ...prevPostData,
-        id: selectedTab,
-        unitId: unitId,
-        // tags: allProps.tags && tags,
-      };
-    });
-  }, [selectedTab]);
+    setDomLoaded(true);
+  }, []);
 
-  const handleTabSelection = (item) => {
+  // useEffect(() => {
+  //   if (!postData && selectedTab) {
+  //     setPostData({
+  //       id: selectedTab as any,
+  //     });
+  //   }
+
+  //   if (postData && selectedTab) {
+  //     setPostData((prevPostData) => ({
+  //       ...prevPostData,
+  //       id: selectedTab as any,
+  //     }));
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedTab]);
+
+  const handleTabSelection = (item: EPostType) => {
     setSelectedTab(item);
-    setPostData((prevPostData) => ({...prevPostData, id: item}));
-    // params.append("type", item)
-    // history.push({ search: params.toString() })
-    // ButtonTrack(`${item} button clicked while creating a post`)
+    setPostData((prevPostData) => ({ ...prevPostData, id: item as any }));
   };
 
   return (
     <>
-      {allowPost && (
-        <div className="overflow-y-scroll threadScroll px-1 h-full ">
-          {!selectedTab ? (
-            <SelectionTab
-              metaData={metaData}
-              onClick={(item) => handleTabSelection(item)}
-            />
-          ) : (
-            <>
-              <FormTab
-                metaData={metaData}
-                selectedTab={selectedTab}
-                setSelectedTab={setSelectedTab}
+      <div className="overflow-y-scroll threadScroll px-1 h-full ">
+        {!selectedTab && (
+          <SelectionTab
+            metaData={metaData}
+            onClick={(item) => handleTabSelection(item)}
+          />
+        )}
+
+        {selectedTab && (
+          <>
+            <br />
+            <FormAvatar />
+
+            {metaData && (
+              <Form
+                metaData={metaData[selectedTab]}
+                postData={postData}
+                setPostData={setPostData}
               />
-              <br />
-              <FormAvatar />
-
-              {metaData && (
-                <Form
-                  metaData={metaData[selectedTab]}
-                  postData={postData}
-                  setPostData={setPostData}
-                />
+            )}
+            {domLoaded &&
+              selectedTab &&
+              document.getElementById("modal-header") &&
+              createPortal(
+                <p>{metaData[selectedTab]?.name}</p>,
+                document.getElementById("modal-header")!
               )}
-            </>
-          )}
-        </div>
-      )}
+            {domLoaded &&
+              selectedTab &&
+              document.getElementById("modal-start") &&
+              createPortal(
+                <Buttons
+                  className="  cursor-pointer"
+                  onClick={() => {
+                    setSelectedTab(null);
+                  }}
+                >
+                  <LeftArrow /> <span className="text-neutral-600">Back</span>
+                </Buttons>,
+                document.getElementById("modal-start")!
+              )}
+          </>
+        )}
+      </div>
 
-      {!allowPost && <NotLogggedModal setAllowPost={setAllowPost} />}
+      {/* {!allowPost && <NotLogggedModal setAllowPost={setAllowPost} />} */}
     </>
   );
 };

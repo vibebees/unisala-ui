@@ -19,7 +19,7 @@ interface ICreateAPostModal {
 const CreateAPostModal: FC<ICreateAPostModal> = ({
   ModalButton,
   ModalData = "No Data",
-  header = "Modal",
+  header = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,7 +38,7 @@ const CreateAPostModal: FC<ICreateAPostModal> = ({
         >
           <IonHeader>
             <IonToolbar>
-              <IonTitle>{header}</IonTitle>
+              <IonTitle id="modal-header"></IonTitle>
               <IonButtons slot="end">
                 <Button
                   className="modal-close-btn"
@@ -47,6 +47,7 @@ const CreateAPostModal: FC<ICreateAPostModal> = ({
                   close
                 </Button>
               </IonButtons>
+              <IonButtons slot="start" id="modal-start"></IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">{ModalData}</IonContent>

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Card } from "../../../defaults/index";
+import { Card, Spinner } from "../../../defaults/index";
 import { usePathName } from "@hooks/usePathname";
 import { PostCardForClick } from "../organisim/PostCardForClick";
 import { PostModalOnClick } from "../organisim/PostModalOnClick";
@@ -8,13 +8,12 @@ import CreateAPostModal from "../molecules/modal";
 import { GET_METADATA_TAGS } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useQuery } from "@apollo/client";
+import MetatagFetchError from "../atoms/MetatagFetchError";
 import { CreateAPostProvider } from "../createAPostContext";
 
-const CreateAPostCard = ({ allProps}) => {
-
-  const [meta, setMeta] = useState({  });
+const CreateAPostCard = () => {
+  const [meta, setMeta] = useState({});
   const pathname = usePathName(0);
-  const {tags = [], unitId} = allProps || {};
 
   const { data, loading, error } = useQuery(GET_METADATA_TAGS, {
     context: { server: USER_SERVICE_GQL },
@@ -29,17 +28,21 @@ const CreateAPostCard = ({ allProps}) => {
 
   return (
     <Card
-      className='BorderCard ion-no-margin ion-no-padding'
-      style={{ marginBottom: '5px', marginTop: '5px' }}
+      className="BorderCard ion-no-margin ion-no-padding"
+      style={{ marginBottom: "5px", marginTop: "5px" }}
       onClick={() => {}}
     >
       <CreateAPostProvider>
         <CreateAPostModal
           ModalData={
-            <PostModalOnClick metaData={meta} tags={tags} unitId={unitId} />
+            <>
+              {error && <MetatagFetchError />}
+
+              {!error && !loading && <PostModalOnClick metaData={meta} />}
+              {loading && <Loader />}
+            </>
           }
           ModalButton={<PostCardForClick />}
-          header='Create a Post'
         />
       </CreateAPostProvider>
     </Card>
@@ -47,3 +50,11 @@ const CreateAPostCard = ({ allProps}) => {
 };
 
 export default CreateAPostCard;
+
+const Loader = () => {
+  return (
+    <div className=" mt-28 w-full grid place-content-center">
+      <Spinner></Spinner>
+    </div>
+  );
+};

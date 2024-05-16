@@ -12,6 +12,7 @@ interface ReplyProps {
   parentId?: string;
   singlePost?: boolean;
   replyTo: string;
+  feedId?: string;
 }
 
 const Reply: FC<ReplyProps> = ({
@@ -21,7 +22,9 @@ const Reply: FC<ReplyProps> = ({
   singlePost = false,
   parentId,
   postId,
+  feedId
 }) => {
+
   return (
     <div>
       <ModalCustom
@@ -33,6 +36,7 @@ const Reply: FC<ReplyProps> = ({
             singlePost={singlePost}
             parentId={parentId}
             postId={postId}
+            feedId={feedId}
           />
         }
       >

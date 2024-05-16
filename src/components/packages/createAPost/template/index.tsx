@@ -9,6 +9,7 @@ import { GET_METADATA_TAGS } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useQuery } from "@apollo/client";
 import MetatagFetchError from "../atoms/MetatagFetchError";
+import { CreateAPostProvider } from "../createAPostContext";
 
 const CreateAPostCard = () => {
   const [meta, setMeta] = useState({});
@@ -28,20 +29,22 @@ const CreateAPostCard = () => {
   return (
     <Card
       className="BorderCard ion-no-margin ion-no-padding"
-      style={{ marginBottom: "5px" }}
+      style={{ marginBottom: "5px", marginTop: "5px" }}
       onClick={() => {}}
     >
-      <CreateAPostModal
-        ModalData={
-          <>
-            {error && <MetatagFetchError />}
+      <CreateAPostProvider>
+        <CreateAPostModal
+          ModalData={
+            <>
+              {error && <MetatagFetchError />}
 
-            {!error && !loading && <PostModalOnClick metaData={meta} />}
-            {loading && <Loader />}
-          </>
-        }
-        ModalButton={<PostCardForClick />}
-      />
+              {!error && !loading && <PostModalOnClick metaData={meta} />}
+              {loading && <Loader />}
+            </>
+          }
+          ModalButton={<PostCardForClick />}
+        />
+      </CreateAPostProvider>
     </Card>
   );
 };

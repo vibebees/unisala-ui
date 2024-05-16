@@ -25,8 +25,12 @@ import {
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
 import { useLocation, useParams } from "react-router";
+import { currentFeedType } from "@utils/lib/URLupdate";
+import { usePostUploading } from "../createAPostContext";
 
-const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
+const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
+  const { startLoading, stopLoading } = usePostUploading();
+
   const { tags } = postData;
   const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
@@ -83,20 +87,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
       [itemId]: value,
     }));
   };
-  let location = useLocation();
-  // feedType could be org , space or feed
-  const pathSegment = location.pathname.split('/')[ 1 ]; // Split the
 
-  let feedType =
-    pathSegment === 'org'
-      ? 'specificOrg'
-      : pathSegment === 'space'
-      ? 'specificSpace'
-      : pathSegment === 'university'
-      ? 'uniWall'
-      : 'newsfeed';
-
-  console.log("feedType", feedType)
   const generateRatingComponent = (item) => {
     return (
       <>
@@ -126,6 +117,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     );
   };
 
+  const feedType = currentFeedType(useLocation())
    const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),
@@ -142,6 +134,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
   });
 
   const handleSubmit = (e) => {
+    startLoading()
     e.preventDefault();
 
     if (files && files?.length > 4) {
@@ -197,6 +190,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => {} }) => {
     // histroy.push({
     //   search: params.toString()
     // })
+    stopLoading();
   };
 
   const generateSelectTag = (item) => {

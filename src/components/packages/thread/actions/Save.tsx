@@ -37,7 +37,6 @@ const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
         const data = cache.readQuery({
           query: GetSavedList,
           variables: { userId, page: 0 },
-          context: { server: USER_SERVICE_GQL },
         });
         data &&
           cache.writeQuery({

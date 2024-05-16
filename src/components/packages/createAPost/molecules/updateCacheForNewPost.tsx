@@ -175,3 +175,40 @@ export const handleEventMutationError = (error, present, dismiss) => {
     mode: "ios",
   });
 };
+
+
+export const updatePostTotalCommentCache = ({ cache, postId, feedType, feedId }) => {
+  let feedQuery = { feedType, page: 0 };
+  if ([ 'specificSpace', 'specificOrg' ].includes(feedType)) {
+    feedQuery['feedId'] = feedId;
+  }
+  const query = {
+    query: getNewsFeed,
+    variables: { feedQuery },
+  };
+
+  const existingData = cache.readQuery(query);
+  // Extract existing posts from the existing data
+  const existingPosts = existingData ? existingData.fetchFeedV2.data : [];
+  const updatedPosts = existingPosts.map((post) => {
+    if (post._id === postId) {
+      return {
+        ...post,
+        postCommentsCount: post.postCommentsCount + 1,
+      };
+    }
+    return post;
+  })
+  // Add the new post to the beginning of the array
+   // Write the updated posts back to the cache
+
+  cache.writeQuery({
+    ...query,
+    data: {
+      fetchFeedV2: {
+        ...(existingData?.fetchFeedV2 || {}),
+        data: updatedPosts,
+      },
+    },
+  });
+}

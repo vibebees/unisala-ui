@@ -1,69 +1,80 @@
-import React from "react"
-import { useMutation } from "@apollo/client"
-import { useIonToast, Button } from "../../../defaults/index"
-import { EditPost } from "../../../../datasource/graphql/user"
-import { useState } from "react"
-import ReactQuill from "react-quill"
-import "react-quill/dist/quill.snow.css"
-import { useLocation } from "react-router-dom"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
+import React, { FC } from "react";
+import { useMutation } from "@apollo/client";
+import { useIonToast, Button } from "../../../defaults/index";
+import { EditPost } from "../../../../datasource/graphql/user";
+import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useLocation } from "react-router-dom";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
 
-const ThreadEditable = ({ _id, postText, setEditable }) => {
-  const pathname = useLocation().pathname
-  const [present, dismiss] = useIonToast()
+interface ThreadEditableProps {
+  _id: string;
+  postText: string;
+  setEditable: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ThreadEditable: FC<ThreadEditableProps> = ({
+  _id,
+  postText,
+  setEditable,
+}) => {
+  const pathname = useLocation().pathname;
+  const [present, dismiss] = useIonToast();
   const [updatedData, setUpdatedData] = useState({
     postText,
     // images,
-    postId: _id
-  })
+    postId: _id,
+  });
 
   const handleChange = (e) => {
-    setUpdatedData((prev) => ({ ...prev, postText: e }))
-  }
+    setUpdatedData((prev) => ({ ...prev, postText: e }));
+  };
 
-  const isHome = pathname === "/" || pathname === "/home"
+  const isHome =
+    pathname === "/" || pathname === "/home" || pathname === "/feed";
 
-  console.log({ updatedData })
+  console.log("isHome", isHome);
+
+  console.log({ updatedData });
   const [editPost] = useMutation(EditPost, {
     context: { server: USER_SERVICE_GQL },
     variables: { ...updatedData },
 
-    update: (cache, { data }) => {
+    update: (cache) => {
       cache.modify({
         id: cache.identify({
           __typename: isHome ? "PostNewsFeed" : "Post",
-          id: _id
+          id: _id,
         }),
         fields: {
-          postText() {
-            return updatedData.postText
-          }
-        }
-      })
+          postText: () => updatedData.postText,
+        },
+      });
     },
     onCompleted: (data) => {
-      const { editPost } = data
+      const { editPost } = data;
 
       if (editPost?.status?.success) {
-        setEditable(false)
+        setEditable(false);
         present({
           duration: 3000,
           message: "Post Updated",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       } else {
         present({
           duration: 3000,
           message: editPost.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
-    }
-  })
+    },
+  });
 
   return (
     <div>
@@ -96,8 +107,7 @@ const ThreadEditable = ({ _id, postText, setEditable }) => {
         Save
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default ThreadEditable
-
+export default ThreadEditable;

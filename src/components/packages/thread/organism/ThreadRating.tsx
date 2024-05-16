@@ -1,45 +1,45 @@
-import React from 'react';
-import { Rating } from '../actions';
+import React from "react";
+import { Rating } from "../actions";
 
 const ThreadRating = ({
   admissionAndApplicationRating,
   financialAidAndScholarshipRating,
   academicProgramsAndDepartmentRating,
   studentLifeAndServiceRating,
-  careerAndAlumniResourceRating
+  careerAndAlumniResourceRating,
 }: {
-  admissionAndApplicationRating: number;
-  financialAidAndScholarshipRating: number;
-  academicProgramsAndDepartmentRating: number;
-  studentLifeAndServiceRating: number;
-  careerAndAlumniResourceRating: number;
+  admissionAndApplicationRating: number | null | undefined;
+  financialAidAndScholarshipRating: number | null | undefined;
+  academicProgramsAndDepartmentRating: number | null | undefined;
+  studentLifeAndServiceRating: number | null | undefined;
+  careerAndAlumniResourceRating: number | null | undefined;
 }) => {
   const ratings = [
     {
-      label: 'Admission & Application',
+      label: "Admission & Application",
       rating: admissionAndApplicationRating,
-      ratingKey: 'admissionAndApplicationRating'
+      ratingKey: "admissionAndApplicationRating",
     },
     {
-      label: 'Financial Aid & Scholarships',
+      label: "Financial Aid & Scholarships",
       rating: financialAidAndScholarshipRating,
-      ratingKey: 'financialAidAndScholarshipRating'
+      ratingKey: "financialAidAndScholarshipRating",
     },
     {
-      label: 'Academic Programs & Department',
+      label: "Academic Programs & Department",
       rating: academicProgramsAndDepartmentRating,
-      ratingKey: 'academicProgramsAndDepartmentRating'
+      ratingKey: "academicProgramsAndDepartmentRating",
     },
     {
-      label: 'Student Life & Services',
+      label: "Student Life & Services",
       rating: studentLifeAndServiceRating,
-      ratingKey: 'studentLifeAndServiceRating'
+      ratingKey: "studentLifeAndServiceRating",
     },
     {
-      label: 'Career & Alumni Resources',
+      label: "Career & Alumni Resources",
       rating: careerAndAlumniResourceRating,
-      ratingKey: 'careerAndAlumniResourceRating'
-    }
+      ratingKey: "careerAndAlumniResourceRating",
+    },
   ];
 
   if (
@@ -51,11 +51,11 @@ const ThreadRating = ({
   ) {
     return (
       <>
-        <div className='flex flex-col mt-3'>
-          <h2 className='font-medium text-blue-800 text-base text-center'>
-            🌟 Ratings 🌟{' '}
+        <div className="flex flex-col mt-3">
+          <h2 className="font-medium text-blue-800 text-base text-center">
+            🌟 Ratings 🌟{" "}
           </h2>
-          <section className='mt-5 w-full'>
+          <section className="mt-5 w-full">
             {ratings.map((item, index) => (
               <Rating
                 key={index}

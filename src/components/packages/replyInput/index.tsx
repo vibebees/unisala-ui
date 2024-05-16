@@ -1,14 +1,18 @@
 import React, { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { IonButton, IonIcon, IonText, useIonToast } from "@ionic/react";
+import { Button, Icon, Text, useIonToast } from "@components/defaults";
 import RichTextInput from "../input/RichTextInput";
 import { ThreadHeader } from "../thread/organism";
-import { AddComment, GetCommentList } from "@datasource/graphql/user";
+import { AddComment } from "@datasource/graphql/user";
 import { sendOutline } from "ionicons/icons";
 import { useAuth } from "@context/AuthContext";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import "./index.css";
 import { Content } from "@components/defaults";
+import { AddCommentMutation } from "src/types/gqlTypes/graphql";
+import { currentFeedType } from "@utils/lib/URLupdate";
+import { useLocation } from "react-router";
+import { updateCacheForNewComments } from "./updateCacheForCommets";
 
 interface ReplyInputProps {
   postId?: string;
@@ -16,6 +20,7 @@ interface ReplyInputProps {
   parentId?: string;
   singlePost: boolean;
   replyTo: string;
+  feedId?: string;
 }
 
 function ReplyInput({
@@ -23,68 +28,16 @@ function ReplyInput({
   isReply,
   parentId = "",
   singlePost,
-  replyTo,
+  feedId,
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
+  const feedType = currentFeedType(useLocation())
 
-  const [addComment] = useMutation(AddComment, {
+  const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addComment } }) => {
-      cache.modify({
-        id: cache.identify({
-          __typename: isReply
-            ? "Comment"
-            : singlePost
-            ? "PostNewsFeed"
-            : "Post",
-          id: postId,
-        }),
-        fields: {
-          postCommentsCount: (prev) => prev + 1,
-        },
-      });
-      cache.modify({
-        id: cache.identify({
-          __typename: isReply
-            ? "Comment"
-            : singlePost
-            ? "PostComment"
-            : "PostNewsFeed",
-          id: parentId,
-        }),
-        fields: {
-          repliesCount: (prev) => prev + 1,
-        },
-      });
-      const post = cache.readQuery({
-        query: GetCommentList,
-        variables: {
-          postId: postId,
-          parentId,
-        },
-      });
-      post &&
-        cache.writeQuery({
-          query: GetCommentList,
-          variables: {
-            postId,
-            parentId,
-          },
-          data: {
-            commentList: {
-              __typename: "commentList",
-              success: true,
-              message: "comments found",
-              comments: [
-                addComment.comment,
-                ...(post?.commentList?.data || []),
-              ],
-            },
-          },
-        });
-    },
+    update: (cache, { data: { addComment } }) => updateCacheForNewComments({ cache, addComment, feedType, parentId, feedId, user }),
     onCompleted: () => {
       present({
         duration: 3000,
@@ -93,9 +46,11 @@ function ReplyInput({
         color: "primary",
         mode: "ios",
       });
+      (document.querySelector(".modal-close-btn") as HTMLElement)?.click();
       setCommentText("");
     },
     onError: (error) => {
+      console.log(error.message)
       present({
         duration: 3000,
         message: error.message,
@@ -122,7 +77,7 @@ function ReplyInput({
 
   return (
     <Content>
-      <form className="  border   flex flex-col  px-5" onSubmit={submitReply}>
+      <form className="  border  flex flex-col  px-5" onSubmit={submitReply}>
         <div
           className="my-3
          "
@@ -145,10 +100,10 @@ function ReplyInput({
           />
         </div>
         <div>
-          <IonButton expand="full" shape="round" type="submit" className="mt-2">
-            <IonText className="mr-3">Reply</IonText>{" "}
-            <IonIcon icon={sendOutline} />
-          </IonButton>
+          <Button expand="full" shape="round" type="submit" className="mt-2">
+            <Text className="mr-3">Reply</Text>{" "}
+            <Icon icon={sendOutline} />
+          </Button>
         </div>
       </form>
     </Content>

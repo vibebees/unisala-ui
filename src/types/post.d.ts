@@ -70,3 +70,56 @@ interface IEvent {
   images: string[];
   isRegistered: boolean;
 }
+
+enum EPostType {
+  suggestMeUniversity = "suggestMeUniversity",
+  questionAboutUniversity = "questionAboutUniversity",
+  reviewUniversity = "reviewUniversity",
+  others = "others",
+}
+
+interface IsuggestMeUniversity {
+  id: EPostType.suggestMeUniversity;
+  levelOfStudy?: string;
+  major?: string;
+  preferredLocation?: string;
+  postText: string;
+  testScores?: string;
+  testScoreMark?: {};
+  gpa?: number;
+}
+
+interface IquestionAboutUniversity {
+  id: EPostType.questionAboutUniversity;
+  postText: string;
+  levelOfStudy?: string;
+  reviewSubCategories?: string;
+  universitySearch?: string;
+  unitId?: number;
+}
+
+interface IreviewUniversity {
+  id: EPostType.reviewUniversity;
+  levelOfStudy?: string;
+  postText?: string;
+  unitId?: number;
+  universitySearch?: string;
+  admissionAndApplicationRating?: number;
+  financialAidAndScholarshipRating?: number;
+  academicProgramsAndDepartmentRating?: number;
+  major?: string;
+  studentLifeAndServiceRating?: number;
+  careerAndAlumniResourceRating?: number;
+}
+
+interface Iothers {
+  id: EPostType.others;
+  postText?: string;
+}
+
+type TPostDataType =
+  | IsuggestMeUniversity
+  | IquestionAboutUniversity
+  | IreviewUniversity
+  | Iothers
+  | null;

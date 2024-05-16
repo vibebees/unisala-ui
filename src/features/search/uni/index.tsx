@@ -6,6 +6,7 @@ import { ResultsColumn } from "./resultColumn";
 import { DesktopFilter } from "./desktopFilter";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
+import CreatePortal from "@utils/CreatePortal";
 
 const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
   const history = useHistory();
@@ -27,18 +28,22 @@ const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -200 }}
     >
-      {window !== undefined &&
+      {/* {window !== undefined &&
         document.getElementById("filter-container") &&
         createPortal(
           <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
           document.getElementById("filter-container")!
-        )}
-      {window !== undefined &&
-        document.getElementById("menu-content") &&
-        createPortal(
-          <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
-          document.getElementById("menu-content")!
-        )}
+        )} */}
+
+      {CreatePortal(
+        <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
+        "filter-container"
+      )}
+
+      {CreatePortal(
+        <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
+        "menu-content"
+      )}
 
       <ResultsColumn
         activeSubTab={activeSubTab}

@@ -6,7 +6,7 @@ import {
   from,
   fromPromise,
   split,
-  Observable
+  Observable,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
@@ -30,22 +30,20 @@ const {
     callSocketAddress,
   } = getServiceConfig(),
   responseLink = new ApolloLink((operation, forward) => {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const processOperation = async () => {
         try {
           const forwardedOperation = await forward(operation);
           const subscription = forwardedOperation.subscribe({
-            next: response => {
+            next: (response) => {
               const { validToken } = response?.data?.fetchFeedV2 ?? {};
-              console.log('Valid token:', validToken)
               if (validToken === false) {
                 console.log("Token is invalid or expired, refreshing token...");
-                fromPromise(refreshTokenAndRetry(operation))
-                  .subscribe({
+                fromPromise(refreshTokenAndRetry(operation)).subscribe({
                   // Ensure responses are forwarded
                   next: observer.next(response),
                   error: observer.error.bind(observer),
-                  complete: observer.complete.bind(response)
+                  complete: observer.complete.bind(response),
                 });
               } else {
                 observer.next(response);
@@ -126,7 +124,7 @@ const {
     server: USER_SERVICE_GQL,
   }),
   authLink = setContext((_, { headers }) => {
-  const authData: IAuthData | null = getCache("authData");
+    const authData: IAuthData | null = getCache("authData");
     return {
       headers: {
         ...headers,
@@ -146,9 +144,9 @@ const {
       )
     )
   );
-  const authData: IAuthData | null = getCache("authData")
-  export const client = new ApolloClient({
-  link: from([ responseLink, errorLink, authLink, httpLink]),
+const authData: IAuthData | null = getCache("authData");
+export const client = new ApolloClient({
+    link: from([responseLink, errorLink, authLink, httpLink]),
     headers: {
       authorization: authData?.accessToken || "",
     },

@@ -216,7 +216,7 @@ function index({ profileHeader }) {
     <>
       <Button>
         <EditIcon />
-        <span>{"Edit"}</span>
+        <span>Edit</span>
       </Button>
 
       <IonButtons

@@ -1,17 +1,14 @@
-import React from "react"
-import {
-  Buttons,
-  Content,
-  Header,
-  Modal,
-  Title,
-  Toolbar
-} from "../index"
-import { useState } from "react"
-import Button from "./Button"
+import React from "react";
+import { Buttons, Content, Header, Modal, Title, Toolbar } from "../index";
+import { useState } from "react";
+import Button from "./Button";
 
-const CustomModal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) => {
-  const [isOpen, setIsOpen] = useState(false)
+const CustomModal = ({
+  ModalButton,
+  ModalData = "No Data",
+  header = "Modal",
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -22,7 +19,7 @@ const CustomModal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) =
         <Modal
           mode="ios"
           onDidDismiss={() => {
-            setIsOpen(false)
+            setIsOpen(false);
           }}
           isOpen={isOpen}
         >
@@ -30,12 +27,12 @@ const CustomModal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) =
             <Toolbar>
               <Title>{header}</Title>
               <Buttons slot="end">
-                <Button
+                <Buttons
                   className="modal-close-btn"
                   onClick={() => setIsOpen(false)}
                 >
                   close
-                </Button>
+                </Buttons>
               </Buttons>
             </Toolbar>
           </Header>
@@ -43,7 +40,7 @@ const CustomModal = ({ ModalButton, ModalData = "No Data", header = "Modal" }) =
         </Modal>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CustomModal
+export default CustomModal;

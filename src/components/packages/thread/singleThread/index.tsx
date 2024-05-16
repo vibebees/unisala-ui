@@ -51,13 +51,13 @@ interface SingleThreadProps {
     commentText?: string | null;
     upVoted?: boolean | null;
     upVoteCount?: number | null;
-    user?: {
+    user: {
       __typename?: "user";
-      _id?: string;
+      _id: string;
       firstName?: string;
       lastName?: string;
       picture?: string | null;
-      username?: string;
+      username: string;
     } | null;
   } | null> | null;
 }
@@ -105,10 +105,8 @@ const SingleThread: FC<SingleThreadProps> = ({
             />
             {images && images.length > 0 && (
               <ThreadImages images={images} _id={_id} />
-              )}
-
+            )}
           </>
-
         )}
       </div>
     );
@@ -130,15 +128,13 @@ const SingleThread: FC<SingleThreadProps> = ({
         <div className="thread_content">
           {threadContent()}
           <ThreadRating
-              academicProgramsAndDepartmentRating={
-                academicProgramsAndDepartmentRating
-              }
-              admissionAndApplicationRating={admissionAndApplicationRating}
-              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
-              financialAidAndScholarshipRating={
-                financialAidAndScholarshipRating
-              }
-              studentLifeAndServiceRating={studentLifeAndServiceRating}
+            academicProgramsAndDepartmentRating={
+              academicProgramsAndDepartmentRating
+            }
+            admissionAndApplicationRating={admissionAndApplicationRating}
+            careerAndAlumniResourceRating={careerAndAlumniResourceRating}
+            financialAidAndScholarshipRating={financialAidAndScholarshipRating}
+            studentLifeAndServiceRating={studentLifeAndServiceRating}
           />
         </div>
         <ThreadFooter
@@ -149,15 +145,14 @@ const SingleThread: FC<SingleThreadProps> = ({
           upVoted={upVoted!}
           isReply={false}
           singlePost={true}
-          parentId={_id}
+          parentId={""}
           replyTo={user?.username!}
         />
-        {/* <ThreadOptions
-          loggedinUser={loggedinUser}
+        <ThreadOptions
           _id={_id}
           setEditable={setEditable}
-          username={user.username}
-        /> */}
+          username={user?.username!}
+        />
 
         {/* other people's replies */}
         <ShowPeopleComments postId={_id!} singlePost={true} />

@@ -45,7 +45,7 @@ const ImageCollage = ({ images =[] }) => {
   const LargerImage = ({ image = '', index = 0 }) => (
     <div>
       <img
-        className='h-auto w-full max-w-full rounded-lg object-contain object-center md:h-[480px]'
+        className='h-auto w-full max-w-full rounded-lg object-contain object-center'
         // className='h-auto w-full max-w-full rounded-lg object-cover object-center md:h-[480px]'
         src={image}
         alt=''
@@ -67,18 +67,18 @@ const ImageCollage = ({ images =[] }) => {
 
   return (
     <>
-      <div className='grid gap-4'>
+      <div className='grid gap-0'>
        {images.map((image, index) => (
           index === largeIndex ? <LargerImage key={index} image={image} index={index} /> : null
         ))}
-        <div className='grid grid-cols-5 gap-4'>
+        <div className='grid grid-cols-5 gap-1'>
           {images.map((image, index) => (
             index !== largeIndex ? <SmallerImage key={index} image={image} index={index} /> : null
           ))}
         </div>
       </div>
 
-      <div className='container mx-auto py-8'>
+      <div className='container'>
         {/* <div className='grid grid-cols-2 md:grid-cols-4'>
        {images.map((image, index) => {
          return (

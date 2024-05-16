@@ -57,8 +57,8 @@ const ImageCollage = ({ images =[] }) => {
     <div>
     <img
       src={image}
-      className='object-cover object-center h-20 max-w-full rounded-lg cursor-pointer'
-        alt='gallery-image'
+      className="h-50 max-w-full rounded-lg object-cover object-center md:h-60"
+      alt='gallery-image'
         onClick={() => openModalWithImage(index)}
 
     />

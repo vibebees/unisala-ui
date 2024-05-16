@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
+import ImageCollage from '../ImageCollages'
 
 const ThreadImages = ({ images, _id }) => {
   const slideOpts = {
@@ -11,7 +12,8 @@ const ThreadImages = ({ images, _id }) => {
   if (images.length === 0) return null
 
   return (
-    <Link to={`/thread/${_id}`} className={clsx("relative")}>
+    <Link to={`/thread/${_id}`} className={clsx('relative')}>
+      <div>{images.length > 0 && <ImageCollage images={images} />}</div>
       {/* <IonSlides
         pager={true}
         options={slideOpts}
@@ -35,7 +37,7 @@ const ThreadImages = ({ images, _id }) => {
         ))}
       </IonSlides> */}
     </Link>
-  )
+  );
 }
 
 export default ThreadImages

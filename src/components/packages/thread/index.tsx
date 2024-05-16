@@ -79,9 +79,11 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         )}
 
+        <div>
         {images.length > 0 && <ImageCollage images={images} />}
+       </div>
 
-        <div className="p-3 bg-white">
+        <div className="p-0" >
           {!editable && (
             <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           )}

@@ -49,9 +49,14 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: { addPost } }) =>
       updateCacheForNewPost({ cache, post: addPost.post, feedType }),
-    onCompleted: (data) =>
-      handlePostCompletion(data, files, present, dismiss, client),
-    onError: (error) => handleMutationError(error, present, dismiss),
+    onCompleted: (data) => {
+      handlePostCompletion(data, files, present, dismiss, client);
+      stopLoading();
+    },
+    onError: (error) => {
+      handleMutationError(error, present, dismiss);
+      stopLoading();
+    },
   });
 
   const [addEvent] = useMutation(AddSpaceEvent, {
@@ -119,7 +124,6 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
     // histroy.push({
     //   search: params.toString()
     // })
-    stopLoading();
   };
 
   const generateSelectTag = (item) => {

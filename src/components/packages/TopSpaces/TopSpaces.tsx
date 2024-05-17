@@ -12,7 +12,7 @@ const TopSpaces = () => {
     GetTopActiveSpaces,
     {
       context: { server: USER_SERVICE_GQL },
-      variables: { limit: 2 },
+      variables: { limit: 10 },
     }
   );
 

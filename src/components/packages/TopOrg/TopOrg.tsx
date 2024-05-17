@@ -10,7 +10,7 @@ import { AnimatePresence } from "framer-motion";
 const TopOrg = () => {
   const { data, loading, error } = useQuery<GetTopOrgSpaceQuery>(GetTopOrgs, {
     context: { server: USER_SERVICE_GQL },
-    variables: { limit: 2 },
+    variables: { limit: 10 },
   });
 
   return (

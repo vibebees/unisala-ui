@@ -61,7 +61,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
-        <div className="p-6 bg-white border">
+        <div className="p-4 bg-white border">
           <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}
@@ -79,9 +79,11 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         )}
 
+        <div>
         {images.length > 0 && <ImageCollage images={images} />}
+       </div>
 
-        <div className="p-6 bg-white">
+        <div className="p-0" >
           {!editable && (
             <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           )}
@@ -156,7 +158,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             />
           </div>
         </div>
-        {/* <div className='p-6 pt-3'>
+        {/* <div className='p-3 pt-3'>
           <button
             className='block w-full select-none rounded-lg bg-gray-900 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
             type='button'

@@ -10,12 +10,12 @@ import { UNIVERSITY_SERVICE_GQL } from "../../../datasource/servers/types"
 export const UniversityPage = () => {
   const { id } = useParams()
 
-  const { loading, data } = useQuery(getUpdatedSchoolInfo({ name: id }), {
+  const { loading, data, error } = useQuery(getUpdatedSchoolInfo({ name: id }), {
       variables: { name: id },
       context: { server: UNIVERSITY_SERVICE_GQL }
     }),
     { uniData, isSideBar } = useSelector((store) => store?.university),
-    allProps = getAllProps({ id, loading, data, uniData, isSideBar })
+    allProps = getAllProps({ id, loading, data, uniData, isSideBar, error })
 
   return <UniversityTemplate allProps={allProps} />
 }

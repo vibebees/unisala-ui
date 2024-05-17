@@ -47,9 +47,6 @@ export const SearchBar = () => {
         style={{
           border: "none",
         }}
-        onClick={(e) => {
-          console.log("log", e);
-        }}
         type="text"
         placeholder="Search universities, people..."
         onKeyUp={(e) => {

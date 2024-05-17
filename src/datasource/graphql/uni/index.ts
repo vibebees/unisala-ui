@@ -613,5 +613,15 @@ export const GetProfessor = gql`
         }
       }
     }
-  `
-
+  `,
+  searchDepartmentRatingForSchool = gql`
+  query searchDepartmentRatingForSchool($subject: String  $unitId: Int) {
+    searchDepartmentRatingForSchool(subject: $subject, unitId: $unitId) {
+      unitId
+      ratings_list
+      subject
+      overall_rating
+      overall_rating
+    }
+  }
+`

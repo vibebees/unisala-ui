@@ -1,18 +1,24 @@
-import { IonInput } from "@ionic/react"
-import {Button} from "../../../../../components/defaults"
+import React from "react"
+import {Button, Searchbar} from "@components/defaults"
 
 export const Search = ({ inputRef, setSearch, resetSearch }) => {
   return (
-    <div className="flex  justify-normal space-x-4">
-      <IonInput
+    <div className="flex  justify-normal space-x-4 border-2px">
+      <Searchbar
         ref={inputRef}
         placeholder="Search a department..."
         className="max-w-[280px]"
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            setSearch(e.target.value);
+          }
+        }}
+        clearInput={resetSearch}
+        onIonInput={(e) => {
+          setSearch(e.target.value);
+        }}
       />
 
-      <Button size="medium" onClick={setSearch}>
-        Search
-      </Button>
 
       {inputRef.current?.value && (
         <Button onClick={resetSearch} size="medium" fill="outline">

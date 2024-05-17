@@ -34,21 +34,15 @@ const TopSpaces = () => {
       )}
       <AnimatePresence>
         {data &&
-          !loading &&
           data?.getTopActiveSpaces &&
           data.getTopActiveSpaces.spaceCategory &&
           data?.getTopActiveSpaces?.spaceCategory?.length > 0 &&
-          data?.getTopActiveSpaces?.spaceCategory.map((space) => {
-            return (
-              <SpaceReference
-                key={space?._id}
-                spaceCard={true}
-                references={
-                  data.getTopActiveSpaces?.spaceCategory as ITopSpace[]
-                }
-              />
-            );
-          })}
+          <SpaceReference
+            spaceCard={true}
+            references={
+              data.getTopActiveSpaces?.spaceCategory as ITopSpace[]
+            }
+          />}
       </AnimatePresence>
     </div>
   );

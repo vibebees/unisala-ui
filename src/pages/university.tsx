@@ -21,7 +21,6 @@ import {
   IonRow
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import LeftSideBar from '@features/home/leftSideBar';
 import { FamousUniversities } from '@components/packages/famousUniversites';
 
 const leftBar = () => {

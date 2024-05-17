@@ -1,15 +1,13 @@
 import React, { lazy, Suspense } from "react";
-import { Avatar, Card, Col, Typography } from "../../components/defaults";
+import { Avatar, Card, Col, Typography } from "@components/defaults";
 import { Link } from "react-router-dom";
 import { useAuth } from "@context/AuthContext";
 import { IonSpinner } from "@ionic/react";
-const TopSpaces = lazy(
-  () => import("@components/packages/TopSpaces/TopSpaces")
-);
+const TopSpaces = lazy(  () => import("@components/packages/TopSpaces/TopSpaces"));
 import UnisalaIntro from "@assets/unisala-intro.png"
 const TopOrgs = lazy(() => import("@components/packages/TopOrg/TopOrg"));
 
-const LeftSideBar = () => {
+export const LeftSideBar = () => {
   const { authenticated, user } = useAuth();
 
   return (
@@ -53,12 +51,26 @@ const LeftSideBar = () => {
                 </Typography>
               </div>
             </Card>
+            <Card className="overflow-y-auto ion-no-margin ion-no-padding my-3 max-h-[348px] BorderCard">
+              <Typography
+                variant="h6"
+                color="dark"
+                className="text-center w-full my-2 font-semibold sticky top-0 bg-white z-10"
+              >
+                 Organizations
+              </Typography>
+              <Suspense fallback={<IonSpinner></IonSpinner>}>
+                <TopOrgs />
+              </Suspense>
+            </Card>
+
+
             <Card className="overflow-y-auto justify-center my-3 max-h-[348px] ion-no-padding ion-no-margin BorderCard">
               <Typography
                 variant="h6"
                 color="dark"
-                className="text-center  w-full my-2 font-semibold"
-              >
+                className="text-center w-full my-2 font-semibold sticky top-0 bg-white z-10"
+                >
                 Spaces
               </Typography>
 
@@ -74,18 +86,7 @@ const LeftSideBar = () => {
               </Link>
             </Card>
 
-            <Card className="overflow-y-auto ion-no-margin ion-no-padding my-3 max-h-[348px] BorderCard">
-              <Typography
-                variant="h6"
-                color="dark"
-                className="text-center my-2 font-semibold"
-              >
-                 Organizations
-              </Typography>
-              <Suspense fallback={<IonSpinner></IonSpinner>}>
-                <TopOrgs />
-              </Suspense>
-            </Card>
+
           </Col>
         </>
       ) : (
@@ -114,4 +115,3 @@ const LeftSideBar = () => {
   );
 };
 
-export default LeftSideBar;

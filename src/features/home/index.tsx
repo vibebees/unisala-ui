@@ -1,8 +1,8 @@
 import React from "react";
 import { Home } from "./template";
-import LeftSideBar from "./leftSideBar";
 import { FamousUniversities } from "../../components/packages/famousUniversites";
 import FixedLayout from "@layouts/FixedLayout";
+import { LeftSideBar } from "@components/packages/spacesAndOrgs";
 export default function HomePage() {
   // const socket = useRef<ReturnType<typeof callSocket> | null>(null);
 
@@ -20,7 +20,7 @@ export default function HomePage() {
   // }, []);
   return (
       <FixedLayout
-        leftSidebar={<LeftSideBar />}
+        leftSidebar={<LeftSideBar/>}
         rightSidebar={<FamousUniversities />}
       >
         <Home />

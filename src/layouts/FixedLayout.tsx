@@ -12,8 +12,8 @@ import {
 
 import "./index.css";
 import { cn } from "@utils/index";
-import LeftSideBar from "@features/home/leftSideBar";
 import { FamousUniversities } from "@components/packages/famousUniversites";
+import { LeftSideBar } from "@components/packages/spacesAndOrgs";
 
 interface LayoutProps {
   leftSidebar?: React.ReactNode;

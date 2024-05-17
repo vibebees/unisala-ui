@@ -1,8 +1,8 @@
 import React from "react"
 import Org from "../features/org/index"
 import FixedLayout from "@layouts/FixedLayout"
-import LeftSideBar from "@features/home/leftSideBar"
 import { FamousUniversities } from "@components/packages/famousUniversites"
+import { LeftSideBar } from "@components/packages/spacesAndOrgs"
 export default function OrgPage() {
   return (
     <FixedLayout

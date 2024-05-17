@@ -82,19 +82,39 @@ export const GraduatesIcon = ({
     </g>
   </svg>
 );
+export const CheckMark = ({ width = 25, height = 25, fill = "#747372" }) => (
+  <svg
+  xmlns='http://www.w3.org/2000/svg'
+  fill='none'
+  viewBox='0 0 24 24'
+  strokeWidth='2.5'
+  stroke='currentColor'
+  aria-hidden='true'
+  className='w-4 h-4 text-white'
+>
+    <path
+
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    d='M4.5 12.75l6 6 9-13.5'
+  />
+</svg>
+);
+
 export const HomeIcon = ({ width = 25, height = 25, fill = "#747372" }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={width}
+    xmlns='http://www.w3.org/2000/svg'
+    viewBox='0 0 24 24'
+    fill='currentColor'
+    aria-hidden='true'
     height={height}
-    viewBox="0 0 24 24"
+    width={width}
   >
     <path
-      fill={fill}
-      fillRule="evenodd"
-      d="M2.52 7.823C2 8.77 2 9.915 2 12.203v1.522c0 3.9 0 5.851 1.172 7.063C4.343 22 6.229 22 10 22h4c3.771 0 5.657 0 6.828-1.212C22 19.576 22 17.626 22 13.725v-1.521c0-2.289 0-3.433-.52-4.381-.518-.949-1.467-1.537-3.364-2.715l-2-1.241C14.111 2.622 13.108 2 12 2c-1.108 0-2.11.622-4.116 1.867l-2 1.241C3.987 6.286 3.038 6.874 2.519 7.823ZM9 17.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5H9Z"
-      clipRule="evenodd"
-    />
+       fill={fill}
+       fillRule="evenodd"
+      d='M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z' />
+    <path d='M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z' />
   </svg>
 );
 

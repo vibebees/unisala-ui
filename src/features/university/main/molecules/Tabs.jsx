@@ -1,35 +1,40 @@
-import React from "react"
-import { useHistory } from "react-router"
-import {Button} from "../../../../components/defaults"
+import React from "react";
+import { useHistory } from "react-router";
+import TabButton from "./TabButton"; // Adjust the path as needed
+import { PeopleIcon, HomeIcon } from "@components/packages/icons";
 
 const Tabs = () => {
-  const params = new URLSearchParams(window.location.search)
-  const history = useHistory()
-  const q = params.get("tab")
-  const setParams = (q) => {
-    params.set("tab", q)
-    history.push({
-      search: params.toString()
-    })
-  }
-  return (
-    <div className="flex w-1/2 mx-auto">
-      <Button
-        className="flex-1 border-r-0"
-        fill={q === "g" ? "solid" : "outline"}
-        onClick={() => setParams("g")}
-      >
-        General
-      </Button>
-      <Button
-        className="flex-1 "
-        onClick={() => setParams("r")}
-        fill={q === "r" ? "solid" : "outline"}
-      >
-        Reviews
-      </Button>
-    </div>
-  )
-}
+  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const q = params.get("tab");
 
-export default Tabs
+  const setParams = (q) => {
+    params.set("tab", q);
+    history.push({
+      search: params.toString(),
+    });
+  };
+
+  return (
+    <div className="flex flex-col items-center mx-auto w-full my-2 ">
+      <div className="flex w-full">
+        <TabButton
+          label="GENERAL"
+          active={q === "g"}
+          onClick={() => setParams("g")}
+          showBadge={q === "g"}
+          Icon={HomeIcon}
+        />
+        <TabButton
+          label="Reviews"
+          active={q === "r"}
+          onClick={() => setParams("r")}
+          showBadge={q === "r"}
+          Icon={PeopleIcon}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Tabs;

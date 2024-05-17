@@ -5,9 +5,9 @@ import { getUniData } from "../../../../datasource/store/action"
  import { isSideBar } from "../../../../datasource/store/action/University"
 
 import useDocTitle from "../../../../hooks/useDocTitile"
-import { NoDataDefaultCard } from "../organisms/noDataCard"
 import { UniversityBuild } from "../organisms/university"
 import { PreLoader } from "../../../../components/packages/preloader"
+import { NoContentCard } from "@components/packages/NoContentCard"
 
 export const UniversityTemplate = ({ allProps }) => {
   const {
@@ -30,7 +30,7 @@ export const UniversityTemplate = ({ allProps }) => {
       similarCollagesEmpty,
       applicantsEmpty,
       uniData,
-      history,
+      error,
       queryParams,
       interviewExperienceEmpty,
       scholarshipsEmpty,
@@ -92,18 +92,17 @@ export const UniversityTemplate = ({ allProps }) => {
     handleScrolling()
   }, [scrollTop, activeTab, clientHeight])
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  })
+  console.log({data, loading, uniData, error})
 
-  return loading ? (
-    <PreLoader/>
-  ) : UniEmpty ? (
-    <NoDataDefaultCard />
-  ) : uniData ? (
-    <UniversityBuild allProps={allProps} />
-  ) : null
+  if (loading) {
+    return <PreLoader />
+  }
+
+  if (!data && !loading) {
+    return <NoContentCard  defaultValue="Something is Wrong!"/>
+  }
+  if (!UniEmpty && uniData) {
+    return <UniversityBuild allProps={allProps} />
+  }
+
 }

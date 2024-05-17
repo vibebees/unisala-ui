@@ -17,15 +17,7 @@ import SuggestedSpace from './SuggestedSpace';
 import { University } from './University';
 import Event from '../events';
 import { Spinner } from '@components/defaults';
-
-const NoContentCard = () => (
-  <div className='flex flex-col items-center justify-center p-8 md:p-12 m-4 bg-white rounded-lg BorderCard h-52 md:h-64 border border-gray-200'>
-    <span className='text-5xl md:text-6xl'>📭</span>
-    <p className='text-gray-800 text-md md:text-lg mt-4'>
-      No content on this page
-    </p>
-  </div>
-);
+import { NoContentCard } from '../NoContentCard';
 
 function Example({ feedType, feedId }) {
   const [items, setItems] = useState<string[]>([]);

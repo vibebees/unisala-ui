@@ -2,7 +2,7 @@ import { useHistory, useLocation } from "react-router";
 import useIsEmpty from "@hooks/useIsEmpty";
 import { createRef, useState } from "react";
 
-export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
+export const getAllProps = ({ id, loading, data, uniData, isSideBar, error }) => {
   const UniEmpty = useIsEmpty(uniData || {}, "School"),
     reportEmpty = useIsEmpty(uniData?.userEvaluation?.report || {}, "Report"),
     similarCollagesEmpty = useIsEmpty(uniData?.similarSchools || {}),
@@ -154,6 +154,7 @@ export const getAllProps = ({ id, loading, data, uniData, isSideBar }) => {
     };
 
   return {
+    error,
     id,
     loading,
     data,

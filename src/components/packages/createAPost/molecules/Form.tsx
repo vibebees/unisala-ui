@@ -1,11 +1,12 @@
 import { useMutation, useApolloClient } from "@apollo/client";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { Dispatch, FC, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import { AddPost, AddSpaceEvent } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { Typography } from "../../../defaults";
 import { Button, Label, useIonToast } from "../../../defaults/index";
+import GenerateRatingComponent from "../atoms/Rating";
 import {
   InputComponent,
   CheckboxComponent,
@@ -24,11 +25,17 @@ import {
   handleEventMutationError,
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
-import { useLocation, useParams } from "react-router";
+import { useLocation } from "react-router";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { usePostUploading } from "../createAPostContext";
 
-const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
+interface IFormProps {
+  metaData?: any;
+  postData: TPostDataType;
+  setPostData: Dispatch<any>;
+}
+
+const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const { startLoading, stopLoading } = usePostUploading();
 
   const { tags } = postData;
@@ -36,91 +43,12 @@ const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
   const client = useApolloClient();
-  let RatingData = [
-    {
-      value: 1,
-      imageURL:
-        "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Enraged%20Face.png",
-      Emojis: "😡",
-    },
-    {
-      value: 2,
-      imageURL:
-        "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Downcast%20Face%20with%20Sweat.png",
-      Emojis: "😞",
-    },
-    {
-      value: 3,
-      imageURL:
-        "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Neutral%20Face.png",
-      Emojis: "😐",
-    },
-    {
-      value: 4,
-      imageURL:
-        "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Beaming%20Face%20with%20Smiling%20Eyes.png",
-      Emojis: "😊",
-    },
-    {
-      value: 5,
-      imageURL:
-        "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Heart-Eyes.png",
-      Emojis: "😍",
-    },
-  ];
-  const [ratings, setRatings] = useState({});
 
-  const handleRatingChange = (itemId, value, name) => {
-    setRatings((prevRatings) => ({
-      ...prevRatings,
-      [itemId]: value,
-    }));
-    // Update the postData with the new rating
-    // const postText = htmlForEditor(
-    //   postData?.postText,
-    //   name,
-    //   RatingData.find((val) => val.value === value)?.Emojis
-    // )
-    setPostData((prev) => ({
-      ...prev,
-      // postText,
-      [itemId]: value,
-    }));
-  };
-
-  const generateRatingComponent = (item) => {
-    return (
-      <>
-        <Label>{item.name}</Label>
-        <div className="flex justify-start gap-x-2">
-          {RatingData.map((val, index) => (
-            <div
-              key={index}
-              className="mt-2 cursor-pointer"
-              onClick={() => handleRatingChange(item?.id, val.value, item.name)}
-            >
-              <span
-                className={clsx("text-4xl transition ease-linear", {
-                  grayscale: ratings[item?.id] !== val.value,
-                })}
-              >
-                {ratings[item?.id] !== val.value ? (
-                  val.Emojis
-                ) : (
-                  <img src={val.imageURL} alt="" width={48} />
-                )}
-              </span>
-            </div>
-          ))}
-        </div>
-      </>
-    );
-  };
-
-  const feedType = currentFeedType(useLocation())
-   const [addPost] = useMutation(AddPost, {
+  const feedType = currentFeedType(useLocation());
+  const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),
+    update: (cache, { data: { addPost } }) =>
+      updateCacheForNewPost({ cache, post: addPost.post, feedType }),
     onCompleted: (data) =>
       handlePostCompletion(data, files, present, dismiss, client),
     onError: (error) => handleMutationError(error, present, dismiss),
@@ -128,13 +56,14 @@ const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
 
   const [addEvent] = useMutation(AddSpaceEvent, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addOrgSpaceEvent } }) => updateEventCache({ cache, event: addOrgSpaceEvent.data }),
+    update: (cache, { data: { addOrgSpaceEvent } }) =>
+      updateEventCache({ cache, event: addOrgSpaceEvent.data }),
     onCompleted: (data) => handleEventCompletion(data, files, present, dismiss),
     onError: (error) => handleEventMutationError(error, present, dismiss),
   });
 
   const handleSubmit = (e) => {
-    startLoading()
+    startLoading();
     e.preventDefault();
 
     if (files && files?.length > 4) {
@@ -227,7 +156,7 @@ const Form = ({ metaData = {}, postData, setPostData = () => { } }) => {
         return CheckboxComponent(item, postData, setPostData);
       case "select":
         return item?.rating
-          ? generateRatingComponent(item)
+          ? GenerateRatingComponent(item)
           : generateSelectTag(item);
       case "textarea":
         return Textarea(item, postData, setPostData);

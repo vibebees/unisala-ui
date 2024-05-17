@@ -76,6 +76,7 @@ enum EPostType {
   questionAboutUniversity = "questionAboutUniversity",
   reviewUniversity = "reviewUniversity",
   others = "others",
+  event = "event",
 }
 
 interface IsuggestMeUniversity {
@@ -117,9 +118,20 @@ interface Iothers {
   postText?: string;
 }
 
+interface Ievents {
+  id: EPostType.event;
+  spaceId: string;
+  description: string;
+  title: string;
+  address: string;
+  eventDate: string;
+  images: string[];
+}
+
 type TPostDataType =
   | IsuggestMeUniversity
   | IquestionAboutUniversity
   | IreviewUniversity
+  | Ievents
   | Iothers
   | null;

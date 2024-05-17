@@ -4,10 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "../index.css";
 import Form from "../molecules/Form";
 import FormAvatar from "../molecules/FormAvatar";
-import FormTab from "./FormTab";
-import NotLogggedModal from "./NotLogggedModal";
 import SelectionTab from "./SelectionTab";
-import CreatePortal from "@utils/CreatePortal";
 import { createPortal } from "react-dom";
 import { Buttons } from "@components/defaults";
 import { LeftArrow } from "@components/packages/icons";
@@ -21,22 +18,6 @@ export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
     setDomLoaded(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (!postData && selectedTab) {
-  //     setPostData({
-  //       id: selectedTab as any,
-  //     });
-  //   }
-
-  //   if (postData && selectedTab) {
-  //     setPostData((prevPostData) => ({
-  //       ...prevPostData,
-  //       id: selectedTab as any,
-  //     }));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedTab]);
-
   const handleTabSelection = (item: EPostType) => {
     setSelectedTab(item);
     setPostData((prevPostData) => ({ ...prevPostData, id: item as any }));
@@ -48,7 +29,7 @@ export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
         {!selectedTab && (
           <SelectionTab
             metaData={metaData}
-            onClick={(item) => handleTabSelection(item)}
+            onClick={(item: EPostType) => handleTabSelection(item)}
           />
         )}
 

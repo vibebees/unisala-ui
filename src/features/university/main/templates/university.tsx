@@ -92,14 +92,13 @@ export const UniversityTemplate = ({ allProps }) => {
     handleScrolling()
   }, [scrollTop, activeTab, clientHeight])
 
-  console.log({data, loading, uniData, error})
 
   if (loading) {
     return <PreLoader />
   }
 
   if (!data && !loading) {
-    return <NoContentCard  defaultValue="Something is Wrong!"/>
+    return <NoContentCard  defaultValue="Something went Wrong!"/>
   }
   if (!UniEmpty && uniData) {
     return <UniversityBuild allProps={allProps} />

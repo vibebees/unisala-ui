@@ -39,45 +39,6 @@ export const ReportTemplate = ({ allProps }) => {
     >
       <CardHeader header={"Report"} />
       <ReportAverage allProps={allProps} />
-      <IonGrid
-        style={{
-          margin: 0,
-          padding: "0px 0px 30px 0px",
-          height: more || width >= 768 ? "auto" : 225,
-          overflow: "hidden",
-          position: "relative"
-        }}
-      >
-        {/* {width < 768 && (
-                    <div
-                        onClick={() => {
-                            setMore(!more)
-                        }}
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            background: "white",
-                            zIndex: 1,
-                            textAlign: "center",
-                            padding: "10px",
-                            cursor: "pointer",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 10,
-                            borderTop: "1px solid #C4C4C4"
-                        }}
-                        className="short"
-                    >
-                        {more ? "Show Less" : "Show More"}
-                        <IonIcon icon={more ? arrowUp : arrowDown} />
-                    </div>
-                )} */}
-
-        <ReportBody allProps={allProps} />
-      </IonGrid>
     </IonCard>
   )
 }

@@ -1,3 +1,4 @@
+import React from "react"
 import { IonCard } from "@ionic/react"
  import {CoverImg} from "../atoms/cover.image"
 import {BioDetails} from "../atoms/bio.details"

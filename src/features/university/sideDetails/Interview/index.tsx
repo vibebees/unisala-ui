@@ -23,7 +23,7 @@ export default function index({ unitId }) {
       variables: {
         unitId: unitId,
         page: page + 1,
-        pageSize: 1
+        pageSize: 3
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
@@ -31,8 +31,8 @@ export default function index({ unitId }) {
           getInterviewExperience: {
             ...prev.getInterviewExperience,
             interviewExperience: [
-              ...prev.getInterviewExperience.interviewExperience,
-              ...fetchMoreResult.getInterviewExperience.interviewExperience
+              ...prev?.getInterviewExperience?.interviewExperience??[],
+              ...fetchMoreResult?.getInterviewExperience?.interviewExperience??[]
             ]
           }
         })
@@ -67,7 +67,7 @@ export default function index({ unitId }) {
 
         <div className="flex justify-center pb-4">
           <Button size="small" onClick={fetchMoreHandler}>
-            {loading ? "Loading" : "See More"}
+            {loading ? "Loading" : "Load More Interview"}
           </Button>
         </div>
       </div>

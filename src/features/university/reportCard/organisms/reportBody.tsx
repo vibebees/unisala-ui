@@ -1,9 +1,14 @@
+import React from "react"
 import { IonCol, IonRow, IonText } from "@ionic/react"
 import { Typography } from "../../../../components/defaults"
+
+
 
 export const ReportBody = ({ allProps }) => {
   const { records, useGradeColor, useGrade, width } = allProps
   return (
+    <>
+
     <IonRow>
       {records.map((item, index) => {
         return (
@@ -16,6 +21,7 @@ export const ReportBody = ({ allProps }) => {
             }}
             className="ion-padding"
             key={index}
+            size="6"
           >
             <IonRow
               style={{
@@ -54,5 +60,7 @@ export const ReportBody = ({ allProps }) => {
         )
       })}
     </IonRow>
+    </>
+
   )
 }

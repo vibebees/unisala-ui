@@ -40,17 +40,19 @@ export const UniversityBuild = ({ allProps }) => {
             <UniversityHeader allProps={allProps} />
           </div>
 
+        <Tabs />
+
           <CreateAPostCard
             allProps={{
               ...allProps,
               unitId: data?.getUpdatedSchoolInfo?.elevatorInfo?.unitId
             }}
           />
-          <Tabs />
+
           {q === "g" ? (
             <SideNavigator allProps={allProps} />
           ) : (
-            <div className="w-11/12 mx-auto  lg:w-1/2 ">
+            <div >
               <Review
                 uniId={data?.getUpdatedSchoolInfo?.elevatorInfo?.unitId}
               />

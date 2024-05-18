@@ -1,4 +1,5 @@
-import React from "react";
+// TopOrgs.tsx
+import React, { useEffect, useState } from "react";
 import SpaceReference from "../spaceReference";
 import { useQuery } from "@apollo/client";
 import { GetTopOrgs } from "@datasource/graphql/user";
@@ -12,6 +13,13 @@ const TopOrg = () => {
     context: { server: USER_SERVICE_GQL },
     variables: { limit: 10 },
   });
+
+  const [ orgs, setOrgs ] = useState<ITopSpace[]>([])
+  useEffect(() => {
+    if(data?.getTopOrgSpace?.data) {
+      setOrgs(data?.getTopOrgSpace?.data)
+    }
+  }, [data])
 
   return (
     <div>
@@ -31,13 +39,10 @@ const TopOrg = () => {
       )}
       <AnimatePresence>
         {data &&
-          !loading &&
-          data?.getTopOrgSpace &&
-          data.getTopOrgSpace.data &&
-          data?.getTopOrgSpace?.data?.length > 0 && (
+          !loading && (
             <SpaceReference
               spaceCard={false}
-              references={data.getTopOrgSpace?.data.slice(0, 3) as ITopSpace[]}
+              references={orgs}
             />
           )}
       </AnimatePresence>

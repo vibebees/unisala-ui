@@ -11,6 +11,7 @@ import {
   ThreadOptions,
   ThreadRating,
 } from "../organism";
+import AuthValidator from "../../authentication/AuthValidator";
 
 interface SingleThreadProps {
   _id: string;
@@ -137,22 +138,24 @@ const SingleThread: FC<SingleThreadProps> = ({
             studentLifeAndServiceRating={studentLifeAndServiceRating}
           />
         </div>
-        <ThreadFooter
-          _id={_id}
-          postCommentsCount={postCommentsCount!}
-          saved={saved}
-          upVoteCount={upVoteCount!}
-          upVoted={upVoted!}
-          isReply={false}
-          singlePost={true}
-          parentId={""}
-          replyTo={user?.username!}
-        />
-        <ThreadOptions
-          _id={_id}
-          setEditable={setEditable}
-          username={user?.username!}
-        />
+        <AuthValidator>
+          <ThreadFooter
+            _id={_id}
+            postCommentsCount={postCommentsCount!}
+            saved={saved}
+            upVoteCount={upVoteCount!}
+            upVoted={upVoted!}
+            isReply={false}
+            singlePost={true}
+            parentId={""}
+            replyTo={user?.username!}
+          />
+          <ThreadOptions
+            _id={_id}
+            setEditable={setEditable}
+            username={user?.username!}
+          />
+        </AuthValidator>
 
         {/* other people's replies */}
         <ShowPeopleComments postId={_id!} singlePost={true} />

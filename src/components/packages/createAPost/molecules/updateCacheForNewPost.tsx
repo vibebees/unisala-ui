@@ -6,6 +6,7 @@ import {
 } from "@datasource/graphql/user";
 import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
+import { clearCache } from "@utils/cache";
 
 export const updateCacheForNewPost = ({ cache, post, feedType }) => {
   const tags = post?.tags ?? [];
@@ -90,6 +91,14 @@ const handleUploadSuccess = (client, postId, imageLinks) => {
   });
 };
 export const handlePostCompletion = (data, files, present, dismiss, client) => {
+  localStorage.removeItem("postData");
+  localStorage.removeItem("st");
+  localStorage.removeItem("financialAidAndScholarshipRating");
+  localStorage.removeItem("careerAndAlumniResourceRating");
+  localStorage.removeItem("academicProgramsAndDepartmentRating");
+  localStorage.removeItem("studentLifeAndServiceRating");
+  localStorage.removeItem("admissionAndApplicationRating");
+
   if (files && files.length > 0) {
     uploadPostImages(files, data.addPost.post._id)
       .then((res) => {
@@ -176,11 +185,15 @@ export const handleEventMutationError = (error, present, dismiss) => {
   });
 };
 
-
-export const updatePostTotalCommentCache = ({ cache, postId, feedType, feedId }) => {
+export const updatePostTotalCommentCache = ({
+  cache,
+  postId,
+  feedType,
+  feedId,
+}) => {
   let feedQuery = { feedType, page: 0 };
-  if ([ 'specificSpace', 'specificOrg' ].includes(feedType)) {
-    feedQuery['feedId'] = feedId;
+  if (["specificSpace", "specificOrg"].includes(feedType)) {
+    feedQuery["feedId"] = feedId;
   }
   const query = {
     query: getNewsFeed,
@@ -198,9 +211,9 @@ export const updatePostTotalCommentCache = ({ cache, postId, feedType, feedId })
       };
     }
     return post;
-  })
+  });
   // Add the new post to the beginning of the array
-   // Write the updated posts back to the cache
+  // Write the updated posts back to the cache
 
   cache.writeQuery({
     ...query,
@@ -211,4 +224,4 @@ export const updatePostTotalCommentCache = ({ cache, postId, feedType, feedId })
       },
     },
   });
-}
+};

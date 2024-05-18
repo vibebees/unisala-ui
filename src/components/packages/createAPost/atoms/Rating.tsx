@@ -1,21 +1,37 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import clsx from "clsx";
 import { Label } from "@components/defaults";
 import { RatingData } from "./RatingData";
+import { getCache, setCache } from "@utils/cache";
 
-const GenerateRatingComponent = (item) => {
-  const [ratings, setRatings] = useState({});
-  const handleRatingChange = (itemId: keyof TPostDataType, value: string) => {
-    setRatings((prevRatings) => ({
-      ...prevRatings,
-      [itemId]: value,
-    }));
+interface IRatingProps {
+  item: {
+    id: string;
+    name: string;
+  };
+  setPostData: any;
+}
 
+const GenerateRatingComponent: FC<IRatingProps> = ({ item, setPostData }) => {
+  const [ratings, setRatings] = useState<{
+    [key: string]: number;
+  }>(getCache(item.id) || {});
+  const handleRatingChange = (itemId: keyof TPostDataType, value: number) => {
+    setRatings((prevRatings) => {
+      let newData = {
+        ...prevRatings,
+        [itemId]: value,
+      };
+      setCache(itemId, JSON.stringify(newData));
+      return newData;
+    });
     setPostData((prev: any) => {
-      return {
+      let newData = {
         ...prev,
         [itemId]: value,
       };
+      setCache("postData", JSON.stringify(newData));
+      return newData;
     });
   };
 
@@ -27,7 +43,7 @@ const GenerateRatingComponent = (item) => {
           <div
             key={index}
             className="mt-2 cursor-pointer"
-            onClick={() => handleRatingChange(item?.id, val.value, item.name)}
+            onClick={() => handleRatingChange(item?.id as never, val.value)}
           >
             <span
               className={clsx("text-4xl transition ease-linear", {

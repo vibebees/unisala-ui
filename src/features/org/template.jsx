@@ -14,23 +14,15 @@ import { Members } from "./org/members"
 import {SpaceNotFound} from "../../navigation/PageNotFound"
 import {PreLoader} from "@components/packages/preloader"
 const InfiniteFeed = lazy(() => import("@components/packages/feed/Feed"))
-export const Orgs = ({ allProps }) => {
+export const Orgs = ({ data, loading, allProps }) => {
   const {
-    handleResize,
-    orgId,
-    tags,
-    loading,
-    orgData,
     configSegment,
     tab,
     setTab
-  } = allProps
-  useEffect(() => {
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
+  } = allProps,
+    orgData = data?.getOrgSpaceById?.data,
+    orgId = orgData?._id,
+    tags = [orgId]
 
   useEffect(() => {
     const queryString = window.location.search
@@ -40,10 +32,7 @@ export const Orgs = ({ allProps }) => {
     setTab(flagValue)
   }, [window.location.search])
 
-  // condition because we do not want to send null datas to backend
-  if (orgId && !tags.includes(orgId)) {
-    tags.push(orgId)
-  }
+
 
   if (loading) {
     return <PreLoader />
@@ -65,7 +54,7 @@ export const Orgs = ({ allProps }) => {
         isJoined={true}
         message="Please Join the orgranization to post"
       >
-        <CreateAPostCard allProps={allProps} />
+        <CreateAPostCard allProps={{tags}} />
       </NotJoinedWrapper>
       <InfiniteFeed feedType="specificOrg" feedId={orgId} />
     </div>

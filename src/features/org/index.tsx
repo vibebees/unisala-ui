@@ -30,7 +30,6 @@ export default function OrgPage() {
       context: { server: USER_SERVICE_GQL },
       variables: { name: params?.category }
     })
-
   const profileData = loggedIn ? profileDataQuery.data : null
 
   const allProps = getAllProps({
@@ -41,10 +40,9 @@ export default function OrgPage() {
     loading,
     data
   })
-
   return (
     <OrgContext.Provider value={allProps}>
-      <Orgs allProps={allProps} />
+      <Orgs data = {data} loading={loading} allProps ={allProps} />
     </OrgContext.Provider>
   )
 }

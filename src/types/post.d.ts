@@ -134,4 +134,6 @@ type TPostDataType =
   | IreviewUniversity
   | Ievents
   | Iothers
-  | null;
+  | null
+  | tags
+  | unitId;

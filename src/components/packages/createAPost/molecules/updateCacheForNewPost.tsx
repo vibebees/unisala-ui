@@ -9,19 +9,34 @@ import { useAuth } from "@context/AuthContext";
 import { clearCache } from "@utils/cache";
 
 export const updateCacheForNewPost = ({ cache, post, feedType }) => {
-  const tags = post?.tags ?? [];
-  if (tags?.length === 0) {
+  const tags = post?.tags?.length > 0 ? post?.tags : []
+  // if publishing from university profile
+  if (feedType === "uniWall") {
+    tags.push(post?.unitId)
+  }
+  //if only published from newsfeed i.e not published from any space or org
+  if (tags?.length === 0 ) {
     prependPostToNewsFeed(cache, post, feedType);
   } else {
-    prependPostToCategory(cache, post, tags[0], feedType); // Assuming tags[0] is the space ID
+    // here space and org has their space detail in the tags after posting to api
+    // api will attach tag info
+    // if it's uni wall, we need to add feedId of unitId instead of space id from tag
+    let _id
+    if (feedType === 'uniWall') {
+      _id = post.unitId
+    } else {
+      _id = tags[ 0 ]?._id;
+    }
+
+    prependPostToCategory(cache, post, _id, feedType); // Assuming tags[0] is the space ID
   }
 };
 
-const prependPostToCategory = (cache, post, tags, feedType) => {
+const prependPostToCategory = (cache, post, _id, feedType) => {
   const query = {
     query: getNewsFeed,
     variables: {
-      feedQuery: { feedType, page: 0, feedId: tags?._id },
+      feedQuery: { feedType, page: 0, feedId: _id },
     },
   };
   const existingData = cache.readQuery(query);

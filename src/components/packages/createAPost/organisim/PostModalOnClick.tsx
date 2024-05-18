@@ -10,7 +10,15 @@ import { Buttons } from "@components/defaults";
 import { LeftArrow } from "@components/packages/icons";
 import { getCache } from "@utils/cache";
 
-export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
+export const PostModalOnClick = ({
+  metaData,
+  tags,
+  unitId,
+}: {
+  metaData: any;
+  tags: any;
+  unitId: any;
+}) => {
   const [selectedTab, setSelectedTab] = useState<EPostType | null>(
     (localStorage.getItem("st") as EPostType) || null
   );
@@ -20,12 +28,13 @@ export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
       id: "",
       title: "",
       description: "",
-      tags: [],
       images: [],
       rating: 0,
       date: new Date(),
       location: "",
       isPublic: true,
+      unitId: unitId,
+      tags: tags || [],
     }
   );
 
@@ -35,8 +44,12 @@ export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
 
   const handleTabSelection = (item: EPostType) => {
     setSelectedTab(item);
-    setPostData((prevPostData) => ({ ...prevPostData, id: item as any }));
     localStorage.setItem("st", item);
+    setPostData((prevPostData) => ({
+      ...prevPostData,
+      unitId: unitId,
+      id: item as any,
+    }));
   };
 
   return (

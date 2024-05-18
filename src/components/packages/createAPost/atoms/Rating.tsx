@@ -22,7 +22,7 @@ const GenerateRatingComponent: FC<IRatingProps> = ({ item, setPostData }) => {
         ...prevRatings,
         [itemId]: value,
       };
-      setCache(itemId, JSON.stringify(newData));
+      setCache(itemId as string, JSON.stringify(newData));
       return newData;
     });
     setPostData((prev: any) => {

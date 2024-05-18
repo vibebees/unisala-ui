@@ -29,8 +29,6 @@ function CourseCard({ allProps }) {
     window.location.origin +
     `/university/${name.trim().split(" ")?.join("%20")}`;
 
-  console.log("allProps", allProps);
-
   return (
     <Card className="max-md:mx-0 relative ion-no-margin ion-no-padding shadow-sm border border-neutral-300">
       <CustomTrackingLink

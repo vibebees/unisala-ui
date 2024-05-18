@@ -67,12 +67,6 @@ const rightSidebarDefault = (
   </div>
 );
 const style = { backgroundColor: "#F0F2F5" };
-let mainContentStyle = {
-    display: "flex",
-    justifyContent: "center",
-    padding: "0 10px",
-  },
-  mainRowStyle = { maxWidth: "1128px", width: "100%", flexWrap: "nowrap" };
 
 const Layout: React.FC<LayoutProps> = ({
   leftSidebar,

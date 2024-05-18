@@ -81,7 +81,7 @@ const FixedLayout: React.FC<LayoutProps> = ({
   rightSideBarSticky = true,
 }) => {
   return (
-    <Content className="layout-content">
+    <Content className="layout-content" style={{backgroundColor: "#000"}}>
       <Row className="layout-row flex flex-nowrap">
         <Col sizeMd="3" className="ion-hide-md-down">
           <div

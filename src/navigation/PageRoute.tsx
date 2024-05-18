@@ -79,11 +79,11 @@ export const PageRoute = () => {
       <Route path="/search" exact>
         <Search />
       </Route>
-      <Route path="/discover" exact>
+      <Route path="/discover/:major" exact>
         <Discover />
       </Route>
 
-      <Route path="/search" exact>
+      <Route path="/discover" exact>
         <Discover />
       </Route>
       {/* <Route path="/space" exact></Route> */}

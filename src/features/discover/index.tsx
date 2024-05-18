@@ -1,6 +1,6 @@
 import React from "react";
-import { SearchTemplate } from "./template";
+import { DiscoverTemplate } from "./template";
 
 export default function Search() {
-  return <SearchTemplate />;
+  return <DiscoverTemplate />;
 }

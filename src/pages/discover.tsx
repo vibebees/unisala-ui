@@ -1,12 +1,11 @@
 import React from "react";
-import SearchPage from "../features/discover/index.js";
-import { IonContent } from "@ionic/react";
-
+import Discover from "../features/discover/index.js";
+import FreeLayout from "../layouts/FreeLayout";
 const DiscoverPage = () => {
   return (
-    <IonContent>
-      <SearchPage />
-    </IonContent>
+    <FreeLayout>
+      <Discover />
+    </FreeLayout>
   );
 };
 export default DiscoverPage;

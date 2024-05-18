@@ -10,6 +10,7 @@ const ImageCard = ({ allProps }) => {
     return null
   }
 
+  console.log("000000",data?.similarSchools)
   return (
     <Card
       style={{

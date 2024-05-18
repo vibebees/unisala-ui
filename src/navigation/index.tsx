@@ -85,7 +85,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
         </IonGrid>
       </IonHeader>
       <Tabs>
-        <RouterOutlet id="main-content" className=" max-md:mt-12">
+        <RouterOutlet className=" max-md:mt-12">
           <PageRoute />
         </RouterOutlet>
 

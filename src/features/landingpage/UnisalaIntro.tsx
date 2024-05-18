@@ -79,9 +79,9 @@ export const UnisalaLandingPage = () => {
 
       <IonRow>
         <IonCol>
-        <div className='relative mx-4 mt-6 overflow-hidden shadow-lg bg-clip-border rounded-xl bg-blue-gray-500'>
-        <Authentication />
-      </div>
+          <div className='max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg'>
+            <Authentication />
+          </div>
         </IonCol>
       </IonRow>
       <IonRow>

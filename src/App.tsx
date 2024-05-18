@@ -28,7 +28,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   return (
-    <IonApp>
+    <IonApp style={{backgroundColor: "rgba(255, 255, 255, 1)"}}>
       <IonReactRouter>
         <Navigation />
       </IonReactRouter>

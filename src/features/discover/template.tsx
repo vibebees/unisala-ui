@@ -10,21 +10,14 @@ import {
   USER_SERVICE_GQL,
 } from "../../datasource/servers/types";
 // Component imports
-import SearchTab from "./atoms/SearchTab";
-import { UserResults } from "./orgamism/UserList";
-import { UniversityResults } from "./orgamism/UniversityResults";
-import UniSearchResult from "./uni";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
-import { OrgList } from "./orgamism/OrgList";
-import { SpaceList } from "./orgamism/SpaceList";
-import { Col, Row } from "../../components/defaults";
-import { getAllQueryParams } from "./uni/filters/utility";
 import { AnimatePresence } from "framer-motion";
 import { SearchQuery } from "src/types/gqlTypes/graphql";
+import MajorPage from "./majors";
 
-export const SearchTemplate: React.FC = () => {
+export const DiscoverTemplate: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -48,12 +41,6 @@ export const SearchTemplate: React.FC = () => {
       fetchPolicy: "network-only",
     });
 
-  useEffect(() => {
-    if (tab === "uni") {
-      const queryObject = getAllQueryParams(0);
-      getUniversityResults({ variables: { ...queryObject } });
-    }
-  }, [history.location.search, tab, getUniversityResults]);
 
   useEffect(() => {
     if (uniData) {
@@ -74,13 +61,7 @@ export const SearchTemplate: React.FC = () => {
   return (
     <>
       <AnimatePresence mode="sync">
-        {tab === "uni" && (
-          <UniSearchResult
-            key={"uni-result"}
-            query={query}
-            loading={uniLoading}
-          />
-        )}
+        <MajorPage />
       </AnimatePresence>
     </>
   );

@@ -57,7 +57,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
 
   useEffect(() => {
     // console.log("postCommentsCount updated 0000000000 ", postCommentsCount)
-   },[postCommentsCount])
+  }, [postCommentsCount]);
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
@@ -79,11 +79,9 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         )}
 
-        <div>
-        {images.length > 0 && <ImageCollage images={images} />}
-       </div>
+        <div>{images.length > 0 && <ImageCollage images={images} />}</div>
 
-        <div className="p-0" >
+        <div className="p-0">
           {!editable && (
             <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           )}
@@ -112,15 +110,17 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               />
             </AuthValidator>
 
-            <Reply
-              repliesCount={postCommentsCount}
-              isReply={isReply}
-              replyTo=""
-              singlePost={false}
-              parentId={""}
-              postId={_id}
-              feedId={feedId}
-            />
+            <AuthValidator>
+              <Reply
+                repliesCount={postCommentsCount}
+                isReply={isReply}
+                replyTo=""
+                singlePost={false}
+                parentId={""}
+                postId={_id}
+                feedId={feedId}
+              />
+            </AuthValidator>
             <AuthValidator>
               {!isReply ? (
                 <Save postId={_id} saved={saved} thread={{}} />

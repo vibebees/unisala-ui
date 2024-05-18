@@ -1,3 +1,4 @@
+import React from "react";
 import { lazy, Suspense } from "react";
 import { Redirect, Route } from "react-router";
 import { PreLoader } from "../components/packages/preloader";
@@ -19,9 +20,7 @@ const Org = lazy(() => import("../pages/org"));
 
 const UniversityPage = lazy(() => import("../pages/university"));
 const AuthPage = lazy(() => import("../pages/auth"));
-const StudyAbroadRoadmap = lazy(() => import("../pages/roadmap"));
 
-const FeedPage = lazy(() => import("../pages/standard"));
 
 const ThreadDetail = lazy(() => import("../pages/thread.detail"));
 const PageNotFound = lazy(() => import("./PageNotFound"));
@@ -29,11 +28,7 @@ const LandingPage = lazy(() => import("../pages/landingPage"));
 const Standard = lazy(() => import("../pages/standard"));
 const NewsFeed = lazy(() => import("../pages/feed"));
 
-const messagingRoutes = () => (
-  // <>
-  <ProtectedRoute></ProtectedRoute>
-  // </>
-);
+
 const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 // const spaceRoutes = () => (
 //   <>
@@ -121,7 +116,11 @@ export const PageRoute = () => {
       {/* <Route path="/org/:category/:admin/:requestor/:orgId/:role">
         <Org />
       </Route> */}
-      <Route component={PageNotFound} />
+      <Route path="/404" exact>
+        <PageNotFound />
+      </Route>
+      {/* <Route component={PageNotFound} /> */}
+      <Route path="*" component={PageNotFound} />
     </Suspense>
   );
 };

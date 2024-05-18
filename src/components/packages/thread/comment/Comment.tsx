@@ -6,6 +6,7 @@ import EditComments from "./EditComment";
 import { ThreadFooter } from "../organism";
 import { useAuth } from "@context/AuthContext";
 import CommentOptions from "./CommentOptions";
+import AuthValidator from "../../authentication/AuthValidator";
 
 interface CommentProps {
   __typename?: "Comment";
@@ -77,26 +78,28 @@ const Comment: FC<CommentProps> = ({
           </div>
         )}
 
-        <ThreadFooter
-          _id={_id}
-          isReply={true}
-          parentId={parentId || _id}
-          replyTo={user?.username}
-          upVoted={upVoted}
-          upVoteCount={upVoteCount}
-          singlePost={singlePost}
-          saved={false}
-        />
-
-        {user?.username === loggedInUser?.username && (
-          <CommentOptions
+        <AuthValidator>
+          <ThreadFooter
             _id={_id}
-            parentId={parentId}
-            postId={postId}
+            isReply={true}
+            parentId={parentId || _id}
+            replyTo={user?.username}
+            upVoted={upVoted}
+            upVoteCount={upVoteCount}
             singlePost={singlePost}
-            setEditable={setEditable}
+            saved={false}
           />
-        )}
+
+          {user?.username === loggedInUser?.username && (
+            <CommentOptions
+              _id={_id}
+              parentId={parentId}
+              postId={postId}
+              singlePost={singlePost}
+              setEditable={setEditable}
+            />
+          )}
+        </AuthValidator>
       </div>
       <div className="ml-20 max-md:ml-8 max-sm:ml-4 border-l-2 max-md:pl-12 max-sm:pl-0 border-opacity-30 border-neutral-400">
         {repliesCount > 0 && singlePost && (

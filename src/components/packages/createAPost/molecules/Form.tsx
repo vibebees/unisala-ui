@@ -47,8 +47,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const feedType = currentFeedType(useLocation());
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addPost } }) =>
-      updateCacheForNewPost({ cache, post: addPost.post, feedType }),
+    update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),
     onCompleted: (data) => {
       handlePostCompletion(data, files, present, dismiss, client);
       stopLoading();
@@ -160,7 +159,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
         return CheckboxComponent(item, postData, setPostData);
       case "select":
         return item?.rating
-          ? GenerateRatingComponent(item)
+          ? GenerateRatingComponent({item, setPostData})
           : generateSelectTag(item);
       case "textarea":
         return Textarea(item, postData, setPostData);

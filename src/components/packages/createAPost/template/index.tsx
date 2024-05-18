@@ -11,9 +11,10 @@ import { useQuery } from "@apollo/client";
 import MetatagFetchError from "../atoms/MetatagFetchError";
 import { CreateAPostProvider } from "../createAPostContext";
 
-const CreateAPostCard = () => {
+const CreateAPostCard = ({allProps}: { allProps: any }) => {
   const [meta, setMeta] = useState({});
   const pathname = usePathName(0);
+  const {tags = [], unitId} = allProps || {};
 
   const { data, loading, error } = useQuery(GET_METADATA_TAGS, {
     context: { server: USER_SERVICE_GQL },
@@ -38,7 +39,7 @@ const CreateAPostCard = () => {
             <>
               {error && <MetatagFetchError />}
 
-              {!error && !loading && <PostModalOnClick metaData={meta} />}
+              {!error && !loading && <PostModalOnClick metaData={meta}  tags={tags} unitId={unitId}/>}
               {loading && <Loader />}
             </>
           }

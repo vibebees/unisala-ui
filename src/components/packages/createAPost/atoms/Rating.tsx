@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Label } from "@components/defaults";
 import { RatingData } from "./RatingData";
 
-const GenerateRatingComponent = (item) => {
+const GenerateRatingComponent = ({item, setPostData}) => {
   const [ratings, setRatings] = useState({});
   const handleRatingChange = (itemId: keyof TPostDataType, value: string) => {
     setRatings((prevRatings) => ({

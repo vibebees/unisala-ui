@@ -9,10 +9,13 @@ import { createPortal } from "react-dom";
 import { Buttons } from "@components/defaults";
 import { LeftArrow } from "@components/packages/icons";
 
-export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
+export const PostModalOnClick = ({ metaData , tags, unitId}: { metaData: any, tags:any, unitId:any }) => {
   const [selectedTab, setSelectedTab] = useState<EPostType | null>(null);
   const [domLoaded, setDomLoaded] = useState(false);
-  const [postData, setPostData] = useState<TPostDataType>(null);
+  const [ postData, setPostData ] = useState<TPostDataType>({
+    unitId: unitId,
+    tags: tags,
+  });
 
   useEffect(() => {
     setDomLoaded(true);
@@ -20,7 +23,7 @@ export const PostModalOnClick = ({ metaData }: { metaData: any }) => {
 
   const handleTabSelection = (item: EPostType) => {
     setSelectedTab(item);
-    setPostData((prevPostData) => ({ ...prevPostData, id: item as any }));
+    setPostData((prevPostData) => ({ ...prevPostData,    unitId: unitId, id: item as any }));
   };
 
   return (

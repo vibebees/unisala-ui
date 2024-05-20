@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next-Uni
 
-## Getting Started
 
-First, run the development server:
+This is Unisala micro frontend a Next.js project designed to run on port 3001. This README provides essential information on setting up, running, and maintaining the application.
+
+    This is designed for seo optimization and performance. we will develop new pages meant for SEO using this application.
+
+All the stories tagged with  **<span style="color:green;">epic i.e value attraction </span>** shall be developed here.
+
+## Prerequisites
+
+Before setting up the Unisala application, ensure you have the following installed:
+- Node.js (20)
+- npm or Yarn
+
+## Installation
+
+
+```bash
+npm install
+```
+
+or if you prefer using Yarn:
+
+```bash
+yarn install
+```
+
+## Running the Application
+
+The Unisala application is configured to run on port 3001. You can start the server using the following commands:
+
+### Development
+
+To start the development server on port 3001, you can use:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+or with Yarn:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Production
 
-## Learn More
+For production environments, build the application first and then start it:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+or using Yarn:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+yarn build
+yarn start
+```
 
-## Deploy on Vercel
+## Accessing the Application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Once the server is running, access the Unisala application by navigating to:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+http://localhost:3001
+```
+
+
+## Integration with Microfrontend on Port 8080
+
+To integrate the Unisala application with a microfrontend architecture running on port 8080, follow these steps:
+
+1. **Ensure Production Builds**: Both the Unisala application and the microfrontend components must be built for production. For Unisala, use the build commands provided above.
+
+2. **Configure Reverse Proxy**: Set up a reverse proxy (e.g., Nginx, Apache) to route traffic between the microfrontend gateway on port 8080 and the Unisala application on port 3001.
+
+
+# Main Goal for adding this micro frontend
+## SEO Optimization and Performance
+
+To enhance SEO and reduce load times, consider the following strategies:
+
+- **Server-Side Rendering (SSR)**: Utilize SSR for critical content to improve SEO and initial load times.
+- **Code Splitting**: Implement code splitting to reduce the size of the initial JavaScript bundle, enhancing load times.

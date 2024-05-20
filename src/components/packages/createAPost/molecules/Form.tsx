@@ -71,7 +71,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
     startLoading();
     e.preventDefault();
 
-    if (files && files?.length > 4) {
+    if (files && files?.length > 10) {
       present({
         duration: 3000,
         message: "Maximum allowed files is 4.",

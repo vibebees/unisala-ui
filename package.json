@@ -10,7 +10,7 @@
     "start": "ionic serve -p 3000",
     "dev": "vite --port 3000",
     "build": "ionic build --prod",
-    "preview": "vite preview",
+    "preview": "vite preview --port 3000",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",

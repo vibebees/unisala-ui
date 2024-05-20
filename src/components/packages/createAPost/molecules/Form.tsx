@@ -1,11 +1,10 @@
 import { useMutation, useApolloClient } from "@apollo/client";
-import clsx from "clsx";
 import React, { Dispatch, FC, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import { AddPost, AddSpaceEvent } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { Typography } from "../../../defaults";
-import { Button, Label, useIonToast } from "../../../defaults/index";
+import { Button, useIonToast } from "../../../defaults/index";
 import GenerateRatingComponent from "../atoms/Rating";
 import {
   InputComponent,
@@ -50,6 +49,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
     update: (cache, { data: { addPost } }) => updateCacheForNewPost({ cache, post: addPost.post, feedType }),
     onCompleted: (data) => {
       handlePostCompletion(data, files, present, dismiss, client);
+
       stopLoading();
     },
     onError: (error) => {
@@ -136,7 +136,6 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
             item={item}
             setPostData={setPostData}
             postData={postData}
-            className="text-sm"
           />
         ) : (
           <SelectAtom
@@ -144,7 +143,6 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
             item={item}
             setPostData={setPostData}
             postData={postData}
-            className="text-sm"
           />
         )}
       </>
@@ -154,12 +152,12 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const generateHTML = (item) => {
     switch (item?.type) {
       case "input":
-        return InputComponent(item, postData, setPostData);
+        return InputComponent({ item, postData, setPostData });
       case "checkbox":
-        return CheckboxComponent(item, postData, setPostData);
+        return CheckboxComponent({ item, postData, setPostData });
       case "select":
         return item?.rating
-          ? GenerateRatingComponent({item, setPostData})
+          ? GenerateRatingComponent({ item, setPostData })
           : generateSelectTag(item);
       case "textarea":
         return Textarea(item, postData, setPostData);

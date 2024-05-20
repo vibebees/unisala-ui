@@ -8,13 +8,12 @@ import {
   IonButton
 } from "@ionic/react"
 import { useSelector } from "react-redux"
-import { Avatar } from "../../component/Avatar"
+import { Avatar } from "@component/Avatar"
 import { useState } from "react"
 import { useLocation } from "react-router"
-import TopSpaces from "../../component/TopSpaces/TopSpaces"
+import TopSpaces from "@component/TopSpaces/TopSpaces"
 import { Link } from "react-router-dom"
-import CreateSpace from "../../../component/createSpace/CreateSpace"
-export const screensMoreThan768 = ({
+ export const screensMoreThan768 = ({
   activeTab,
   setActiveTab,
   unisalaImg,
@@ -90,14 +89,14 @@ export const screensMoreThan768 = ({
           </IonCard>
 
           <IonCol>
-            <CreateSpace />
+
 
             <IonCard className="overflow-y-auto max-h-[348px]">
               <IonText color="dark">
                 <h6 className="text-center my-2 font-semibold">Top Spaces</h6>
               </IonText>{" "}
               <TopSpaces topSpaces={topSpaces} />
-              <Link to="/space" style={{ marginTop: "120px" }}>
+              {/* <Link to="/space" style={{ marginTop: "120px" }}>
                 <IonText
                   className="max-w-[250px] text-[#3880FF] text-center  font-semibold"
                   fill="solid"
@@ -108,7 +107,7 @@ export const screensMoreThan768 = ({
                 >
                   <h1 className="py-4">Browse More Spaces</h1>
                 </IonText>
-              </Link>
+              </Link> */}
             </IonCard>
           </IonCol>
         </>

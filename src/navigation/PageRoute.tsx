@@ -46,6 +46,8 @@ const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 // )
 
 export const PageRoute = () => {
+const { authenticated } = useAuth();
+
   return (
     <Suspense fallback={<PreLoader />}>
       <Route path="/login" exact>
@@ -55,7 +57,7 @@ export const PageRoute = () => {
         <NewsFeed />
       </Route>
       <Route path="/" exact>
-        <LandingPage />
+        {authenticated ? <Redirect to="/feed" /> : <Redirect to="/home" />}
       </Route>
       <Route path="/home" exact>
         <LandingPage />

@@ -3,11 +3,15 @@ import urls from "../servers/index"
 import { getCache, setCache } from "../../utils/cache"
 
 const authBaseURL = urls["base"]
+
+let authData = getCache('authData') || {accessToken: false},
+{ accessToken } = authData || { accessToken: false};
+
 export const authInstance = axios.create({
   baseURL: authBaseURL,
   headers: {
-    Authorization: getCache("accessToken")
-      ? "Bearer " + getCache("accessToken")
+    Authorization: accessToken
+      ? "Bearer " + accessToken
       : null,
     "Content-Type": "application/json",
     accept: "application/json"

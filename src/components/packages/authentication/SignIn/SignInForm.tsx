@@ -33,7 +33,7 @@ const SignInForm = () => {
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
-    code: params.get("code"),
+    code: parseInt(params.get("code") ?? "0"),
   });
 
   const [LoginUser, { loading }] = useMutation<LoginMutation>(Login, {
@@ -43,7 +43,7 @@ const SignInForm = () => {
       password: input.password,
       spaceOrgName: input.spaceOrgName,
       type: input.type,
-      code: input.code,
+      code: parseInt(input?.code),
     },
     onCompleted: (data) => {
       if (data.login?.status?.success && data.login && data.login.data) {

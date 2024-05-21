@@ -19,7 +19,7 @@ interface ILoginInput {
   password: string;
   spaceOrgName: string | null;
   type: string | null;
-  code: string | null;
+  code: number | null;
 }
 
 interface ILoginInputErrors {

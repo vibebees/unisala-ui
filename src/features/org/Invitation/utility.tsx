@@ -21,14 +21,14 @@ export const handleSendInvitation = ({
       })
     }
   setLoading(true)
-    present({
-      duration: 3000,
-      message: "Invitation already sent",
-      buttons: [{text: "X", handler: () => dismiss()}],
-      color: "primary",
-      mode: "ios"
-    })
-    setEmail("")
+    // present({
+    //   duration: 3000,
+    //   message: "Preparing to send invitation",
+    //   buttons: [{text: "X", handler: () => dismiss()}],
+    //   color: "primary",
+    //   mode: "ios"
+    // })
+    // setEmail("")
     authInstance
       .post(`${userServer}/org-invitation-request/${orgId}`, {
         emails: [email],

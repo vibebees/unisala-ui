@@ -23,6 +23,7 @@ import { createPortal } from "react-dom";
 import ProfilePop from "@components/packages/profilePop";
 import { useAuth } from "@context/AuthContext";
 import AuthModal from "@components/packages/authentication/AuthModal";
+import WelcomeForm from "@components/packages/authentication/Welcome";
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
   // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
@@ -32,7 +33,7 @@ type RouteParams = {
 };
 
 export const Navigation: React.FC<NavigationProps> = () => {
-  const { authenticated } = useAuth();
+  const { authenticated, user } = useAuth();
   const routes = useRoutes();
   const history = useHistory();
   const [showPopover, setShowPopover] = useState(false);
@@ -115,6 +116,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
           ))}
         </TabBar>
       </Tabs>
+      <div>{user?.newUser && <WelcomeForm />}</div>
       {window !== undefined &&
         document.getElementById("root") &&
         showPopover &&

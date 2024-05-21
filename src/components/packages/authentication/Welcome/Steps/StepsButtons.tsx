@@ -1,99 +1,45 @@
-import {useMutation} from "@apollo/client"
-import {IonButton, IonCard, useIonToast} from "@ionic/react"
-import clsx from "clsx"
-import {jwtDecode} from "jwt-decode"
-import {useContext, useState} from "react"
-import {useDispatch, useSelector} from "react-redux"
-import {useHistory} from "react-router"
- import {WelcomeData} from ".."
- import { getCache, removeCache } from "@utils/cache"
- import { USER_SERVICE_GQL } from "@datasource/servers/types"
-import { EditProfile , getUserGql} from "@datasource/graphql/user"
-import { getUserProfile } from "@datasource/store/action/userProfile"
+import React from "react";
+import { useMutation } from "@apollo/client";
+import { IonButton, IonCard, useIonToast } from "@ionic/react";
+import clsx from "clsx";
+import { useContext } from "react";
+import { WelcomeData } from "..";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { EditProfile } from "@datasource/graphql/user";
+import { useAuth } from "@context/AuthContext";
 
- const StepsButtons = ({ allProps }) => {
-  const { welcomeFormdata } = useContext(WelcomeData),
-    dispatch = useDispatch(),
-    [present, dismiss] = useIonToast(),
-    { accessToken } = useSelector((state) => state?.auth),
-    decode = jwtDecode(accessToken),
-    history = useHistory(),
-    [users, setUsers] = useState({
-      email: decode.email,
-      firstName: decode.firstName,
-      lastName: decode.lastName,
-      username: decode.username
-    }),
-    {
-      currentStep,
-      setCurrentStep,
-      setNewUser,
-      modalRef,
-      refetch,
-      meta,
-      totalSteps
-    } = allProps
-  const metaData = Object.values(meta)
-  // eslint-disable-next-line require-await
+const StepsButtons = ({ allProps }) => {
+  const { welcomeFormdata } = useContext(WelcomeData);
+  const { user, UpdateNewUser } = useAuth();
+  const [present, dismiss] = useIonToast();
+  const { currentStep, setCurrentStep, meta, totalSteps } = allProps;
+  const metaData = Object.values(meta);
 
   const [editProfile, { loading }] = useMutation(EditProfile, {
     context: { server: USER_SERVICE_GQL },
     variables: {
-      ...users,
-      ...welcomeFormdata
-    },
-    update: (cache, { data: { editProfile } }) => {
-      const result = cache.readQuery({
-        query: getUserGql,
-        variables: { username: users.username }
-      })
-
-      const getUser = result?.getUser
-
-      if (!getUser) {
-        // Handle the error or return early
-        return
-      }
-
-      cache.writeQuery({
-        query: getUserGql,
-        variables: { username: users.username },
-        data: {
-          getUser: {
-            ...getUser,
-            user: {
-              ...getUser.user,
-              ...editProfile.user
-            }
-          }
-        }
-      })
+      ...user,
+      ...welcomeFormdata,
     },
     onCompleted: (data) => {
-      // update uesr details in redux
       if (data?.editProfile?.status?.success) {
-        removeCache("newUser")
-        modalRef.current.dismiss()
         present({
           duration: 3000,
           message: "Customizing your feed based on your profile!",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "primary",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       } else {
         present({
           duration: 3000,
           message: data?.editProfile?.status?.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
-      setNewUser(false)
-      refetch({
-        username: users?.username
-      })
+      UpdateNewUser();
     },
     onError: (error) => {
       present({
@@ -101,73 +47,51 @@ import { getUserProfile } from "@datasource/store/action/userProfile"
         message: error?.message,
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const validationFunctions = () => {
-    let typeofData = typeof welcomeFormdata[metaData[currentStep - 1].id]
+    let typeofData = typeof welcomeFormdata[metaData[currentStep - 1].id];
 
     if (currentStep === 1) {
-      return true
+      return true;
     }
     if (typeofData === "string") {
-      return welcomeFormdata[metaData[currentStep - 1].id] !== ""
+      return welcomeFormdata[metaData[currentStep - 1].id] !== "";
     }
     if (typeofData === "object") {
-      return welcomeFormdata[metaData[currentStep - 1].id].length > 0
+      return welcomeFormdata[metaData[currentStep - 1].id].length > 0;
     }
-  }
+  };
 
   const handleSubmit = () => {
-    const isValid = validationFunctions()
+    const isValid = validationFunctions();
     if (!isValid) {
       return present({
         duration: 3000,
         message: "Please select atleast one university",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
-
-    try {
-      dispatch(
-        getUserProfile({ user: { ...decode }, loggedIn: Boolean(decode) })
-      )
-      editProfile()
-      const spaceOrg = getCache("org")
-
-      if (spaceOrg) {
-        window.location.replace("/org/" + spaceOrg)
-      }
-      removeCache("org")
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    editProfile();
+  };
   const handleNext = () => {
-    const isValid = validationFunctions()
+    const isValid = validationFunctions();
     if (!isValid) {
       return present({
         duration: 3000,
         message: "Please fill out the required fields",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
-    setCurrentStep(currentStep + 1)
-  }
-
-  const handleSkip = () => {
-    if (currentStep === totalSteps) {
-      handleSubmit()
-    } else {
-      setCurrentStep(currentStep + 1)
-    }
-  }
+    setCurrentStep(currentStep + 1);
+  };
 
   return (
     <IonCard className="w-full ion-no-margin ion-no-padding shadow-none  flex justify-between h-12">
@@ -184,13 +108,14 @@ import { getUserProfile } from "@datasource/store/action/userProfile"
         Back
       </IonButton>
       <IonButton
+        disabled={loading}
         className="flex-shrink-0"
         onClick={currentStep === totalSteps ? handleSubmit : handleNext}
       >
         {currentStep === totalSteps ? "Submit" : "Next"}
       </IonButton>
     </IonCard>
-  )
-}
+  );
+};
 
-export default StepsButtons
+export default StepsButtons;

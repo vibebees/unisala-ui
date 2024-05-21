@@ -5,6 +5,7 @@ interface IAuthContext {
   authenticated: boolean;
   UpdateAuth: (data: IAuthData) => void;
   ClearAuth: () => void;
+  UpdateNewUser: () => void;
   loading: boolean;
 }
 

@@ -161,7 +161,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
           ? GenerateRatingComponent({ item, setPostData })
           : generateSelectTag(item);
       case "textarea":
-        return Textarea(item, postData, setPostData);
+        return Textarea({ item, postData, setPostData });
       case "date":
         return DateComponent(item, postData, setPostData);
       default:

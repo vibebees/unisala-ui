@@ -8,23 +8,24 @@ import { authInstance } from "@datasource/api/axiosInstance";
 import { userServer } from "@datasource/servers/endpoints";
 import Step from "./Steps/Step";
 import { PreLoader } from "../../preloader";
+import { useAuth } from "@context/AuthContext";
 
 export const WelcomeData = createContext();
 
-const Index = ({ allProps }) => {
+const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(0);
   const [meta, setMeta] = useState({});
   const modalRef = useRef(null);
+  const { UpdateNewUser } = useAuth();
 
   const [status, setStatus] = useState("ideal");
   const [welcomeFormdata, setWelcomeFormdata] = useState({
-      interestedSubjects: [],
-      userStatus: "",
-      interestedUni: [],
-      studyLevel: "",
-    }),
-    { setNewUser, newUser } = allProps;
+    interestedSubjects: [],
+    userStatus: "",
+    interestedUni: [],
+    studyLevel: "",
+  });
 
   const getAllQuestion = async () => {
     setStatus("loading");
@@ -75,7 +76,6 @@ const Index = ({ allProps }) => {
       <IonCol size="auto" className="">
         <StepsButtons
           allProps={{
-            ...allProps,
             currentStep,
             setCurrentStep,
             modalRef,
@@ -88,7 +88,7 @@ const Index = ({ allProps }) => {
   );
 
   return (
-    <IonModal ref={modalRef} isOpen={newUser}>
+    <IonModal ref={modalRef} isOpen={true}>
       <WelcomeData.Provider
         value={{ meta, welcomeFormdata, setWelcomeFormdata }}
       >

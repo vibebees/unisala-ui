@@ -4,7 +4,11 @@ import {closeOutline} from "ionicons/icons"
 import Filter from "./filters"
 import {ExploreFilterPopupContext} from "./ExploreUniFilterPopupContext"
 
-export const MobileFilter = ({filterPage, setIsLoading, onClose}) => {
+export const MobileFilter = ({loading,
+    filterPage,
+    getUniversityResults,
+    data,
+    fetchMore,}) => {
 
     // const {popUp, closePopup} = useContext(ExploreFilterPopupContext)
     const popUp = false, closePopup = () => {}
@@ -23,7 +27,7 @@ export const MobileFilter = ({filterPage, setIsLoading, onClose}) => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <Filter filterPage={filterPage} setIsLoading={setIsLoading} />
+                <Filter filterPage={filterPage} loading={loading} />
             </IonContent>
         </IonModal>
 

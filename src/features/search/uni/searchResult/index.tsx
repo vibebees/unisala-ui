@@ -43,6 +43,7 @@ const SearchResults: FC<ISearchResults> = ({
 }) => {
   const { searchData } = useSelector((store) => store?.university || []);
 
+  console.log('======> isloading', isLoading)
   return (
     <motion.div
       initial={{ x: 1000 }}
@@ -77,8 +78,8 @@ const SearchResults: FC<ISearchResults> = ({
         threshold="100px"
         onIonInfinite={(e) => {
           // if searchParams has more than 2 items then it infers filter is applied, in this case add page for paginated data
-          setFilterPage((prev) => prev + 1);
-          e.target.complete();
+          setFilterPage(filterPage + 1);
+          setTimeout(() => e.target.complete(), 700);
         }}
       >
         <IonInfiniteScrollContent

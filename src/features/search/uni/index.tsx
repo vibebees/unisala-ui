@@ -47,12 +47,12 @@ const UniSearchResult: FC<IUniSearchResult> = () => {
         )} */}
 
       {CreatePortal(
-        <DesktopFilter filterPage={filterPage} setIsLoading={loading} data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
+        <DesktopFilter filterPage={filterPage} loading={loading} data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
         "filter-container"
       )}
 
       {CreatePortal(
-        <DesktopFilter filterPage={filterPage} setIsLoading={loading}  data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
+        <DesktopFilter filterPage={filterPage} loading={loading}  data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
         "menu-content"
       )}
 

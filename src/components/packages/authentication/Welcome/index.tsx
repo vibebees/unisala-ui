@@ -8,16 +8,13 @@ import { authInstance } from "@datasource/api/axiosInstance";
 import { userServer } from "@datasource/servers/endpoints";
 import Step from "./Steps/Step";
 import { PreLoader } from "../../preloader";
-import { useAuth } from "@context/AuthContext";
 
-export const WelcomeData = createContext();
-
+export const WelcomeData = createContext<any>({});
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(0);
-  const [meta, setMeta] = useState({});
+  const [meta, setMeta] = useState<IWelcomeData | null>(null);
   const modalRef = useRef(null);
-  const { UpdateNewUser } = useAuth();
 
   const [status, setStatus] = useState("ideal");
   const [welcomeFormdata, setWelcomeFormdata] = useState({
@@ -55,21 +52,22 @@ const Index = () => {
       </IonCol>
       <IonRow className=" flex-1">
         <IonCol className=" welcomeScroll overflow-y-auto  h-full ">
-          {Object.values(meta).map((MetaData, index) => {
-            return (
-              <div
-                key={index}
-                className={clsx("step-container  absolute left-0 w-full", {
-                  "z-10": currentStep === index + 1,
-                  "z-0 opacity-0": currentStep !== index + 1,
-                  "fade-enter": currentStep === index + 1,
-                  "fade-exit": currentStep !== index + 1,
-                })}
-              >
-                <Step metaData={MetaData} />
-              </div>
-            );
-          })}
+          {meta &&
+            Object.values(meta).map((MetaData, index) => {
+              return (
+                <div
+                  key={index}
+                  className={clsx("step-container  absolute left-0 w-full", {
+                    "z-10": currentStep === index + 1,
+                    "z-0 opacity-0": currentStep !== index + 1,
+                    "fade-enter": currentStep === index + 1,
+                    "fade-exit": currentStep !== index + 1,
+                  })}
+                >
+                  <Step metaData={MetaData} />
+                </div>
+              );
+            })}
         </IonCol>
       </IonRow>
 

@@ -1,11 +1,11 @@
-import React, { useContext } from "react"
-import { IonCheckbox, IonRow } from "@ionic/react"
+import React, { useContext } from "react";
+import { IonCheckbox, IonRow } from "@ionic/react";
 
 const Checkbox = ({
   isChecked = false,
   value = false,
   handleClick,
-  label = ""
+  label = "",
 }) => {
   return (
     <IonRow class="gap-2 items-center  flex-nowrap ">
@@ -17,9 +17,9 @@ const Checkbox = ({
       >
         {label}
       </IonCheckbox>
-      <label className="text-sm  font-medium text-neutral-600">{label}</label>
+      {/* <label className="text-sm  font-medium text-neutral-600">{label}</label> */}
     </IonRow>
-  )
-}
+  );
+};
 
-export default Checkbox
+export default Checkbox;

@@ -1,11 +1,11 @@
-import React from "react"
-import { IonGrid, IonCardContent } from "@ionic/react"
-import Headers from "../organism/Headers"
-import Welcome from "./welcome"
-const SelectOptions = React.lazy(() => import("../organism/SelectOptions"))
-const InputOptions = React.lazy(() => import("../organism/InputOptions"))
+import React from "react";
+import { IonGrid, IonCardContent } from "@ionic/react";
+import Headers from "../organism/Headers";
+import Welcome from "./welcome";
+const SelectOptions = React.lazy(() => import("../organism/SelectOptions"));
+const InputOptions = React.lazy(() => import("../organism/InputOptions"));
 
-const Step = ({ metaData }) => {
+const Step = ({ metaData }: any) => {
   return (
     <div>
       <div>
@@ -27,7 +27,7 @@ const Step = ({ metaData }) => {
         </IonGrid>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Step
+export default Step;

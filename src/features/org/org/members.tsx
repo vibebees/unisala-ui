@@ -7,55 +7,25 @@ import {
   IonGrid,
 } from "@ionic/react";
 import React from "react";
-import { useHistory } from "react-router";
 import Tabs from "../tabs";
 import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
 import MemberList from "./memberList";
 import "./members.css";
 import { GetAllMembersBySpaceID } from "../../../datasource/graphql/user";
-import { URLgetter, URLupdate } from "../../../utils/lib/URLupdate";
+import { URLgetter } from "../../../utils/lib/URLupdate";
 import { Row } from "../../../components/defaults";
 import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
 import { useOrgContext } from "..";
-
-type IActiveTab = "members" | "students" | "alumini";
+import { typeOfMember } from "../configSegmentData";
 
 const Members = () => {
-  const history = useHistory();
-  const [activeTab, setActiveTab] = React.useState<IActiveTab>("members");
   const { _id } = useOrgContext();
   const { data, loading, error } = useQuery(GetAllMembersBySpaceID, {
     context: { server: USER_SERVICE_GQL },
     variables: { spaceId: _id },
   });
 
-  const myDefaultMembers = "Members";
-  const typeOfMember = {
-    options: [
-      {
-        name: myDefaultMembers,
-        icon: "people",
-        count: 6,
-        nav: "members",
-      },
-      {
-        name: "Students",
-        icon: "business",
-        count: 30,
-        nav: "students",
-      },
-      {
-        name: "Alumini",
-        icon: "school",
-        count: 600,
-        nav: "alumini",
-      },
-    ],
-    Identifier: "mem",
-    scrollable: false,
-  };
-
-  const memberType = URLgetter("mem") || myDefaultMembers;
+  const memberType = URLgetter("mem") || "memebers";
 
   if (loading) {
     return (

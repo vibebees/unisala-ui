@@ -28,6 +28,30 @@ export const configSegment = {
       nav: "invite",
     },
   ],
-  onClick: (e: any, nav: string) => {},
   Identifier: "t",
+};
+
+export const typeOfMember = {
+  options: [
+    {
+      name: "Members",
+      icon: "people",
+      count: 6,
+      nav: "members",
+    },
+    {
+      name: "Students",
+      icon: "business",
+      count: 30,
+      nav: "students",
+    },
+    {
+      name: "Alumini",
+      icon: "school",
+      count: 600,
+      nav: "alumini",
+    },
+  ],
+  Identifier: "mem",
+  scrollable: false,
 };

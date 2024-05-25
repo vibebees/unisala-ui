@@ -18,8 +18,11 @@ import { Row } from "../../../components/defaults";
 import { ThreadSkeleton } from "../../../components/packages/skeleton/threadSkeleton";
 import { useOrgContext } from "..";
 
-export const Members = () => {
+type IActiveTab = "members" | "students" | "alumini";
+
+const Members = () => {
   const history = useHistory();
+  const [activeTab, setActiveTab] = React.useState<IActiveTab>("members");
   const { _id } = useOrgContext();
   const { data, loading, error } = useQuery(GetAllMembersBySpaceID, {
     context: { server: USER_SERVICE_GQL },
@@ -48,10 +51,7 @@ export const Members = () => {
         nav: "alumini",
       },
     ],
-    onClick: (event, nav) => {
-      const updatedUrl = URLupdate("mem", nav);
-      history.push({ search: updatedUrl });
-    },
+    Identifier: "mem",
     scrollable: false,
   };
 
@@ -99,3 +99,5 @@ export const Members = () => {
     </IonGrid>
   );
 };
+
+export default Members;

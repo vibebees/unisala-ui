@@ -1,3 +1,5 @@
+import { URLupdate } from "@utils/lib/URLupdate";
+
 export const configSegment = {
   options: [
     {
@@ -8,7 +10,7 @@ export const configSegment = {
     {
       name: "Org",
       icon: "people",
-      nav: "org&mem=members",
+      nav: "org",
     },
     {
       name: "Apply",
@@ -26,4 +28,6 @@ export const configSegment = {
       nav: "invite",
     },
   ],
+  onClick: (e: any, nav: string) => {},
+  Identifier: "t",
 };

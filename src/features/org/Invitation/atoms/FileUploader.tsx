@@ -1,30 +1,30 @@
-import { IonCard, useIonToast } from "@ionic/react"
-import { authInstance } from "../../../../datasource/api/axiosInstance"
-import { OrgContext } from "../../index"
-import React, { useState } from "react"
- import SendButton from "./SendButton"
-import {userServer} from "../../../../datasource/servers/endpoints"
+import { IonCard, useIonToast } from "@ionic/react";
+import { authInstance } from "../../../../datasource/api/axiosInstance";
+import { useOrgContext } from "@features/org";
+import React, { useState } from "react";
+import SendButton from "./SendButton";
+import { userServer } from "../../../../datasource/servers/endpoints";
 
 const FileUploader = () => {
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [present, dismiss] = useIonToast()
-  const [loading, setLoading] = useState(false)
-  const { spaceId } = React.useContext(OrgContext)
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [present, dismiss] = useIonToast();
+  const [loading, setLoading] = useState(false);
+  const { _id } = useOrgContext();
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
     if (file.type !== "text/csv") {
-      present("Only CSV files are allowed", 3000)
+      present("Only CSV files are allowed", 3000);
       return present({
         duration: 3000,
         message: "Only CSV files are allowed",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "primary",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
-    setSelectedFile(file)
-  }
+    setSelectedFile(file);
+  };
 
   const handleUpload = () => {
     if (!selectedFile) {
@@ -33,15 +33,15 @@ const FileUploader = () => {
         message: "Please select a file to upload",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
 
-    const formData = new FormData()
-    setLoading(true)
-    formData.append("file", selectedFile)
+    const formData = new FormData();
+    setLoading(true);
+    formData.append("file", selectedFile);
     authInstance
-      .post(`${userServer}/org-invite-all/${spaceId}`, formData)
+      .post(`${userServer}/org-invite-all/${_id}`, formData)
       .then((res) => {
         if (res.data.success) {
           present({
@@ -49,10 +49,10 @@ const FileUploader = () => {
             message: "Invitation sent successfully",
             buttons: [{ text: "X", handler: () => dismiss() }],
             color: "primary",
-            mode: "ios"
-          })
+            mode: "ios",
+          });
         }
-        setSelectedFile(null)
+        setSelectedFile(null);
       })
       .catch((err) => {
         present({
@@ -60,14 +60,14 @@ const FileUploader = () => {
           message: err?.message || " Something went wrong",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       })
       .finally(() => {
-        setSelectedFile(null)
-        setLoading(false)
-      })
-  }
+        setSelectedFile(null);
+        setLoading(false);
+      });
+  };
   return (
     <div className="w-full h-full">
       <IonCard className="ion-no-margin  ion-no-padding shadow-none px-4 py-6">
@@ -85,7 +85,7 @@ const FileUploader = () => {
         />
       </IonCard>
     </div>
-  )
-}
+  );
+};
 
-export default FileUploader
+export default FileUploader;

@@ -1,31 +1,34 @@
-import { useQuery } from "@apollo/client"
+import React from "react";
+import { useQuery } from "@apollo/client";
 import {
   IonAccordion,
   IonAccordionGroup,
   IonItem,
-  IonLabel
-} from "@ionic/react"
-import { OrgContext } from "../index"
- import { useContext, useEffect, useRef } from "react"
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
-import "./index.css"
-import {TimeLine} from "../timeline"
-import {GetAllHistoryYear} from "../../../datasource/graphql/user"
+  IonLabel,
+} from "@ionic/react";
+
+import { useEffect, useRef } from "react";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import "./index.css";
+import { TimeLine } from "../timeline";
+import { GetAllHistoryYear } from "../../../datasource/graphql/user";
+import { useOrgContext } from "..";
+
 export const SqueezeBox = () => {
-  const { orgData } = useContext(OrgContext)
+  const { _id } = useOrgContext();
   const { data, loading, fetchMore } = useQuery(GetAllHistoryYear, {
     context: { server: USER_SERVICE_GQL },
-    variables: { orgId: orgData?._id }
-  })
+    variables: { orgId: _id },
+  });
 
-  const accordionGroup = useRef(null)
+  const accordionGroup = useRef(null);
   useEffect(() => {
     if (!accordionGroup.current) {
-      return
+      return;
     }
 
-    accordionGroup.current.value = ["2024"]
-  }, [])
+    accordionGroup.current.value = ["2024"];
+  }, []);
 
   return (
     <IonAccordionGroup
@@ -53,5 +56,5 @@ export const SqueezeBox = () => {
           </IonAccordion>
         ))}
     </IonAccordionGroup>
-  )
-}
+  );
+};

@@ -84,37 +84,37 @@ export const GraduatesIcon = ({
 );
 export const CheckMark = ({ width = 25, height = 25, fill = "#747372" }) => (
   <svg
-  xmlns='http://www.w3.org/2000/svg'
-  fill='none'
-  viewBox='0 0 24 24'
-  strokeWidth='2.5'
-  stroke='currentColor'
-  aria-hidden='true'
-  className='w-4 h-4 text-white'
->
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="2.5"
+    stroke="currentColor"
+    aria-hidden="true"
+    className="w-4 h-4 text-white"
+  >
     <path
-
-    strokeLinecap='round'
-    strokeLinejoin='round'
-    d='M4.5 12.75l6 6 9-13.5'
-  />
-</svg>
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 12.75l6 6 9-13.5"
+    />
+  </svg>
 );
 
 export const HomeIcon = ({ width = 25, height = 25, fill = "#747372" }) => (
   <svg
-    xmlns='http://www.w3.org/2000/svg'
-    viewBox='0 0 24 24'
-    fill='currentColor'
-    aria-hidden='true'
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
     height={height}
     width={width}
   >
     <path
-       fill={fill}
-       fillRule="evenodd"
-      d='M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z' />
-    <path d='M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z' />
+      fill={fill}
+      fillRule="evenodd"
+      d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"
+    />
+    <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
   </svg>
 );
 
@@ -379,5 +379,35 @@ export const EditIcon = ({ className }: { className?: string }) => (
   >
     <path d="M459.94 53.25a16.06 16.06 0 00-23.22-.56L424.35 65a8 8 0 000 11.31l11.34 11.32a8 8 0 0011.34 0l12.06-12c6.1-6.09 6.67-16.01.85-22.38zM399.34 90L218.82 270.2a9 9 0 00-2.31 3.93L208.16 299a3.91 3.91 0 004.86 4.86l24.85-8.35a9 9 0 003.93-2.31L422 112.66a9 9 0 000-12.66l-9.95-10a9 9 0 00-12.71 0z"></path>
     <path d="M386.34 193.66L264.45 315.79A41.08 41.08 0 01247.58 326l-25.9 8.67a35.92 35.92 0 01-44.33-44.33l8.67-25.9a41.08 41.08 0 0110.19-16.87l122.13-121.91a8 8 0 00-5.65-13.66H104a56 56 0 00-56 56v240a56 56 0 0056 56h240a56 56 0 0056-56V199.31a8 8 0 00-13.66-5.65z"></path>
+  </svg>
+);
+
+export const OptionIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={cn("w-8 h-8", className)}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <circle
+      cx="256"
+      cy="256"
+      r="32"
+      strokeMiterlimit="20"
+      className="fill-white"
+    ></circle>
+    <circle
+      cx="416"
+      cy="256"
+      r="32"
+      strokeMiterlimit="20"
+      className="fill-white"
+    ></circle>
+    <circle
+      cx="96"
+      cy="256"
+      r="32"
+      strokeMiterlimit="20"
+      className="fill-white"
+    ></circle>
   </svg>
 );

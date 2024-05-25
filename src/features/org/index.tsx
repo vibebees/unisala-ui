@@ -1,48 +1,86 @@
-import {useQuery} from "@apollo/client"
-import {GetOrgSpace, GetTopOrgs, getUserGql} from "@datasource/graphql/user"
-import {createContext} from "react"
-import {useSelector} from "react-redux"
-import {useParams} from "react-router"
- import {getAllProps} from "./getAllProps"
-import {Orgs} from "./template"
-import {USER_SERVICE_GQL} from "@datasource/servers/types"
-import {userName} from "@utils/cache"
+import { useQuery } from "@apollo/client";
+import { GetOrgSpace } from "@datasource/graphql/user";
+import React, { createContext } from "react";
+import { useParams } from "react-router";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { SpaceNotFound } from "@navigation/PageNotFound";
+import Org from "@features/org/Template";
+import { PreLoader } from "@components/packages/preloader";
 
-export const OrgContext = createContext()
+interface IOrgContext {
+  loading: boolean;
+  __typename: string;
+  _id: string;
+  admin: User;
+  coverImage: string | null;
+  description: string;
+  image: string | null;
+  isJoined: boolean;
+  name: string;
+  profileImage: string | null;
+  role: string | null;
+}
+
+const OrgContext = createContext<IOrgContext | null>(null);
 
 export default function OrgPage() {
-  const params = useParams(),
-    { data: topOrgData } = useQuery(GetTopOrgs, {
-      variables: { limit: 6 },
-      context: { server: USER_SERVICE_GQL }
-    }),
-    { user, loggedIn } = useSelector((store) => store?.userProfile),
-    profileDataQuery = useQuery(getUserGql, {
+  const params: any = useParams();
+  const { data, loading, error } = useQuery<GetOrgSpaceByIdResponse>(
+    GetOrgSpace,
+    {
       context: { server: USER_SERVICE_GQL },
-      variables: {
-        username:userName,
-      },
-      skip: !userName,
-      fetchPolicy:"cache-first"
+      variables: { name: params.category },
+    }
+  );
 
-    }),
-    { data, loading } = useQuery(GetOrgSpace, {
-      context: { server: USER_SERVICE_GQL },
-      variables: { name: params?.category }
-    })
-  const profileData = loggedIn ? profileDataQuery.data : null
+  if (loading) {
+    return <PreLoader />;
+  }
 
-  const allProps = getAllProps({
-    user,
-    loggedIn,
-    profileData,
-    topOrgData,
-    loading,
-    data
-  })
+  if ((!loading && !data?.getOrgSpaceById.data) || (!loading && error)) {
+    return <SpaceNotFound />;
+  }
+
+  const {
+    __typename,
+    _id,
+    admin,
+    coverImage,
+    description,
+    image,
+    isJoined,
+    name,
+    profileImage,
+    role,
+  } = data?.getOrgSpaceById.data! || {};
+
   return (
-    <OrgContext.Provider value={allProps}>
-      <Orgs data = {data} loading={loading} allProps ={allProps} />
+    <OrgContext.Provider
+      value={{
+        loading,
+        __typename,
+        _id,
+        admin,
+        coverImage,
+        description,
+        image,
+        isJoined,
+        name,
+        profileImage,
+        role,
+      }}
+    >
+      <Org />
     </OrgContext.Provider>
-  )
+  );
 }
+
+const useOrgContext = () => {
+  const context = React.useContext(OrgContext);
+  if (!context) {
+    throw new Error("useOrgContext must be used within a OrgContext");
+  }
+  return context;
+};
+
+export { useOrgContext };

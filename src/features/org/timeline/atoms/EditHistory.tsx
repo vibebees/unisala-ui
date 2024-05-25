@@ -1,18 +1,18 @@
-import React from "react"
-import { useMutation } from "@apollo/client"
-import { useIonToast } from "@ionic/react"
-import {Col, Input, Row} from "@components/defaults"
- import { EditHistory, GetAllHistory } from "@datasource/graphql/user"
-import { useContext, useState } from "react"
-import { USER_SERVICE_GQL } from "@datasource/servers/types"
-import {EditIcon, CloseIcon, Tick} from "@components/packages/icons"
- import {Button} from "@components/defaults"
-import { OrgContext } from "@features/org"
+import React from "react";
+import { useMutation } from "@apollo/client";
+import { useIonToast } from "@ionic/react";
+import { Col, Input, Row } from "@components/defaults";
+import { EditHistory, GetAllHistory } from "@datasource/graphql/user";
+import { useContext, useState } from "react";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { EditIcon, CloseIcon, Tick } from "@components/packages/icons";
+import { Button } from "@components/defaults";
+import { useOrgContext } from "@features/org";
 
 const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
-  const { orgData } = useContext(OrgContext)
-  const [value, setvalue] = useState(text)
-  const [present, dismiss] = useIonToast()
+  const { _id } = useOrgContext();
+  const [value, setvalue] = useState(text);
+  const [present, dismiss] = useIonToast();
 
   const [updateHistory] = useMutation(EditHistory, {
     context: { server: USER_SERVICE_GQL },
@@ -21,12 +21,12 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
       const getAllHistories = cache.readQuery({
         query: GetAllHistory,
         variables: {
-          orgId: orgData._id,
-          year: new Date(date).getFullYear()
-        }
-      })
+          orgId: _id,
+          year: new Date(date).getFullYear(),
+        },
+      });
 
-      console.log("getAllHistories", getAllHistories)
+      console.log("getAllHistories", getAllHistories);
     },
 
     onCompleted: () => {
@@ -36,15 +36,15 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
         buttons: [
           {
             text: "X",
-            handler: () => dismiss()
-          }
+            handler: () => dismiss(),
+          },
         ],
         color: "primary",
-        mode: "ios"
-      })
-      setedit(false)
-    }
-  })
+        mode: "ios",
+      });
+      setedit(false);
+    },
+  });
 
   const handleUpdate = () => {
     if (value.trim() === "") {
@@ -54,21 +54,21 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
         buttons: [
           {
             text: "X",
-            handler: () => dismiss()
-          }
+            handler: () => dismiss(),
+          },
         ],
         color: "danger",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
     updateHistory({
       variables: {
         orgHistoryId: orgHistoryId,
         title: value,
-        description: value
-      }
-    })
-  }
+        description: value,
+      },
+    });
+  };
 
   return (
     <Row className="ion-no-padding ion-no-margin w-full">
@@ -95,7 +95,7 @@ const EditHistoryForm = ({ text, edit, setedit, orgHistoryId, date }) => {
         )}
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-export default EditHistoryForm
+export default EditHistoryForm;

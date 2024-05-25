@@ -1,99 +1,103 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useContext } from "react"
-import Inputbox from "../atom/Inputbox"
-import { useDebouncedEffect } from "@hooks/useDebouncedEffect"
-import { universityServer } from "@datasource/servers/endpoints"
-import { authInstance } from "@datasource/api/axiosInstance"
-import SearchResults from "./SearchResults"
-import { WelcomeData } from ".."
+import React, { useState, useContext } from "react";
+import Inputbox from "../atom/Inputbox";
+import { useDebouncedEffect } from "@hooks/useDebouncedEffect";
+import { universityServer } from "@datasource/servers/endpoints";
+import { authInstance } from "@datasource/api/axiosInstance";
+import SearchResults from "./SearchResults";
+import { WelcomeData } from "..";
 
-const InputOptions = ({ metaData }) => {
-  const { setWelcomeFormdata, welcomeFormdata } = useContext(WelcomeData)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [results, setResults] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+const InputOptions = ({ metaData }: any) => {
+  const { setWelcomeFormdata, welcomeFormdata } = useContext(WelcomeData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getMajors = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await authInstance.get(
         `${universityServer}/keyword/majors/${searchTerm}/4`
-      )
-      setResults(res.data)
+      );
+      setResults(res.data);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const getUniversitites = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await authInstance.get(
         `${universityServer}/keyword/schoolname/${searchTerm.trim()}/5`
-      )
-      setResults(res.data)
+      );
+      setResults(res.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   function handleInput() {
     if (metaData.id === "interestedSubjects") {
-      getMajors()
+      getMajors();
     }
     if (metaData.id === "interestedUni") {
-      getUniversitites()
+      getUniversitites();
     }
   }
 
-  useDebouncedEffect(handleInput, [searchTerm], 2000)
+  useDebouncedEffect(handleInput, [searchTerm], 2000);
 
   const handleClick = (e) => {
-    const value = e.target.value
+    const value = e.target.value;
     if (metaData.id === "interestedSubjects") {
-      const data = welcomeFormdata[metaData?.id]?.find((item) => item === value)
+      const data = welcomeFormdata[metaData?.id]?.find(
+        (item) => item === value
+      );
       if (!data) {
-        let newdata = [...welcomeFormdata.interestedSubjects, value]
+        let newdata = [...welcomeFormdata.interestedSubjects, value];
         setWelcomeFormdata((prev) => {
-          return { ...prev, interestedSubjects: newdata }
-        })
+          return { ...prev, interestedSubjects: newdata };
+        });
       } else {
         //remove the existing data from the array
         let newdata = welcomeFormdata.interestedSubjects.filter(
           (item) => item !== value
-        )
+        );
         setWelcomeFormdata((prev) => {
-          return { ...prev, interestedSubjects: newdata }
-        })
+          return { ...prev, interestedSubjects: newdata };
+        });
       }
     }
 
     if (metaData.id === "interestedUni") {
-      const data = welcomeFormdata[metaData?.id]?.find((item) => item === value)
+      const data = welcomeFormdata[metaData?.id]?.find(
+        (item) => item === value
+      );
       if (!data) {
-        let newdata = [...welcomeFormdata.interestedUni, value]
+        let newdata = [...welcomeFormdata.interestedUni, value];
         setWelcomeFormdata((prev) => {
-          return { ...prev, interestedUni: newdata }
-        })
+          return { ...prev, interestedUni: newdata };
+        });
       } else {
         //remove the existing data from the array
         let newdata = welcomeFormdata.interestedUni.filter(
           (item) => item !== value
-        )
+        );
         setWelcomeFormdata((prev) => {
-          return { ...prev, interestedUni: newdata }
-        })
+          return { ...prev, interestedUni: newdata };
+        });
       }
     }
-  }
+  };
 
   return (
-    <div className="  w-full">
+    <div className=" w-full">
       <Inputbox
         setTerm={setSearchTerm}
         placeholder={metaData?.placeholder}
@@ -106,7 +110,7 @@ const InputOptions = ({ metaData }) => {
         selectedValue={welcomeFormdata[metaData?.id]}
       />
     </div>
-  )
-}
+  );
+};
 
-export default InputOptions
+export default InputOptions;

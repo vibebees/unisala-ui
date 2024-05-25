@@ -1,10 +1,7 @@
-import React from "react"
-import Tabs from "./molecules/tabs"
+import React from "react";
+import Tabs from "./molecules/tabs";
 
-function Example({config}) {
-
-
-  return (<Tabs props={config} />
-  )
+function Example({ config }: any) {
+  return <Tabs props={config} />;
 }
-export default Example
+export default Example;

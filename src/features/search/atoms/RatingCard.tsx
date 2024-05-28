@@ -1,6 +1,7 @@
 import React from "react"
 import { IonRow, IonText, IonIcon, IonCol, IonCardSubtitle } from "@ionic/react"
 import { star, starHalf } from "ionicons/icons"
+import { URLgetter } from "@utils/lib/URLupdate"
 
 const RatingCard = ({ allProps }) => {
   const { overallRating, totalPeopleVoted = 0 } = allProps
@@ -49,10 +50,18 @@ const RatingCard = ({ allProps }) => {
 
     return stars
   }
+     const major = URLgetter("major")
 
   return (
     <IonRow className=" justify-end items-start  m-0 h-fit">
       <IonCol size="auto m-0">
+      <IonRow>
+          <IonText>
+            <IonCardSubtitle className="text-sm font-semibold text-gray-600">
+              {major} department
+            </IonCardSubtitle>
+          </IonText>
+        </IonRow>
         <IonRow className="items-center m-0">
           <IonText className="text-2xl m-0 font-semibold text-neutral-900">
             {overallRating ? overallRating.toFixed(1) : 0}
@@ -61,10 +70,11 @@ const RatingCard = ({ allProps }) => {
             {renderStars()}
           </IonCol>
         </IonRow>
+
         <IonRow>
           <IonText>
             <IonCardSubtitle className="text-sm font-semibold text-gray-600">
-              {totalPeopleVoted} Reviews
+              {totalPeopleVoted}  votes
             </IonCardSubtitle>
           </IonText>
         </IonRow>

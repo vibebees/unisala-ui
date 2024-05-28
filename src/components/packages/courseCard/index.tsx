@@ -50,7 +50,7 @@ function CourseCard({ allProps }) {
             <Row>
               <Row>
                 <Row>
-                  <Col size="12">
+                  <Col >
                     <div style={{ display: "flex", float: "right" }}></div>
 
                     <Typography
@@ -60,7 +60,6 @@ function CourseCard({ allProps }) {
                     >
                       {name}
                     </Typography>
-
                     <Location
                       city={allProps?.address?.city}
                       stateAbbreviation={allProps?.address?.stateAbbreviation}
@@ -97,12 +96,12 @@ function CourseCard({ allProps }) {
                       />
                     )}
                   </Col>
+
                   <Col className="h-fit">
                     <RatingCard
                       allProps={{ overallRating, totalPeopleVoted }}
                     />
                   </Col>
-                  <Col></Col>
 
                   {/* {tags?.map((tag, index) => <LikeATag colorTitle="blue" colorValue="yellow" title="Tags:" value={tag} key={index} />)} */}
 

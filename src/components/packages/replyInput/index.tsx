@@ -25,10 +25,11 @@ interface ReplyInputProps {
 
 function ReplyInput({
   postId = "",
-  isReply,
+  isReply = false,
   parentId = "",
   singlePost,
   feedId,
+  replyTo
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
@@ -66,12 +67,12 @@ function ReplyInput({
     const variables = {
       postId: postId,
       commentText: commentText,
+      parentId,
     };
 
-    // if (isReply) {
-    //   variables?.replyTo = replyTo;
-    //   parentId && variables?.parentId = parentId;
-    // }
+    if (isReply) {
+      variables.replyTo = replyTo
+    }
     addComment({ variables });
   };
 

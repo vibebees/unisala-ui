@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
-import { EditSpace } from "@datasource/graphql/user";
+import { UpateOrgSpace } from "@datasource/graphql/user";
 import { useOrgContext } from "@features/org";
 
 const UpdateSpace = ({ setIsOpen }: any) => {
@@ -23,12 +23,11 @@ const UpdateSpace = ({ setIsOpen }: any) => {
   const [present, dismiss] = useIonToast();
 
   const history = useHistory();
-  const [editSpaceCategoryById, { loading }] = useMutation(EditSpace, {
+  const [editSpaceCategoryById, { loading }] = useMutation(UpateOrgSpace, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data?.editSpaceCategoryById?.status.success) {
         setIsOpen(false);
-
         setTimeout(() => {
           history.push(
             `/space/${data?.editSpaceCategoryById?.spaceCategory?.name}`

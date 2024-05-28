@@ -77,7 +77,7 @@ export const Login = () => {
             ) : auth.state === "userNotVerified" ? (
               <UserNotVerified setauth={setauth} auth={auth} />
             ) : auth.state === "welcomeForm" ? (
-              <WelcomSteps allProps={{}} />
+              <WelcomSteps />
             ) : null}
           </Col>
         </Row>

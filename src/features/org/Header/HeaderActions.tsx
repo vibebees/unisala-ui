@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { DeleteSpace } from "@datasource/graphql/user";
+import { DeleteOrgSpace } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { useIonToast, IonPopover } from "@ionic/react";
 import { useHistory } from "react-router";
@@ -17,11 +17,11 @@ const HeaderActions = () => {
 
   const history = useHistory();
   const [present, dismiss] = useIonToast();
-  const [deleteSpace, { loading }] = useMutation(DeleteSpace, {
+  const [deleteSpace, { loading }] = useMutation(DeleteOrgSpace, {
     context: { server: USER_SERVICE_GQL },
     variables: { id: _id },
     onCompleted: (data) => {
-      if (data?.deleteSpaceCategoryById?.success) {
+      if (data?.deleteOrgSpaceById?.status?.success) {
         present({
           duration: 5000,
           message: "Space has been deleted successfully",

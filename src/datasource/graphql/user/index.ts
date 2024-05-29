@@ -1512,6 +1512,16 @@ export const Login = gql`
       }
     }
   `,
+  DeleteOrgSpace = gql`
+    mutation deleteOrgSpaceById($id: ID!) {
+      deleteOrgSpaceById(id: $id) {
+        status {
+          success
+          message
+        }
+      }
+    }
+  `,
   GetAllQuestions = gql`
     query {
       getAllQuestions {
@@ -1548,6 +1558,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
           alumini {
             _id
@@ -1555,6 +1566,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
           students {
             _id
@@ -1562,6 +1574,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
         }
       }
@@ -1575,6 +1588,36 @@ export const Login = gql`
       $description: String
     ) {
       editSpaceCategoryById(
+        id: $id
+        name: $name
+        image: $image
+        description: $description
+      ) {
+        status {
+          message
+          success
+        }
+        data {
+          _id
+          name
+          parentId
+          image
+          description
+          user {
+            _id
+          }
+        }
+      }
+    }
+  `,
+  UpateOrgSpace = gql`
+    mutation updateOrgSpaceById(
+      $id: ID!
+      $name: String!
+      $image: String
+      $description: String
+    ) {
+      updateOrgSpaceById(
         id: $id
         name: $name
         image: $image

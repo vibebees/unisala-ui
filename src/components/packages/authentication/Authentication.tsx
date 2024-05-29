@@ -52,9 +52,9 @@ export const AuthenticationContext = createContext<
   IAuthenticationContext | undefined
 >(undefined);
 
-export const Authentication = () => {
+export const Authentication = ({ state }: { state: TAuthState }) => {
   const [auth, setauth] = useState<IAuth>({
-    state: "signin",
+    state: state || "signin",
     email: "",
     code: 0,
   });
@@ -99,7 +99,7 @@ export const Authentication = () => {
               </Suspense>
             ) : auth.state === "welcomeForm" ? (
               <Suspense fallback={<PreLoader />}>
-                <WelcomSteps allProps={{}} />
+                <WelcomSteps />
               </Suspense>
             ) : null}
           </Col>

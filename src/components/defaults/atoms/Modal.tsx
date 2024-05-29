@@ -1,12 +1,19 @@
-import React from "react";
+import React, { FC } from "react";
 import { Buttons, Content, Header, Modal, Title, Toolbar } from "../index";
 import { useState } from "react";
-import Button from "./Button";
 
-const CustomModal = ({
+interface ICustomModal {
+  children: React.ReactNode;
+  ModalData?: React.ReactNode;
+  header?: string;
+  ModalButton?: React.ReactNode;
+}
+
+const CustomModal: FC<ICustomModal> = ({
   ModalButton,
   ModalData = "No Data",
   header = "Modal",
+  children,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -14,7 +21,7 @@ const CustomModal = ({
     <>
       <div className="ion-padding p-0">
         <div onClick={() => setIsOpen(true)} className="cursor-pointer p-0">
-          {ModalButton}
+          {children || ModalButton}
         </div>
         <Modal
           mode="ios"

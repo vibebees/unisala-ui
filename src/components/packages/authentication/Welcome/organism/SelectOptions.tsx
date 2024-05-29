@@ -1,15 +1,15 @@
-import React, { useContext } from "react"
-import Checkbox from "../atom/Checkbox"
-import { WelcomeData } from ".."
+import React, { useContext } from "react";
+import Checkbox from "../atom/Checkbox";
+import { WelcomeData } from "..";
 
-const SelectOptions = ({ metaData }) => {
-  const { setWelcomeFormdata, welcomeFormdata } = useContext(WelcomeData)
-  const handleClick = (e) => {
-    const data = e.target.value
+const SelectOptions = ({ metaData }: any) => {
+  const { setWelcomeFormdata, welcomeFormdata } = useContext(WelcomeData);
+  const handleClick = (e: any) => {
+    const data = e.target.value;
     if (data) {
-      setWelcomeFormdata({ ...welcomeFormdata, [metaData?.id]: data })
+      setWelcomeFormdata({ ...welcomeFormdata, [metaData?.id]: data });
     }
-  }
+  };
 
   return (
     <>
@@ -22,9 +22,9 @@ const SelectOptions = ({ metaData }) => {
             handleClick={handleClick}
             isChecked={option === welcomeFormdata[metaData?.id]}
           />
-        )
+        );
       })}
     </>
-  )
-}
-export default SelectOptions
+  );
+};
+export default SelectOptions;

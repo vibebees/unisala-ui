@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable complexity */
-import React from "react";
+import React, { useRef } from "react";
 import { IonIcon, IonLabel } from "@ionic/react";
 import "./index.css";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -23,27 +23,38 @@ import { UniFilterResults } from "@datasource/graphql/uni";
 import { Button } from "@components/defaults";
 import { motion } from "framer-motion";
 
+// filterPage={filterPage} loading={loading} data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults}
 function index({
-  setIsLoading,
+  loading,
   filterPage,
+  getUniversityResults,
+  data,
+  fetchMore,
+
 }: {
-  setIsLoading: any;
-  filterPage: number;
+    filterPage: number;
+    getUniversityResults: any;
+    data: any;
+    fetchMore: any;
+    loading: boolean;
 }) {
   const [isFiltered, setIsFiltered] = useState(false);
   const [selectedMajor, setSelectedMajor] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
-  const [getUniversityResults, { data, fetchMore }] = useLazyQuery(
-    UniFilterResults,
-    {
-      context: { server: UNIVERSITY_SERVICE_GQL },
-      fetchPolicy: "network-only",
-    }
-  );
+  // use this to keep track of the current page of the filter
+  const currentQueryForPage = useRef(0);
+  //update this var by 1 when the filter page changes
+
+
 
   useEffect(() => {
-    if (filterPage > 1 && isFiltered) {
+    if (loading) {
+      return
+    }
+    console.log('filterPage', filterPage)
+    currentQueryForPage
+    if (filterPage > 0 && isFiltered) {
       fetchMore({
         variables: {
           page: filterPage,
@@ -132,7 +143,9 @@ function index({
 
   useEffect(() => {
     setIsFiltered(true);
-    const queryObject = getAllQueryParams(1);
+    const queryObject = getAllQueryParams(0);
+    console.log('-------->')
+    console.log(queryObject)
     getUniversityResults({
       variables: {
         ...queryObject,

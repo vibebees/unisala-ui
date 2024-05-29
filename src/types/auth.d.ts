@@ -1,15 +1,17 @@
 /* eslint-disable no-unused-vars */
 
+type TAuthState =
+  | "signin"
+  | "signup"
+  | "SignUpVerification"
+  | "emailVerify"
+  | "ForgotPasswordVerification"
+  | "resetPassword"
+  | "userNotVerified"
+  | "welcomeForm";
+
 interface IAuth {
-  state:
-    | "signin"
-    | "signup"
-    | "SignUpVerification"
-    | "emailVerify"
-    | "ForgotPasswordVerification"
-    | "resetPassword"
-    | "userNotVerified"
-    | "welcomeForm";
+  state: TAuthState;
   email: string | null;
   code: number;
 }

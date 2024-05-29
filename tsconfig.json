@@ -23,7 +23,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@features/*": ["./src/features/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@context/*": ["./src/context/*"]
+      "@context/*": ["./src/context/*"],
+      "@navigation/*": ["./src/navigation/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "src/features/messages/new/Chats.js"],

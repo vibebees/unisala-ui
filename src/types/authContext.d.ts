@@ -5,6 +5,7 @@ interface IAuthContext {
   authenticated: boolean;
   UpdateAuth: (data: IAuthData) => void;
   ClearAuth: () => void;
+  UpdateNewUser: () => void;
   loading: boolean;
 }
 
@@ -18,6 +19,7 @@ interface IUser {
   picture?: string;
   location?: string;
   name?: string;
+  interestedSubjects?: string;
 }
 
 interface IAuthData extends IUser {

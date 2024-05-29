@@ -41,7 +41,7 @@ const {
                 console.log("Token is invalid or expired, refreshing token...");
                 fromPromise(refreshTokenAndRetry(operation)).subscribe({
                   // Ensure responses are forwarded
-                  next: observer.next(response),
+                  next: observer.next(response) as any,
                   error: observer.error.bind(observer),
                   complete: observer.complete.bind(response),
                 });
@@ -65,17 +65,10 @@ const {
     });
   }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, locations, path }) => {
-        // if (message === "You are not logged in. Please login") {
-        //   alert("You are not logged in. Please login");
-        // }
-      });
-    }
     try {
       if (graphQLErrors) {
         for (let err of graphQLErrors) {
-          const { message, path } = err || {};
+          const { message } = err || {};
           const { statusCode } = JSON.parse(message) || {};
           switch (statusCode) {
             // case 400:
@@ -114,15 +107,15 @@ const {
   messageServerGql = new HttpLink({
     uri: messagingServiceAddress + "/graphql",
     server: MESSAGE_SERVICE_GQL,
-  }),
+  } as any),
   universityServerGql = new HttpLink({
     uri: universityServiceAddress + "/graphql",
     server: UNIVERSITY_SERVICE_GQL,
-  }),
+  } as any),
   userServerGql = new HttpLink({
     uri: userServiceAddress + "/graphql",
     server: USER_SERVICE_GQL,
-  }),
+  } as any),
   authLink = setContext((_, { headers }) => {
     const authData: IAuthData | null = getCache("authData");
     return {

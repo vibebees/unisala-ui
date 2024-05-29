@@ -7,11 +7,22 @@ import { DesktopFilter } from "./desktopFilter";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import CreatePortal from "@utils/CreatePortal";
+import { useLazyQuery } from "@apollo/client";
+import { UniFilterResults } from "@datasource/graphql/uni";
+import { UNIVERSITY_SERVICE_GQL } from "@datasource/servers/types";
 
-const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
+const UniSearchResult: FC<IUniSearchResult> = () => {
   const history = useHistory();
   const [activeSubTab, setActiveSubTab] = useState<string>("u");
-  const [filterPage, setFilterPage] = useState<number>(1);
+  const [filterPage, setFilterPage] = useState<number>(0);
+  const [getUniversityResults, { data, fetchMore , loading}] = useLazyQuery(
+    UniFilterResults,
+    {
+      context: { server: UNIVERSITY_SERVICE_GQL },
+      fetchPolicy: "network-only",
+    }
+  );
+
 
   useEffect(() => {
     const url = URLgetter("st");
@@ -36,12 +47,12 @@ const UniSearchResult: FC<IUniSearchResult> = ({ loading }) => {
         )} */}
 
       {CreatePortal(
-        <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
+        <DesktopFilter filterPage={filterPage} loading={loading} data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
         "filter-container"
       )}
 
       {CreatePortal(
-        <DesktopFilter filterPage={filterPage} setIsLoading={loading} />,
+        <DesktopFilter filterPage={filterPage} loading={loading}  data = {data} fetchMore = {fetchMore} getUniversityResults ={getUniversityResults} />,
         "menu-content"
       )}
 

@@ -1,10 +1,11 @@
 import React from "react";
 import LayoutSplit from "@layouts/FixedLayout";
 import Authentication from "@components/packages/authentication/Authentication";
-const AuthPage = () => {
+
+const AuthPage = ({ state }: { state: TAuthState }) => {
   return (
     <LayoutSplit>
-      <Authentication />
+      <Authentication state={state} />
     </LayoutSplit>
   );
 };

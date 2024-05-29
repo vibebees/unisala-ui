@@ -25,7 +25,7 @@ export const SignUpForm = () => {
     password: "",
     spaceOrgName,
     type: spaceOrgName && "invitation",
-    code: code,
+    code: code ? parseInt(code) : null,
   });
 
   const [RegisterUser, { loading }] = useMutation<RegisterMutation>(Register, {

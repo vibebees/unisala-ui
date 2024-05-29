@@ -1,109 +1,113 @@
-import { useApolloClient, useMutation } from "@apollo/client"
-import { IonInput, useIonToast } from "@ionic/react"
-import { Button, Col, Grid, Row } from "../../../../components/defaults"
-import { OrgContext } from "@features/org"
-import { AddNewHistory, GetAllHistory, GetAllHistoryYear } from "../../../../datasource/graphql/user"
-import moment from "moment"
-import { useContext, useState } from "react"
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types"
-import HistoryButton from "../atoms/SaveButton"
-import AddPeople from "./AddPeople"
+import { useApolloClient, useMutation } from "@apollo/client";
+import { IonInput, useIonToast } from "@ionic/react";
+import { Button, Col, Grid, Row } from "../../../../components/defaults";
+import { useOrgContext } from "@features/org";
+import {
+  AddNewHistory,
+  GetAllHistory,
+  GetAllHistoryYear,
+} from "../../../../datasource/graphql/user";
+import moment from "moment";
+import React, { useState } from "react";
+import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
+import HistoryButton from "../atoms/SaveButton";
+import AddPeople from "./AddPeople";
 
 const AddHistory = () => {
-  const { orgData } = useContext(OrgContext)
-  const [addPeople, setAddPeople] = useState(false)
-  const client = useApolloClient()
-  const [present, dismiss] = useIonToast()
+  const { _id } = useOrgContext();
+  const [addPeople, setAddPeople] = useState(false);
+  const client = useApolloClient();
+  const [present, dismiss] = useIonToast();
   const [data, setdata] = useState({
     date: Date.now(),
     description: "",
-    events: []
-  })
+    events: [],
+  });
 
   const [addHistoryMutation] = useMutation(AddNewHistory, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data }) => {
       const getHistories = cache.readQuery({
         query: GetAllHistory,
-        variables: { orgId: orgData._id, year: new Date().getFullYear() }
-      })
+        variables: { orgId: _id, year: new Date().getFullYear() },
+      });
 
       if (!getHistories) {
         client.refetchQueries({
-          include: [GetAllHistoryYear, GetAllHistory]
-        })
+          include: [GetAllHistoryYear, GetAllHistory],
+        });
       }
 
       getHistories &&
         cache.writeQuery({
           query: GetAllHistory,
-          variables: { orgId: orgData._id, year: new Date().getFullYear() },
+          variables: { orgId: _id, year: new Date().getFullYear() },
           data: {
             getAllHistory: {
               ...getHistories.getAllHistory,
               data: [
                 ...getHistories.getAllHistory.data,
-                data.createHistory.data
-              ]
-            }
-          }
-        })
+                data.createHistory.data,
+              ],
+            },
+          },
+        });
     },
 
     onCompleted: () => {
-      setdata({ date: Date.now(), description: "", events: [] })
+      setdata({ date: Date.now(), description: "", events: [] });
       present({
         duration: 3000,
         message: "History added successfully",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "primary",
-        mode: "ios"
-      })
-    }
-  })
+        mode: "ios",
+      });
+    },
+  });
 
   const handleSaveHistory = () => {
-    let formatevents = []
+    let formatevents = [];
     if (data.description === "") {
       return present({
         duration: 3000,
         message: "Please fill all the fields",
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
-        mode: "ios"
-      })
+        mode: "ios",
+      });
     }
 
     if (data.events && data.events.length > 0) {
-      const isEventsValid = data.events.every((event) => event.title !== "")
+      const isEventsValid = data.events.every((event) => event.title !== "");
       if (!isEventsValid) {
         return present({
           duration: 3000,
           message: "Please fill all the fields",
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
       formatevents = data.events.map((event) => {
         return {
           userId: "6561b47fe92160691070dc06",
           title: event.title,
-          date: data.date
-        }
-      })
+          date: data.date,
+        };
+      });
     }
 
     addHistoryMutation({
       variables: {
-        orgId: orgData._id,
+        orgId: _id,
         title: data.description,
         description: data.description,
         date: moment(data.date).format("YYYY-MM-DD"),
-        events: formatevents
-      }
-    })
-  }
+        events: formatevents,
+      },
+    });
+  };
 
   return (
     <Grid className="ion-no-padding   w-full h-full ion-no-margin  mb-8 mt-4  justify-between rounded-md ">
@@ -137,7 +141,7 @@ const AddHistory = () => {
         >
           <Button
             onClick={() => {
-              setAddPeople(!addPeople)
+              setAddPeople(!addPeople);
             }}
             fill="outline"
             className="ion-no-margin w-fit"
@@ -156,7 +160,7 @@ const AddHistory = () => {
         />
       </Col>
     </Grid>
-  )
-}
+  );
+};
 
-export default AddHistory
+export default AddHistory;

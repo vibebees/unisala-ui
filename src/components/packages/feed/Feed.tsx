@@ -102,7 +102,7 @@ function Example({ feedType, feedId }) {
       <InfiniteScroll
         onIonInfinite={(ev) => {
           loadMorePost();
-          setTimeout(() => ev.target.complete(), 1000);
+          setTimeout(() => ev.target.complete(), 500);
         }}
       >
         <InfiniteScrollContent></InfiniteScrollContent>

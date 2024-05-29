@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client";
 import {
   IonButton,
   IonCol,
@@ -6,55 +6,55 @@ import {
   IonInput,
   IonLabel,
   IonRow,
-  IonText,
-  useIonToast
-} from "@ionic/react"
- import React, { useEffect, useRef, useState } from "react"
-  import { useHistory } from "react-router"
-import {USER_SERVICE_GQL} from "@datasource/servers/types"
-import { EditSpace } from "@datasource/graphql/user"
+  useIonToast,
+} from "@ionic/react";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { UpateOrgSpace } from "@datasource/graphql/user";
+import { useOrgContext } from "@features/org";
 
-const UpdateSpace = ({ spaceDetails, setIsOpen }) => {
-  const [editSpaceDetails, setEditSpaceDetails] = useState(spaceDetails)
-  const [present, dismiss] = useIonToast()
+const UpdateSpace = ({ setIsOpen }: any) => {
+  const { name, description, _id } = useOrgContext();
+  const [editSpaceDetails, setEditSpaceDetails] = useState({
+    name: name || "",
+    description: description || "",
+  });
+  const [present, dismiss] = useIonToast();
 
-  const nameRef = useRef(spaceDetails?.name)
-  const descRef = useRef(spaceDetails?.description)
-  const history = useHistory()
-  const [editSpaceCategoryById] = useMutation(EditSpace, {
+  const history = useHistory();
+  const [editSpaceCategoryById, { loading }] = useMutation(UpateOrgSpace, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data?.editSpaceCategoryById?.status.success) {
-        setIsOpen(false)
-
+        setIsOpen(false);
         setTimeout(() => {
           history.push(
             `/space/${data?.editSpaceCategoryById?.spaceCategory?.name}`
-          )
-        }, 100)
+          );
+        }, 100);
       } else {
         present({
           duration: 3000,
           message: data?.editSpaceCategoryById?.status?.message,
           buttons: [{ text: "X", handler: () => dismiss() }],
           color: "danger",
-          mode: "ios"
-        })
+          mode: "ios",
+        });
       }
-    }
-  })
+    },
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     editSpaceCategoryById({
       variables: {
-        id: editSpaceDetails?._id,
-        name: nameRef?.current?.value,
-        description: descRef?.current?.value
-      }
-    })
-  }
+        id: _id,
+        name: editSpaceDetails?.name,
+        description: editSpaceDetails?.description,
+      },
+    });
+  };
 
   return (
     <IonContent>
@@ -69,15 +69,20 @@ const UpdateSpace = ({ spaceDetails, setIsOpen }) => {
               placeholder="Name of your space"
               fill="outline"
               required
-              value={spaceDetails?.name}
+              value={editSpaceDetails?.name}
+              onIonChange={(e) =>
+                setEditSpaceDetails({
+                  ...editSpaceDetails,
+                  name: e.detail.value || "",
+                })
+              }
               color="dark"
-              ref={nameRef}
-              className="mt-2  border border-black w-full "
+              className="mt-2 !px-3 rounded-md border duration-200 transition-all border-neutral-300 focus-within:border-neutral-500 w-full "
               name="name"
             ></IonInput>
           </IonCol>
         </IonRow>
-        <IonRow>
+        <IonRow class="mt-2">
           <IonCol>
             <IonLabel>
               Description
@@ -88,22 +93,32 @@ const UpdateSpace = ({ spaceDetails, setIsOpen }) => {
             <IonInput
               color="dark"
               type="text"
+              onIonChange={(e) =>
+                setEditSpaceDetails({
+                  ...editSpaceDetails,
+                  description: e.detail.value || "",
+                })
+              }
               fill="outline"
               placeholder="This space is about ....."
-              className="mt-2 text-sm border border-black  w-full"
-              ref={descRef}
+              className="mt-2 !px-3 rounded-md border duration-200 transition-all border-neutral-300 focus-within:border-neutral-500 w-full "
               name="description"
-              value={spaceDetails.description}
+              value={editSpaceDetails.description}
             ></IonInput>
           </IonCol>
         </IonRow>
 
-        <IonButton type="button" onClick={handleSubmit} className="mt-4">
-          Update
+        <IonButton
+          disabled={loading}
+          type="button"
+          onClick={handleSubmit}
+          className="mt-4"
+        >
+          {loading ? "Updating..." : "Update"}
         </IonButton>
       </form>
     </IonContent>
-  )
-}
+  );
+};
 
-export default UpdateSpace
+export default UpdateSpace;

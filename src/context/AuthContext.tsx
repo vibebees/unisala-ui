@@ -39,6 +39,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     window.location.replace(`/home`);
   };
 
+  const UpdateNewUser = () => {
+    if (!user) return;
+    const newUser: IAuthData = { ...user, newUser: false };
+    setUser(newUser);
+    setCache("authData", newUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -47,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         UpdateAuth,
         ClearAuth,
         loading,
+        UpdateNewUser,
       }}
     >
       {children}

@@ -1,18 +1,18 @@
 // import StepInput from "../../component/roadmap/StepInput"
-import { useQuery } from "@apollo/client"
- import { OrgContext } from "../index"
- import { useContext } from "react"
-import { USER_SERVICE_GQL } from "../../../datasource/servers/types"
-import SingleTimeline from "./organism/SingleTimeline"
-import {Grid} from "../../../components/defaults"
-import {GetAllHistory} from "../../../datasource/graphql/user"
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { useOrgContext } from "..";
+import { USER_SERVICE_GQL } from "../../../datasource/servers/types";
+import SingleTimeline from "./organism/SingleTimeline";
+import { Grid } from "../../../components/defaults";
+import { GetAllHistory } from "../../../datasource/graphql/user";
 
 export const TimeLine = ({ year }) => {
-  const { orgData } = useContext(OrgContext)
+  const { _id } = useOrgContext();
   const { data, loading, fetchMore } = useQuery(GetAllHistory, {
     context: { server: USER_SERVICE_GQL },
-    variables: { orgId: orgData?._id, year: year }
-  })
+    variables: { orgId: _id, year: year },
+  });
   return (
     <Grid
       style={{ maxWidth: "900px" }}
@@ -32,5 +32,5 @@ export const TimeLine = ({ year }) => {
       </Row> */}
       <SingleTimeline data={data?.getAllHistory?.data} />
     </Grid>
-  )
-}
+  );
+};

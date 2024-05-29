@@ -21,13 +21,11 @@ const Org = lazy(() => import("../pages/org"));
 const UniversityPage = lazy(() => import("../pages/university"));
 const AuthPage = lazy(() => import("../pages/auth"));
 
-
 const ThreadDetail = lazy(() => import("../pages/thread.detail"));
 const PageNotFound = lazy(() => import("./PageNotFound"));
 const LandingPage = lazy(() => import("../pages/landingPage"));
 const Standard = lazy(() => import("../pages/standard"));
 const NewsFeed = lazy(() => import("../pages/feed"));
-
 
 const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 // const spaceRoutes = () => (
@@ -46,12 +44,15 @@ const networkRoutes = () => <ProtectedRoute></ProtectedRoute>;
 // )
 
 export const PageRoute = () => {
-const { authenticated } = useAuth();
+  const { authenticated } = useAuth();
 
   return (
     <Suspense fallback={<PreLoader />}>
       <Route path="/login" exact>
-        <AuthPage />
+        <AuthPage state="signin" />
+      </Route>
+      <Route path="/register" exact>
+        <AuthPage state="signup" />
       </Route>
       <Route path="/feed" exact>
         <NewsFeed />

@@ -1,14 +1,12 @@
-import { Button, Col, Row, Text } from "@components/defaults"
-import clsx from "clsx"
-import AddHistory from "../../timeline/organism/AddHistory"
-import React from "react"
+import { Button, Col, Row, Text } from "@components/defaults";
+import clsx from "clsx";
+import AddHistory from "../../timeline/organism/AddHistory";
+import React from "react";
 const HistoryHeader = ({ setData }) => {
-  const [showAddHistory, setshowAddHistory] = React.useState(false)
+  const [showAddHistory, setshowAddHistory] = React.useState(false);
 
   return (
-    <Row
-      className={clsx("flex-col h-full", showAddHistory ? "mb-0" : "mb-5")}
-    >
+    <Row className={clsx("flex-col h-full", showAddHistory ? "mb-0" : "mb-5")}>
       <Row className="ion-no-margin mt-5 ion-no-padding items-center justify-between">
         <Col
           size="auto"
@@ -40,7 +38,7 @@ const HistoryHeader = ({ setData }) => {
         <AddHistory setData={setData} />
       </Row>
     </Row>
-  )
-}
+  );
+};
 
-export default HistoryHeader
+export default HistoryHeader;

@@ -1,13 +1,15 @@
-import { Button, Col, Row, Typography } from "@components/defaults"
- import AvatarProfile from "@components/packages/Avatar"
-import {MessageIcon2} from "@components/packages/icons"
+import React from "react";
+import { Button, Col, Row, Typography } from "@components/defaults";
+import AvatarProfile from "@components/packages/Avatar";
+import { MessageIcon2 } from "@components/packages/icons";
 
 const memberList = ({
   profileImg,
   username,
   firstName,
   lastName,
-  memberType
+  memberType,
+  interestedSubjects,
 }) => {
   return (
     <Row className="border py-2 px-2 ion-no-padding ion-no-margin hover:bg-neutral-200 rounded-md w-full ion-no-padding ion-no-margin">
@@ -21,9 +23,15 @@ const memberList = ({
             <span className="text-neutral-50 ml-3 text-xs pb-px bg-blue-400 px-2 rounded-full leading-normal">
               {memberType}
             </span>
-            <span className="text-neutral-50 ml-3 text-xs pb-px bg-green-500 px-2 rounded-full leading-normal">
-              Computer science
-            </span>
+            {interestedSubjects ? (
+              <>
+                <span className="text-neutral-50 ml-3 text-xs pb-px bg-green-500 px-2 rounded-full leading-normal">
+                  {interestedSubjects}
+                </span>
+              </>
+            ) : (
+              <></>
+            )}
           </Typography>
           <Typography
             variant="p"
@@ -47,7 +55,7 @@ const memberList = ({
         </Button>
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-export default memberList
+export default memberList;

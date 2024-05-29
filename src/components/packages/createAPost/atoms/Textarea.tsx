@@ -1,38 +1,32 @@
+import React, { FC } from "react";
 import { Typography } from "@components/defaults";
 import RichTextInput from "@components/packages/input/RichTextInput";
 
-export const Textarea = (item, postData, setPostData) => {
+interface ITextareaProps {
+  item: any;
+  postData: any;
+  setPostData: any;
+}
+
+const Textarea: FC<ITextareaProps> = ({ item, postData, setPostData }) => {
   return (
     <>
       <Typography className="text-sm mb-1">{item?.name}</Typography>
       <div>
         <RichTextInput
           id={item?.id}
-          onChange={(e) => setPostData((prev) => ({ ...prev, postText: e }))}
+          onChange={(e) =>
+            setPostData((prev: any) => {
+              let newData = { ...prev, postText: e };
+              localStorage.setItem("postData", JSON.stringify(newData));
+              return newData;
+            })
+          }
           value={postData?.postText}
-          showUniversityListOnAt={true}
-          searchText={postData?.postText?.split("@").pop().split("<")[0]}
-          handleUniversitySelect={(e) => {
-            if (postData?.postText?.endsWith("</p>")) {
-              const removeTextafter = postData?.postText?.split("@")[0];
-              setPostData((prev) => ({
-                ...prev,
-                postText:
-                  removeTextafter +
-                  `<a href="https://unisala.com/university/${e}" rel="noopener noreferrer" target="_blank">${e}</a></p></p>`,
-              }));
-            } else {
-              const removeTextafter = postData.postText.split("@")[0];
-              setPostData((prev) => ({
-                ...prev,
-                postText:
-                  removeTextafter +
-                  `<a href="https://unisala.com/university/${e}" rel="noopener noreferrer" target="_blank">${e}</a></p>`,
-              }));
-            }
-          }}
         />
       </div>
     </>
   );
 };
+
+export { Textarea };

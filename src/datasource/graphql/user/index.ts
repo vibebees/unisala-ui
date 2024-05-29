@@ -1558,6 +1558,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
           alumini {
             _id
@@ -1565,6 +1566,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
           students {
             _id
@@ -1572,6 +1574,7 @@ export const Login = gql`
             lastName
             username
             picture
+            interestedSubjects
           }
         }
       }

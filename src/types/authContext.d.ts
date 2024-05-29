@@ -19,6 +19,7 @@ interface IUser {
   picture?: string;
   location?: string;
   name?: string;
+  interestedSubjects?: string;
 }
 
 interface IAuthData extends IUser {

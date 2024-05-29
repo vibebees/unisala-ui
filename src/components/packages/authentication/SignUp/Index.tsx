@@ -22,6 +22,8 @@ export const SignUp = () => {
           <div
             style={{
               width: "234px",
+              cursor: isInvited ? "not-allowed" : "pointer",
+              pointerEvents: isInvited ? "none" : "auto",
             }}
           >
             <GoogleAuth />

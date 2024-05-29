@@ -45,9 +45,8 @@ const UpdateSpace = ({ setIsOpen }: any) => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-
     editSpaceCategoryById({
       variables: {
         id: _id,

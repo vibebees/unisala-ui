@@ -99,7 +99,7 @@ export const Authentication = ({ state }: { state: TAuthState }) => {
               </Suspense>
             ) : auth.state === "welcomeForm" ? (
               <Suspense fallback={<PreLoader />}>
-                <WelcomSteps allProps={{}} />
+                <WelcomSteps />
               </Suspense>
             ) : null}
           </Col>

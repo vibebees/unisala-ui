@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState, useContext } from "react";
+import React, { FormEvent, useState, useContext, useLayoutEffect } from "react";
 import { IonSpinner, useIonToast } from "@ionic/react";
 import { Typography, Button, Row } from "@components/defaults";
 import AuthInput from "../AuthInput";
@@ -8,7 +8,7 @@ import { USER_SERVICE_GQL } from "@datasource/servers/types";
 import { LoginMutation } from "src/types/gqlTypes/graphql";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "@context/AuthContext";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import { AuthenticationContext } from "../Authentication";
 
 const SignInForm = () => {
@@ -16,14 +16,16 @@ const SignInForm = () => {
   const params = new URLSearchParams(window.location.search);
   const { UpdateAuth, authenticated } = useAuth();
   const history = useHistory();
-  const location = useLocation();
   const spaceOrgName = params.get("org");
   const [errors, setErrors] = useState<ILoginInputErrors>({});
   const [present, dismiss] = useIonToast();
 
-  useEffect(() => {
-    if (authenticated && !location.search.includes("auth")) {
-      history.push("/");
+  useLayoutEffect(() => {
+    if (authenticated) {
+      if (input?.spaceOrgName && input.code) {
+        return history.push(`/org/${input.spaceOrgName}?inv=t`);
+      }
+      history.push("/feed");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated]);
@@ -43,7 +45,7 @@ const SignInForm = () => {
       password: input.password,
       spaceOrgName: input.spaceOrgName,
       type: input.type,
-      code: parseInt(input?.code),
+      code: input.code,
     },
     onCompleted: (data) => {
       if (data.login?.status?.success && data.login && data.login.data) {
@@ -63,8 +65,7 @@ const SignInForm = () => {
           color: "success",
           buttons: [{ text: "X", handler: () => dismiss() }],
         });
-        document.getElementById("close-auth-modal")?.click();
-        history.push("/feed");
+        window.location.reload();
       }
     },
     onError: (error) => {

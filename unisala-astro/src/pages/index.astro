@@ -1,0 +1,19 @@
+---
+import MainLayout from '@/layouts/main-layout.astro';
+import HeroLanding from "@/components/sections/hero-landing.astro"
+import PreviewLanding from "@/components/sections/preview-landing.astro"
+import BentoGrid from "@/components/sections/bentogrid.astro"
+import InfoLanding from "@/components/sections/info-landing.astro"
+import { infos } from "@/config/landing";
+import Features from '@/components/sections/features.astro';
+import Testimonials from '@/components/sections/testimonials.astro';
+console.log("Check if this log is displayed");
+---
+<MainLayout title ="landing page">
+  <HeroLanding/>
+  <PreviewLanding />
+  <BentoGrid />
+  <InfoLanding data={infos[0]} reverse={true} />
+  <Features />
+  <Testimonials />
+</MainLayout>

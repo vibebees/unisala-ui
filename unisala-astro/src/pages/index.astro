@@ -6,12 +6,13 @@ import InfoLanding from "@/components/sections/info-landing.astro"
 import { infos } from "@/config/landing";
 import Features from '@/components/sections/features.astro';
 import Testimonials from '@/components/sections/testimonials.astro';
+import Organization from '@/components/sections/organization.astro';
 console.log("Check if this log is displayed");
 ---
 <MainLayout title ="landing page">
   <HeroLanding/>
   <BentoGrid />
   <InfoLanding data={infos[0]} reverse={true} />
-  <Features />
+  <Features data={infos[0]} reverse={false} />
   <Testimonials />
 </MainLayout>

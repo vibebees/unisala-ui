@@ -1,48 +1,86 @@
 ---
-import { testimonials } from "@/config/landing";
-import { Image } from "astro:assets";
-import HeaderSection from "./header-section.astro";
+import { testimonials } from '@/config/landing';
+import { Image } from 'astro:assets';
+import HeaderSection from './header-section.astro';
+import RatingStars from '../ui/RatingStars';
+
+const ratingsConfig = [
+  {
+    label: "Admission & Application",
+    ratingKey: "admission",
+  },
+  {
+    label: "Financial Aid & Scholarships",
+    ratingKey: "financialAid",
+  },
+  {
+    label: "Academic Programs & Department",
+    ratingKey: "academicPrograms",
+  },
+  {
+    label: "Student Life & Services",
+    ratingKey: "studentLife",
+  },
+  {
+    label: "Career & Alumni Resources",
+    ratingKey: "careerResources",
+  },
+];
 ---
 
 <section>
-  <div class="container flex max-w-7xl flex-col gap-10 py-32 sm:gap-y-16">
+  <div class='container flex max-w-7xl flex-col gap-10 py-32 sm:gap-y-16'>
     <HeaderSection
-      label="Testimonials"
-      title="What our clients are sharing."
-      subtitle="Discover the glowing feedback from our delighted customers worldwide."
+      label='Decision Makings'
+      title='Students reviews and stories.'
+      subtitle='Explore student experiences and valuable lessons for decision making.'
     />
 
-    <div class="column-1 gap-5 space-y-5 md:columns-2 lg:columns-3 xl:columns-4">
-      {
-        testimonials.map((item) => (
-          <div class="break-inside-avoid">
-            <div class="relative rounded-xl border bg-muted/25">
-              <div class="flex flex-col px-4 py-5 sm:p-6">
-                <div>
-                  <div class="relative mb-4 flex items-center gap-3">
-                    <span class="relative inline-flex size-10 shrink-0 items-center justify-center rounded-full text-base">
-                      <Image
-                        width={100}
-                        height={100}
-                        class="size-full rounded-full border"
-                        src={item.image}
-                        alt={item.name}
-                      />
-                    </span>
-                    <div>
-                      <p class="text-sm font-semibold text-foreground">
-                        {item.name}
-                      </p>
-                      <p class="text-sm text-muted-foreground">{item.job}</p>
-                    </div>
+    <div
+      class='column-1 gap-5 space-y-5 md:columns-2 lg:columns-3 xl:columns-4'
+    >
+      {testimonials.map((item) => (
+        <div class='break-inside-avoid'>
+          <div class='relative rounded-xl border bg-muted/25'>
+            <div class='flex flex-col px-4 py-5 sm:p-6'>
+              <div>
+                <div class='relative mb-4 flex items-center gap-3'>
+                  <span class='relative inline-flex size-10 shrink-0 items-center justify-center rounded-full text-base'>
+                    <Image
+                      width={100}
+                      height={100}
+                      class='size-full rounded-full border filter blur-sm	 '
+                      src={item.image}
+                      alt={item.name}
+                    />
+                  </span>
+                  <div>
+                    <p class='text-sm font-semibold text-foreground'>
+                      {item.name}
+                    </p>
+                    <p class='text-sm text-muted-foreground'>{item.job}</p>
                   </div>
-                  <q class="text-muted-foreground">{item.review}</q>
+                </div>
+                <q class='text-muted-foreground'>{item.review}</q>
+
+                <div className='mt-10 pt-10 '>
+                  {item?.ratings && (
+                    <div>
+                      {ratingsConfig.map(({ label, ratingKey }) => (
+                        item.ratings[ratingKey] ? (
+                          <p key={ratingKey} class="text-sm font-normal text-blue-gray-700">
+                            {label}: <RatingStars rating={item.ratings[ratingKey]} />
+                          </p>
+                        ) : null
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-        ))
-      }
+        </div>
+      ))}
     </div>
   </div>
 </section>

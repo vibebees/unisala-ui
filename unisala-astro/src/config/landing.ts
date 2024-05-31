@@ -50,11 +50,11 @@ export const features = [
     image:"/images/ask-university-question-to-community-unisala.webp"
   },
   {
-    title: "Review University",
-    description: "Share your feedback and experiences about your university.",
-    link: "/review-university",
-    icon: "lucide:circle-help",
-    image:"/images/review-uni.webp"
+    title: "Discover Your Space",
+    description: "Find and join a community of like-minded individuals. Share your field of study and grow together.",
+    link: "/networking",
+    icon: "lucide:users",
+    image:"/images/like-minded-peope-space.webp"
   },
 
 ];
@@ -69,19 +69,19 @@ export const featuresSecond = [
     image:"/images/nsas_events_unisala.webp"
   },
   {
-    title: "Discover Your Space",
-    "description": "Find and join a community of like-minded individuals. Share your field of study and grow together.",
-    link: "/networking",
-    icon: "lucide:users",
-    image:"/images/discover-your-space-unisala.webp"
-  },
-  {
     title: "Student-Alumini Networking",
     "description": "Connect with alumni and classmates to explore career opportunities and gain industry insights.",
     link: "/career-portal",
     icon: "lucide:briefcase",
     image:"/images/alumini-stories.webp"
-  }
+  },
+  {
+    title: "Rate your University",
+    description: "Rate your university and share your journey to guide future students.",
+    link: "/review-university",
+    icon: "lucide:circle-help",
+    image:"/images/university-ratings-unisala.webp"
+  },
 ];
 
 export const testimonials = [

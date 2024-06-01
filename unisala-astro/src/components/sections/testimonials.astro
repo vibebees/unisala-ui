@@ -63,13 +63,13 @@ const ratingsConfig = [
                 </div>
                 <q class='text-muted-foreground'>{item.review}</q>
 
-                <div className='mt-10 pt-10 '>
+                <div class='mt-10 pt-10 '>
                   {item?.ratings && (
                     <div>
                       {ratingsConfig.map(({ label, ratingKey }) => (
-                        item.ratings[ratingKey] ? (
-                          <p key={ratingKey} class="text-sm font-normal text-blue-gray-700">
-                            {label}: <RatingStars rating={item.ratings[ratingKey]} />
+                        item.ratings[ratingKey as keyof typeof item.ratings] ? (
+                            <p class="text-sm font-normal text-blue-gray-700">
+                            {label}: <RatingStars rating={item.ratings[ratingKey as keyof typeof item.ratings] ?? 0 } />
                           </p>
                         ) : null
                       ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RatingStars = ({ rating }) => {
+const RatingStars = ({ rating }: { rating: number }) => {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
     stars.push(

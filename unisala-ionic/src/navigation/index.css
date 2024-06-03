@@ -1,0 +1,12 @@
+.icon-search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .icon-search-container {
+        flex-direction: column;
+    }
+}

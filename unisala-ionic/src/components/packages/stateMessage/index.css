@@ -1,0 +1,12 @@
+.center-text {
+    text-align: center;
+}
+
+.empty-state {
+    padding: 16px;
+}
+
+.state-img {
+    height: 140px;
+    width: auto;
+}

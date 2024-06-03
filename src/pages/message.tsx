@@ -3,7 +3,7 @@ import Message from "../features/messages";
 import ComingSoon from "./ComingSoon";
 
 const MessagePage = () => {
-  return <ComingSoon />;
+  return <Message />;
 };
 
 export default MessagePage;

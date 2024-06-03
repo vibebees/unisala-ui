@@ -2,7 +2,7 @@ import type { InfoLdg } from "@/types";
 
 export const infos: InfoLdg[] = [
   {
-    title: "Webinar: University Journey",
+    title: "Discover Paths: Weekly Graduate Webinars",
     description: "Join our weekly webinars at Unisala, where we bring guest speakers from the U.S. who are currently pursuing their major. Each session explores a different major, offering insights into the curriculum, scope, and opportunities in the USA.",
     image: "/images/web.webp",
     list: [

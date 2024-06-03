@@ -7,12 +7,15 @@ import { infos } from "@/config/landing";
 import Features from '@/components/sections/features.astro';
 import Testimonials from '@/components/sections/testimonials.astro';
 import Organization from '@/components/sections/organization.astro';
-console.log("Check if this log is displayed");
+import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
 ---
 <MainLayout title ="landing page">
   <HeroLanding/>
-  <BentoGrid />
+  <!-- <BentoGrid /> -->
   <InfoLanding data={infos[0]} reverse={true} />
+  <GoToUnisalaPortal/>
   <Features data={infos[0]} reverse={false} />
+  <GoToUnisalaPortal/>
   <Testimonials />
+  <GoToUnisalaPortal/>
 </MainLayout>

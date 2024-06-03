@@ -1,13 +1,25 @@
 {
   "name": "Unisala",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "prepare": "husky"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
@@ -20,7 +32,6 @@
     "@types/react-dom": "^18.3.0",
     "astro": "^4.8.6",
     "autoprefixer": "^10.4.19",
-    "install": "^0.13.0",
     "lucide-react": "^0.379.0",
     "npm": "^10.8.1",
     "postcss": "^8.4.38",
@@ -37,6 +48,7 @@
     "classnames": "^2.5.1",
     "rollup-plugin-visualizer": "^5.12.0",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
-  }
+    "tailwindcss-animate": "^1.0.7",
+    "husky": "^9.0.11"
+    }
 }

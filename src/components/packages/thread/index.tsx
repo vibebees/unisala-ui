@@ -37,27 +37,11 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     academicProgramsAndDepartmentRating,
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
-    postType,
-    levelOfStudy,
   } = thread;
   const BASEURL = window.location.origin;
   const [editable, setEditable] = useState(false);
-  const [isReply, setIsReply] = useState(false);
-  const postTypes = {
-    suggestMeUniversity: "Suggest Me University",
-    questionAboutUniversity: "Question About University",
-    reviewUniversity: "Review University",
-  };
-  let dummyImages = [
-    "https://cdn.britannica.com/85/13085-050-C2E88389/Corpus-Christi-College-University-of-Cambridge-England.jpg",
-    "https://www.creighton.edu/sites/default/files/styles/hero_mobile/public/2024-05/may-commencement-hero-9.jpg?itok=3Mu4dsF2",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDLci5lWs5pqELaAP_LDOMzqLF8QzsBt_j9nEto30DVw&s",
-    "https://www.purdue.edu/home/wp-content/uploads/2023/07/16_2022_RM13902-2.jpg",
-  ];
+  const isReply = false;
 
-  useEffect(() => {
-    // console.log("postCommentsCount updated 0000000000 ", postCommentsCount)
-  }, [postCommentsCount]);
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">

@@ -5,12 +5,13 @@ import { useAuth } from "@context/AuthContext"
 
 const FormAvatar = () => {
   const { user } = useAuth()
+  if (!user) return null
   return (
     <div className="thread-header gap-2">
       <div className="thread_profile-pic ">
         <Avatar
-          profilePic={user.profilePic}
-          username={user.firstName + user.lastName}
+          profilePic={user?.profilePic}
+          username={user?.firstName + user?.lastName}
         />
       </div>
       <div className="thread_userdetails ">
@@ -21,10 +22,10 @@ const FormAvatar = () => {
             textTransform: "capitalize"
           }}
         >
-          {user.firstName + " " + user.lastName}
+          {user?.firstName + " " + user?.lastName}
         </h3>
         <div className="threads_username h-fit">
-          <p style={{ fontSize: "12px" }}>@{user.username}</p>
+          <p style={{ fontSize: "12px" }}>@{user?.username}</p>
         </div>
       </div>
     </div>

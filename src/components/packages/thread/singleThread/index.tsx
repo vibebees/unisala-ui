@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
 import { IonCard } from "@ionic/react";
-import ReplyInput from "../../replyInput";
 import ShowPeopleComments from "../organism/ShowPeopleComments";
 import {
   ThreadHeader,

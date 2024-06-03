@@ -4,6 +4,7 @@ import ModalCustom from "@components/packages/reusable/modal";
 import ReplyInput from "@components/packages/replyInput";
 import { CommentIcon } from "@components/packages/icons";
 import { cn } from "@utils/index";
+import { useParams } from "react-router";
 
 interface ReplyProps {
   repliesCount: number | null | undefined;
@@ -21,10 +22,9 @@ const Reply: FC<ReplyProps> = ({
   replyTo,
   singlePost = false,
   parentId,
+  feedId,
   postId,
-  feedId
 }) => {
-
   return (
     <div>
       <ModalCustom

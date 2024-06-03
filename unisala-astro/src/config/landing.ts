@@ -4,7 +4,7 @@ export const infos: InfoLdg[] = [
   {
     title: "Discover Paths: Weekly Graduate Webinars",
     description: "Join our weekly webinars at Unisala, where we bring guest speakers from the U.S. who are currently pursuing their major. Each session explores a different major, offering insights into the curriculum, scope, and opportunities in the USA.",
-    image: "/images/web.webp",
+    image: "/images/webinar-unisala-study-in-usa.webp",
     list: [
       {
         "title": "Alumni Stories",

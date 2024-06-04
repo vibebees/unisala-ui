@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Change to Ionic project directory
-        run: cd unisala-ionic
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -23,15 +20,18 @@ jobs:
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
+        working-directory: unisala-ionic
 
       - name: Install dependencies
         run: npm install --force
+        working-directory: unisala-ionic
 
       - name: Build Ionic Application
         run: npm run build --prod
         env:
           CI: false
           NODE_ENV: TEST
+        working-directory: unisala-ionic
 
       - name: Prepare and Deploy Application
         uses: appleboy/ssh-action@v0.1.8
@@ -51,11 +51,10 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"
+          source: "unisala-ionic/dist/*"
           target: "~/unisala-web"
 
-
-      - name: ssh
+      - name: SSH and deploy to production directory
         if: ${{github.ref == 'refs/heads/micro-frontend'}}
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -64,7 +63,7 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd unisala-web/dist
+            cd ~/unisala-web
             sudo rm -rf /var/www/html/*
             sudo cp -r * /var/www/html
 

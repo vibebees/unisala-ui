@@ -11,33 +11,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Ionic Project
+      # Setup Node.js for both projects
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'npm'
+
+      # Ionic Project Setup and Build
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
         working-directory: unisala-ionic
 
-      - name: Install Ionic dependencies
-        run: npm install --force
-        working-directory: unisala-ionic
-
-      - name: Build Ionic Application
-        run: npm run build --prod
+      - name: Install Ionic dependencies and build application
+        run: |
+          npm install --force
+          npm run build --prod
         env:
           CI: false
           NODE_ENV: TEST
         working-directory: unisala-ionic
 
-      # Astro Project
-      - name: Install Astro dependencies
-        run: npm install
+      # Astro Project Setup and Build
+      - name: Install Astro dependencies and build application
+        run: |
+          npm install
+          npm run build
         working-directory: unisala-astro
 
-      - name: Build Astro Application
-        run: npm run build
-        working-directory: unisala-astro
-
-      # Deployment
-      - name: Ensure directory exists and has correct permissions for Ionic
+      # Prepare deployment directories on the server
+      - name: Prepare deployment directories
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "13.201.127.208"
@@ -47,9 +50,12 @@ jobs:
           script: |
             sudo mkdir -p /var/www/html/app
             sudo chown -R ec2-user:ec2-user /var/www/html/app
-            echo "Ionic directory prepared"
+            sudo mkdir -p /var/www/html/astro
+            sudo chown -R ec2-user:ec2-user /var/www/html/astro
+            echo "Directories prepared for Ionic and Astro"
 
-      - name: Copy Ionic build artifacts to the server
+      # Deploy Ionic build artifacts
+      - name: Deploy Ionic build artifacts
         uses: appleboy/scp-action@master
         with:
           host: "13.201.127.208"
@@ -59,19 +65,8 @@ jobs:
           source: "unisala-ionic/dist/*"
           target: "/var/www/html/app/"
 
-      - name: Ensure directory exists and has correct permissions for Astro
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: "13.201.127.208"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            sudo mkdir -p /var/www/html/astro
-            sudo chown -R ec2-user:ec2-user /var/www/html/astro
-            echo "Astro directory prepared"
-
-      - name: Copy Astro build artifacts to the server
+      # Deploy Astro build artifacts
+      - name: Deploy Astro build artifacts
         uses: appleboy/scp-action@master
         with:
           host: "13.201.127.208"
@@ -81,6 +76,7 @@ jobs:
           source: "unisala-astro/dist/*"
           target: "/var/www/html/astro/"
 
+      # Reload Nginx to apply changes
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -90,4 +86,4 @@ jobs:
           port: 22
           script: |
             sudo systemctl reload nginx
-            echo "Nginx reloaded for both Ionic and Astro"
+            echo "Nginx reloaded"

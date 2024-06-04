@@ -18,31 +18,23 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      # Astro Build
-      - name: Install dependencies for Astro
-        run: |
-          cd unisala-astro
-          npm install --force
-
+      # Install dependencies and build Astro
       - name: Build Astro Application
         run: |
-          cd unisala-astro
-          npm run build
-
-      # Ionic Build
-      - name: Install Ionic CLI and dependencies for Ionic
-        run: |
-          npm install -g @ionic/cli
-          cd unisala-ionic
           npm install --force
+          npm run build
+        working-directory: unisala-astro  # Set the correct directory for Astro operations
 
+      # Install Ionic CLI and dependencies, then build Ionic
       - name: Build Ionic Application
         run: |
-          cd unisala-ionic
+          npm install -g @ionic/cli
+          npm install --force
           npm run build --prod
         env:
           CI: false
           NODE_ENV: TEST
+        working-directory: unisala-ionic  # Set the correct directory for Ionic operations
 
       # Deployment using SSH and SCP
       - name: Prepare and Deploy Application

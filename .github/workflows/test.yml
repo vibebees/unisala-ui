@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-       -name: Change to Ionic project directory
+      - name: Change to Ionic project directory
         run: cd unisala-ionic
 
       - name: Checkout repository

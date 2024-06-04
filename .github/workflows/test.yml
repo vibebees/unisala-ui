@@ -1,13 +1,6 @@
-name: Test/Release
-
-on:
-  push:
-    branches: [micro-frontend]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -27,7 +20,7 @@ jobs:
           NODE_ENV: TEST
         working-directory: unisala-ionic
 
-      - name: Prepare and Deploy Application
+      - name: Ensure directory exists and has correct permissions
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "13.201.127.208"
@@ -35,8 +28,9 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo rm -rf /var/www/html/*
-            echo "Deployment directory cleared"
+            sudo mkdir -p /var/www/html/app
+            sudo chown -R ec2-user:ec2-user /var/www/html/app
+            echo "Directory prepared"
 
       - name: Copy build artifacts to the server
         uses: appleboy/scp-action@master
@@ -45,21 +39,8 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "unisala-ionic/dist/*"  # Specify that the source is the dist directory inside unisala-ionic
-          target: "/var/www/html/unisala-web/app"  # The target directory where you want to place the files
-
-      - name: ssh
-        if: ${{github.ref == 'refs/heads/micro-frontend'}}
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: "13.201.127.208"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            cd /var/www/html/unisala-web
-            sudo rm -rf /var/www/html/*
-            sudo cp -r * /var/www/html
+          source: "unisala-ionic/dist/*"
+          target: "/var/www/html/app/"
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8

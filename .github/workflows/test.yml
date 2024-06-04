@@ -12,12 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
         working-directory: unisala-ionic
@@ -51,8 +45,8 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "unisala-ionic/www/*"  # Ensure the source path reflects the output directory of your Ionic build
-          target: "/var/www/html/unisala-web"
+          source: "unisala-ionic/dist/*"  # Specify that the source is the dist directory inside unisala-ionic
+          target: "/var/www/html/unisala-web/app"  # The target directory where you want to place the files
 
       - name: ssh
         if: ${{github.ref == 'refs/heads/micro-frontend'}}

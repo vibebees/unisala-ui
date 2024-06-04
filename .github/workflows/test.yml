@@ -1,0 +1,77 @@
+name: Test/Release
+
+on:
+  push:
+    branches: [micro-frontend]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Build Ionic Application
+        run: npm run build --prod
+        env:
+          CI: false
+          NODE_ENV: TEST
+
+      - name: Prepare and Deploy Application
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "13.201.127.208"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo rm -rf /var/www/html/*
+            echo "Deployment directory cleared"
+
+      - name: Copy build artifacts to the server
+        uses: appleboy/scp-action@master
+        with:
+          host: "13.201.127.208"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "dist/*"
+          target: "~/unisala-web"
+
+
+      - name: ssh
+        if: ${{github.ref == 'refs/heads/micro-frontend'}}
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "13.201.127.208"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd unisala-web/dist
+            sudo rm -rf /var/www/html/*
+            sudo cp -r * /var/www/html
+
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "13.201.127.208"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo systemctl reload nginx
+            echo "Nginx reloaded"

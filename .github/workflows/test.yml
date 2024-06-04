@@ -7,11 +7,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: unisala-ionic
 
     steps:
+       -name: Change to Ionic project directory
+        run: cd unisala-ionic
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -36,7 +36,7 @@ jobs:
       - name: Prepare and Deploy Application
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.201.127.208"
+          host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
@@ -47,30 +47,31 @@ jobs:
       - name: Copy build artifacts to the server
         uses: appleboy/scp-action@master
         with:
-          host: "13.201.127.208"
+          host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           source: "dist/*"
           target: "~/unisala-web"
 
+
       - name: ssh
-        if: ${{ github.ref == 'refs/heads/micro-frontend' }}
+        if: ${{github.ref == 'refs/heads/micro-frontend'}}
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.201.127.208"
+          host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/unisala-web
+            cd unisala-web/dist
             sudo rm -rf /var/www/html/*
             sudo cp -r * /var/www/html
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.201.127.208"
+          host: "65.0.112.117"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22

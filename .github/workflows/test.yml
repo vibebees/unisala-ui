@@ -11,11 +11,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Ionic Project
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
         working-directory: unisala-ionic
 
-      - name: Install dependencies
+      - name: Install Ionic dependencies
         run: npm install --force
         working-directory: unisala-ionic
 
@@ -26,7 +27,17 @@ jobs:
           NODE_ENV: TEST
         working-directory: unisala-ionic
 
-      - name: Ensure directory exists and has correct permissions
+      # Astro Project
+      - name: Install Astro dependencies
+        run: npm install
+        working-directory: unisala-astro
+
+      - name: Build Astro Application
+        run: npm run build
+        working-directory: unisala-astro
+
+      # Deployment
+      - name: Ensure directory exists and has correct permissions for Ionic
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "13.201.127.208"
@@ -36,9 +47,9 @@ jobs:
           script: |
             sudo mkdir -p /var/www/html/app
             sudo chown -R ec2-user:ec2-user /var/www/html/app
-            echo "Directory prepared"
+            echo "Ionic directory prepared"
 
-      - name: Copy build artifacts to the server
+      - name: Copy Ionic build artifacts to the server
         uses: appleboy/scp-action@master
         with:
           host: "13.201.127.208"
@@ -48,7 +59,7 @@ jobs:
           source: "unisala-ionic/dist/*"
           target: "/var/www/html/app/"
 
-      - name: Adjust directory structure if necessary
+      - name: Ensure directory exists and has correct permissions for Astro
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "13.201.127.208"
@@ -56,11 +67,19 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            if [ -d /var/www/html/app/unisala-ionic ]; then
-              sudo mv /var/www/html/app/unisala-ionic/dist/* /var/www/html/app/
-              sudo rm -rf /var/www/html/app/unisala-ionic
-            fi
-            echo "Directory structure adjusted"
+            sudo mkdir -p /var/www/html/astro
+            sudo chown -R ec2-user:ec2-user /var/www/html/astro
+            echo "Astro directory prepared"
+
+      - name: Copy Astro build artifacts to the server
+        uses: appleboy/scp-action@master
+        with:
+          host: "13.201.127.208"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "unisala-astro/dist/*"
+          target: "/var/www/html/astro/"
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
@@ -71,4 +90,4 @@ jobs:
           port: 22
           script: |
             sudo systemctl reload nginx
-            echo "Nginx reloaded"
+            echo "Nginx reloaded for both Ionic and Astro"

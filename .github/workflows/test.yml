@@ -21,6 +21,9 @@ jobs:
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
 
+      - name: Change directory to unisala-ionic
+        run: cd unisala-ionic
+
       - name: Install dependencies
         run: npm install --force
 
@@ -48,9 +51,8 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"
+          source: "unisala-ionic/dist/*"
           target: "~/unisala-web"
-
 
       - name: ssh
         if: ${{github.ref == 'refs/heads/micro-frontend'}}
@@ -61,7 +63,7 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd unisala-web/dist
+            cd ~/unisala-web
             sudo rm -rf /var/www/html/*
             sudo cp -r * /var/www/html
 

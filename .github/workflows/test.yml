@@ -18,27 +18,20 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
-        working-directory: unisala-ionic
+      - name: Install dependencies for Astro
+        run: npm install
+        working-directory: unisala-astro  # Specify the correct directory
 
-      - name: Install dependencies
-        run: npm install --force
-        working-directory: unisala-ionic
-
-      - name: Build Ionic Application
-        run: npm run build --prod
-        env:
-          CI: false
-          NODE_ENV: TEST
-        working-directory: unisala-ionic
+      - name: Build Astro Application
+        run: npm run build
+        working-directory: unisala-astro  # Specify the correct directory
 
       - name: Prepare and Deploy Application
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             sudo rm -rf /var/www/html/*
@@ -47,32 +40,19 @@ jobs:
       - name: Copy build artifacts to the server
         uses: appleboy/scp-action@master
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "unisala-ionic/dist/*"
-          target: "~/unisala-web"
-
-      - name: SSH and deploy to production directory
-        if: ${{github.ref == 'refs/heads/micro-frontend'}}
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: "65.0.112.117"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            cd ~/unisala-web
-            sudo rm -rf /var/www/html/*
-            sudo cp -r * /var/www/html
+          source: "unisala-astro/dist/*"
+          target: "/var/www/html/"
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             sudo systemctl reload nginx

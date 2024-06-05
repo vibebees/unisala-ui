@@ -9,12 +9,12 @@ interface Props {
   image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, siteConfig.url);
 
 const {
   title,
   description = siteConfig.description,
-  image = "/og.jpg",
+  image = siteConfig.ogImage,
 } = Astro.props;
 ---
 
@@ -37,23 +37,24 @@ const {
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title ? `${title} | Astronomy` : "Astronomy"}</title>
-<meta name="title" content={title ? `${title} | Astronomy` : "Astronomy"} />
+<title>{title ? `${title} | Unisala` : "Unisala"}</title>
+<meta name="title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={new URL(image, siteConfig.url).toString()} />
+<meta property="og:site_name" content={siteConfig.name} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={new URL(image, siteConfig.url).toString()} />
 
 <!-- Dark mode with prevent flickering flash between navigations -->
 <script is:inline>

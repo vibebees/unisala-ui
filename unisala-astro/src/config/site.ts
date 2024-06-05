@@ -4,11 +4,8 @@ export const siteConfig: SiteConfig = {
   name: "Unisala",
   description: "Connecting students worldwide with universities and educational resources, helping them make informed decisions for their future.",
   url: "https://unisala.com",
-  ogImage: "https://unisala.com/og-image.jpg",  // Update with an actual path to an image that represents Unisala
-  links: {
-    twitter: "https://twitter.com/unisala",  // Update with your actual Twitter handle if available
-    github: "https://github.com/yourgithub/unisala",  // Update with your actual GitHub repository for Unisala if it's open-source or public
-  },
+  ogImage: "images/unisala.png",
+
 };
 export const footerLinks: SidebarNavItem[] = [
   {

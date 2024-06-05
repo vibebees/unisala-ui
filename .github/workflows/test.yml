@@ -2,7 +2,7 @@ name: Test/Release
 
 on:
   push:
-    branches: [micro-frontend]
+    branches: [test]
 
 jobs:
   deploy:

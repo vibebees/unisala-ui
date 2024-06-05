@@ -86,3 +86,6 @@ jobs:
           script: |
             sudo systemctl reload nginx
             echo "Nginx reloaded for both Ionic and Astro"
+            pm2 restart unisala-astro
+            pm2 restart unisala-ionic
+

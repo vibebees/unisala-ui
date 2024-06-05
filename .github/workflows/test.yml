@@ -32,8 +32,8 @@ jobs:
           npm run build
         working-directory: unisala-astro
 
-      # Prepare deployment directories on the server
-      - name: Prepare deployment directories
+      # Prepare deployment directories on the server and clear old files
+      - name: Prepare and clear deployment directories
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "13.201.127.208"
@@ -41,11 +41,17 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Prepare and clear the Ionic app directory
             sudo mkdir -p /var/www/html/app
             sudo chown -R ec2-user:ec2-user /var/www/html/app
+            sudo rm -rf /var/www/html/app/*
+
+            # Prepare and clear the Astro directory
             sudo mkdir -p /var/www/html/astro
             sudo chown -R ec2-user:ec2-user /var/www/html/astro
-            echo "Directories prepared for Ionic and Astro"
+            sudo rm -rf /var/www/html/astro/*
+
+            echo "Directories prepared and cleared for Ionic and Astro"
 
       # Deploy Ionic build artifacts
       - name: Deploy Ionic build artifacts
@@ -55,7 +61,7 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "unisala-ionic/dist/*"
+          source: "/unisala-ionic/dist/*"
           target: "/var/www/html/app/"
 
       # Deploy Astro build artifacts
@@ -66,7 +72,7 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "unisala-astro/dist/*"
+          source: "/unisala-astro/dist/*"
           target: "/var/www/html/astro/"
 
       # Reload Nginx to apply changes
@@ -79,4 +85,4 @@ jobs:
           port: 22
           script: |
             sudo systemctl reload nginx
-            echo "Nginx reloaded"
+            echo "Nginx reloaded for both Ionic and Astro"

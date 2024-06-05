@@ -7,71 +7,80 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-
+      # Ionic Project Setup and Build
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
+        working-directory: unisala-ionic
 
-      - name: Install dependencies
-        run: npm install --force
-
-      - name: Build Ionic Application
-        run: npm run build --prod
+      - name: Install Ionic dependencies and build application
+        run: |
+          npm install --force
+          npm run build --prod
         env:
           CI: false
           NODE_ENV: TEST
+        working-directory: unisala-ionic
 
-      - name: Prepare and Deploy Application
+      # Astro Project Setup and Build
+      - name: Install Astro dependencies and build application
+        run: |
+          npm install
+          npm run build
+        working-directory: unisala-astro
+
+  # Prepare and clear the deployment directory on the server
+      - name: Clear deployment directory
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo rm -rf /var/www/html/*
-            echo "Deployment directory cleared"
+            sudo chown -R ec2-user:ec2-user ~/unisala-web
+            sudo rm -rf ~/unisala-web/unisala-astro
+            sudo rm -rf ~/unisala-web/unisala-ionic
 
-      - name: Copy build artifacts to the server
+            echo "Directory ~/unisala-web cleared"
+
+
+      # Deploy Ionic build artifacts
+      - name: Deploy Ionic build artifacts
         uses: appleboy/scp-action@master
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "dist/*"
-          target: "~/unisala-web"
+          source: "unisala-ionic/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
+          target: "~/unisala-web/"
 
-
-      - name: ssh
-        if: ${{github.ref == 'refs/heads/test'}}
-        uses: appleboy/ssh-action@v0.1.8
+      # Deploy Astro build artifacts
+      - name: Deploy Astro build artifacts
+        uses: appleboy/scp-action@master
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          script: |
-            cd unisala-web/dist
-            sudo rm -rf /var/www/html/*
-            sudo cp -r * /var/www/html
+          source: "unisala-astro/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
+          target: "~/unisala-web/"
 
+      # Reload Nginx to apply changes
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "65.0.112.117"
+          host: "13.201.127.208"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
             sudo systemctl reload nginx
-            echo "Nginx reloaded"
+            echo "Nginx reloaded for both Ionic and Astro"
+            pm2 restart unisala-astro
+            pm2 restart unisala-ionic
+

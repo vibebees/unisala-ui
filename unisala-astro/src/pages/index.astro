@@ -1,0 +1,24 @@
+---
+import MainLayout from '@/layouts/main-layout.astro';
+import HeroLanding from "@/components/sections/hero-landing.astro"
+import BentoGrid from "@/components/sections/bentogrid.astro"
+import InfoLanding from "@/components/sections/info-landing.astro"
+import { infos } from "@/config/landing";
+import Features from '@/components/sections/features.astro';
+import Testimonials from '@/components/sections/testimonials.astro';
+import Organization from '@/components/sections/organization.astro';
+import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
+---
+<MainLayout title ="Home">
+  <HeroLanding/>
+  <!-- <BentoGrid /> -->
+  <InfoLanding data={infos[0]} reverse={true} />
+  <GoToUnisalaPortal/>
+  <Features data={infos[0]} reverse={false} />
+  <GoToUnisalaPortal/>
+  <Testimonials />
+  <GoToUnisalaPortal/>
+  <iframe src="/home" style="display:none;"></iframe>
+  <iframe src="/login" style="display:none;"></iframe>
+
+</MainLayout>

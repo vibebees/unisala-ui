@@ -1,0 +1,35 @@
+---
+// Import necessary components and utilities
+import MainLayout from "@/layouts/main-layout.astro";
+import NewsLetter from "@/components/sections/newsletter.astro";
+import { Image } from "astro:assets";
+
+
+---
+
+<MainLayout
+  title="Unisala Webinar Registration"
+  description="Register for our exclusive webinar series on studying in the USA."
+  mainClass="bg-background-200"
+>
+  <div class="relative container max-w-screen-md py-10">
+    <article class="prose dark:prose-invert max-w-none">
+
+
+      <Image
+        class="rounded-xl overflow-hidden my-6"
+        width={720}
+        height={360}
+        src={"/images/unisala-study-in-usa-webinar-series.webp"}
+        alt={"unisala-study-in-usa-webinar-series"}
+      />
+
+
+
+      <slot />
+    </article>
+
+
+    <NewsLetter/>
+  </div>
+</MainLayout>

@@ -22,11 +22,9 @@ const Reply: FC<ReplyProps> = ({
   replyTo,
   singlePost = false,
   parentId,
-  feedId
+  feedId,
+  postId,
 }) => {
-  const { id }: any = useParams(),
-    postId = id;
-
   return (
     <div>
       <ModalCustom

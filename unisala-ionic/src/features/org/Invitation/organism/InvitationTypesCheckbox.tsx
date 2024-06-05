@@ -1,14 +1,14 @@
-import React from "react"
-import { Col, RadioGroup, Row, Text } from "@components/defaults"
-import InvitationType from "../atoms/InvitationType"
+import React from "react";
+import { Col, RadioGroup, Row, Text } from "@components/defaults";
+import InvitationType from "../atoms/InvitationType";
 
 const InvitationTypesCheckbox = ({ allProps }) => {
-  const { admin, invitationType, setInvitationType } = allProps
+  const { admin, invitationType, setInvitationType } = allProps;
 
   const handleCheckbox = (e) => {
-    setInvitationType(e.detail.value) // Assuming e.detail.value contains the selected value
-    console.log("selected -------> ", e.detail.value)
-  }
+    setInvitationType(e.detail.value); // Assuming e.detail.value contains the selected value
+    console.log("selected -------> ", e.detail.value);
+  };
 
   return (
     <Col className="flex w-full my-3 ion-no-margin ion-no-padding h-full flex-col ">
@@ -29,7 +29,7 @@ const InvitationTypesCheckbox = ({ allProps }) => {
               allProps={{
                 invitationType,
                 label: "Members",
-                value: "member"
+                value: "member",
               }}
             />
           )}
@@ -37,20 +37,20 @@ const InvitationTypesCheckbox = ({ allProps }) => {
             allProps={{
               invitationType,
               label: "Student",
-              value: "student"
+              value: "student",
             }}
           />
           <InvitationType
             allProps={{
               invitationType,
-              label: "Alumni",
-              value: "alumni"
+              label: "Alumini",
+              value: "alumini",
             }}
           />
         </RadioGroup>
       </Row>
     </Col>
-  )
-}
+  );
+};
 
-export default InvitationTypesCheckbox
+export default InvitationTypesCheckbox;

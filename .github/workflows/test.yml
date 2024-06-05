@@ -62,7 +62,7 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           source: "unisala-ionic/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
-         target: "~/unisala-web/app/"
+          target: "~/unisala-web/app/"
 
       # Deploy Astro build artifacts
       - name: Deploy Astro build artifacts

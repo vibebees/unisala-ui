@@ -61,7 +61,7 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "/unisala-ionic/dist/*"
+          source: "unisala-ionic/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "/var/www/html/app/"
 
       # Deploy Astro build artifacts
@@ -72,7 +72,7 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
-          source: "/unisala-astro/dist/*"
+          source: "unisala-astro/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "/var/www/html/astro/"
 
       # Reload Nginx to apply changes

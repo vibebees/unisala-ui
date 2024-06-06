@@ -5,7 +5,10 @@ export const siteConfig: SiteConfig = {
   description: "Connecting students worldwide with universities and educational resources, helping them make informed decisions for their future.",
   url: "https://unisala.com",
   ogImage: "images/unisala.png",
-
+  links: {
+    twitter: "",
+    github: ""
+  }
 };
 export const footerLinks: SidebarNavItem[] = [
   {

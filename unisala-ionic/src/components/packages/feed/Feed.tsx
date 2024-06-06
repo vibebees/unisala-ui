@@ -33,8 +33,6 @@ function Example({ feedType, feedId }) {
   );
   const [lastFetchedPage, setLastFetchedPage] = useState(0);
 
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     if (data?.fetchFeedV2?.data) {
       setPosts(() => {

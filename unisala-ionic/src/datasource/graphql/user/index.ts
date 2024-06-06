@@ -1038,6 +1038,13 @@ export const Login = gql`
           postType
           levelOfStudy
           videoURL
+          postTags{
+            tagType
+            tag{
+              _id
+              name
+            }
+          }
           event {
             _id
             title
@@ -1050,13 +1057,7 @@ export const Login = gql`
             }
             images
           }
-          tags {
-            _id
-            name
-            parentId
-            image
-            description
-          }
+
           date
           _id
           images

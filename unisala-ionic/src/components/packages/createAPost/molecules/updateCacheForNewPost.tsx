@@ -60,6 +60,7 @@ const prependPostToNewsFeed = (cache, post, feedType) => {
     query: getNewsFeed,
     variables: { feedQuery: { feedType, page: 0 } },
   };
+
   const existingData = cache.readQuery(query);
   // Extract existing posts from the existing data
   const existingPosts = existingData ? existingData.fetchFeedV2.data : [];

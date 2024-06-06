@@ -7,6 +7,7 @@ import {
   ThreadHeader,
   ThreadOptions,
   ThreadRating,
+  ThreadSpace
 } from "./organism";
 import { Buttons } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
@@ -37,21 +38,26 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     academicProgramsAndDepartmentRating,
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
+    postTags
   } = thread;
   const BASEURL = window.location.origin;
   const [editable, setEditable] = useState(false);
   const isReply = false;
 
+  console.log("thread", postTags)
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
         <div className="p-4 bg-white border">
-          <ThreadHeader
+
+
+           <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}
             date={date}
             profilePic={user?.picture!}
             username={user?.username}
+            postTags={postTags}
           />
         </div>
 

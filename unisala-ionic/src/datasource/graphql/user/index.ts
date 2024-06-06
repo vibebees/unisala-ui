@@ -284,6 +284,15 @@ export const Login = gql`
             image
             description
           }
+          postType
+          levelOfStudy
+          postTags{
+            tagType
+            tag{
+              _id
+              name
+            }
+          }
           date
           _id
           images

@@ -56,6 +56,13 @@ interface IPost {
   universitySearch: string;
   reviewSubCategories: string;
   videoURL: string;
+  postTags: {
+    tagType: string;
+    tag: {
+      _id: string;
+      name: string;
+    };
+  }
 }
 
 interface IEvent {

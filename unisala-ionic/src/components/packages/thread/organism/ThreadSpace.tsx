@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Avatar } from '../../../defaults';
-import { color } from 'framer-motion';
 
 interface Tag {
   _id: string;
@@ -64,7 +63,7 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
         {postTags?.tagType === 'space' && postTags.tag && (
           <div >
             <Link to={`/space/${postTags?.tag?.name}`} className='h-fit block max-md:px-2'>
-                          <p style={{ fontSize: '15px', color:"#551A8B" }}>#{postTags.tag.name}</p>
+                          <p style={{ fontSize: '12px' }}>#{postTags.tag.name}</p>
             </Link>
           </div>
         )}

@@ -58,7 +58,7 @@ const prependPostToCategory = (cache, post, _id, feedType) => {
 const prependPostToNewsFeed = (cache, post, feedType) => {
   const query = {
     query: getNewsFeed,
-    variables: { feedQuery: { feedType, page: 0 } },
+    variables: { feedQuery: { feedType, page: 0 , feedId: null} },
   };
 
   const existingData = cache.readQuery(query);
@@ -72,7 +72,7 @@ const prependPostToNewsFeed = (cache, post, feedType) => {
     ...query,
     data: {
       fetchFeedV2: {
-        ...(existingData?.fetchFeedV2 || {}),
+        ...(existingData?.fetchFeedV2 || {validToken: true, data: []}),
         data: updatedPosts,
       },
     },

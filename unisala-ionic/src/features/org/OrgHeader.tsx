@@ -27,7 +27,7 @@ const OrgHeader = () => {
           {description}
         </p>
 
-        {admin.username === user?.username && (
+        {admin?.username === user?.username && (
           <Suspense fallback={<Spinner></Spinner>}>
             <HeaderActions />
           </Suspense>

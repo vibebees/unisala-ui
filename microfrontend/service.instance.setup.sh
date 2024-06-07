@@ -210,6 +210,9 @@ mkdir -p /home/ec2-user/Unisala-University-Service
 mkdir -p /home/ec2-user/Unisala-User-Service
 mkdir -p /home/ec2-user/Unisala-Message-Service
 mkdir -p /home/ec2-user/unisala-web
+mkdir -p /home/ec2-user/unisala-web/unisala-ionic
+mkdir -p /home/ec2-user/unisala-web/unisala-astro
+
 log_message "Directories for Unisala services created."
 
 log_message "Packages installation and SSH setup completed."

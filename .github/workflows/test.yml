@@ -42,8 +42,8 @@ jobs:
           port: 22
           script: |
             sudo chown -R ec2-user:ec2-user ~/unisala-web
-            sudo rm -rf ~/unisala-web/unisala-astro
-            sudo rm -rf ~/unisala-web/unisala-ionic
+            sudo rm -rf ~/unisala-web/unisala-astro/{*,.[!.]*,..?*}
+            sudo rm -rf ~/unisala-web/unisala-ionic/{*,.[!.]*,..?*}
 
             echo "Directory ~/unisala-web cleared"
 

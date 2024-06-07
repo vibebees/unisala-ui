@@ -58,6 +58,7 @@ jobs:
           port: 22
           source: "."  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/"
+          debug: true
 
       # Deploy Astro build artifacts
       - name: Deploy Astro build artifacts

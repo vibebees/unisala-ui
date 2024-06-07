@@ -56,9 +56,8 @@ jobs:
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY  }}
           port: 22
-          source: "."  # Make sure the path is relative to the GitHub workspace or absolute path
+          source: "unisala-ionic/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/"
-          debug: true
 
       # Deploy Astro build artifacts
       - name: Deploy Astro build artifacts

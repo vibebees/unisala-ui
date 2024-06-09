@@ -1,0 +1,93 @@
+---
+// Import necessary components and utilities
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Icon } from 'astro-icon/components';
+import z from 'zod';
+
+let error: boolean = false;
+let registered = Astro.cookies.get('webinar-registered')?.boolean() || false;
+const formSchema = z.object({ email: z.string().email() });
+let count = 5; // Initialize count, to be updated from API
+
+// Fetch the initial count of registered attendees
+async function fetchAttendeeCount() {
+  try {
+    const response = await fetch(
+      `${Astro.url.origin}/api/webinar/attendees/count`
+    );
+    const data = await response.json();
+    count = data.count;
+  } catch (err) {
+    console.error('Failed to fetch attendee count', err);
+  }
+}
+
+// Form submission handler for webinar registration
+async function handleFormSubmit(event: Event) {
+  event.preventDefault();
+  const formData = new FormData(event.target as HTMLFormElement);
+  const email = formData.get('email');
+
+  // Validate email and register for the webinar
+  try {
+    formSchema.parse({ email });
+    const response = await fetch(`${Astro.url.origin}/api/webinar/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+
+    if (data.message === 'success') {
+      Astro.cookies.set('webinar-registered', 'true', { path: '/' });
+      registered = true;
+      error = false;
+    } else {
+      throw new Error('Registration failed');
+    }
+  } catch (err) {
+    error = true;
+    console.error(err);
+  }
+}
+
+// Call to fetch attendee count on component initialization
+fetchAttendeeCount();
+---
+
+<div class="container flex justify-center items-center ">
+    <div class='flex flex-col gap-y-5 w-full max-w-lg mx-auto px-4 py-5 sm:p-6 bg-white border rounded-xl shadow-md'>
+        <div class='flex items-center gap-x-2'> <!-- Ensures items are on the same line and aligns them vertically in the center -->
+            <h1 class='text-2xl font-bold'>Join Our Webinar Series</h1>
+            <Icon name='lucide:video' size={parseInt('32')} />
+
+          </div>
+
+    <p>
+      <strong>{count} attendees</strong> have already registered! Don’t miss out
+      on expert insights about studying in the USA. Perfect for Nepali students looking
+      to navigate the U.S. education system.
+    </p>
+    <form onsubmit='handleFormSubmit' class='flex flex-col gap-y-4'>
+      <label for='email' class='text-sm font-medium'>Your Email</label>
+      <Input
+        id='email'
+        name='email'
+        autoComplete='email'
+        placeholder='yourname@example.com'
+      />
+      {
+        error && (
+          <p class='text-red-500'>Please try again, something went wrong.</p>
+        )
+      }
+      {
+        registered && (
+          <p class='text-blue-500'>You are now registered for the webinar!</p>
+        )
+      }
+      <Button type='submit' className='mt-4 w-full'>Reserve a seat!</Button>
+    </form>
+  </div>
+</div>

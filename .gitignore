@@ -29,3 +29,5 @@ yarn-error.log*
 .eslintcache
 .next
 node_modules
+
+unisala-ionic/dist/

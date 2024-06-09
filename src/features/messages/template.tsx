@@ -1,26 +1,25 @@
 // Messaging System Entry Point
-import React, { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { IonGrid, IonRow, IonCol } from "@ionic/react";
+import { useParams, useHistory } from "react-router-dom";
 
-import { ContactList } from './contactList';
-import { MessagingStation } from './chats';
+import { ContactList } from "./contactList";
+import { MessagingStation } from "./chats";
 import {
   MESSAGE_SERVICE_GQL,
-  USER_SERVICE_GQL
-} from '@datasource/servers/types';
-import { ConnectedList } from '@datasource/graphql/user';
-
-import './index.css';
-import { useAuth } from '@context/AuthContext';
-import { fetchMessageHistory } from '@datasource/graphql/msg';
-import useDocTitle from '@hooks/useDocTitile';
-import { set } from 'cypress/types/lodash';
-import { generateConvesationId } from '@utils/lib/messageUtility';
+  USER_SERVICE_GQL,
+} from "@datasource/servers/types";
+import { ConnectedList } from "@datasource/graphql/user";
+import "./index.css";
+import { useAuth } from "@context/AuthContext";
+import { fetchMessageHistory } from "@datasource/graphql/msg";
+import useDocTitle from "@hooks/useDocTitile";
+import { generateConvesationId } from "@utils/lib/messageUtility";
+import SingleChat from "./organism/SingleChat";
 
 const MessagingSystem = () => {
-  useDocTitle('Messages');
+  useDocTitle("Messages");
 
   const { friendUserName } = useParams();
   const history = useHistory();
@@ -30,11 +29,11 @@ const MessagingSystem = () => {
   const {
     data: friendsData,
     loading: friendsLoading,
-    error: friendsError
+    error: friendsError,
   } = useQuery(ConnectedList, {
     variables: { userId },
     context: { server: USER_SERVICE_GQL },
-    skip: !userId
+    skip: !userId,
   });
 
   const friends = friendsData?.connectedList?.connectionList || [];
@@ -50,14 +49,14 @@ const MessagingSystem = () => {
   const {
     loading: friendMessageLoading,
     error: friendMessageError,
-    data: friendsMessages
+    data: friendsMessages,
   } = useQuery(fetchMessageHistory, {
     variables: {
       userId,
-      connectedList: friends.map((friend) => friend?.user?._id)
+      connectedList: friends.map((friend) => friend?.user?._id),
     },
     context: { server: MESSAGE_SERVICE_GQL },
-    skip: !userId || !friends.length
+    skip: !userId || !friends.length,
   });
 
   const [conversationId, setConversationId] = useState(null);
@@ -100,21 +99,23 @@ const MessagingSystem = () => {
     friendConvoError: friendMessageError,
     messagingToId,
     messagingTo,
-    previousMessages: messages
+    previousMessages: messages,
   };
 
   if (friendsLoading || friendMessageLoading) return <div>Loading...</div>;
   return (
-    <IonGrid className='messagingGrid'>
-      <IonRow>
-        <IonCol size='3'>
-          <ContactList {...chatProps} />
-        </IonCol>
-        <IonCol size='9' className='messages-wrapper'>
-          {userId && messagingToId && <MessagingStation {...chatProps} />}
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+    <div className="w-full flex bg-white h-full">
+      <section className="w-[300px] h-full bg-neutral-100">
+        <ContactList {...chatProps} />
+      </section>
+      <section className="w-[calc(100%-300px)] ">
+        <SingleChat />
+      </section>
+
+      {/* <IonCol size="9" className="messages-wrapper">
+        {userId && messagingToId && <MessagingStation {...chatProps} />}
+      </IonCol> */}
+    </div>
   );
 };
 

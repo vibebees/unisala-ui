@@ -1,5 +1,5 @@
 import React from "react";
-import ComingSoon from "./ComingSoon";
+import Message from "@features/messages";
 
 const MessagePage = () => {
   return <Message />;

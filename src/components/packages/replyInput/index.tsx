@@ -24,21 +24,29 @@ interface ReplyInputProps {
 }
 
 function ReplyInput({
-  postId = "",
+  postId,
   isReply = false,
-  parentId = "",
+  parentId,
   singlePost,
   feedId,
-  replyTo
+  replyTo,
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
-  const feedType = currentFeedType(useLocation())
+  const feedType = currentFeedType(useLocation());
 
   const [addComment] = useMutation<AddCommentMutation>(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addComment } }) => updateCacheForNewComments({ cache, addComment, feedType, parentId, feedId, user }),
+    update: (cache, { data: { addComment } }) =>
+      updateCacheForNewComments({
+        cache,
+        addComment,
+        feedType,
+        parentId,
+        feedId,
+        user,
+      }),
     onCompleted: () => {
       present({
         duration: 3000,
@@ -51,7 +59,7 @@ function ReplyInput({
       setCommentText("");
     },
     onError: (error) => {
-      console.log(error.message)
+      console.log(error.message);
       present({
         duration: 3000,
         message: error.message,
@@ -71,7 +79,7 @@ function ReplyInput({
     };
 
     if (isReply) {
-      variables.replyTo = replyTo
+      variables.replyTo = replyTo;
     }
     addComment({ variables });
   };
@@ -102,8 +110,7 @@ function ReplyInput({
         </div>
         <div>
           <Button expand="full" shape="round" type="submit" className="mt-2">
-            <Text className="mr-3">Reply</Text>{" "}
-            <Icon icon={sendOutline} />
+            <Text className="mr-3">Reply</Text> <Icon icon={sendOutline} />
           </Button>
         </div>
       </form>

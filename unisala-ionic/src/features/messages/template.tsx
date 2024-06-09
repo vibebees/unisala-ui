@@ -38,6 +38,8 @@ const MessagingSystem = () => {
 
   const friends = friendsData?.connectedList?.connectionList || [];
 
+  console.log("Friends", friends);
+
   // Redirect to the first friend if no specific friend is selected
   useEffect(() => {
     if (!friendUserName && friends.length > 0) {

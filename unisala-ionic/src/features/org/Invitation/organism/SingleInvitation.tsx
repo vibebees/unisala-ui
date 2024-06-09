@@ -1,22 +1,19 @@
-import {IonInput, useIonToast} from "@ionic/react"
-import NotJoinedWrapper from "../../../org/NotJoinedWrapper"
-import React from "react"
-import {SpaceRole} from "../../../../utils/lib/SpaceRoles"
-import Header from "../atoms/Header"
-import SendButton from "../atoms/SendButton"
-import {handleSendInvitation} from "../utility"
-import InvitationTypesCheckbox from "./InvitationTypesCheckbox"
-import {Card} from "../../../../components/defaults"
+import { IonInput, useIonToast } from "@ionic/react";
+import NotJoinedWrapper from "../../../org/NotJoinedWrapper";
+import React from "react";
+import { SpaceRole } from "../../../../utils/lib/SpaceRoles";
+import Header from "../atoms/Header";
+import SendButton from "../atoms/SendButton";
+import { handleSendInvitation } from "../utility";
+import InvitationTypesCheckbox from "./InvitationTypesCheckbox";
+import { Card } from "../../../../components/defaults";
 
-
-const SingleInvitation = ({orgId, role, isJoined}) => {
-  const [email, setEmail] = React.useState("")
-  const [invitationType, setInvitationType] = React.useState("")
-  const [present, dismiss] = useIonToast()
-  const [loading, setLoading] = React.useState(false)
-
-
-
+const SingleInvitation = ({ orgId, role, isJoined }) => {
+  const [email, setEmail] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [invitationType, setInvitationType] = React.useState("");
+  const [present, dismiss] = useIonToast();
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <div>
@@ -31,16 +28,31 @@ const SingleInvitation = ({orgId, role, isJoined}) => {
         <IonInput
           type="email"
           autocomplete="additional-name"
-          className="border-2 border-neutral-300 rounded-lg p-2 focus-within:border-neutral-700 duration-300"
+          className="border-2 border-neutral-300 rounded-lg !px-2 focus-within:border-neutral-700 duration-300"
           placeholder="Enter email address"
           value={email}
           onIonChange={(e) => setEmail(e.target.value)}
+        />
+
+        <br />
+        <Header
+          header={"Invite user position"}
+          subHeader={"Enter the user position title"}
+        />
+        <br />
+        <IonInput
+          type="text"
+          autocomplete="additional-name"
+          className="border-2 border-neutral-300 rounded-lg !px-2 focus-within:border-neutral-700 duration-300"
+          placeholder="Enter user position"
+          value={title}
+          onIonChange={(e) => setTitle(e.target.value)}
         />
         <InvitationTypesCheckbox
           allProps={{
             invitationType,
             setInvitationType,
-            admin: role === SpaceRole.ADMIN || role === SpaceRole.MEMBER
+            admin: role === SpaceRole.ADMIN || role === SpaceRole.MEMBER,
           }}
         />
         <NotJoinedWrapper
@@ -49,13 +61,24 @@ const SingleInvitation = ({orgId, role, isJoined}) => {
         >
           <SendButton
             loading={loading}
-            onclick={() => handleSendInvitation({ email, orgId, invitationType, setLoading, present, dismiss, setEmail })}
+            onclick={() =>
+              handleSendInvitation({
+                email,
+                orgId,
+                invitationType,
+                title,
+                setLoading,
+                present,
+                dismiss,
+                setEmail,
+              })
+            }
             label="Send Invitation"
           />
         </NotJoinedWrapper>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default SingleInvitation
+export default SingleInvitation;

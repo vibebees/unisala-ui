@@ -70,6 +70,27 @@
 
 }
 
+.message-container {
+    scrollbar-gutter: stable both-edges;
+}
+
+.message-container::-webkit-scrollbar-track {
+    background: rgb(236, 236, 236);
+    height: 2px;
+
+}
+
+.message-container::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    height: 5px;
+}
+
+.message-container::-webkit-scrollbar-thumb {
+    background: #a8a8a8;
+    border-radius: 10px;
+}
+
 .mention {
     background-color: transparent !important;
 }

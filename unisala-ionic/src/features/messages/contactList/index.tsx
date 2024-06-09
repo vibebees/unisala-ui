@@ -1,22 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonList,
-  IonListHeader,
-  IonSearchbar,
-} from "@ionic/react";
 import "./index.css";
 import MessageItem from "../messagePop/MessageItem";
 import { useDispatch } from "react-redux";
 import { sendMessageTo } from "@datasource/store/action/userActivity";
 import clsx from "clsx";
-import ImageWithLoader from "@components/packages/reusable/Image/ImageWithLoader";
-import SingleMessageList from "../atoms/SingleMessageList";
 import MessageTabContent from "../molecules/MessageTabContent";
-import FriendsTabContent from "../molecules/FriendsTabContent";
+import FriendsTabContent from "../molecules/FriendTabContent";
 
 export const ContactList = ({ friends = [] }) => {
   const [activeTab, setActiveTab] = React.useState("messages");

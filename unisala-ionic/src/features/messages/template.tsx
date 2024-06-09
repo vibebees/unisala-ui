@@ -105,10 +105,10 @@ const MessagingSystem = () => {
   if (friendsLoading || friendMessageLoading) return <div>Loading...</div>;
   return (
     <div className="w-full flex bg-white h-full">
-      <section className="w-[300px] h-full bg-neutral-100">
+      <section className="w-[300px] max-md:w-20 h-full bg-neutral-100">
         <ContactList {...chatProps} />
       </section>
-      <section className="w-[calc(100%-300px)] ">
+      <section className="w-[calc(100%-300px)]  max-md:w-[calc(100%-80px)] ">
         <SingleChat />
       </section>
 

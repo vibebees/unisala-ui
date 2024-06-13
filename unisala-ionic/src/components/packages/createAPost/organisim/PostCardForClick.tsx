@@ -6,6 +6,7 @@ import { currentFeedType } from "@utils/lib/URLupdate";
 import { useLocation } from "react-router";
 import { IonAvatar } from "@ionic/react";
 import { usePostUploading } from "../createAPostContext";
+import { trackEvent } from "@components/analytics";
 
 export const PostCardForClick = () => {
   const { isLoading } = usePostUploading();
@@ -33,7 +34,13 @@ export const PostCardForClick = () => {
    return  UploadingPost()
   }
   return (
-    <div style={{ padding: "1px", cursor: "pointer", margin: '5px' }} >
+    <div style={{ padding: "1px", cursor: "pointer", margin: '5px' }} onClick={() => {
+      trackEvent({
+        action: 'AddPost_Started',
+        category: 'AddPost',
+        label: 'Started AddPost Flow'
+      });
+    }} >
       {/* {} */}
       <Item lines="none" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <IonAvatar slot="start">

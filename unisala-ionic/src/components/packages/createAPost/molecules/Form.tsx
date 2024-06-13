@@ -27,6 +27,7 @@ import { useAuth } from "@context/AuthContext";
 import { useLocation } from "react-router";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { usePostUploading } from "../createAPostContext";
+import { trackEvent } from "@components/analytics";
 
 interface IFormProps {
   metaData?: any;
@@ -71,6 +72,12 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
     startLoading();
     e.preventDefault();
 
+    trackEvent({
+      action: "AddPost_"+ metaData.id +"_Submitted",
+      category: "AddPost",
+      label: "Submitted AddPost Flow",
+
+    })
     if (files && files?.length > 10) {
       present({
         duration: 3000,
@@ -78,6 +85,12 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
         buttons: [{ text: "X", handler: () => dismiss() }],
         color: "danger",
         mode: "ios",
+      });
+      trackEvent({
+        action: "Add_Post_Error",
+        category: "AddPost",
+        label: "Exceeded File Limit",
+        value: files.length,
       });
       return;
     }
@@ -104,6 +117,11 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
           },
         });
       } else {
+        trackEvent({
+          action: "AddPost_Empty_Content_Error",
+          category: "AddPost",
+          label: "Empty Post",
+        });
         present({
           duration: 3000,
           message: "Please include something to post",
@@ -180,7 +198,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
           );
         })}
         <ImageUpload files={files} setFiles={setFiles} />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Submitt</Button>
       </form>
     </div>
   );

@@ -37,12 +37,17 @@ interface IFormProps {
 const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const { startLoading, stopLoading } = usePostUploading();
 
+  console.log('-----> postData', postData)
   const { tags } = postData;
   const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
   const client = useApolloClient();
 
+  postData.postTags = {
+    tagType: "space",
+    tagId: "65b4383ce5c9e5e15449274e",
+  };
   const feedType = currentFeedType(useLocation());
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },

@@ -201,6 +201,11 @@ export const Login = gql`
     }
   `,
   AddPost = gql`
+  input PostTagInput {
+    tagType: String
+    tagId: ID
+  }
+
     mutation addPost(
       $postText: String!
       $unitId: Float
@@ -223,6 +228,7 @@ export const Login = gql`
       $academicProgramsAndDepartmentRating: Int
       $studentLifeAndServiceRating: Int
       $careerAndAlumniResourceRating: Int
+      $postTags: [PostTagInput]
     ) {
       addPost(
         postText: $postText
@@ -246,6 +252,8 @@ export const Login = gql`
         academicProgramsAndDepartmentRating: $academicProgramsAndDepartmentRating
         studentLifeAndServiceRating: $studentLifeAndServiceRating
         careerAndAlumniResourceRating: $careerAndAlumniResourceRating
+        postTags: $postTags
+
       ) {
         status {
           success

@@ -32,6 +32,7 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
   date,
   postTags
 }) => {
+  postTags?.tagType && console.log('-------> postTags', postTags)
   return (
     <div className='thread-header gap-2'>
       <Link to={`/@/${username}`} className='h-fit block max-md:px-2'>
@@ -64,6 +65,15 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
         {postTags?.tagType === 'space' && postTags.tag && (
           <div >
             <Link to={`/space/${postTags?.tag?.name}`} className='h-fit block max-md:px-2'>
+                          <p style={{ fontSize: '15px', color:"#551A8B" }}>#{postTags.tag.name}</p>
+            </Link>
+          </div>
+        )}
+
+
+        {postTags?.tagType === 'org' && postTags.tag && (
+          <div >
+            <Link to={`/org/${postTags?.tag?.name}`} className='h-fit block max-md:px-2'>
                           <p style={{ fontSize: '15px', color:"#551A8B" }}>#{postTags.tag.name}</p>
             </Link>
           </div>

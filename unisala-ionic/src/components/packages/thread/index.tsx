@@ -13,6 +13,7 @@ import { Reply, Save, Upvote } from "./actions";
 import Share from "@components/packages/share";
 import ImageCollage from "./ImageCollages";
 import AuthValidator from "../authentication/AuthValidator";
+import usePostViewTracker from "@hooks/usePostViewTracker";
 
 interface ThreadProps {
   thread: IPost;
@@ -21,6 +22,11 @@ interface ThreadProps {
 }
 
 const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
+  const { postRef, viewStartTime } = usePostViewTracker({
+    postId: thread._id,
+    postText: thread.postText,
+  });
+  const [durationSeconds, setDurationSeconds] = useState(0);
   const {
     _id,
     date,
@@ -42,10 +48,19 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
   const [editable, setEditable] = useState(false);
   const isReply = false;
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!viewStartTime.current) return;
+      const seconds = Math.floor((Date.now() - viewStartTime.current!) / 1000);
+      setDurationSeconds(seconds);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [_id]);
+
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
-        <div className="p-4 bg-white border">
+        <div className="p-4 bg-white border flex justify-between items-center">
           <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}
@@ -53,6 +68,12 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             profilePic={user?.picture!}
             username={user?.username}
           />
+          <div>
+            <h2>
+              viewed duration :{" "}
+              <span className="text-blue-700">{durationSeconds} Sec</span>
+            </h2>
+          </div>
         </div>
 
         {editable && (
@@ -63,9 +84,8 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         )}
 
-        <div>{images.length > 0 && <ImageCollage images={images} />}</div>
-
-        <div className="p-0">
+        <div className="p-0" ref={postRef}>
+          <div>{images.length > 0 && <ImageCollage images={images} />}</div>
           {!editable && (
             <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           )}

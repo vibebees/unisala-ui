@@ -10,16 +10,10 @@ import {
   USER_SERVICE_GQL,
 } from "../../datasource/servers/types";
 // Component imports
-import SearchTab from "./atoms/SearchTab";
-import { UserResults } from "./orgamism/UserList";
-import { UniversityResults } from "./orgamism/UniversityResults";
 import UniSearchResult from "./uni";
 import { URLgetter } from "../../utils/lib/URLupdate";
 import useDocTitle from "../../hooks/useDocTitile";
 import { searchGetSuccess } from "../../datasource/store/action";
-import { OrgList } from "./orgamism/OrgList";
-import { SpaceList } from "./orgamism/SpaceList";
-import { Col, Row } from "../../components/defaults";
 import { getAllQueryParams } from "./uni/filters/utility";
 import { AnimatePresence } from "framer-motion";
 import { SearchQuery } from "src/types/gqlTypes/graphql";
@@ -33,14 +27,6 @@ export const SearchTemplate: React.FC = () => {
   let tab = URLgetter("tab");
 
   useDocTitle(`Search ᛫ ${query}`);
-
-  const { data: searchData, loading: userLoading } = useQuery<SearchQuery>(
-    Search,
-    {
-      variables: { q: query, user: true, org: true, space: true, school: true },
-      context: { server: USER_SERVICE_GQL },
-    }
-  );
 
   const [getUniversityResults, { data: uniData, loading: uniLoading }] =
     useLazyQuery(UniFilterResults, {
@@ -66,10 +52,6 @@ export const SearchTemplate: React.FC = () => {
       dispatch(searchGetSuccess(formattedData));
     }
   }, [uniData, dispatch]);
-
-  // const { setPopUp } = useContext(ExploreFilterPopupContext);
-
-  const { users, orgs, spaces } = searchData?.search ?? {};
 
   return (
     <>

@@ -58,12 +58,12 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             profilePic={user?.picture!}
             username={user?.username}
           />
-          <div>
+          {/* <div className="">
             <h2>
               viewed duration :{" "}
               <span className="text-blue-700">{viewTime}</span>
             </h2>
-          </div>
+          </div> */}
         </div>
 
         {editable && (

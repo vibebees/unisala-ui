@@ -24,7 +24,7 @@ import {
   handleEventMutationError,
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { currentFeedType } from "@utils/lib/URLupdate";
 import { usePostUploading } from "../createAPostContext";
 
@@ -43,10 +43,16 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const [present, dismiss] = useIonToast();
   const { user } = useAuth();
   const client = useApolloClient();
+  const location = useLocation();
+  const path = location.pathname;
+  const isSpace = path.startsWith('/space/');
+  const isOrg = path.startsWith('/org/');
 
+
+  console.log(tags[0])
   postData.postTags = {
-    tagType: "space",
-    tagId: "65b4383ce5c9e5e15449274e",
+    tagType: isSpace ? "space" : isOrg ? "org" : "uni",
+    tagId:tags[0],
   };
   const feedType = currentFeedType(useLocation());
   const [addPost] = useMutation(AddPost, {

@@ -39,6 +39,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     academicProgramsAndDepartmentRating,
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
+    postTags
   } = thread;
   const BASEURL = window.location.origin;
   const [editable, setEditable] = useState(false);
@@ -57,6 +58,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             date={date}
             profilePic={user?.picture!}
             username={user?.username}
+            postTags={postTags}
           />
           {/* <div className="">
             <h2>

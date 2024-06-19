@@ -201,10 +201,7 @@ export const Login = gql`
     }
   `,
   AddPost = gql`
-  input PostTagInput {
-    tagType: String
-    tagId: ID
-  }
+
 
     mutation addPost(
       $postText: String!
@@ -228,7 +225,7 @@ export const Login = gql`
       $academicProgramsAndDepartmentRating: Int
       $studentLifeAndServiceRating: Int
       $careerAndAlumniResourceRating: Int
-      $postTags: [PostTagInput]
+      $postTags: PostTagsInput
     ) {
       addPost(
         postText: $postText
@@ -483,6 +480,13 @@ export const Login = gql`
             parentId
             image
             description
+          }
+          postTags{
+            tagType
+            tag{
+              _id
+              name
+            }
           }
           upVoted
           images

@@ -3,14 +3,14 @@ import { useHistory } from "react-router";
 export const URLupdate = (key: string, value: string) => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  let search = params.get(key);
+  const search = params.get(key);
   if (search) {
     params.delete(key);
     params.set(key, value);
   } else {
     params.set(key, value);
   }
-  return params.toString();
+  return params?.toString();
 };
 
 export const URLgetter = (key) => {
@@ -23,7 +23,7 @@ export const URLdelete = (key: string) => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   params.delete(key);
-  return params.toString();
+  return params?.toString();
 };
 
 export const redirectTo = () => {
@@ -37,7 +37,7 @@ export const currentFeedType = (location) => {
   // feedType could be org , space or feed
   const pathSegment = location.pathname.split('/')[ 1 ]; // Split the
 
-  let feedType =
+  const feedType =
     pathSegment === 'org'
       ? 'specificOrg'
       : pathSegment === 'space'

@@ -20,6 +20,7 @@ interface IUser {
   location?: string;
   name?: string;
   interestedSubjects?: string;
+  position?: string;
 }
 
 interface IAuthData extends IUser {

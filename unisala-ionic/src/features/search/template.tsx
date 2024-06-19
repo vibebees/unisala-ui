@@ -23,7 +23,7 @@ export const SearchTemplate: React.FC = () => {
   useDocTitle(`Search ᛫ ${query}`);
 
   const { data: searchData, loading } = useQuery<SearchQuery>(Search, {
-    variables: { q: query, user: true, org: true, space: true, school: true },
+    variables: { q: query, user: true, org: true, space: true, school: false },
     context: { server: USER_SERVICE_GQL },
   });
 
@@ -38,7 +38,7 @@ export const SearchTemplate: React.FC = () => {
           </AnimatePresence>
           <AnimatePresence mode="sync">
             {loading && (
-              <div className=" grid place-content-center absolute z-10 inset-0 w-full h-full">
+              <div className=" grid place-content-center absolute  inset-0 w-full h-full">
                 <Spinner />
               </div>
             )}

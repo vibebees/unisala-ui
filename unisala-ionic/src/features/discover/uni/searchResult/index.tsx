@@ -71,7 +71,7 @@ const SearchResults: FC<ISearchResults> = ({
               destination={`/university/${data?.name}`}
             >
               {/* <CourseCard key={index} allProps={data} /> */}
-              <DesignedCards key={index}/>
+              <DesignedCards key={index} />
             </CustomTrackingLink>
           );
         })}

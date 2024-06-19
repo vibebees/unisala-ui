@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
@@ -7,13 +7,14 @@ import {
   ThreadHeader,
   ThreadOptions,
   ThreadRating,
-  ThreadSpace
 } from "./organism";
 import { Buttons } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
 import Share from "@components/packages/share";
 import ImageCollage from "./ImageCollages";
 import AuthValidator from "../authentication/AuthValidator";
+import { InView } from "react-intersection-observer";
+import useViewDuration from "@hooks/useViewDuration";
 
 interface ThreadProps {
   thread: IPost;
@@ -38,27 +39,31 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
     academicProgramsAndDepartmentRating,
     studentLifeAndServiceRating,
     careerAndAlumniResourceRating,
-    postTags
   } = thread;
   const BASEURL = window.location.origin;
   const [editable, setEditable] = useState(false);
   const isReply = false;
+  const viewDuration = useRef<number | null>(null);
+  const [viewTime, setViewTime] = useState(0);
+  const { ViewDurationCacheUpdate, getDuration } = useViewDuration();
 
-  console.log("thread", postTags)
   return (
     <>
       <div className="relative flex flex-col bg-white bg-clip-border rounded-xl  text-gray-700 shadow-md w-full max-w-[48rem]">
-        <div className="p-4 bg-white border">
-
-
-           <ThreadHeader
+        <div className="p-4 bg-white border flex justify-between items-center">
+          <ThreadHeader
             firstName={user?.firstName}
             lastName={user?.lastName}
             date={date}
             profilePic={user?.picture!}
             username={user?.username}
-            postTags={postTags}
           />
+          {/* <div className="">
+            <h2>
+              viewed duration :{" "}
+              <span className="text-blue-700">{viewTime}</span>
+            </h2>
+          </div> */}
         </div>
 
         {editable && (
@@ -69,9 +74,26 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
           />
         )}
 
-        <div>{images.length > 0 && <ImageCollage images={images} />}</div>
-
-        <div className="p-0">
+        <InView
+          as="div"
+          className="p-0"
+          onChange={(inView) => {
+            if (inView) {
+              viewDuration.current = Date.now();
+              setViewTime(getDuration(_id));
+            } else {
+              if (viewDuration.current) {
+                const viewTime = Math.floor(
+                  (Date.now() - viewDuration.current) / 1000
+                );
+                ViewDurationCacheUpdate(viewTime, _id);
+                viewDuration.current = null;
+              }
+            }
+          }}
+        >
+          {/* <div ref={ref}> */}
+          <div>{images.length > 0 && <ImageCollage images={images} />}</div>
           {!editable && (
             <ThreadExpand htmlText={postText} _id={_id} tags={tags} />
           )}
@@ -88,7 +110,8 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               studentLifeAndServiceRating={studentLifeAndServiceRating}
             />
           </div>
-        </div>
+          {/* </div> */}
+        </InView>
         <div className="pt-0 pb-5  ">
           <div className="inline-flex flex-wrap items-center gap-3 mt-3 group ">
             <AuthValidator>

@@ -1,5 +1,5 @@
 // ImageCollage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import {
   IonButtons,
@@ -7,10 +7,10 @@ import {
   IonModal,
   IonHeader,
   IonToolbar,
-  IonContent
-} from '@ionic/react';
+  IonContent,
+} from "@ionic/react";
 
-const ImageCollage = ({ images =[] }) => {
+const ImageCollage = ({ images = [] }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [largeIndex, setLargeIndex] = useState(0);
@@ -41,44 +41,46 @@ const ImageCollage = ({ images =[] }) => {
     setLargeIndex(Math.floor(Math.random() * images.length)); // Randomize on mount
   }, []);
 
-
-  const LargerImage = ({ image = '', index = 0 }) => (
+  const LargerImage = ({ image = "", index = 0 }) => (
     <div>
       <img
-        className='h-auto w-full max-w-full rounded-lg object-contain object-center'
+        className="h-auto w-full max-w-full rounded-lg object-contain object-center"
         // className='h-auto w-full max-w-full rounded-lg object-cover object-center md:h-[480px]'
         src={image}
-        alt=''
+        alt=""
         onClick={() => openModalWithImage(index)}
       />
     </div>
   );
-  const SmallerImage = ({ image = '', index = 0 }) => (
+  const SmallerImage = ({ image = "", index = 0 }) => (
     <div>
-    <img
-      src={image}
-      className="h-50 max-w-full rounded-lg object-cover object-center md:h-60"
-      alt='gallery-image'
+      <img
+        src={image}
+        className="h-50 max-w-full rounded-lg object-cover object-center md:h-60"
+        alt="gallery-image"
         onClick={() => openModalWithImage(index)}
-
-    />
-  </div>
+      />
+    </div>
   );
 
   return (
     <>
-      <div className='grid gap-0'>
-       {images.map((image, index) => (
-          index === largeIndex ? <LargerImage key={index} image={image} index={index} /> : null
-        ))}
-        <div className='grid grid-cols-5 gap-1'>
-          {images.map((image, index) => (
-            index !== largeIndex ? <SmallerImage key={index} image={image} index={index} /> : null
-          ))}
+      <div className="grid gap-0">
+        {images.map((image, index) =>
+          index === largeIndex ? (
+            <LargerImage key={index} image={image} index={index} />
+          ) : null
+        )}
+        <div className="grid grid-cols-5 gap-1">
+          {images.map((image, index) =>
+            index !== largeIndex ? (
+              <SmallerImage key={index} image={image} index={index} />
+            ) : null
+          )}
         </div>
       </div>
 
-      <div className='container'>
+      <div className="container">
         {/* <div className='grid grid-cols-2 md:grid-cols-4'>
        {images.map((image, index) => {
          return (
@@ -98,21 +100,21 @@ const ImageCollage = ({ images =[] }) => {
           <IonHeader>
             <IonToolbar>
               {images.length > 1 && (
-                <IonButtons slot='start'>
+                <IonButtons slot="start">
                   <IonButton onClick={prevImage}>Previous</IonButton>
                   <IonButton onClick={nextImage}>Next</IonButton>
                 </IonButtons>
               )}
-              <IonButtons slot='end'>
+              <IonButtons slot="end">
                 <IonButton onClick={closeModal}>Close</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent className='ion-padding !p-0'>
+          <IonContent className="ion-padding !p-0">
             <img
               src={images[currentImageIndex]}
               alt={`Image ${currentImageIndex + 1}`}
-              className='w-full max-h-96 object-contain'
+              className="w-full max-h-96 object-contain"
             />
           </IonContent>
         </IonModal>

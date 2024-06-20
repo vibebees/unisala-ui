@@ -18,19 +18,52 @@ import { University } from './University';
 import Event from '../events';
 import { Spinner } from '@components/defaults';
 import { NoContentCard } from '../NoContentCard';
+import { Chips } from '../chips';
+import { getFeedChipValues, getQueryParams } from '@utils/lib/URLupdate';
+import { useLocation } from 'react-router';
 
 function Example({ feedType, feedId }) {
-  const [items, setItems] = useState<string[]>([]);
+
+  const location = useLocation();
+  const queryParams = getQueryParams(location.search);
+  const filterParams = queryParams.getAll('f'); // Get all 'f' parameters as an array
+
+
+
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState<IPost[] | null>(null);
-  const [noContent, setNoContent] = useState(false);
-  const { data, loading, fetchMore, error } = useQuery<FetchFeedV2Query>(
+  const [ noContent, setNoContent ] = useState(false);
+
+  const { data, loading, fetchMore, error, refetch } = useQuery<FetchFeedV2Query>(
     getNewsFeed,
     {
-      variables: { feedQuery: { feedType, feedId, page } },
+      variables: {
+        feedQuery: {
+          feedType, feedId, page,
+          filterByTags:  getFeedChipValues(filterParams)
+        }
+      },
       context: { server: USER_SERVICE_GQL }
     }
   );
+
+  useEffect(() => {
+    refetch({
+      feedQuery: {
+        feedType, feedId, filterByTags:  getFeedChipValues(filterParams), page: 0
+      }
+    }).then(result => {
+      if (result?.data && result?.data?.fetchFeedV2?.data.length > 0) {
+        setPosts(result?.data?.fetchFeedV2?.data);
+        setNoContent(false);
+      } else {
+        setPosts([]);
+        setNoContent(true);
+      }
+    });
+  }, [filterParams.join(',')]); // Effect dependency on filterParams as a string
+
+
   const [lastFetchedPage, setLastFetchedPage] = useState(0);
 
   useEffect(() => {
@@ -76,6 +109,7 @@ function Example({ feedType, feedId }) {
 
   return (
     <div className='w-full'>
+      <Chips />
       {posts?.map((post, index) => (
         <motion.div
           key={post._id ?? index}

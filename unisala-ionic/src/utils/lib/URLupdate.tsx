@@ -48,3 +48,27 @@ export const currentFeedType = (location) => {
 
   return feedType;
 }
+
+export const getQueryParams = (search:string) => {
+  return new URLSearchParams(search);
+};
+
+export const feedUrlChips =   [
+  { key: 's_uni', value : 'suggestMeUniversity', text: 'Suggested Uni', color: 'green' },
+  { key: 'q_uni', value : 'questionAboutUniversity', text: 'Questions on Uni', color: 'amber' },
+  { key: 'rev', value : 'reviewUniversity', text: 'Reviews', color: 'indigo' },
+  { key: 'o', value : 'others', text: 'Others', color: 'cyan' }
+];
+
+
+
+// Function to get the actual values from the keys
+export const getFeedChipValues = (keys: Array<string>) => {
+  console.log(keys);
+  if (!keys) return [];
+  return keys.map(key => {
+    const foundChip = feedUrlChips.find(chip => chip.key === key);
+    return foundChip ? foundChip.value : undefined;
+  });
+};
+

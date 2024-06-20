@@ -32,7 +32,6 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
   date,
   postTags
 }) => {
-  postTags?.tagType && console.log('-------> postTags', postTags.tag)
   return (
     <div className='thread-header gap-2'>
       <Link to={`/@/${username}`} className='h-fit block max-md:px-2'>

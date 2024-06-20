@@ -60,12 +60,12 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             username={user?.username}
             postTags={postTags}
           />
-          {/* <div className="">
+          <div className="">
             <h2>
               viewed duration :{" "}
               <span className="text-blue-700">{viewTime}</span>
             </h2>
-          </div> */}
+          </div>
         </div>
 
         {editable && (
@@ -112,7 +112,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
               studentLifeAndServiceRating={studentLifeAndServiceRating}
             />
           </div>
-          {/* </div> */}
         </InView>
         <div className="pt-0 pb-5  ">
           <div className="inline-flex flex-wrap items-center gap-3 mt-3 group ">

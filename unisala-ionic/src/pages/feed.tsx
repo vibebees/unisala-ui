@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import Home from "../features/home";
 import useViewDuration from "@hooks/useViewDuration";
+import ReactGA from "react-ga4";
 
 const PageHome = () => {
   const { getAllViewTime, deleteAllViewTime } = useViewDuration();
+
   useEffect(() => {
     window.onbeforeunload = () => {
       deleteAllViewTime();
@@ -11,7 +13,11 @@ const PageHome = () => {
 
     return () => {
       const getAllDuration = getAllViewTime();
-      console.log("getAllDuration", getAllDuration);
+      ReactGA.event({
+        category: "feed_view",
+        action: "view_duration",
+        value: getAllDuration,
+      });
     };
   }, []);
 

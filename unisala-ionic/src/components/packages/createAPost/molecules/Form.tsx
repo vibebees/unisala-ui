@@ -25,7 +25,7 @@ import {
 } from "./updateCacheForNewPost";
 import { useAuth } from "@context/AuthContext";
 import { useLocation, useParams } from "react-router";
-import { currentFeedType } from "@utils/lib/URLupdate";
+import { currentFeedType, getFeedChipValues, getQueryParams } from "@utils/lib/URLupdate";
 import { usePostUploading } from "../createAPostContext";
 import { trackEvent } from "@components/analytics";
 
@@ -38,7 +38,6 @@ interface IFormProps {
 const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const { startLoading, stopLoading } = usePostUploading();
 
-  console.log('-----> postData', postData)
   const { tags } = postData;
   const [files, setFiles] = useState<FileList | null>(null);
   const [present, dismiss] = useIonToast();
@@ -49,17 +48,19 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
   const isSpace = path.startsWith('/space/');
   const isOrg = path.startsWith('/org/');
 
+  const queryParams = getQueryParams(location.search);
+  const filterParams = queryParams.getAll('f'); // Get all 'f' parameters as an array
 
-  console.log(tags[0])
   postData.postTags = {
     tagType: isSpace ? "space" : isOrg ? "org" : "uni",
     tagId:tags[0],
   };
   const feedType = currentFeedType(useLocation());
+
   const [addPost] = useMutation(AddPost, {
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: { addPost } }) =>
-      updateCacheForNewPost({ cache, post: addPost.post, feedType }),
+      updateCacheForNewPost({ cache, post: addPost.post, feedType, filterByTags: getFeedChipValues(filterParams) }),
     onCompleted: (data) => {
       handlePostCompletion(data, files, present, dismiss, client);
 

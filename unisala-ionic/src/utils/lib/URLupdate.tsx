@@ -64,7 +64,6 @@ export const feedUrlChips =   [
 
 // Function to get the actual values from the keys
 export const getFeedChipValues = (keys: Array<string>) => {
-  console.log(keys);
   if (!keys) return [];
   return keys.map(key => {
     const foundChip = feedUrlChips.find(chip => chip.key === key);

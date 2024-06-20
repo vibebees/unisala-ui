@@ -82,6 +82,7 @@ const SingleThread: FC<SingleThreadProps> = ({
   user,
   videoURL,
   saved = false,
+  postTags
 }) => {
   const [reply, setReply] = useState(false),
     [editable, setEditable] = useState(false);
@@ -122,6 +123,7 @@ const SingleThread: FC<SingleThreadProps> = ({
             lastName={user?.lastName!}
             profilePic={user?.picture!}
             username={user?.username!}
+            postTags={postTags}
           />
         </div>
 

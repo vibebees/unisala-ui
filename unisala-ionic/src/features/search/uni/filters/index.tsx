@@ -144,8 +144,6 @@ function index({
   useEffect(() => {
     setIsFiltered(true);
     const queryObject = getAllQueryParams(0);
-    console.log('-------->')
-    console.log(queryObject)
     getUniversityResults({
       variables: {
         ...queryObject,

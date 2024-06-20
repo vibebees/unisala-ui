@@ -21,14 +21,13 @@ import { NoContentCard } from '../NoContentCard';
 import { Chips } from '../chips';
 import { getFeedChipValues, getQueryParams } from '@utils/lib/URLupdate';
 import { useLocation } from 'react-router';
+import { useAuth } from '@context/AuthContext';
 
 function Example({ feedType, feedId }) {
 
   const location = useLocation();
   const queryParams = getQueryParams(location.search);
   const filterParams = queryParams.getAll('f'); // Get all 'f' parameters as an array
-
-
 
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState<IPost[] | null>(null);
@@ -40,7 +39,9 @@ function Example({ feedType, feedId }) {
       variables: {
         feedQuery: {
           feedType, feedId, page,
-          filterByTags:  getFeedChipValues(filterParams)
+          ...(getFeedChipValues(filterParams).length > 0 && {
+            filterByTags: getFeedChipValues(filterParams)
+          })
         }
       },
       context: { server: USER_SERVICE_GQL }
@@ -50,7 +51,10 @@ function Example({ feedType, feedId }) {
   useEffect(() => {
     refetch({
       feedQuery: {
-        feedType, feedId, filterByTags:  getFeedChipValues(filterParams), page: 0
+        feedType, feedId,page: 0,
+        ...(getFeedChipValues(filterParams).length > 0 && {
+          filterByTags: getFeedChipValues(filterParams)
+        })
       }
     }).then(result => {
       if (result?.data && result?.data?.fetchFeedV2?.data.length > 0) {
@@ -109,7 +113,8 @@ function Example({ feedType, feedId }) {
 
   return (
     <div className='w-full'>
-      <Chips />
+      <Chips/>
+      {loading && <Spinner />}
       {posts?.map((post, index) => (
         <motion.div
           key={post._id ?? index}

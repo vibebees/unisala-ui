@@ -7,7 +7,6 @@ const InvitationTypesCheckbox = ({ allProps }) => {
 
   const handleCheckbox = (e) => {
     setInvitationType(e.detail.value); // Assuming e.detail.value contains the selected value
-    console.log("selected -------> ", e.detail.value);
   };
 
   return (

@@ -8,15 +8,16 @@ import { userServer } from "@datasource/servers/endpoints";
 import { useAuth } from "@context/AuthContext";
 import { clearCache } from "@utils/cache";
 
-export const updateCacheForNewPost = ({ cache, post, feedType }) => {
+export const updateCacheForNewPost = ({ cache, post, feedType, filterByTags }) => {
   const tags = post?.tags?.length > 0 ? post?.tags : []
+  console.log(filterByTags, tags, post?.unitId, feedType)
   // if publishing from university profile
   if (feedType === "uniWall") {
     tags.push(post?.unitId)
   }
   //if only published from newsfeed i.e not published from any space or org
   if (tags?.length === 0 ) {
-    prependPostToNewsFeed(cache, post, feedType);
+    prependPostToNewsFeed({cache, post, feedType, filterByTags});
   } else {
     // here space and org has their space detail in the tags after posting to api
     // api will attach tag info
@@ -28,15 +29,19 @@ export const updateCacheForNewPost = ({ cache, post, feedType }) => {
       _id = tags[ 0 ]?._id;
     }
 
-    prependPostToCategory(cache, post, _id, feedType); // Assuming tags[0] is the space ID
+    prependPostToCategory({cache, post, _id, feedType, filterByTags}); // Assuming tags[0] is the space ID
   }
 };
 
-const prependPostToCategory = (cache, post, _id, feedType) => {
+const prependPostToCategory = ({cache, post, _id, feedType, filterByTags}) => {
   const query = {
     query: getNewsFeed,
     variables: {
-      feedQuery: { feedType, page: 0, feedId: _id },
+      feedQuery: { feedType, page: 0, feedId: _id ,
+        ...(filterByTags.length > 0 && {
+          filterByTags: filterByTags
+        })
+      },
     },
   };
   const existingData = cache.readQuery(query);
@@ -55,10 +60,16 @@ const prependPostToCategory = (cache, post, _id, feedType) => {
   });
 };
 
-const prependPostToNewsFeed = (cache, post, feedType) => {
+const prependPostToNewsFeed = ({cache, post, feedType, filterByTags}) => {
   const query = {
     query: getNewsFeed,
-    variables: { feedQuery: { feedType, page: 0 , feedId: null} },
+    variables: {
+      feedQuery: {
+        feedType, page: 0, feedId: null,
+        ...(filterByTags?.length > 0 && {
+          filterByTags: filterByTags
+        })
+    } },
   };
 
   const existingData = cache.readQuery(query);
@@ -206,7 +217,7 @@ export const updatePostTotalCommentCache = ({
   feedType,
   feedId,
 }) => {
-  let feedQuery = { feedType, page: 0 };
+  const feedQuery = { feedType, page: 0 };
   if (["specificSpace", "specificOrg"].includes(feedType)) {
     feedQuery["feedId"] = feedId;
   }

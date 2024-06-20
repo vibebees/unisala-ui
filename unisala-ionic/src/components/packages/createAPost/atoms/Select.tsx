@@ -41,7 +41,7 @@ const SelectAtom: FC<selectAtomProps> = ({
   const handleChange = (e: any) => {
     setPostData((prev: any) => {
       const postText = htmlForEditor(postData?.postText, item.name, e.value);
-      let obj = {
+      const obj = {
         ...prev,
       };
       obj[item.id] = e.value.toLowerCase();
@@ -55,7 +55,6 @@ const SelectAtom: FC<selectAtomProps> = ({
       category: "AddPost",
       label:  e.value,
       value: e.value,
-
     })
     if (item.id === "testScores") {
       setScoreType(e.value.toLowerCase());

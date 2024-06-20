@@ -2,7 +2,7 @@ import React from "react";
 import Message from "@features/messages";
 
 const MessagePage = () => {
-  return <Message />;
+  return <ComingSoon />;
 };
 
 export default MessagePage;

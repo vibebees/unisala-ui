@@ -1,6 +1,7 @@
 import React, { Dispatch, FC } from "react";
 import { Checkbox, Label } from "@components/defaults";
 import { setCache } from "@utils/cache";
+import { trackEvent } from "@components/analytics";
 
 interface ICheckboxComponentProps {
   item: {
@@ -20,18 +21,27 @@ const CheckboxComponent: FC<ICheckboxComponentProps> = ({
     <div className="flex mt-2 w-fit items-center">
       <Label htmlFor={item.id}>{item.name}</Label>
 
+
       <Checkbox
-        className="ml-2 "
+        className="ml-2"
         id={item.id} // Add id attribute here
-        name={item.name}
+        name={item.name } // Add name attribute here
         onIonChange={(e: any) => {
+          const isChecked = e.target.checked;
           setPostData((prev: any) => {
             let newData = {
               ...prev,
-              [item.id]: e.target.checked,
+              [item.id]: isChecked,
             };
             setCache("postData", JSON.stringify(newData));
             return newData;
+          });
+          // Track the event when the checkbox is changed
+          trackEvent({
+            action: 'Checkbox_Changed',
+            category: 'AddPost',
+            label: item.name,
+            value: isChecked ? 1 : 0
           });
         }}
       />

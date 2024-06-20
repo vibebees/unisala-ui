@@ -3,6 +3,7 @@ import ReactSelect from "react-select";
 import { IonInput, IonLabel } from "@ionic/react";
 import { htmlForEditor } from "../utils/htmlForEditor";
 import { setCache } from "@utils/cache";
+import { trackEvent } from "@components/analytics";
 
 interface selectAtomProps {
   options: string[];
@@ -49,6 +50,13 @@ const SelectAtom: FC<selectAtomProps> = ({
       return obj;
     });
 
+    trackEvent({
+      action: "AddPost_"+ postData?.id +"_"+ item.id +"_Selected",
+      category: "AddPost",
+      label:  e.value,
+      value: e.value,
+
+    })
     if (item.id === "testScores") {
       setScoreType(e.value.toLowerCase());
     }

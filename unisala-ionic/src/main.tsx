@@ -7,6 +7,9 @@ import { client } from "./datasource/servers/endpoints";
 import { Provider } from "react-redux";
 import { AuthProvider } from "./context/AuthContext";
 import { store } from "./datasource/store/store";
+import ReactGA from 'react-ga4';
+ReactGA.initialize("G-MD5HNN6SQS");
+
 client.clearStore();
 
 const container = document.getElementById("root");

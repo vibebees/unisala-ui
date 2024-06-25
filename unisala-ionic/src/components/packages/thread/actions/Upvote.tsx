@@ -15,6 +15,7 @@ import { UpVoteIcon } from "@components/packages/icons";
 import { cn } from "@utils/index";
 import { URLupdate } from "@utils/lib/URLupdate";
 import { useHistory } from "react-router";
+import { trackEvent } from "@components/analytics";
 
 interface UpvoteProps {
   upVoteCount: number;
@@ -34,6 +35,7 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
     variables: { postId },
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: upVote }) => {
+      anylitcs()
       cache.modify({
         id: cache.identify({
           __typename: isReply ? "Comment" : "Post",
@@ -59,7 +61,17 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
     },
   });
 
+  const anylitcs = () => {
+    const activity =  upVoted ?'downvote':'upvote';
+    trackEvent({
+      action: activity +"_clicked_"+ postId,
+      category: "engagment",
+      label: 'vote_' + activity,
+      value: voted.upVoteCount,
+    })
+  }
   const debounce = (func) => {
+
     let timer;
     return function (...args) {
       setVoted((prev) => ({

@@ -10,6 +10,8 @@ import {
 import React, { FC } from "react";
 import { BookMarkIcon } from "@components/packages/icons";
 import { cn } from "@utils/index";
+import { trackEvent } from "@components/analytics";
+import { useAuth } from "@context/AuthContext";
 
 interface SaveProps {
   postId: string;
@@ -18,12 +20,22 @@ interface SaveProps {
 }
 
 const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
-  const userId = "";
+  console.log({
+    saved
+
+  })
+  const {user} = useAuth();
+  const userId = user?.id
   const [present, dismiss] = useIonToast();
   const [save] = useMutation(saved ? UnSavePost : SavePost, {
     variables: { postId },
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data }) => {
+      trackEvent({
+        action: saved ? "Unsaved_" : "Saved_" +  postId,
+        category: "engagement",
+        label: saved ? "Unsaved_" : "Saved_" + postId + '_by_' + userId,
+      })
       cache.modify({
         id: cache.identify({
           __typename: "Post",

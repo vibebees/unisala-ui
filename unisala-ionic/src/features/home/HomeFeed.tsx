@@ -1,10 +1,10 @@
-import CourseCard from "../../../component/courseCard";
-import Thread from "../../../component/thread";
+import CourseCard from "@components/packages/courseCard";
+import Thread from "@components/packages/thread";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
-import { USER_SERVICE_GQL } from "servers/types";
-import { getNewsFeed } from "graphql/user";
+import { USER_SERVICE_GQL } from "@datasource/servers/types";
+import { getNewsFeed } from "@datasource/graphql/user";
 
 const HomeFeed = ({ userInfo }) => {
   const { user } = useSelector((store) => store?.userProfile);

@@ -7,6 +7,7 @@ import {
     information,
     readerOutline
 } from "ionicons/icons"
+import { trackEvent } from "@components/analytics"
 
 const Tabs = ({ activeTab, HandleTabClick }) => {
     const [width, setWidth] = React.useState(window.innerWidth)
@@ -73,6 +74,11 @@ const Tabs = ({ activeTab, HandleTabClick }) => {
                             key={index}
                             onClick={() => {
                                 HandleTabClick(index)
+                                trackEvent({
+                                    category: "engagement_uni_website",
+                                    action: "visit_uni_website_tab",
+                                    label: tab.name
+                                })
                             }}
                         >
                             <IonIcon

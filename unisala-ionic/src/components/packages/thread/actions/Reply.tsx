@@ -5,6 +5,7 @@ import ReplyInput from "@components/packages/replyInput";
 import { CommentIcon } from "@components/packages/icons";
 import { cn } from "@utils/index";
 import { useParams } from "react-router";
+import { trackEvent } from "@components/analytics";
 
 interface ReplyProps {
   repliesCount: number | null | undefined;
@@ -25,6 +26,7 @@ const Reply: FC<ReplyProps> = ({
   feedId,
   postId,
 }) => {
+
   return (
     <div>
       <ModalCustom

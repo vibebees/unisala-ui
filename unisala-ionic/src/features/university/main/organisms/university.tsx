@@ -8,12 +8,15 @@ import { UniversityHeader } from "../molecules/header"
 import CreateAPostCard from "@components/packages/createAPost/template"
 import Tabs from "../molecules/Tabs"
 import { useHistory } from "react-router"
+import { trackEvent } from "@components/analytics"
+import { useAuth } from "@context/AuthContext"
 
 export const UniversityBuild = ({ allProps }) => {
   const { data, app, profile, UniScroll } = allProps
   const params = new URLSearchParams(window.location.search)
   const history = useHistory()
   const q = params.get("tab")
+  const {user} = useAuth();
 
   if (!q) {
     params.set("tab", "g")
@@ -21,6 +24,14 @@ export const UniversityBuild = ({ allProps }) => {
       search: params.toString()
     })
   }
+
+  useEffect(() => {
+    trackEvent({
+      action: "Uni_page_viewed_by_"+ user?.id,
+      category: "navigation",
+      label: data?.getUpdatedSchoolInfo?.elevatorInfo?.name
+    })
+  }, [])
   return (
     <div
     className="w-full">

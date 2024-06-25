@@ -24,6 +24,7 @@ import ProfilePop from "@components/packages/profilePop";
 import { useAuth } from "@context/AuthContext";
 import AuthModal from "@components/packages/authentication/AuthModal";
 import WelcomeForm from "@components/packages/authentication/Welcome";
+import { trackEvent } from "@components/analytics";
 // Define props if you have any for NavBar, for example:
 interface NavigationProps {
   // Define any props here if needed, for now, it's empty as we don't have specific props based on your code.
@@ -98,7 +99,14 @@ export const Navigation: React.FC<NavigationProps> = () => {
             <TabButton
               key={name}
               tab={name}
-              onClick={(e) => handleTabClick(e, link)}
+              onClick={(e) => {
+                handleTabClick(e, link)
+                trackEvent({
+                  action: name+ "_tab_clicked",
+                  category: "navigation",
+                  label: name,
+                })
+              }}
               selected={activeTab === link}
               className={cn(
                 " max-w-[10%] max-md:max-w-full relative ion-no-padding px-0 mx-0  ion-no-margin",

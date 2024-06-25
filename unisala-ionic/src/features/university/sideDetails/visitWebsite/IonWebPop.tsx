@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 const IonWebPop = ({ setPopup, popup, followThis = [], urls, tab = false }) => {
   const { uniData } = useSelector((store) => store?.university)
 
+  console.log({tab, urls})
   const [activeTab, setActiveTab] = React.useState(0)
   const HandleTabClick = (index) => {
     setActiveTab(index)

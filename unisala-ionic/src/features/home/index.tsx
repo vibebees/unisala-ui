@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Home } from "./template";
 import { FamousUniversities } from "../../components/packages/famousUniversites";
 import FixedLayout from "@layouts/FixedLayout";
@@ -18,6 +18,7 @@ export default function HomePage() {
   //     console.log("callSocket disconnected");
   //   };
   // }, []);
+
   return (
       <FixedLayout
         leftSidebar={<LeftSideBar/>}

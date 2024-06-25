@@ -3,6 +3,7 @@ import { IonIcon, IonButton, IonContent, IonPopover } from "@ionic/react";
 import { shareSocialOutline } from "ionicons/icons";
 import ListOptions from "../organism/ListOptions";
 import {  Buttons } from "@components/defaults";
+import { trackEvent } from "@components/analytics";
 
 const ShareButton = ({ allProps }) => {
   const {
@@ -21,6 +22,11 @@ const ShareButton = ({ allProps }) => {
   const openPopover = (e) => {
     popover.current.event = e;
     setPopoverOpen(true);
+    trackEvent({
+      action: "Share_button_clicked",
+      category: "engagement",
+      label: "Share_button_clicked"
+    })
   };
 
   return (

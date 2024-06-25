@@ -38,6 +38,8 @@ import Statstics from "./statistics"
 import StudentCharges from "./studentCharges"
 import VisitWebsite from "./visitWebsite"
 import { useLocation } from "react-router"
+import { trackEvent } from "@components/analytics"
+import { useAuth } from "@context/AuthContext"
 
 const SideDetails = ({
   activeTab,
@@ -46,7 +48,7 @@ const SideDetails = ({
   allProps
 }) => {
   const { isSideBar, uniData } = allProps
-
+  const {user} = useAuth();
   const sideMenu = [
     !isSideBar?.scholarshipsEmpty && {
       title: "Scholarships",
@@ -298,7 +300,11 @@ const SideDetails = ({
     <IonGrid>
       <IonRow className=" block" style={{ flex: 1, margin: 0 }}>
         {sections.map(({ ref, id, component }) => (
-          <section ref={ref} id={id} key={id}>
+          <section ref={ref} id={id} key={id} onClick={() => trackEvent({
+            action: "Uni_page_Details_"+ id+"_clicked_by_" + user?.id,
+            category: "navigation",
+            label: id
+          })}>
             {component}
           </section>
         ))}

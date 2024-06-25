@@ -23,7 +23,7 @@ export const Chips = () => {
       updatedParams.delete('f', chipKey);
       trackEvent({
         action: 'Feed_filter' + chipKey + '_unselected_' + user?.id,
-        category: 'feedFilter',
+        category: 'engagement',
         label: updatedParams.toString()
       });
     } else {
@@ -31,7 +31,7 @@ export const Chips = () => {
       updatedParams.append('f', chipKey);
       trackEvent({
         action: 'Feed_filter' + chipKey + '_selected_' + user?.id,
-        category: 'feedFilter',
+        category: 'engagement',
         label: updatedParams.toString()
       });
     }

@@ -1,0 +1,43 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import ScholarshipCard from "@/components/scholarship/ScholarshipCard.astro";
+import Filter from "@/components/scholarship/Filter";
+---
+
+<MainLayout title="Discover Scholarships">
+  <div class="container">
+    <section class="">
+      <div class="flex justify-between scholarship-header">
+        <div class="scholarship-title">
+          <h1 class="font-bold">Available Scholarships</h1>
+        </div>
+
+        <div>
+          <Filter />
+        </div>
+      </div>
+
+      <div>
+        <ScholarshipCard />
+        <ScholarshipCard />
+        <ScholarshipCard />
+        <ScholarshipCard />
+      </div>
+    </section>
+  </div>
+</MainLayout>
+
+<style>
+  .scholarship-title {
+    color: #006eff;
+    margin-left: 5px;
+    font-size: 1.5rem;
+  }
+  .scholarship-header {
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+    color: #006eff;
+    margin-left: 5px;
+    font-size: 1.5rem;
+  }
+</style>

@@ -1,0 +1,270 @@
+---
+// ScholarshipCard.astro
+const scholarship = {
+  title: "Global Excellence Scholarship",
+  institution: "University of Innovation",
+  country: "United States",
+  degreeLevel: "Master's",
+  fieldOfStudy: "Computer Science, Data Science",
+  amount: "$20,000 per year",
+  deadline: "2024-12-31",
+  eligibility:
+    "International students with a GPA of 3.5 or higher, proficient in English, and with a bachelor's degree in a related field.",
+  moreInfoLink: "https://example.com/scholarship",
+  description:
+    "This scholarship aims to support outstanding international students pursuing advanced degrees in technology-related fields, fostering innovation and global collaboration.",
+};
+---
+
+<div class="scholarship-card">
+  <div class="card-header">
+    <div>
+      <h2 class="title">{scholarship.title}</h2>
+      <p class="institution">
+        <i class="fas fa-university"></i>
+        {scholarship.institution}
+      </p>
+    </div>
+
+    <button class="favorite-btn">
+      <i class="fas fa-star"></i> Favorite
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label"><i class="fas fa-globe-americas"></i> Country</span>
+        <span class="value">{scholarship.country}</span>
+      </div>
+      <div class="info-item">
+        <span class="label"
+          ><i class="fas fa-graduation-cap"></i> Degree Level</span
+        >
+        <span class="value">{scholarship.degreeLevel}</span>
+      </div>
+      <div class="info-item">
+        <span class="label"><i class="fas fa-book"></i> Field of Study</span>
+        <span class="value">{scholarship.fieldOfStudy}</span>
+      </div>
+      <div class="info-item">
+        <span class="label"><i class="fas fa-dollar-sign"></i> Amount</span>
+        <span class="value amount">{scholarship.amount}</span>
+      </div>
+      <div class="info-item">
+        <span class="label"><i class="fas fa-calendar-alt"></i> Deadline</span>
+        <span class="value deadline"
+          >{new Date(scholarship.deadline).toLocaleDateString()}</span
+        >
+      </div>
+    </div>
+    <div class="eligibility">
+      <h3><i class="fas fa-check-circle"></i> Eligibility</h3>
+      <p>{scholarship.eligibility}</p>
+    </div>
+    <div class="description">
+      <h3><i class="fas fa-info-circle"></i> Description</h3>
+      <p>{scholarship.description}</p>
+    </div>
+  </div>
+  <div class="card-footer">
+    <a href={scholarship.moreInfoLink} class="more-info-btn">
+      Apply Now <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</div>
+
+<style>
+  @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+
+  .scholarship-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: none;
+    margin-bottom: 2rem;
+    width: 100%;
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #d3dae2;
+  }
+
+  .card-header {
+    background-color: #2082ff;
+    padding: 1.5rem;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .institution {
+    font-size: 1rem;
+    margin: 0.5rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e6f0ff;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label {
+    font-size: 0.875rem;
+    color: #4a5568;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .label i {
+    color: #2082ff;
+  }
+
+  .value {
+    font-size: 1rem;
+    color: #2d3748;
+  }
+
+  .amount {
+    color: #1cdb7c;
+    font-weight: 600;
+  }
+
+  .deadline {
+    color: #c53030;
+    font-weight: 500;
+  }
+
+  .eligibility h3,
+  .fa-check-circle {
+    color: #38c238;
+  }
+
+  .eligibility h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .eligibility,
+  .description {
+    margin-bottom: 1.5rem;
+  }
+
+  .description h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #2e7bff;
+  }
+
+  .eligibility p,
+  .description p {
+    color: #4a5568;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card-footer {
+    padding: 1rem;
+    background-color: #f7fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .favorite-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #ffffff;
+    color: #2082ff;
+    border: 1px solid #2082ff;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .favorite-btn:hover {
+    background-color: #1e76e9;
+    color: #ffffff;
+  }
+
+  .more-info-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2082ff;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .more-info-btn:hover {
+    background-color: #1a6cd6;
+  }
+
+  @media (max-width: 640px) {
+    .card-footer {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .favorite-btn,
+    .more-info-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .card-header,
+    .card-body,
+    .card-footer {
+      padding: 1rem;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

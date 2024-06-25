@@ -60,12 +60,6 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             username={user?.username}
             postTags={postTags}
           />
-          <div className="">
-            <h2>
-              viewed duration :{" "}
-              <span className="text-blue-700">{viewTime}</span>
-            </h2>
-          </div>
         </div>
 
         {editable && (

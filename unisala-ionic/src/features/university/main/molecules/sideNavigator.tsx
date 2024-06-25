@@ -1,4 +1,7 @@
+import { useEffect } from "react"
 import SideDetails from "../../sideDetails"
+import { trackEvent } from "@components/analytics"
+import { useAuth } from "@context/AuthContext"
 
 export const SideNavigator = ({ allProps }) => {
   const {
@@ -34,6 +37,14 @@ export const SideNavigator = ({ allProps }) => {
     admission
   } = allProps
 
+  const {user} = useAuth();
+  useEffect(() => {
+    trackEvent({
+      action: "Uni_page_details_viewed_by_"+ user?.id,
+      category: "navigation",
+      label: data?.getUpdatedSchoolInfo?.elevatorInfo?.name
+    })
+  },[])
   return (
     <SideDetails
       forwardedRef={{

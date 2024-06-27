@@ -1,0 +1,14 @@
+---
+import WelcomeFormLayout from "@/components/layout/Welcome-form-Layout.astro";
+import StepTwoForm from "../../components/welcome-form/Step-two-form";
+---
+
+<WelcomeFormLayout
+  ImageAlt="step-tw0 image"
+  title="Welcomeform"
+  ImageSrc={"/public/field-study.png"}
+  step={3}
+  className="w-[48%] scale-75 px-7 pointer-events-none"
+>
+  <StepTwoForm client:load />
+</WelcomeFormLayout>

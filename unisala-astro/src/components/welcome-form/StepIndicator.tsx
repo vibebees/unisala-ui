@@ -1,9 +1,8 @@
 import clsx from "clsx";
 import React from "react";
 
-const StepIndicator = () => {
+const StepIndicator = ({ step }: { step: number }) => {
   const TotalSteps = 5;
-  const [step, setStep] = React.useState(1);
   const [width, setWidth] = React.useState(0);
 
   const calculateWidth = () => {

@@ -74,3 +74,18 @@ export async function getSeasonInfo() {
     nextYear,
   };
 }
+
+export const shakeWebsite = () => {
+  document.body.classList.add("shake");
+  const forms = document.getElementsByClassName("warning");
+  Array.from(forms).forEach((item) => {
+    item.classList.add("border-error");
+  });
+
+  setTimeout(() => {
+    document.body.classList.remove("shake");
+    Array.from(forms).forEach((item) => {
+      item.classList.remove("border-error");
+    });
+  }, 500);
+};

@@ -75,12 +75,50 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideDown: {
+          "0%": { transform: "translateY(-20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        slideUp: {
+          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        slideRight: {
+          "0%": { transform: "translateX(-20px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        fadeIn: "fadeIn 0.5s ease-out forwards",
+        slideDown: "slideDown 0.5s ease-out forwards",
+        slideUp: "slideUp 0.5s ease-out forwards",
+        slideRight: "slideRight 0.5s ease-out forwards",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  variants: {
+    extend: {
+      animation: ["responsive", "motion-safe", "motion-reduce"],
+    },
+  },
+
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    function ({ addUtilities, theme }) {
+      const newUtilities = {
+        ".animation-delay-150": { animationDelay: "150ms" },
+        ".animation-delay-300": { animationDelay: "300ms" },
+        ".animation-delay-500": { animationDelay: "500ms" },
+        ".animation-delay-700": { animationDelay: "700ms" },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };

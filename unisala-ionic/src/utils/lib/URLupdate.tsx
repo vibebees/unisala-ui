@@ -55,7 +55,7 @@ export const getQueryParams = (search:string) => {
 
 export const feedUrlChips =   [
   { key: 's_uni', value : 'suggestMeUniversity', text: 'Suggested Uni', color: 'green' },
-  { key: 'q_uni', value : 'questionAboutUniversity', text: 'Questions on Uni', color: 'amber' },
+  { key: 'q_uni', value : 'questionAboutUniversity', text: 'Questions on Uni', color: 'orange' },
   { key: 'rev', value : 'reviewUniversity', text: 'Reviews', color: 'indigo' },
   { key: 'o', value : 'others', text: 'Others', color: 'purple' }
 ];

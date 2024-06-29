@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { GraduationCap, BookOpen, FlaskConical, Atom } from "lucide-react";
-
+import { useAstroMutation } from "@/datasource/apollo-client";
+import { EditProfile } from "@/graphql/user";
 import Button from "./atoms/Button";
 import Option from "./atoms/Option";
 import { shakeWebsite } from "@/lib/utils";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 const StepThreeForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(
     localStorage.getItem("studyLevel") || ""
   );
+  const [editProfile, { loading }] = useAstroMutation(EditProfile, {
+    context: { server: USER_SERVICE_GQL },
+  });
 
   const handleStatusChange = (event: any) => {
     localStorage.setItem("studyLevel", event.target.value);
@@ -43,7 +48,11 @@ const StepThreeForm = () => {
         interestedSubjects: JSON.parse(interestedSubjects),
         studyLevel,
       };
-      console.log(data);
+      editProfile({
+        variables: {
+          ...data,
+        },
+      });
     }
   };
 

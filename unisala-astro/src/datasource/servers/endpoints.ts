@@ -1,0 +1,108 @@
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+  from,
+  fromPromise,
+  split,
+  Observable,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { io } from "socket.io-client";
+import {
+  MESSAGE_SERVICE_GQL,
+  UNIVERSITY_SERVICE_GQL,
+  USER_SERVICE_GQL,
+} from "./types";
+import getServiceConfig from "./index";
+
+import config from "./config";
+
+const {
+    messagingServiceAddress,
+    universityServiceAddress,
+    messageSocketAddress,
+    userServiceAddress,
+    callSocketAddress,
+  } = getServiceConfig(),
+  responseLink = new ApolloLink((operation, forward) => {
+    return new Observable((observer) => {
+      const processOperation = async () => {
+        try {
+          const forwardedOperation = await forward(operation);
+          const subscription = forwardedOperation.subscribe({
+            next: (response) => {
+              const { validToken } = response?.data?.fetchFeedV2 ?? {};
+              if (validToken === false) {
+                console.log("Token is invalid or expired, refreshing token...");
+              } else {
+                observer.next(response);
+              }
+            },
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer),
+          });
+
+          return () => subscription.unsubscribe();
+        } catch (error) {
+          observer.error(error);
+        }
+      };
+
+      processOperation();
+
+      return () => {}; // Cleanup function if necessary
+    });
+  }),
+  errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+    }
+  }),
+  messageServerGql = new HttpLink({
+    uri: messagingServiceAddress + "/graphql",
+    server: MESSAGE_SERVICE_GQL,
+  } as any),
+  universityServerGql = new HttpLink({
+    uri: universityServiceAddress + "/graphql",
+    server: UNIVERSITY_SERVICE_GQL,
+  } as any),
+  userServerGql = new HttpLink({
+    uri: userServiceAddress + "/graphql",
+    server: USER_SERVICE_GQL,
+  } as any),
+  httpLink = split(
+    (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
+    universityServerGql,
+    split(
+      (operation) => operation.getContext().server === MESSAGE_SERVICE_GQL,
+      messageServerGql,
+      split(
+        (operation) => operation.getContext().server === USER_SERVICE_GQL,
+        userServerGql
+      )
+    )
+  );
+export const client = new ApolloClient({
+    link: from([responseLink, errorLink, httpLink]),
+    headers: {
+      authorization: "",
+    },
+    cache: new InMemoryCache(),
+  }),
+  messageSocket = () => {
+    const socketOptions = {
+      path: "",
+    };
+
+    if (config.NODE_ENV !== "DEVELOPMENT") {
+      socketOptions["path"] = "/msg/socket/socket.io";
+    }
+
+    return io(messageSocketAddress, socketOptions);
+  },
+  callSocket = () => io(callSocketAddress),
+  userServer = userServiceAddress,
+  messageServer = messagingServiceAddress,
+  universityServer = universityServiceAddress;

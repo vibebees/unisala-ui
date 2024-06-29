@@ -6,9 +6,12 @@ import Option from "./atoms/Option";
 import { shakeWebsite } from "@/lib/utils";
 
 const StepThreeForm = () => {
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(
+    localStorage.getItem("studyLevel") || ""
+  );
 
   const handleStatusChange = (event: any) => {
+    localStorage.setItem("studyLevel", event.target.value);
     setSelectedStatus(event.target.value);
   };
 
@@ -17,6 +20,32 @@ const StepThreeForm = () => {
     { value: "masters", Icon: FlaskConical, label: "Masters" },
     { value: "phd", Icon: Atom, label: "PHD" },
   ];
+
+  const handleSubmit = () => {
+    const userStatus = localStorage.getItem("userStatus");
+    const interestedSubjects = localStorage.getItem("interestedSubjects");
+    const studyLevel = localStorage.getItem("studyLevel");
+
+    if (!userStatus || !interestedSubjects || !studyLevel) {
+      if (!userStatus) {
+        window.location.href = "step-one";
+      }
+      if (!interestedSubjects) {
+        window.location.href = "step-two";
+      }
+      if (!studyLevel) {
+        window.location.href = "step-three";
+      }
+      shakeWebsite();
+    } else {
+      const data = {
+        userStatus,
+        interestedSubjects: JSON.parse(interestedSubjects),
+        studyLevel,
+      };
+      console.log(data);
+    }
+  };
 
   return (
     <div className="welcome-form-container animate-fadeIn">
@@ -42,19 +71,21 @@ const StepThreeForm = () => {
 
       <div className="mt-8 flex flex-col ">
         <Button
-          url={selectedStatus ? "step-three" : null}
-          lable="Next"
+          url={null}
+          lable="submit"
           className={`${
             selectedStatus ? "bg-blue-500 text-white" : "bg-neutral-300"
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
           onclick={() => {
             if (!selectedStatus) {
               shakeWebsite();
+            } else {
+              handleSubmit();
             }
           }}
         />
         <Button
-          url="step-one"
+          url="step-two"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
         />

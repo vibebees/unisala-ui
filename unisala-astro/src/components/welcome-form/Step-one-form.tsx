@@ -10,9 +10,12 @@ import Option from "./atoms/Option";
 import { shakeWebsite } from "@/lib/utils";
 
 const StepTwoForm = () => {
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(
+    localStorage.getItem("userStatus") || ""
+  );
 
   const handleStatusChange = (event: any) => {
+    localStorage.setItem("userStatus", event.target.value);
     setSelectedStatus(event.target.value);
   };
 

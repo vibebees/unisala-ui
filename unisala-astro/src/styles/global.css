@@ -144,7 +144,7 @@
   }
 
   .welcome-form-container {
-    @apply min-w-[600px] max-w-4xl mx-auto my-8 p-10
+    @apply max-w-4xl mx-auto my-8 p-10 max-md:px-4 w-full
   }
 
   .anime-grid {

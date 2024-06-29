@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import Button from "./atoms/Button";
@@ -9,26 +10,69 @@ interface FieldOfStudyProps {
 
 const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [selectedFields, setSelectedFields] = useState<string[]>(
+    JSON.parse(localStorage.getItem("interestedSubjects") || "[]")
+  );
   const [filteredFields, setFilteredFields] = useState<string[]>([]);
 
-  const allFields: string[] = [
-    "Computer Science",
-    "Computer Information Systems",
-    "Computer & Informational Tech.",
-    "Computer Applications",
-    "Computer Engineering",
-    "Computer Graphics",
-    "Computer Networks",
-    "Computer Programming",
-    // Add more fields as needed
+  const data = [
+    {
+      name: "computer science",
+      universityCount: 1554,
+    },
+    {
+      name: "computer information systems",
+      universityCount: 130,
+    },
+    {
+      name: "computer & informational tech.",
+      universityCount: 48,
+    },
+    {
+      name: "electrical engineering",
+      universityCount: 82,
+    },
+    {
+      name: "electronics",
+      universityCount: 38,
+    },
+    {
+      name: "elementary education",
+      universityCount: 30,
+    },
+    {
+      name: "architecture",
+      universityCount: 339,
+    },
+    {
+      name: "architectural engineering",
+      universityCount: 5,
+    },
+    {
+      name: "architectural technology",
+      universityCount: 1,
+    },
+    {
+      name: "civil engineering",
+      universityCount: 66,
+    },
+    {
+      name: "civil & environ engineering",
+      universityCount: 10,
+    },
+    {
+      name: "civil  environ engineering",
+      universityCount: 6,
+    },
   ];
 
   useEffect(() => {
     setFilteredFields(
-      allFields.filter((field) =>
-        field.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      data
+        .filter((field) =>
+          field.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .map((field) => field.name) as string[]
     );
   }, [searchTerm]);
 
@@ -41,9 +85,17 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
   };
 
   const toggleFieldSelection = (field: string) => {
-    setSelectedFields((prev) =>
-      prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]
-    );
+    setSelectedFields((prev) => {
+      const newFields = [...prev];
+      const index = newFields.indexOf(field);
+      if (index > -1) {
+        newFields.splice(index, 1);
+      } else {
+        newFields.push(field);
+      }
+      localStorage.setItem("interestedSubjects", JSON.stringify(newFields));
+      return newFields;
+    });
   };
 
   return (
@@ -78,7 +130,7 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
       </div>
 
       <div className="max-h-64 overflow-y-auto  animate-fadeIn animation-delay-500">
-        {filteredFields.map((field, index) => (
+        {data.map((major, index) => (
           <label
             key={index}
             className="flex items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out animate-slideRight"
@@ -86,11 +138,11 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
           >
             <input
               type="checkbox"
-              checked={selectedFields.includes(field)}
-              onChange={() => toggleFieldSelection(field)}
+              checked={selectedFields.includes(major.name)}
+              onChange={() => toggleFieldSelection(major.name)}
               className="form-checkbox h-5 w-5 text-blue-500  rounded focus:ring-blue-500 transition-all duration-300 ease-in-out"
             />
-            <span className="ml-3 text-gray-700">{field}</span>
+            <span className="ml-3 text-gray-700">{major.name}</span>
           </label>
         ))}
       </div>

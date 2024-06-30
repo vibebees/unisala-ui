@@ -1,11 +1,15 @@
 ---
-import PageHeader from '@/components/page-header.astro';
+import ThreadHeader from '@/components/layout/thread-header.astro';
 import { Badge } from '@/components/ui/badge';
 import MainLayout from '@/layouts/main-layout.astro';
 import { getCollection } from 'astro:content';
 import linkifyHtml from 'linkify-html';
-
+import ThreadAction from '@/components/thread/thread.action.astro';
+import Comments from '@/components/thread/comments/index.astro';
 import SingleThread from '@/components/thread/singlethread';
+
+
+
 let data = {
   _id: '667c3b8cebc4e892ddcd7254',
   postText:
@@ -57,7 +61,7 @@ let data = {
   __typename: 'PostDetails'
 };
 
-const {firstName, lastName} = data.user;
+const { firstName, lastName, username } = data.user;
 const linkifiedText = linkifyHtml(data?.postText, {
   defaultProtocol: 'https',
   className: 'custom-link',
@@ -67,10 +71,10 @@ const linkifiedText = linkifyHtml(data?.postText, {
 });
 
 function formatDate(dateString) {
-     const date = new Date(dateString);
-     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-     return date.toLocaleDateString('en-US', options);
-   }
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+}
 
 // Function to extract heading
 function extractHeading(text) {
@@ -104,8 +108,6 @@ function extractHeading(text) {
 
 const heading = extractHeading(data.postText);
 
-
-
 export const prerender = false;
 
 const { slug } = Astro.params;
@@ -113,44 +115,53 @@ const { slug } = Astro.params;
 
 <MainLayout title='Thread'>
   <section class='container max-w-screen-lg space-y-6 pt-12'>
-    <PageHeader
-      heading={heading}
-      text='Reproduce Astro Starlog template with Tailwind CSS & shadcn/ui.'
-    />
+    <ThreadHeader heading={heading} username={username} date={data.date} />
 
     <ul class='pt-6'>
       {
-          <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
-            <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
-              <div class='md:sticky md:top-24 w-auto mr-6'>
-                <a
-                  href={`/releases/${"post.slug"}`}
-                  class='flex flex-col gap-y-2 pb-4'
-                >
-                  <Badge
-                    variant='default'
-                    radius='lg'
-                    className='w-25 h-8  text-md bg_release_version text-white'
+        (
+          <>
+            <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
+              <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
+                {/* <div class='md:sticky md:top-24 w-auto mr-6'>
+                  <a
+                    href={`/releases/${'post.slug'}`}
+                    class='flex flex-col gap-y-2 pb-4'
                   >
-                     {firstName + ' ' + lastName}
-                  </Badge>
-                  <span class='text-sm text-muted-foreground'>
-                    {formatDate(data.date)}
-                  </span>
-                </a>
+                    <Badge
+                      variant='default'
+                      radius='lg'
+                      className="w-14 h-7 justify-center text-md bg_release_version text-white"
+                      >
+                      {firstName + ' ' + lastName}
+                    </Badge>
+                    <span class='text-sm text-muted-foreground'>
+                      {formatDate(data.date)}
+                    </span>
+                  </a>
+                </div> */}
               </div>
-            </div>
 
-            <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
-              <SingleThread
-                htmlText={linkifiedText}
-                _id={data._id}
-                tags={data.tags}
-                videoURL={data.videoURL}
-              />
-            </div>
-          </li>
+              <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
+                <SingleThread
+                  htmlText={linkifiedText}
+                  _id={data._id}
+                  tags={data.tags}
+                  videoURL={data.videoURL}
+                />
+              </div>
+            </li>
+            <ThreadAction
+              heading={heading}
+              username={username}
+              date={'Jan 21'}
+              claps={12}
+              comments={123}
+            />
+          </>
+        )
       }
     </ul>
   </section>
+  <Comments/>
 </MainLayout>

@@ -1,18 +1,18 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail } from "lucide-react";
 import GoogleAuth from "./GoogleAuth";
 import SubmitButton from "./SubmitButton";
 
 interface EmailInputProps {
-  onSubmit: (email: string) => void;
-  onGoogleLogin: () => void;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EmailInput: React.FC<EmailInputProps> = ({ onSubmit, onGoogleLogin }) => {
-  const [email, setEmail] = useState("");
+const EmailInput: React.FC<EmailInputProps> = ({ email, setEmail }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(email);
+    console.log("Submit email", email);
   };
 
   return (

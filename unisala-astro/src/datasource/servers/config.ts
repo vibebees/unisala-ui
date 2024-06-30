@@ -1,5 +1,5 @@
 const config = {
-  NODE_ENV: "PRODUCTION",
+  NODE_ENV: "w",
 };
 
 export default config;

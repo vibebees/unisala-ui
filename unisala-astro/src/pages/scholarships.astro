@@ -17,7 +17,7 @@ import Filter from "@/components/scholarship/Filter";
         </div>
       </div>
 
-      <div>
+      <div class="grid-container">
         <ScholarshipCard />
         <ScholarshipCard />
         <ScholarshipCard />
@@ -39,5 +39,11 @@ import Filter from "@/components/scholarship/Filter";
     color: #006eff;
     margin-left: 5px;
     font-size: 1.5rem;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 1rem;
   }
 </style>

@@ -1,0 +1,16 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import AuthWrapper from "@/components/authentication/AuthWrapper";
+---
+
+<MainLayout
+  title="Unisala Webinar Registration"
+  description="Register for our exclusive webinar series on studying in the USA."
+  mainClass="bg-background-200"
+>
+  <div
+    class="flex flex-col items-center justify-center h-[calc(100vh-100px)] overflow-hidden"
+  >
+    <AuthWrapper client:only="react" />
+  </div>
+</MainLayout>

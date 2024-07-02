@@ -9,7 +9,7 @@ import {
   Observable,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import {
   MESSAGE_SERVICE_GQL,
   UNIVERSITY_SERVICE_GQL,
@@ -100,9 +100,9 @@ export const client = new ApolloClient({
       socketOptions["path"] = "/msg/socket/socket.io";
     }
 
-    return io(messageSocketAddress, socketOptions);
+    // return io(messageSocketAddress, socketOptions);
   },
-  callSocket = () => io(callSocketAddress),
+  // callSocket = () => io(callSocketAddress),
   userServer = userServiceAddress,
   messageServer = messagingServiceAddress,
   universityServer = universityServiceAddress;

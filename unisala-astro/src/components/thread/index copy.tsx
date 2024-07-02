@@ -1,16 +1,12 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import MainLayout from '@/layouts/main-layout.astro';
- import ThreadAction from '@/components/thread/thread.action.astro';
-import Comments from '@/components/thread/comments/index.astro';
+ import {ThreadAction} from '@/components/thread/threadAction';
+import Comments from '@/components/thread/comments/index';
 import SingleThread from '@/components/thread/singlethread';
 import linkifyHtml from 'linkify-html';
 import { formatDate } from '@/lib/utils';
 import { ThreadHeader } from '@/components/thread/threadHeader';
-import { useAstroQuery } from '@/datasource/apollo-client';
-import { useQuery } from '@apollo/client';
-import { GetPostById } from '@/graphql/user';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 
 let data2 = {
     _id: '667c3b8cebc4e892ddcd7254',
@@ -102,17 +98,10 @@ function extractHeading(text) {
   }
 
 
-const Thread = ({ slug }) => {
+const Thread = () => {
     const heading = extractHeading(data2.postText);
 
-    const { data, loading, error } = useQuery(GetPostById, {
-        context: { server: USER_SERVICE_GQL },
-        variables: { id:"testId" },
-    });
 
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Error...</div>
-    if (!data) return <div>No data...</div>
   return (
       <section className='container max-w-screen-lg space-y-6 pt-12'>
         <ThreadHeader heading={heading} username={data2.user.username} claps={0} comments={0}  date=''/>
@@ -127,15 +116,15 @@ const Thread = ({ slug }) => {
               />
             </div>
           </li>
-          {/* <ThreadAction
+          <ThreadAction
             heading={heading}
             username={data2.user.username}
             date={formatDate(new Date())}
             claps={12}
             comments={123}
-          /> */}
+          />
         </ul>
-        {/* <Comments /> */}
+        <Comments />
       </section>
   );
 };

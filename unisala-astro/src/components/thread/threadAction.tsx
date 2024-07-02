@@ -1,9 +1,7 @@
 import React from 'react'; // Ensure React is imported for JSX processing
-import { cn } from "@/lib/utils"; // Make sure this utility handles conditional classes correctly
-// import { Icon } from "astro-icon/components"; // Confirm 'astro-icon' components are suitable for React
-import type { HTMLAttributes } from "astro/types"; // Make sure these types are compatible with React, or use React's own types
 
-interface Props extends HTMLAttributes<HTMLDivElement> { // Using HTMLDivElement if directly using div element attributes
+
+type Props = {
   heading: string;
   username: string;
   date: string;
@@ -11,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> { // Using HTMLDivElement
   comments: number;
   className?: string;
   showBorder?: boolean;
-}
+};
 
 export const ThreadAction = ({
   heading,

@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-import { IonCard } from "@ionic/react";
 import ShowPeopleComments from "../organism/ShowPeopleComments";
 import {
   ThreadHeader,
@@ -115,7 +114,7 @@ const SingleThread: FC<SingleThreadProps> = ({
 
   return (
     <div className="max-w-2xl w-full mx-auto mb-10">
-      <IonCard className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
+      <div className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
         <div className="ml-6 max-md:ml-2">
           <ThreadHeader
             date={date}
@@ -160,7 +159,7 @@ const SingleThread: FC<SingleThreadProps> = ({
 
         {/* other people's replies */}
         <ShowPeopleComments postId={_id!} singlePost={true} />
-      </IonCard>
+      </div>
     </div>
   );
 };

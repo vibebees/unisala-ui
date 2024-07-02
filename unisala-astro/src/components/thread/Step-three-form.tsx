@@ -1,57 +1,57 @@
-import React, { useState } from 'react';
-import { GraduationCap, BookOpen, FlaskConical, Atom } from 'lucide-react';
-import { useAstroMutation } from '@/datasource/apollo-client';
-import { EditProfile } from '@/graphql/user';
-import Button from './atoms/Button';
-import Option from './atoms/Option';
-import { shakeWebsite } from '@/lib/utils';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import React, { useState } from "react";
+import { GraduationCap, BookOpen, FlaskConical, Atom } from "lucide-react";
+import { useAstroMutation } from "@/datasource/apollo-client";
+import { EditProfile } from "@/graphql/user";
+import Button from "./atoms/Button";
+import Option from "./atoms/Option";
+import { shakeWebsite } from "@/lib/utils";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 const StepThreeForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(
-    localStorage.getItem('studyLevel') || ''
+    localStorage.getItem("studyLevel") || ""
   );
   const [editProfile, { loading }] = useAstroMutation(EditProfile, {
-    context: { server: USER_SERVICE_GQL }
+    context: { server: USER_SERVICE_GQL },
   });
 
   const handleStatusChange = (event: any) => {
-    localStorage.setItem('studyLevel', event.target.value);
+    localStorage.setItem("studyLevel", event.target.value);
     setSelectedStatus(event.target.value);
   };
 
   const options = [
-    { value: 'bachelor', Icon: BookOpen, label: 'Bachelor' },
-    { value: 'masters', Icon: FlaskConical, label: 'Masters' },
-    { value: 'phd', Icon: Atom, label: 'PHD' }
+    { value: "bachelor", Icon: BookOpen, label: "Bachelor" },
+    { value: "masters", Icon: FlaskConical, label: "Masters" },
+    { value: "phd", Icon: Atom, label: "PHD" },
   ];
 
   const handleSubmit = () => {
-    const userStatus = localStorage.getItem('userStatus');
-    const interestedSubjects = localStorage.getItem('interestedSubjects');
-    const studyLevel = localStorage.getItem('studyLevel');
+    const userStatus = localStorage.getItem("userStatus");
+    const interestedSubjects = localStorage.getItem("interestedSubjects");
+    const studyLevel = localStorage.getItem("studyLevel");
 
     if (!userStatus || !interestedSubjects || !studyLevel) {
       if (!userStatus) {
-        window.location.href = 'step-one';
+        window.location.href = "step-one";
       }
       if (!interestedSubjects) {
-        window.location.href = 'step-two';
+        window.location.href = "step-two";
       }
       if (!studyLevel) {
-        window.location.href = 'step-three';
+        window.location.href = "step-three";
       }
       shakeWebsite();
     } else {
       const data = {
         userStatus,
         interestedSubjects: JSON.parse(interestedSubjects),
-        studyLevel
+        studyLevel,
       };
       editProfile({
         variables: {
-          ...data
-        }
+          ...data,
+        },
       });
     }
   };
@@ -83,7 +83,7 @@ const StepThreeForm = () => {
           url={null}
           lable="submit"
           className={`${
-            selectedStatus ? 'bg-blue-500 text-white' : 'bg-neutral-300'
+            selectedStatus ? "bg-blue-500 text-white" : "bg-neutral-300"
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
           onclick={() => {
             if (!selectedStatus) {

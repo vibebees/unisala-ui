@@ -1,5 +1,5 @@
 const config = {
-  NODE_ENV: "w",
+  NODE_ENV: "DEVELOPMENT",
 };
 
 export default config;

@@ -89,3 +89,17 @@ export const shakeWebsite = () => {
     });
   }, 500);
 };
+
+export const URLupdate = (key: string, value: string) => {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const search = params.get(key);
+  if (search) {
+    params.delete(key);
+    params.set(key, value);
+  } else {
+    params.set(key, value);
+  }
+  return params?.toString();
+};
+

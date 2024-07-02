@@ -1,0 +1,13 @@
+---
+import StepThreeForm from "@/components/welcome-form/Step-three-form";
+import MainLayout from '@/layouts/main-layout.astro';
+// import Thread from '@/components/thread/index';
+import Thread from '@/components/packages/thread/singleThread/index'
+---
+
+<MainLayout title='Thread'>
+
+<!-- <StepThreeForm client:only="react" /> -->
+  <Thread  client:only="react"  />
+</MainLayout>
+

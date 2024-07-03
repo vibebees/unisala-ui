@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 // import { Buttons } from "@components/defaults/index";
 // import Share from "@components/packages/share";
 import { Reply, Save, Upvote } from "../actions";
@@ -15,7 +15,7 @@ interface ThreadFooterProps {
   parentId: string;
 }
 
-const ThreadFooter: FC<ThreadFooterProps> = ({
+const ThreadFooter = ({
   upVoteCount,
   upVoted,
   _id,
@@ -25,7 +25,7 @@ const ThreadFooter: FC<ThreadFooterProps> = ({
   replyTo,
   singlePost,
   parentId,
-}) => {
+}: ThreadFooterProps) => {
   const BASEURL = window.location.origin;
   return (
     <div className="thread_footer mw-full px-5   flex justify-start  gap-x-12">

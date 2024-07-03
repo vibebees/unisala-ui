@@ -687,7 +687,7 @@ export const Login = gql`
       }
     }
   `,
-  GetReplyList = (id, pid) =>
+  GetReplyList = (id: any, pid: any) =>
     gql`
         query {
             replyList (postId:"${id}", parentId:"${pid}") {

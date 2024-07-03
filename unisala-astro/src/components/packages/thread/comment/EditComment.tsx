@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import { useMutation } from "@apollo/client";
 import { EditComment } from "@/datasource/graphql/user";
@@ -10,15 +10,13 @@ interface EditCommentsProps {
   text: string;
 }
 
-const EditComments: FC<EditCommentsProps> = ({
+const EditComments = ({
   _id,
   setEditable,
   text = "",
-}) => {
+}: EditCommentsProps) => {
   const [commentText, setCommentText] = useState<string>(text);
-  const [present, dismiss] = () => {
-    return [() => {}, () => {}];
-  }
+  const [present, dismiss] = [() => {}, () => {}];
   const handleChange = (value: string) => {
     setCommentText(value);
   };
@@ -42,21 +40,21 @@ const EditComments: FC<EditCommentsProps> = ({
       setEditable(false);
       if (editComment?.status?.success) {
         setEditable(false);
-        present({
-          duration: 3000,
-          message: "Post Updated",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: "Post Updated",
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       } else {
-        present({
-          duration: 3000,
-          message: editComment.message,
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: editComment.message,
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       }
     },
   });
@@ -70,24 +68,24 @@ const EditComments: FC<EditCommentsProps> = ({
         className="h-48 mb-8 text-black"
       />
       <br />
-      <Button
-        fill="clear"
+      <button
+        // fill="clear"
         className="ion-no-padding capitalize px-4 font-semibold text-black hover:bg-[#eae8e8] rounded-2xl transition ease delay-200"
-        size="small"
-        style={{ "--ripple-color": "transparent" }}
+        // size="small"
+        // style={{ "--ripple-color": "transparent" }}
         onClick={() => setEditable(false)}
       >
         Cancel
-      </Button>
-      <Button
+      </button>
+      <button
         className="ion-no-padding capitalize font-bold px-4 text-white bg-blue-500 rounded-2xl transition ease delay-200 hover:bg-blue-600"
-        fill="clear"
-        size="small"
-        onClick={editComment}
-        style={{ "--ripple-color": "transparent" }}
+        // fill="clear"
+        // size="small"
+        onClick={() =>editComment()}
+        // style={{ "--ripple-color": "transparent" }}
       >
         Save
-      </Button>
+      </button>
     </div>
   );
 };

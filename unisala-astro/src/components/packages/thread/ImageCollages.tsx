@@ -15,7 +15,7 @@ const ImageCollage = ({ images = [] }: any) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [largeIndex, setLargeIndex] = useState(0);
 
-  const openModalWithImage = (index) => {
+  const openModalWithImage = (index: React.SetStateAction<number>) => {
     setCurrentImageIndex(index);
     setIsOpen(true);
   };
@@ -66,13 +66,13 @@ const ImageCollage = ({ images = [] }: any) => {
   return (
     <>
       <div className="grid gap-0">
-        {images.map((image, index) =>
+        {images.map((image: string | undefined, index: number) =>
           index === largeIndex ? (
             <LargerImage key={index} image={image} index={index} />
           ) : null
         )}
         <div className="grid grid-cols-5 gap-1">
-          {images.map((image, index) =>
+          {images.map((image: string | undefined, index: number) =>
             index !== largeIndex ? (
               <SmallerImage key={index} image={image} index={index} />
             ) : null

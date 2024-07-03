@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { useMutation } from "@apollo/client";
 // import { useIonToast, Button } from "../../../defaults/index";
 import { useState } from "react";
@@ -14,23 +14,21 @@ interface ThreadEditableProps {
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ThreadEditable: FC<ThreadEditableProps> = ({
+const ThreadEditable = ({
   _id,
   postText,
   setEditable,
-}) => {
+}: ThreadEditableProps) => {
   const pathname = useLocation().pathname;
-  const [present, dismiss] = () => {
-    return [() => {}, () => {}];
+  const [present, dismiss] = [() => {}, () => {}];
   
-  };
   const [updatedData, setUpdatedData] = useState({
     postText,
     // images,
     postId: _id,
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setUpdatedData((prev) => ({ ...prev, postText: e }));
   };
 
@@ -60,21 +58,21 @@ const ThreadEditable: FC<ThreadEditableProps> = ({
 
       if (editPost?.status?.success) {
         setEditable(false);
-        present({
-          duration: 3000,
-          message: "Post Updated",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: "Post Updated",
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       } else {
-        present({
-          duration: 3000,
-          message: editPost.message,
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: editPost.message,
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       }
     },
   });
@@ -91,24 +89,24 @@ const ThreadEditable: FC<ThreadEditableProps> = ({
       </div>
 
       <br />
-      <Button
-        fill="clear"
+      <button
+        // fill="clear"
         className="ion-no-padding capitalize px-4 font-semibold text-black hover:bg-[#eae8e8] rounded-2xl transition ease delay-200"
-        size="small"
-        style={{ "--ripple-color": "transparent" }}
+        // size="small"
+        // style={{ rippleColor: "transparent" }}
         onClick={() => setEditable(false)}
       >
         Cancel
-      </Button>
-      <Button
+      </button>
+      <button
         className="ion-no-padding capitalize font-bold px-4 text-white bg-blue-500 rounded-2xl transition ease delay-200 hover:bg-blue-600"
-        fill="clear"
-        size="small"
-        onClick={editPost}
-        style={{ "--ripple-color": "transparent" }}
+        // fill="clear"
+        // size="small"
+        onClick={() => editPost()}
+        // style={{ "--ripple-color": "transparent" }}
       >
         Save
-      </Button>
+      </button>
     </div>
   );
 };

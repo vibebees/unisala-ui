@@ -1,15 +1,11 @@
-import React, { FC, useState } from "react";
-import ShowPeopleComments from "../organism/ShowPeopleComments";
+import React, { type FC, useState } from "react";
 import {
-  ThreadHeader,
-  ThreadFooter,
   ThreadExpand,
   ThreadEditable,
   ThreadImages,
-  ThreadOptions,
   ThreadRating,
 } from "../organism";
-// import AuthValidator from "../../authentication/AuthValidator";
+import { AuthProvider } from '@/context/AuthContext';
 
 interface SingleThreadProps {
   _id: string;
@@ -63,7 +59,7 @@ interface SingleThreadProps {
 
 const SingleThread: FC<SingleThreadProps> = ({
   _id,
-  academicProgramsAndDepartmentRating,
+  academicProgramsAndDepartmentRating = null,
   admissionAndApplicationRating,
   careerAndAlumniResourceRating,
   comments,
@@ -80,9 +76,7 @@ const SingleThread: FC<SingleThreadProps> = ({
   upVoted,
   user,
   videoURL,
-  saved = false,
-  postTags
-}) => {
+  saved = false}) => {
   const [reply, setReply] = useState(false),
     [editable, setEditable] = useState(false);
 
@@ -92,7 +86,7 @@ const SingleThread: FC<SingleThreadProps> = ({
         {editable ? (
           <ThreadEditable
             _id={_id}
-            postText={postText}
+            postText={postText || ""}
             setEditable={setEditable}
           />
         ) : (
@@ -104,7 +98,7 @@ const SingleThread: FC<SingleThreadProps> = ({
               videoURL={videoURL}
             />
             {images && images.length > 0 && (
-              <ThreadImages images={images} _id={_id} />
+              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
             )}
           </>
         )}
@@ -113,17 +107,10 @@ const SingleThread: FC<SingleThreadProps> = ({
   };
 
   return (
+    <AuthProvider>
     <div className="max-w-2xl w-full mx-auto mb-10">
       <div className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
         <div className="ml-6 max-md:ml-2">
-          <ThreadHeader
-            date={date}
-            firstName={user?.firstName!}
-            lastName={user?.lastName!}
-            profilePic={user?.picture!}
-            username={user?.username!}
-            postTags={postTags}
-          />
         </div>
 
         <div className="thread_content">
@@ -138,29 +125,10 @@ const SingleThread: FC<SingleThreadProps> = ({
             studentLifeAndServiceRating={studentLifeAndServiceRating}
           />
         </div>
-        {/* <AuthValidator> */}
-          <ThreadFooter
-            _id={_id}
-            postCommentsCount={postCommentsCount!}
-            saved={saved}
-            upVoteCount={upVoteCount!}
-            upVoted={upVoted!}
-            isReply={false}
-            singlePost={true}
-            parentId={""}
-            replyTo={user?.username!}
-          />
-          <ThreadOptions
-            _id={_id}
-            setEditable={setEditable}
-            username={user?.username!}
-          />
-        {/* </AuthValidator> */}
 
-        {/* other people's replies */}
-        <ShowPeopleComments postId={_id!} singlePost={true} />
       </div>
     </div>
+    </AuthProvider>
   );
 };
 

@@ -1,13 +1,11 @@
 // UserHeader.js
 import { Link } from "react-router-dom"
-import moment from "moment"
+// import moment from "moment"
 
 // PostOptions.js
-import { Button, Icon } from "./atoms"
-import { create, trash } from "ionicons/icons"
 import { Avatar } from '@/components/avatar'
 
-export const UserHeader = ({ props }) => {
+export const UserHeader = ({ props }: { props: any }) => {
   const { username, firstName, lastName, profilePic, date } = props
   return (
     <Link to={`/@/${username}`} className="px-4">
@@ -20,7 +18,7 @@ export const UserHeader = ({ props }) => {
           <div className="threads_username">
             <p>@{username}</p>
 
-            <p className="threads_date">{moment(date).fromNow()}</p>
+            <p className="threads_date">{new Date().toString()}</p>
           </div>
         </div>
       </div>
@@ -28,13 +26,13 @@ export const UserHeader = ({ props }) => {
   )
 }
 
-export const PostOptions = ({ setEditable, deletePost }) => (
+export const PostOptions = ({ setEditable, deletePost }: { setEditable: any, deletePost: any }) => (
   <div className="post-options">
-    <Button onClick={() => setEditable(true)}>
-      <Icon icon={create} />
-    </Button>
-    <Button onClick={deletePost}>
-      <Icon icon={trash} />
-    </Button>
+    <button onClick={() => setEditable(true)}>
+      {/* <Icon icon={create} /> */}
+    </button>
+    <button onClick={deletePost}>
+      {/* <Icon icon={trash} /> */}
+    </button>
   </div>
 )

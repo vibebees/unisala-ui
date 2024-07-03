@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Avatar } from '@/components/avatar';
@@ -23,13 +23,20 @@ interface ThreadHeaderProps {
   postTags?: PostTag;
 }
 
-const ThreadHeader: FC<ThreadHeaderProps> = ({
+const ThreadHeader = ({
   username,
   profilePic,
   firstName,
   lastName,
   date,
   postTags
+}: {
+  username: string;
+  profilePic: string;
+  firstName: string;
+  lastName: string;
+  date: string;
+  postTags: PostTag | undefined;
 }) => {
   return (
     <div className='thread-header gap-2'>

@@ -1,5 +1,5 @@
+import { cn } from '@/utils/lib/utils';
 import React from "react";
-import { cn } from "@utils/index";
 
 const FilterIcon = ({ className }: { className?: string }) => (
   <svg

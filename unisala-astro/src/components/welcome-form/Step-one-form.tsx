@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Button from "./atoms/Button";
 import Option from "./atoms/Option";
-import { shakeWebsite } from "@/lib/utils";
+import { shakeWebsite } from "@/utils/lib/utils";
 
 const StepTwoForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(

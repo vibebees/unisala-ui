@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import Comment from "../comment/Comment";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import { GetCommentList } from "@/datasource/graphql/user";
-import { CommentListQuery } from "@/types/gqlTypes/graphql";
 import { useAuth } from "@/context/AuthContext";
 
 interface ShowOtherCommentsProps {
@@ -15,7 +14,10 @@ interface ShowOtherCommentsProps {
   singlePost?: boolean;
   postCommentsCount?: number;
 }
-
+interface Comment {
+  userId: string;
+  date: string;
+}
 function ShowOtherComments({
   postId = "",
   parentId = "",
@@ -25,7 +27,7 @@ function ShowOtherComments({
   const [refetchComments, setRefetchComments] = useState(false);
   const { user } = useAuth();
   const [getCommentList, { data, loading, refetch }] =
-    useLazyQuery<CommentListQuery>(GetCommentList, {
+    useLazyQuery(GetCommentList, {
       context: { server: USER_SERVICE_GQL },
     });
 
@@ -52,16 +54,17 @@ function ShowOtherComments({
     }
   }, [refetchComments, refetch]);
 
-  const userComment = (commentData = [], userId = "") => {
+  const userComment = (commentData: Comment[] = [], userId: string = "") => {
     // Filter the comments to find those made by the specified user
     const userComments = commentData.filter(
-      (comment) => comment?.userId === userId
+      (comment) => comment.userId === userId
     );
+    
     // Sort the filtered comments by date in descending order to get the most recent one at the beginning
     const sortedComments = userComments.sort(
-      (a, b) => new Date(b?.date).getTime() - new Date(a.date).getTime()
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-
+  
     // Return the most recent comment if it exists
     if (sortedComments.length > 0) {
       setCommentToShow(sortedComments[0]);
@@ -94,7 +97,7 @@ function ShowOtherComments({
   if (singlePost) {
     return (
       <>
-        {comments?.map((reply: any, i) => {
+        {comments?.map((reply: any, i: React.Key | null | undefined) => {
           return <Comment {...reply} singlePost={singlePost} key={i} />;
         })}
       </>

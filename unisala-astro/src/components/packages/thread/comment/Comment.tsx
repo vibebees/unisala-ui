@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import "../index.css";
 import ShowMore from "../organism/ShowPeopleComments";
 import ThreadHeader from "../organism/ThreadHeader";
@@ -33,7 +33,7 @@ interface CommentProps {
   setRefetchComments: any;
 }
 
-const Comment: FC<CommentProps> = ({
+const Comment = ({
   postId,
   parentId,
   singlePost,
@@ -45,6 +45,25 @@ const Comment: FC<CommentProps> = ({
   upVoted,
   user,
   replyTo,
+}: {
+  postId: string;
+  parentId: string | null;
+  singlePost: boolean;
+  _id: string;
+  commentText: string;
+  date: any;
+  repliesCount: number;
+  upVoteCount: number;
+  upVoted: boolean;
+  user: {
+    __typename?: "user";
+    _id: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    picture?: string | null;
+  };
+  replyTo?: string | null;
 }) => {
   const { user: loggedInUser } = useAuth();
   const [editable, setEditable] = useState(false);

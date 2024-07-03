@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
 
@@ -11,13 +11,20 @@ interface ICustomTrackingLink {
   className?: string;
 }
 
-export const CustomTrackingLink: FC<ICustomTrackingLink> = ({
+export const CustomTrackingLink= ({
   to,
   children,
   title = "",
   destination,
   customFunction,
   className,
+}: {
+  to: string;
+  children: React.ReactNode;
+  title?: string;
+  destination: string;
+  customFunction?: () => void;
+  className?: string;
 }) => {
   const history = useHistory();
   const location = useLocation();

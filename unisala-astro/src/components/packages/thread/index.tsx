@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./index.css";
 import {
   ShowPeopleComments,
@@ -8,13 +8,12 @@ import {
   ThreadOptions,
   ThreadRating,
 } from "./organism";
-import { Buttons } from "@components/defaults";
 import { Reply, Save, Upvote } from "./actions";
-import Share from "@components/packages/share";
+// import Share from "@/components/packages/share";
 import ImageCollage from "./ImageCollages";
 import AuthValidator from "../authentication/AuthValidator";
 import { InView } from "react-intersection-observer";
-import useViewDuration from "@hooks/useViewDuration";
+import useViewDuration from "@/hooks/useViewDuration";
 
 interface ThreadProps {
   thread: IPost;
@@ -22,7 +21,7 @@ interface ThreadProps {
   feedId?: string;
 }
 
-const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
+const Thread = ({ thread, feedType, feedId }: ThreadProps) => {
   const {
     _id,
     date,
@@ -58,7 +57,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             date={date}
             profilePic={user?.picture!}
             username={user?.username}
-            postTags={postTags}
+            postTags={{ __typename: 'PostTags', tagType: '', tag: { _id: '', name: '' } }}
           />
           <div className="">
             <h2>
@@ -137,13 +136,14 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
             </AuthValidator>
             <AuthValidator>
               {!isReply ? (
-                <Save postId={_id} saved={saved} thread={{}} />
+                // <Save postId={_id} saved={saved} thread={{}} />
+                ''
               ) : (
                 <></>
               )}
             </AuthValidator>
 
-            {!isReply && (
+            {/* {!isReply && (
               <Buttons className="ThreadFooterBtn h-7">
                 <Share
                   allProps={{
@@ -162,7 +162,7 @@ const Thread: FC<ThreadProps> = ({ thread, feedType, feedId }) => {
                   }}
                 />
               </Buttons>
-            )}
+            )} */}
             <ThreadOptions
               setEditable={setEditable}
               username={user?.username}

@@ -18,7 +18,7 @@ const Rating = ({
 }) => {
   if (!rating) return null;
 
-  const icons = {
+  const icons: { [key: string]: JSX.Element } = {
     financialAidAndScholarshipRating: <MoneyIcon />,
     admissionAndApplicationRating: <DocumentIcon />,
     academicProgramsAndDepartmentRating: <UniversityIcon />, // Corrected the typo

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import Button from "./atoms/Button";
-import { shakeWebsite } from "@/lib/utils";
+import { shakeWebsite } from "@/utils/lib/utils";
 
 interface FieldOfStudyProps {
   // Add any props if needed

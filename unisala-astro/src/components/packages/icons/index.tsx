@@ -1,5 +1,4 @@
-import { cn } from "@utils/index";
-import * as React from "react";
+import { cn } from '@/utils/lib/utils';
 export const ExploreIcon = ({ width = 25, height = 25, fill = "#747372" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

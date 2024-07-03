@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { IonIcon, useIonToast } from "@ionic/react";
 import { ellipsisHorizontalOutline } from "ionicons/icons";
 import { useMutation } from "@apollo/client";
@@ -14,14 +14,14 @@ interface CommentOptionsProps {
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CommentOptions: FC<CommentOptionsProps> = ({
+const CommentOptions = ({
   _id,
   parentId,
   postId,
   singlePost,
   setEditable,
-}) => {
-  const [present, dismiss] = useIonToast();
+}: CommentOptionsProps) => {
+  const [present, dismiss] = [() => {}, () => {}];
   const [showOptions, setShowOptions] = useState(false);
   const [deleteComment] = useMutation(DeleteComment, {
     context: { server: USER_SERVICE_GQL },
@@ -55,21 +55,21 @@ const CommentOptions: FC<CommentOptionsProps> = ({
       const { deleteComment } = data;
 
       if (deleteComment?.success) {
-        present({
-          duration: 3000,
-          message: "Comment Deleted",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: "Comment Deleted",
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       } else {
-        present({
-          duration: 3000,
-          message: "Can not delete comment",
-          buttons: [{ text: "X", handler: () => dismiss() }],
-          color: "primary",
-          mode: "ios",
-        });
+        // present({
+        //   duration: 3000,
+        //   message: "Can not delete comment",
+        //   buttons: [{ text: "X", handler: () => dismiss() }],
+        //   color: "primary",
+        //   mode: "ios",
+        // });
       }
     },
   });

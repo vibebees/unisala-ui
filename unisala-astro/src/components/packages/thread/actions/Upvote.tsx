@@ -1,21 +1,12 @@
-import React, { FC } from "react";
-import { useCallback, useState } from "react";
-import {
-  Icon,
-  Buttons,
-  Text,
-  useIonToast,
-  Typography,
-} from "../../../defaults";
-import { useMutation } from "@apollo/client";
+import React, { useCallback, useState } from "react";
+ import { ApolloCache, useMutation, type FetchResult, type MutationFunctionOptions, type OperationVariables } from "@apollo/client";
 import clsx from "clsx";
-import { USER_SERVICE_GQL } from "../../../../datasource/servers/types";
-import { UpVote } from "../../../../datasource/graphql/user";
-import { UpVoteIcon } from "@components/packages/icons";
-import { cn } from "@utils/index";
-import { URLupdate } from "@utils/lib/URLupdate";
-import { useHistory } from "react-router";
-import { trackEvent } from "@components/analytics";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+import { UpVote } from "@/datasource/graphql/user";
+import { UpVoteIcon } from "@/components/packages/icons";
+import { trackEvent } from "@/components/packages/analytics";
+import { cn } from '@/utils/lib/utils';
+// import { useNavigate } from 'react-router';
 
 interface UpvoteProps {
   upVoteCount: number;
@@ -24,18 +15,18 @@ interface UpvoteProps {
   isReply: boolean;
 }
 
-const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
-  const [present, dismiss] = useIonToast();
-  const history = useHistory();
+const Upvote = ({ upVoteCount, postId, upVoted, isReply }: UpvoteProps) => {
+  const navigate = () =>{}
   const [voted, setVoted] = useState({
     upVoted: upVoted,
     upVoteCount: upVoteCount,
   });
+
   const [upVote] = useMutation(UpVote, {
     variables: { postId },
     context: { server: USER_SERVICE_GQL },
     update: (cache, { data: upVote }) => {
-      anylitcs()
+      analytics();
       cache.modify({
         id: cache.identify({
           __typename: isReply ? "Comment" : "Post",
@@ -51,39 +42,31 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
       });
     },
     onError: (error) => {
-      present({
-        duration: 3000,
-        message: error.message,
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
-      });
+      alert(error.message);
     },
   });
 
-  const anylitcs = () => {
-    const activity =  upVoted ?'downvote':'upvote';
+  const analytics = () => {
+    const activity = upVoted ? 'downvote' : 'upvote';
     trackEvent({
-      action: activity +"_clicked_"+ postId,
-      category: "engagment",
+      action: activity + "_clicked_" + postId,
+      category: "engagement",
       label: 'vote_' + activity,
       value: voted.upVoteCount,
-    })
-  }
-  const debounce = (func) => {
+    });
+  };
 
-    let timer;
-    return function (...args) {
+  const debounce = (func: () => void) => {
+    let timer: NodeJS.Timeout | null = null;
+    return () => {
       setVoted((prev) => ({
         ...prev,
         upVoted: !prev.upVoted,
         upVoteCount: prev.upVoted ? prev.upVoteCount - 1 : prev.upVoteCount + 1,
       }));
-      const context = this;
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
-        timer = null;
-        func.apply(context, args);
+        func();
       }, 2000);
     };
   };
@@ -91,28 +74,16 @@ const Upvote: FC<UpvoteProps> = ({ upVoteCount, postId, upVoted, isReply }) => {
   const debouncedClick = useCallback(debounce(upVote), [upVoted]);
 
   return (
-    <Buttons
-      className=" active:scale-90 select-none  min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200"
+    <button
       onClick={debouncedClick}
-      style={{ cursor: "pointer" }}
+      className={cn(
+        "flex items-center space-x-1 text-sm",
+        voted.upVoted ? "text-blue-500" : "text-gray-500"
+      )}
     >
-      <UpVoteIcon
-        className={cn(
-          "w-6",
-          voted.upVoted ? "fill-blue-600" : "fill-neutral-400"
-        )}
-      />
-
-      <Typography
-        variant="p"
-        className={cn(
-          "block ",
-          voted.upVoted ? "!text-blue-600 !font-medium" : "text-gray-600"
-        )}
-      >
-        {voted.upVoteCount}
-      </Typography>
-    </Buttons>
+      <UpVoteIcon className={cn("w-4 h-4", voted.upVoted ? "fill-blue-500" : "fill-gray-500")} />
+      <span>{voted.upVoteCount}</span>
+    </button>
   );
 };
 

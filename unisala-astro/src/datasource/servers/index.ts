@@ -40,6 +40,11 @@ const getServiceConfig = (): ServiceConfig => {
       };
     default:
       return {
+        messagingServiceAddress: "",
+        universityServiceAddress: "",
+        messageSocketAddress: "",
+        userServiceAddress: "",
+        callSocketAddress: "",
         base: "https://unisala.com"
       };
   }

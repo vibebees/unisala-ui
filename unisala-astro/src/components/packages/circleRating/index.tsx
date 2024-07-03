@@ -1,6 +1,6 @@
 import React from "react"
 
-const CircleRating = ({ rating }) => {
+const CircleRating = ({ rating }: { rating: number }) => {
   const percentage = (rating / 5) * 100
 
   return (

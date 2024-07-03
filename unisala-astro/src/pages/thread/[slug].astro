@@ -1,0 +1,11 @@
+---
+import StepThreeForm from "@/components/welcome-form/Step-three-form";
+import MainLayout from '@/layouts/main-layout.astro';
+import Thread from '@/components/packages/thread/singleThread/index'
+export const prerender = false;
+const { slug } = Astro.params;
+---
+
+<MainLayout title='Thread'>
+   <Thread client:only="react" />
+</MainLayout>

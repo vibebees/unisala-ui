@@ -23,7 +23,7 @@ export const GetProfessor = gql`
       }
     }
   `,
-  getUpdatedSchoolInfo = (unitId, name) =>
+  getUpdatedSchoolInfo = (unitId: any, name: any) =>
     gql`
       query getUpdatedSchoolInfo($unitId: Float, $name: String) {
         getUpdatedSchoolInfo(unitId: $unitId, name: $name) {

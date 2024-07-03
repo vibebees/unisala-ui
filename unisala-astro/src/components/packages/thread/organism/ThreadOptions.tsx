@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { useMutation } from "@apollo/client";
 import { IonIcon, useIonToast } from "@ionic/react";
 import { DeletePost, getNewsFeed } from "@/datasource/graphql/user";
@@ -18,13 +18,13 @@ interface ThreadOptionsProps {
   feedId: string;
 }
 
-const ThreadOptions: FC<ThreadOptionsProps> = ({
+const ThreadOptions = ({
   username,
   _id,
   setEditable,
   feedType,
   feedId,
-}) => {
+}: ThreadOptionsProps) => {
   const { user } = useAuth();
   const pathname = useLocation().pathname;
   const [showOptions, setShowOptions] = useState(false);
@@ -60,8 +60,8 @@ const ThreadOptions: FC<ThreadOptionsProps> = ({
 
         data: {
           fetchFeedV2: {
-            ...(cachedData.fetchFeedV2.data || []),
-            ...cachedData.fetchFeedV2.data.filter((post) => post._id !== _id),
+            ...(cachedData as { fetchFeedV2: { data: any[] } }).fetchFeedV2.data || [],
+            ...(cachedData as { fetchFeedV2: { data: any[] } }).fetchFeedV2.data.filter((post) => post._id !== _id),
           },
         },
       });

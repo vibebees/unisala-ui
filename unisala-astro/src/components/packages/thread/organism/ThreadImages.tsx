@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import clsx from "clsx"
 import ImageCollage from '../ImageCollages'
 
-const ThreadImages = ({ images, _id }) => {
+const ThreadImages = ({ images, _id }: { images: string[], _id: string }) => {
   const slideOpts = {
     initialSlide: 0,
     speed: 400

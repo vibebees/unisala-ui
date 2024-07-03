@@ -1,5 +1,5 @@
 import React, { useRef, memo } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/graphql/user";

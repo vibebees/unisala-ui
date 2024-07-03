@@ -4,7 +4,7 @@ import { useAstroMutation } from '@/datasource/apollo-client';
 import { EditProfile } from '@/graphql/user';
 import Button from './atoms/Button';
 import Option from './atoms/Option';
-import { shakeWebsite } from '@/lib/utils';
+import { shakeWebsite } from '@/utils/lib/utils';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 
 const StepThreeForm = () => {

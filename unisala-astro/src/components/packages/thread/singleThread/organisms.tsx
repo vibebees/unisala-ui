@@ -8,6 +8,11 @@ export const ThreadContent = ({
   editable,
   setEditable,
   deletePost
+}: {
+  thread: any;
+  editable: boolean;
+  setEditable: (editable: boolean) => void;
+  deletePost: () => void;
 }) => {
   const [showOptions, setShowOptions] = useState(false)
 
@@ -20,10 +25,8 @@ export const ThreadContent = ({
       ) : (
         <>
           <ThreadExpand
-            htmlText={postText}
-            maxLines={8}
-            _id={_id}
-            thread={thread}
+              htmlText={postText}
+              _id={_id} tags={null}            // thread={thread}
           />
           {images.length > 0 && <ImageCollage images={images} />}
         </>

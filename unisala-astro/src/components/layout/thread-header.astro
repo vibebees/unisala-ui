@@ -1,8 +1,8 @@
 ---
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/lib/utils";
 import { Icon } from "astro-icon/components";
 import type { HTMLAttributes } from "astro/types";
-import ThreadAction from "@/components/thread/thread.action.astro";
+// import ThreadAction from "@/components/thread/thread.action.astro";
 
 interface Props extends HTMLAttributes<"div"> {
   heading: string;
@@ -28,12 +28,12 @@ const { heading, username, date, claps, comments, className, ...attrs } = Astro.
   </div>
 
 
-  <ThreadAction
+  <!-- <ThreadAction
     heading={heading}
     username={username}
     date={date}
     claps={claps}
     comments={comments}
     showBorder={true}
-  />
+  /> -->
 </div>

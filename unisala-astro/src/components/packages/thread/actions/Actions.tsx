@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 // import { IonIcon } from "@ionic/react";
 // import { create, trash } from "ionicons/icons";
 // import { motion } from "framer-motion";
@@ -8,7 +8,7 @@ interface ActionsProps {
   DeleteAction: () => void;
 }
 
-const Actions: FC<ActionsProps> = ({ DeleteAction, EditAction }) => {
+const Actions = ({ DeleteAction, EditAction }: ActionsProps) => {
   return (
     <div
       className="absolute w-[120px] overflow-hidden right-3 top-6 bg-neutral-50 rounded-md BorderCard px shadow-xl"

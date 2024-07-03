@@ -6,11 +6,11 @@ import {
   SavePost,
   UnSavePost,
 } from "@/datasource/graphql/user";
-import React, { FC } from "react";
+import React from "react";
 import { BookMarkIcon } from "@/components/packages/icons";
 import { trackEvent } from "@/components/packages/analytics";
 import { useAuth } from "@/context/AuthContext";
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils';
 
 interface SaveProps {
   postId: string;
@@ -18,16 +18,15 @@ interface SaveProps {
   thread: any;
 }
 
-const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
+const Save = ({ postId, saved, thread }: SaveProps) => {
   console.log({
     saved
 
   })
   const {user} = useAuth();
   const userId = user?.id
-  const [present, dismiss] = () => {
-    return  [() => {}, () => {}]
-  }
+  const [present, dismiss] = [() => {}, () => {}];
+
   const [save] = useMutation(saved ? UnSavePost : SavePost, {
     variables: { postId },
     context: { server: USER_SERVICE_GQL },
@@ -56,39 +55,39 @@ const Save: FC<SaveProps> = ({ postId, saved, thread }) => {
             query: GetSavedList,
             variables: { userId, page: 0 },
             data: {
-              ...data,
+              ...(data as { savedList: any }), // Add type declaration for 'data'
               savedList: {
-                ...data.savedList,
-                Posts: [{ ...thread, saved: true }, ...data.savedList.Posts],
+                ...(data as { savedList: any }).savedList, // Add type declaration for 'data.savedList'
+                Posts: [{ ...thread, saved: true }, ...(data as { savedList: any }).savedList.Posts], // Add type declaration for 'data.savedList.Posts'
               },
             },
           });
       }
     },
     onCompleted: () => {
-      present({
-        duration: 3000,
-        message: saved ? "Unsaved" : "Saved",
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
-      });
+      // present({
+      //   duration: 3000,
+      //   message: saved ? "Unsaved" : "Saved",
+      //   buttons: [{ text: "X", handler: () => dismiss() }],
+      //   color: "primary",
+      //   mode: "ios",
+      // });
     },
     onError: (error) => {
-      present({
-        duration: 3000,
-        message: error.message,
-        buttons: [{ text: "X", handler: () => dismiss() }],
-        color: "primary",
-        mode: "ios",
-      });
+      // present({
+      //   duration: 3000,
+      //   message: error.message,
+      //   buttons: [{ text: "X", handler: () => dismiss() }],
+      //   color: "primary",
+      //   mode: "ios",
+      // });
     },
   });
 
   return (
     <button
       className="ThreadFooterBtn"
-      onClick={save}
+      onClick={(event) => save()}
       style={{ cursor: "pointer" }}
     >
       {/* <Icon

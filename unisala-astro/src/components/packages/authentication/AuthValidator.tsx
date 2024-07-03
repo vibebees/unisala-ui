@@ -1,13 +1,13 @@
-import React, { FC } from "react";
+import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useHistory } from "react-router";
-import { URLupdate } from '@/lib/utils';
+import { useHistory } from "react-router-dom";
+import { URLupdate } from '@/utils/lib/utils';
 
 interface AuthValidatorProps {
   children: React.ReactNode;
 }
 
-const AuthValidator: FC<AuthValidatorProps> = ({ children }) => {
+const AuthValidator= ({ children }: { children: React.ReactNode }) => {
   const { authenticated } = useAuth();
   const history = useHistory();
 

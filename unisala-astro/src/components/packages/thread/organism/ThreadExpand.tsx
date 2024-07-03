@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import linkifyHtml from "linkify-html";
 import clsx from "clsx";
 import { Link, useHistory } from "react-router-dom";
@@ -17,12 +17,12 @@ interface ThreadExpandProps {
   videoURL?: string | null;
 }
 
-const ThreadExpand: FC<ThreadExpandProps> = ({
+const ThreadExpand = ({
   htmlText,
   _id,
   tags,
   videoURL,
-}) => {
+}: ThreadExpandProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const history = useHistory();
   const [showSeeMore, setShowMore] = useState(true);

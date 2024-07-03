@@ -589,7 +589,7 @@ const scholarship = {
     expandBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const expanded = btn.getAttribute("aria-expanded") === "true" || false;
-        btn.setAttribute("aria-expanded", !expanded);
+        btn.setAttribute("aria-expanded", String(!expanded));
       });
     });
   });

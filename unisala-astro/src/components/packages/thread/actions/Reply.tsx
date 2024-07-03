@@ -1,11 +1,9 @@
-import React, { FC } from "react";
-import { Buttons, Typography } from "../../../defaults";
-import ModalCustom from "@components/packages/reusable/modal";
-import ReplyInput from "@components/packages/replyInput";
-import { CommentIcon } from "@components/packages/icons";
-import { cn } from "@utils/index";
-import { useParams } from "react-router";
-import { trackEvent } from "@components/analytics";
+import React from "react";
+// import { Buttons, Typography } from "../../../defaults";
+// import ModalCustom from "@/components/packages/reusable/modal";
+import ReplyInput from "@/components/packages/replyInput";
+import { CommentIcon } from "@/components/packages/icons";
+import { cn } from '@/utils/lib/utils';
 
 interface ReplyProps {
   repliesCount: number | null | undefined;
@@ -17,7 +15,7 @@ interface ReplyProps {
   feedId?: string;
 }
 
-const Reply: FC<ReplyProps> = ({
+const Reply = ({
   repliesCount,
   isReply,
   replyTo,
@@ -25,11 +23,19 @@ const Reply: FC<ReplyProps> = ({
   parentId,
   feedId,
   postId,
+}: {
+  repliesCount: number | null | undefined;
+  isReply: boolean;
+  replyTo: string;
+  singlePost?: boolean;
+  parentId?: string;
+  feedId?: string;
+  postId?: string;
 }) => {
 
   return (
     <div>
-      <ModalCustom
+      {/* <ModalCustom
         header="Add a Comment"
         ModalData={
           <ReplyInput
@@ -41,16 +47,14 @@ const Reply: FC<ReplyProps> = ({
             feedId={feedId}
           />
         }
-      >
-        <Buttons className="ThreadFooterBtn">
+      > */}
+        <button className="ThreadFooterBtn">
           <CommentIcon className={cn("w-6 fill-neutral-400")} />
           {!isReply && (
-            <Typography variant="p" className={cn("blocktext-gray-600")}>
-              {repliesCount || 0}
-            </Typography>
+           repliesCount || 0
           )}
-        </Buttons>
-      </ModalCustom>
+        </button>
+      {/* </ModalCustom> */}
     </div>
   );
 };

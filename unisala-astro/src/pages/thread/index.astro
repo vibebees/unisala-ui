@@ -7,7 +7,7 @@ const posts = await getCollection('releases');
 posts.sort((a, b) => +b.data.date - +a.data.date);
 import linkifyHtml from 'linkify-html';
 
-import SingleThread from '@/components/thread/singlethread';
+// import SingleThread from '@/components/thread/singlethread';
 let data = {
   _id: '667c3b8cebc4e892ddcd7254',
   postText:
@@ -68,14 +68,14 @@ const linkifiedText = linkifyHtml(data?.postText, {
   }
 });
 
-function formatDate(dateString) {
+function formatDate(dateString: string) {
      const date = new Date(dateString);
      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-     return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString('en-US', options as Intl.DateTimeFormatOptions);
    }
 
 // Function to extract heading
-function extractHeading(text) {
+function extractHeading(text: string) {
   // Try to find an h tag first
   const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
   if (headingMatch) return headingMatch[1].trim();
@@ -140,8 +140,15 @@ const heading = extractHeading(data.postText);
             </div>
 
             <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
-              <SingleThread
-                htmlText={linkifiedText}
+              {/* <SingleThread
+                postText={linkifiedText}
+                _id={data._id}
+                tags={data.tags}
+                videoURL={data.videoURL}
+                saved={false}
+                user={null}
+              /> */}
+                postText={linkifiedText}
                 _id={data._id}
                 tags={data.tags}
                 videoURL={data.videoURL}

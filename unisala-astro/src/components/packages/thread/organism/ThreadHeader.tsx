@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { color } from 'framer-motion';
@@ -46,14 +46,14 @@ const renderTagLink = (postTags?: PostTag, user?:IUser ) => {
   }
 };
 
-const ThreadHeader: FC<ThreadHeaderProps> = ({
+const ThreadHeader = ({
   username,
   profilePic,
   firstName,
   lastName,
   date,
   postTags
-}) => {
+}: ThreadHeaderProps) => {
   const { user } = useAuth();
   return (
     <div className='thread-header gap-2'>
@@ -84,7 +84,7 @@ const ThreadHeader: FC<ThreadHeaderProps> = ({
           </div>
         </Link>
 
-        {renderTagLink(postTags, user)}
+        {renderTagLink(postTags, user as IUser)}
       </div>
     </div>
   );

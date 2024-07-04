@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GraduationCap, BookOpen, FlaskConical, Atom } from 'lucide-react';
 import { useAstroMutation } from '@/datasource/apollo-client';
-import { EditProfile } from '@/graphql/user';
+import { EditProfile } from '@/datasource/graphql/user';
 import Button from './atoms/Button';
 import Option from './atoms/Option';
 import { shakeWebsite } from '@/utils/lib/utils';

@@ -1,0 +1,44 @@
+---
+export const prerender = false;
+
+console.log("Server-side code is running");
+
+import MainLayout from '@/layouts/main-layout.astro';
+import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
+
+const { slug } = Astro.params;
+console.log("Slug:", slug);
+
+let versionInfo = null;
+let error = null;
+
+try {
+  console.log("Attempting to fetch version info");
+  const response = await fetch('http://localhost:4444/version');
+  console.log("Fetch response status:", response.status);
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  
+  versionInfo = await response.text();
+  console.log("Version info:", versionInfo);
+} catch (e) {
+  console.error("Fetch error:", e);
+  error = e instanceof Error ? e.message : String(e);
+}
+
+console.log("Final version info:", versionInfo);
+console.log("Final error:", error);
+---
+
+<MainLayout title='Thread'>
+  {error && <p>Error: {error}</p>}
+  {!versionInfo && !error && <ThreadSkeleton />}
+  {versionInfo && (
+    <div>
+      <h1>Version Information</h1>
+      <pre>{versionInfo}</pre>
+    </div>
+  )}
+</MainLayout>

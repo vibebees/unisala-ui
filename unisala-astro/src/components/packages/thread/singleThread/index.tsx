@@ -1,34 +1,22 @@
-// import { useEffect } from 'react';
-// import { trackEvent } from '../../analytics';
-// import { useParams } from 'react-router';
-import { GetPostById } from '@/graphql/user';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
-import { useAstroQuery } from '@/datasource/apollo-client';
+import React, { useEffect } from 'react';
 import SingleThread from './template';
 import { ThreadSkeleton } from '@/components/packages/skeleton/thread';
+import { trackEvent } from '@/components/packages/analytics';
 
-const Thread = () => {
+const Thread = ({ post }: { post: any }) => {
+  useEffect(() => {
+    if (post) {
+      trackEvent({
+        action: "Thread_page_viewed_" + post.id,
+        category: "Thread_view",
+        label: "thread_view",
+      });
+    }
+  }, [post]);
 
-//   const { id }: any = useParams();
-const id = '667adc362bf59de35465faa1'
+  if (!post) return <ThreadSkeleton />;
 
-//   useEffect(() => {
-//     trackEvent({
-//       action: "Thread_page_viewed_"+ id,
-//       category: "Thread_view",
-//       label: "thread_view",
-//     });
-//   }, []);
-
-
-  const { data, loading } = useAstroQuery(GetPostById, {
-    context: { server: USER_SERVICE_GQL },
-    variables: { id },
-  });
-
-  if (loading || !data?.getPostById?.post) return <ThreadSkeleton />;
-
-  return <SingleThread saved={false} {...data.getPostById.post} />;
+  return <ThreadSkeleton />;
 };
 
 export default Thread;

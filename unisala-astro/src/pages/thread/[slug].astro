@@ -1,11 +1,144 @@
 ---
-import StepThreeForm from "@/components/welcome-form/Step-three-form";
-import MainLayout from '@/layouts/main-layout.astro';
-import Thread from '@/components/packages/thread/singleThread/index'
 export const prerender = false;
+
+import MainLayout from '@/layouts/main-layout.astro';
+import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+// import SingleThread from '@/components/packages/thread/singleThread/index';
 const { slug } = Astro.params;
+console.log("Fetching data for slug:", slug);
+
+let post = null;
+let error = null;
+
+const query = `
+query getPostById($id: String!, $user: String) {
+      getPostById(id: $id, user: $user) {
+        status {
+          success
+          message
+        }
+        post {
+          _id
+          postText
+          postCommentsCount
+          admissionAndApplicationRating
+          financialAidAndScholarshipRating
+          academicProgramsAndDepartmentRating
+          studentLifeAndServiceRating
+          careerAndAlumniResourceRating
+          postType
+          postImage
+          videoURL
+          date
+          tags {
+            _id
+            name
+            parentId
+            image
+            description
+          }
+          postTags{
+            tagType
+            tag{
+              _id
+              name
+            }
+          }
+          upVoted
+          images
+          upVoteCount
+          user {
+            _id
+            username
+            picture
+          }
+          comments {
+            _id
+            commentText
+            upVoted
+            upVoteCount
+           
+          }
+        }
+      }
+    }
+`;
+
+try {
+  const response = await fetch('http://localhost:4444/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables: { id: '667adc362bf59de35465faa1', user: null }, // Add user if needed
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  console.log("GraphQL response:", JSON.stringify(result, null, 2));
+
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+
+  post = result.data?.getPostById?.post;
+
+  if (!post) {
+    throw new Error('Post not found');
+  }
+} catch (e) {
+  console.error("Error fetching post:", e);
+  error = e instanceof Error ? e.message : String(e);
+}
 ---
 
-<MainLayout title='Thread'>
-   <Thread client:only="react" />
+<MainLayout title={post ? `${post.postText.slice(0, 20)}...` : 'Thread'}>
+  {error && (
+    <div class="error-container">
+      <h2>Error</h2>
+      <p>{error}</p>
+    </div>
+  )}
+  
+  {!post && !error && <ThreadSkeleton />}
+  
+  {post && (
+    <div class="post-container">
+      <h1>{post.postText}</h1>
+      <p>Comments: {post.postCommentsCount}</p>
+      <p>Date: {new Date(post.date).toLocaleDateString()}</p>
+      <div class="ratings">
+        <p>Admission Rating: {post.admissionAndApplicationRating}</p>
+        <p>Financial Aid Rating: {post.financialAidAndScholarshipRating}</p>
+        <p>Academic Programs Rating: {post.academicProgramsAndDepartmentRating}</p>
+        <p>Student Life Rating: {post.studentLifeAndServiceRating}</p>
+        <p>Career Resources Rating: {post.careerAndAlumniResourceRating}</p>
+      </div>
+      
+      <div class="tags">
+        {post.tags.map(tag => (
+          <span key={tag._id} class="tag">{tag.name}</span>
+        ))}
+      </div>
+      <p>Upvotes: {post.upVoteCount}</p>
+      {post.postImage && <img src={post.postImage} alt="Post image" class="post-image" />}
+      {post.videoURL && <video src={post.videoURL} controls class="post-video"></video>}
+      <h2>Comments</h2>
+      <ul class="comments">
+        {post.comments.map(comment => (
+          <li key={comment._id} class="comment">
+            <p>{comment.commentText}</p>
+            <p>Upvotes: {comment.upVoteCount}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
 </MainLayout>

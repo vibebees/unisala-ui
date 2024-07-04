@@ -5,7 +5,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useLocation } from "react-router-dom";
- import { EditPost } from '@/graphql/user';
+ import { EditPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 
 interface ThreadEditableProps {

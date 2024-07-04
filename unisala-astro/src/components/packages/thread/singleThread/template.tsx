@@ -1,8 +1,8 @@
-import React, { type FC, useState } from "react";
+import React, { type FC } from "react";
 import {
   ThreadExpand,
-  ThreadEditable,
-  ThreadImages,
+  // ThreadEditable,
+  // ThreadImages,
   ThreadRating,
 } from "../organism";
 import { AuthProvider } from '@/context/AuthContext';
@@ -77,29 +77,30 @@ const SingleThread: FC<SingleThreadProps> = ({
   user,
   videoURL,
   saved = false}) => {
-  const [reply, setReply] = useState(false),
-    [editable, setEditable] = useState(false);
+  const editable = false, setEditable = () => {};
 
   const threadContent = () => {
     return (
       <div className="thread_comment">
         {editable ? (
-          <ThreadEditable
-            _id={_id}
-            postText={postText || ""}
-            setEditable={setEditable}
-          />
+          // <ThreadEditable
+          //   _id={_id}
+          //   postText={postText || ""}
+          //   setEditable={setEditable}
+          // />
+          'edit'
         ) : (
           <>
-            <ThreadExpand
+           <ThreadExpand
               htmlText={postText!}
               _id={_id}
               tags={tags as any}
               videoURL={videoURL}
             />
             {images && images.length > 0 && (
-              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
-            )}
+              'image'
+              // <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
+            )} 
           </>
         )}
       </div>
@@ -128,7 +129,7 @@ const SingleThread: FC<SingleThreadProps> = ({
 
       </div>
     </div>
-    </AuthProvider>
+   </AuthProvider>
   );
 };
 

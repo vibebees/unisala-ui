@@ -1,6 +1,6 @@
 // import ShowPeopleComments from "./ShowPeopleComments"
 // import ThreadHeader from "./ThreadHeader"
-// import ThreadImages from "./ThreadImages"
+import ThreadImages from "./ThreadImages"
 import ThreadExpand from "./ThreadExpand"
 // import ThreadFooter from "./ThreadFooter"
 import ThreadRating from "./ThreadRating"
@@ -12,7 +12,7 @@ import ThreadRating from "./ThreadRating"
 export {
 //   ShowPeopleComments,
 //   ThreadHeader,
-//   ThreadImages,
+  ThreadImages,
   ThreadExpand,
 //   ThreadFooter,
   ThreadRating,

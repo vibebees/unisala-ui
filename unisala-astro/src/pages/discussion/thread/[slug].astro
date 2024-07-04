@@ -73,7 +73,7 @@ try {
     },
     body: JSON.stringify({
       query,
-      variables: { id: '667adc362bf59de35465faa1', user: null }, // Add user if needed
+      variables: { id: slug, user: null }, // Add user if needed
     }),
   });
 
@@ -109,5 +109,5 @@ try {
   
   {!post && !error && <ThreadSkeleton />}
   
-  {post &&  <SingleThread post = {post} />}
+  {post &&  <SingleThread post = {post}  />}
 </MainLayout>

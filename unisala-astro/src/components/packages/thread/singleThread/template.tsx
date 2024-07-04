@@ -2,7 +2,7 @@ import React, { type FC } from "react";
 import {
   ThreadExpand,
   // ThreadEditable,
-  // ThreadImages,
+  ThreadImages,
   ThreadRating,
 } from "../organism";
 import { AuthProvider } from '@/context/AuthContext';
@@ -98,8 +98,8 @@ const SingleThread: FC<SingleThreadProps> = ({
               videoURL={videoURL}
             />
             {images && images.length > 0 && (
-              'image'
-              // <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
+              // 'image'
+              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
             )} 
           </>
         )}

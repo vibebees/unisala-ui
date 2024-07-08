@@ -1,25 +1,22 @@
 import React, { useRef, memo } from "react";
-import { useHistory } from "react-router";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 export const GoogleAuth = memo(() => {
-  const googlebuttonref = useRef<any>(),
-    history = useHistory();
+  const googlebuttonref = useRef<any>();
 
   const params = new URLSearchParams(window.location.search);
 
-  const [Googlelogin, { loading }] = useAstroMutation(GoogleLogin, {
+  const [Googlelogin] = useAstroMutation(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       console.log("login data", data);
       if (data.google?.status?.success && data.google && data.google.data) {
         console.log("login data", data.google.data);
 
-        document.getElementById("close-auth-modal")?.click();
-        history.push("/feed");
+        // history.push("/feed");
       }
     },
     onError: (error) => {

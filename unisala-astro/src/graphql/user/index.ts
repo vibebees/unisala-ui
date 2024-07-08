@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const checkEmail = gql`
-    mutation checkEmail($email: String) {
+    mutation checkEmail($email: String!) {
       checkEmail(email: $email) {
         status {
           success
@@ -9,6 +9,30 @@ export const checkEmail = gql`
         }
         data {
           newUser
+        }
+      }
+    }
+  `,
+  RegisterV2 = gql`
+    mutation registerV2(
+      $firstName: String!
+      $lastName: String!
+      $email: String!
+      $type: String
+      $spaceOrgName: String
+      $code: Float
+    ) {
+      registerV2(
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        type: $type
+        spaceOrgName: $spaceOrgName
+        code: $code
+      ) {
+        status {
+          success
+          message
         }
       }
     }

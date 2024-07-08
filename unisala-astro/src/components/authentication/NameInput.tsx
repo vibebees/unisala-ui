@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { User, ArrowLeft } from "lucide-react";
 import SubmitButton from "./SubmitButton";
+import { useAstroMutation } from "@/datasource/apollo-client";
+import { checkEmail } from "@/graphql/user";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 interface NameInputProps {
   setName: React.Dispatch<React.SetStateAction<string>>;
@@ -18,7 +21,6 @@ const NameInput: React.FC<NameInputProps> = ({
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit name", name);
   };
 
   return (

@@ -5,7 +5,7 @@ import PinCodeInput from "./PinCodeInput";
 
 const AuthWrapper: React.FC = () => {
   const [authState, setAuthState] = useState<"email" | "name" | "pincode">(
-    "pincode"
+    "email"
   );
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");

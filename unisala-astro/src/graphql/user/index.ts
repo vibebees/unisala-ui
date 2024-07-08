@@ -1,61 +1,14 @@
 import { gql } from "@apollo/client";
 
-export const Login = gql`
-    mutation login(
-      $email: String
-      $password: String
-      $type: String
-      $code: Float
-      $spaceOrgName: String
-    ) {
-      login(
-        email: $email
-        password: $password
-        type: $type
-        code: $code
-        spaceOrgName: $spaceOrgName
-      ) {
+export const checkEmail = gql`
+    mutation checkEmail($email: String) {
+      checkEmail(email: $email) {
         status {
           success
           message
         }
         data {
-          accessToken
-          refreshToken
-          firstName
-          lastName
-          username
-          role
           newUser
-          id
-          userAddedToOrg
-          spaceOrgName
-        }
-      }
-    }
-  `,
-  Register = gql`
-    mutation register(
-      $firstName: String
-      $lastName: String
-      $email: String
-      $password: String
-      $type: String
-      $spaceOrgName: String
-      $code: Float
-    ) {
-      register(
-        firstName: $firstName
-        lastName: $lastName
-        email: $email
-        password: $password
-        type: $type
-        spaceOrgName: $spaceOrgName
-        code: $code
-      ) {
-        status {
-          success
-          message
         }
       }
     }
@@ -70,6 +23,10 @@ export const Login = gql`
         data {
           accessToken
           refreshToken
+          id
+          firstName
+          lastName
+          newUser
         }
       }
     }
@@ -77,16 +34,6 @@ export const Login = gql`
   SendVerificationMail = gql`
     mutation sendVerficationMail($email: String!) {
       sendVerficationMail(email: $email) {
-        status {
-          success
-          message
-        }
-      }
-    }
-  `,
-  ChangePassword = gql`
-    mutation changePassword($email: String!, $password: String!, $code: Int!) {
-      changePassword(email: $email, password: $password, code: $code) {
         status {
           success
           message
@@ -201,8 +148,6 @@ export const Login = gql`
     }
   `,
   AddPost = gql`
-
-
     mutation addPost(
       $postText: String!
       $unitId: Float
@@ -250,7 +195,6 @@ export const Login = gql`
         studentLifeAndServiceRating: $studentLifeAndServiceRating
         careerAndAlumniResourceRating: $careerAndAlumniResourceRating
         postTags: $postTags
-
       ) {
         status {
           success
@@ -291,9 +235,9 @@ export const Login = gql`
           }
           postType
           levelOfStudy
-          postTags{
+          postTags {
             tagType
-            tag{
+            tag {
               _id
               name
             }
@@ -481,9 +425,9 @@ export const Login = gql`
             image
             description
           }
-          postTags{
+          postTags {
             tagType
-            tag{
+            tag {
               _id
               name
             }
@@ -1059,9 +1003,9 @@ export const Login = gql`
           postType
           levelOfStudy
           videoURL
-          postTags{
+          postTags {
             tagType
-            tag{
+            tag {
               _id
               name
             }

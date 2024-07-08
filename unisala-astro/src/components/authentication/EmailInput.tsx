@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React from "react";
 import { Mail } from "lucide-react";
 import GoogleAuth from "./GoogleAuth";
 import SubmitButton from "./SubmitButton";
+import { useAstroMutation } from "@/datasource/apollo-client";
+import { checkEmail } from "@/graphql/user";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 interface EmailInputProps {
   email: string;
@@ -10,9 +13,22 @@ interface EmailInputProps {
 }
 
 const EmailInput: React.FC<EmailInputProps> = ({ email, setEmail }) => {
+  const [CheckEmail, { loading }] = useAstroMutation(checkEmail, {
+    context: { server: USER_SERVICE_GQL },
+    variables: {
+      email,
+    },
+    onCompleted: () => {
+      console.log("Email checked");
+    },
+    onError: (error) => {
+      console.error("Error", error);
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit email", email);
+    CheckEmail();
   };
 
   return (
@@ -69,7 +85,7 @@ const EmailInput: React.FC<EmailInputProps> = ({ email, setEmail }) => {
         </div>
 
         <br />
-        <SubmitButton />
+        <SubmitButton isLoading={loading} disabled={loading} />
       </form>
     </div>
   );

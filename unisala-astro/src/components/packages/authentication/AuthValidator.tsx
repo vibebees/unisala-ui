@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useHistory } from "react-router-dom";
-import { URLupdate } from '@/utils/lib/utils';
+// import { useHistory } from "react-router-dom";
+// import { URLupdate } from '@/utils/lib/utils';
 
 interface AuthValidatorProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface AuthValidatorProps {
 
 const AuthValidator= ({ children }: { children: React.ReactNode }) => {
   const { authenticated } = useAuth();
-  const history = useHistory();
+  const history = () => {};
 
   if (!authenticated) {
     return (
@@ -18,8 +18,8 @@ const AuthValidator= ({ children }: { children: React.ReactNode }) => {
         onClick={(event: React.MouseEvent<HTMLDivElement>) => {
           event.preventDefault();
           event.stopPropagation();
-          const updatedURL = URLupdate("auth", "y");
-          history.push({ search: updatedURL });
+          // const updatedURL = URLupdate("auth", "y");
+          // history.push({ search: updatedURL });
         }}
       >
         <div className="pointer-events-none ">{children}</div>

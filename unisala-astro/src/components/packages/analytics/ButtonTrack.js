@@ -1,6 +1,7 @@
-import ReactGA from "react-ga4"
+// import ReactGA from "react-ga4"
 export const ButtonTrack = (action) => {
-  ReactGA.event({
+  // ReactGA.event({
+  return ({
     action: action
   })
 }

@@ -1,5 +1,5 @@
 // UserHeader.js
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 // import moment from "moment"
 
 // PostOptions.js
@@ -8,7 +8,6 @@ import { Avatar } from '@/components/avatar'
 export const UserHeader = ({ props }: { props: any }) => {
   const { username, firstName, lastName, profilePic, date } = props
   return (
-    <Link to={`/@/${username}`} className="px-4">
       <div className="thread-header">
         <div className="thread_profile-pic">
           <Avatar profilePic={profilePic} username={firstName + lastName} />
@@ -22,7 +21,6 @@ export const UserHeader = ({ props }: { props: any }) => {
           </div>
         </div>
       </div>
-    </Link>
   )
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import { useMutation } from "@apollo/client";
 import { EditComment } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
@@ -61,12 +61,12 @@ const EditComments = ({
 
   return (
     <div className="px-5">
-      <ReactQuill
+      {/* <ReactQuill
         theme="snow"
         onChange={handleChange}
         defaultValue={commentText}
         className="h-48 mb-8 text-black"
-      />
+      /> */}
       <br />
       <button
         // fill="clear"

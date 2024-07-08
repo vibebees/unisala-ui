@@ -1,5 +1,5 @@
 import React, { useRef, memo } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/datasource/graphql/user";
@@ -7,7 +7,7 @@ import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 export const GoogleAuth = memo(() => {
   const googlebuttonref = useRef<any>(),
-    history = useHistory();
+    history =[]
 
   const params = new URLSearchParams(window.location.search);
 

@@ -1,11 +1,13 @@
 import React, { type FC } from "react";
 import {
   ThreadExpand,
+  ThreadFooter,
   // ThreadEditable,
   ThreadImages,
   ThreadRating,
 } from "../organism";
 import { AuthProvider } from '@/context/AuthContext';
+// import AuthValidator from "../../authentication/AuthValidator";
 
 interface SingleThreadProps {
   _id: string;
@@ -76,8 +78,8 @@ const SingleThread: FC<SingleThreadProps> = ({
   upVoted,
   user,
   videoURL,
-  saved = false}) => {
-  const editable = false, setEditable = () => {};
+  saved = false }) => {
+  const editable = false, setEditable = () => { };
 
   const threadContent = () => {
     return (
@@ -91,7 +93,7 @@ const SingleThread: FC<SingleThreadProps> = ({
           'edit'
         ) : (
           <>
-           <ThreadExpand
+            <ThreadExpand
               htmlText={postText!}
               _id={_id}
               tags={tags as any}
@@ -100,7 +102,7 @@ const SingleThread: FC<SingleThreadProps> = ({
             {images && images.length > 0 && (
               // 'image'
               <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
-            )} 
+            )}
           </>
         )}
       </div>
@@ -109,27 +111,39 @@ const SingleThread: FC<SingleThreadProps> = ({
 
   return (
     <AuthProvider>
-    <div className="max-w-2xl w-full mx-auto mb-10">
-      <div className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
-        <div className="ml-6 max-md:ml-2">
-        </div>
+      <div className="max-w-2xl w-full mx-auto mb-5">
+        <div className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
+          <div className="ml-6 max-md:ml-2">
+          </div>
 
-        <div className="thread_content">
-          {threadContent()}
-          <ThreadRating
-            academicProgramsAndDepartmentRating={
-              academicProgramsAndDepartmentRating
-            }
-            admissionAndApplicationRating={admissionAndApplicationRating}
-            careerAndAlumniResourceRating={careerAndAlumniResourceRating}
-            financialAidAndScholarshipRating={financialAidAndScholarshipRating}
-            studentLifeAndServiceRating={studentLifeAndServiceRating}
-          />
+          <div className="thread_content">
+            {threadContent()}
+            <ThreadRating
+              academicProgramsAndDepartmentRating={
+                academicProgramsAndDepartmentRating
+              }
+              admissionAndApplicationRating={admissionAndApplicationRating}
+              careerAndAlumniResourceRating={careerAndAlumniResourceRating}
+              financialAidAndScholarshipRating={financialAidAndScholarshipRating}
+              studentLifeAndServiceRating={studentLifeAndServiceRating}
+            />
+          </div>
+          {/* <AuthValidator> */}
+            {/* <ThreadFooter
+              _id={_id}
+              postCommentsCount={postCommentsCount!}
+              saved={saved}
+              upVoteCount={upVoteCount!}
+              upVoted={upVoted!}
+              isReply={false}
+              singlePost={true}
+              parentId={""}
+              replyTo={user?.username!}
+            /> */}
+          {/* </AuthValidator> */}
         </div>
-
       </div>
-    </div>
-   </AuthProvider>
+    </AuthProvider>
   );
 };
 

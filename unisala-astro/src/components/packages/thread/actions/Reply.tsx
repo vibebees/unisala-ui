@@ -1,6 +1,6 @@
 import React from "react";
 // import { Buttons, Typography } from "../../../defaults";
-// import ModalCustom from "@/components/packages/reusable/modal";
+import ModalCustom from "@/components/packages/reusable/modal";
 // import ReplyInput from "@/components/packages/replyInput";
 import { CommentIcon } from "@/components/packages/icons";
 import { cn } from '@/utils/lib/utils';
@@ -35,26 +35,17 @@ const Reply = ({
 
   return (
     <div>
-      {/* <ModalCustom
+      <ModalCustom
         header="Add a Comment"
-        ModalData={
-          <ReplyInput
-            isReply={isReply}
-            replyTo={replyTo}
-            singlePost={singlePost}
-            parentId={parentId}
-            postId={postId}
-            feedId={feedId}
-          />
-        }
-      > */}
+       
+      >
         <button className="ThreadFooterBtn">
           <CommentIcon className={cn("w-6 fill-neutral-400")} />
           {!isReply && (
            repliesCount || 0
           )}
         </button>
-      {/* </ModalCustom> */}
+      </ModalCustom>
     </div>
   );
 };

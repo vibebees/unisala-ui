@@ -1,6 +1,6 @@
 import Rating from "./Rating"
-// import Reply from "./Reply"
-// import Upvote from "./Upvote"
-// import Save from "./Save"
+import Reply from "./Reply"
+import Upvote from "./Upvote"
+import Save from "./Save"
 
-export { Rating}
+export { Rating, Reply, Upvote, Save}

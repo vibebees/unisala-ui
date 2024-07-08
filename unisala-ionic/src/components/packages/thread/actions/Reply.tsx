@@ -26,18 +26,20 @@ const Reply: FC<ReplyProps> = ({
   feedId,
   postId,
 }) => {
+  const { id: postIdFromRoute } = useParams();
 
+  console.log({postIdFromRoute,postId})
   return (
     <div>
       <ModalCustom
-        header="Add a Comment"
+        header={"Add a Comment" + postId}
         ModalData={
           <ReplyInput
             isReply={isReply}
             replyTo={replyTo}
             singlePost={singlePost}
             parentId={parentId}
-            postId={postId}
+            postId={postIdFromRoute??postId}
             feedId={feedId}
           />
         }

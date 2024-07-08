@@ -1,14 +1,14 @@
 import React, { type FormEvent, useState } from "react";
-import { useMutation } from "@apollo/client";
-import RichTextInput from "../input/RichTextInput";
-import { ThreadHeader } from "../thread/organism";
+// import { useMutation } from "@apollo/client";
+// import RichTextInput from "../input/RichTextInput";
+// import { ThreadHeader } from "../thread/organism";
 import { AddComment } from "@/datasource/graphql/user";
 import { useAuth } from "@/context/AuthContext";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import "./index.css";
 // import { AddCommentMutation } from "@/types/gqlTypes/graphql";
 import { currentFeedType } from "@/utils/lib/URLupdate";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { updateCacheForNewComments } from "./updateCacheForCommets";
 
 interface ReplyInputProps {
@@ -30,31 +30,10 @@ function ReplyInput({
 }: ReplyInputProps) {
   const [commentText, setCommentText] = useState("");
   const { user } = useAuth();
-  const location = useLocation();
+  // const location = useLocation();
   const feedType = currentFeedType(location as unknown as Location);
 
-  const [addComment] = useMutation(AddComment, {
-    context: { server: USER_SERVICE_GQL },
-    update: (cache, { data: { addComment } }) =>
-      updateCacheForNewComments({
-        cache,
-        addComment,
-        feedType,
-        parentId,
-        feedId,
-        user,
-      }),
-    onCompleted: () => {
-      alert("Comment added");
-      const closeButton = document.querySelector(".modal-close-btn") as HTMLElement;
-      closeButton?.click();
-      setCommentText("");
-    },
-    onError: (error) => {
-      console.log(error.message);
-      alert(error.message);
-    },
-  });
+  const [addComment] = [() =>{}]
 
   const submitReply = (e: FormEvent) => {
     e.preventDefault();
@@ -68,27 +47,18 @@ function ReplyInput({
     if (isReply) {
       variables.replyTo = replyTo;
     }
-    addComment({ variables });
+    // addComment({ variables });
   };
 
   return (
     <div className="content">
       <form className="border flex flex-col px-5" onSubmit={submitReply}>
         <div className="my-3">
-          {user && (
-            <ThreadHeader
-              date=""
-              firstName={user?.firstName}
-              username={user?.username}
-              lastName={user?.lastName}
-              profilePic={user?.picture || ""}
-            />
-          )}
+         
         </div>
 
         <div>
-          <RichTextInput
-            onChange={(e) => setCommentText(e)}
+          <input
             value={commentText}
           />
         </div>

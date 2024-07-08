@@ -164,7 +164,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={heading} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
+      <ThreadHeader heading={heading} username={post.user.username} date={post.date} />
 
       <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
@@ -174,7 +174,10 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
 
           <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
             <SingleThread
-            post = {post}
+              htmlText={linkifiedText}
+              _id={post._id}
+              tags={post.tags}
+              videoURL={post.videoURL}
             />
           </div>
         </li>
@@ -189,5 +192,5 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
     </section>
   )}
   
-  <Comments client:only />
+  <Comments />
 </MainLayout>

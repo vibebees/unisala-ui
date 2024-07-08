@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 export const URLupdate = (key: string, value: string) => {
   const url = new URL(window.location.href);
@@ -28,7 +28,7 @@ export const URLdelete = (key: string) => {
 
 export const redirectTo = () => {
   return (url: string) => {
-    const history = useHistory();
+    const history = []
     history.push(url);
   };
 };

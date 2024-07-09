@@ -28,7 +28,6 @@ const Reply: FC<ReplyProps> = ({
 }) => {
   const { id: postIdFromRoute } = useParams();
 
-  console.log({postIdFromRoute,postId})
   return (
     <div>
       <ModalCustom

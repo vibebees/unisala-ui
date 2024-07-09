@@ -79,9 +79,8 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
 
     try {
       const result = await addComment(variables);
-      console.log('result.data.addComment.status.success', result.data.addComment.status.success)
       if (result.data.addComment.status.success) {
-        // onCommentAdded(result.data.addComment.data);
+        onCommentAdded(result.data.addComment.data);
         setCommentText('');
         toast.success('Comment posted successfully!');
 
@@ -99,10 +98,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
   };
 
 
-  toast('Test toast');
-  toast('Test toast');
-  toast('Test toast');
-  toast('Test toast');
   return (
     <form onSubmit={submitComment} className='mb-6'>
       <div className='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-blue-800 dark:border-gray-700'>

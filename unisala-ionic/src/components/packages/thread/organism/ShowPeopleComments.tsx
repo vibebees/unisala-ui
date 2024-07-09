@@ -38,9 +38,10 @@ function ShowOtherComments({
   const commentsList = data?.commentList?.data ?? [];
   const [commentToShow, setCommentToShow] = useState(showValidComments( commentsList ?? [])  );
 
-  console.log('======> ',  data)
   useEffect(() => {
     if (postId !== null && parentId !== null) {
+  console.log({postId, parentId})
+
       getCommentList({
         variables: {
           postId,

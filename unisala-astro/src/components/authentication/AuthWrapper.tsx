@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import EmailInput from "./EmailInput";
 import NameInput from "./NameInput";
 import PinCodeInput from "./PinCodeInput";
+import { Toaster } from "react-hot-toast";
 
 const AuthWrapper: React.FC = () => {
   const [authState, setAuthState] = useState<"email" | "name" | "pincode">(
-    "pincode"
+    "email"
   );
   const [email, setEmail] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<{ firstName: string; lastName: string }>({
+    firstName: "",
+    lastName: "",
+  });
 
   return (
     <div className="w-full  flex container">
+      <Toaster />
       <div className="w-1/2 max-md:hidden flex items-center justify-start">
         <img
           src="/auth-bg.png"
@@ -22,7 +27,11 @@ const AuthWrapper: React.FC = () => {
       <div className="w-1/2 h-full max-md:w-full flex items-center justify-center ">
         <div className="w-full h-full">
           {authState === "email" && (
-            <EmailInput email={email} setEmail={setEmail} />
+            <EmailInput
+              email={email}
+              setEmail={setEmail}
+              setAuthState={setAuthState}
+            />
           )}
           {authState === "name" && (
             <NameInput
@@ -30,6 +39,7 @@ const AuthWrapper: React.FC = () => {
               name={name}
               setName={setName}
               onBack={() => setAuthState("email")}
+              setAuthState={setAuthState}
             />
           )}
           {authState === "pincode" && (

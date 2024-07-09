@@ -1,7 +1,14 @@
+/* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Lock, RefreshCw, ArrowLeft, Mail } from "lucide-react";
+import { Lock, RefreshCw, ArrowLeft } from "lucide-react";
 import SubmitButton from "./SubmitButton";
+import { useAstroMutation } from "@/datasource/apollo-client";
+import { SendVerificationMail, VerifyEmail } from "@/graphql/user";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+import toast from "react-hot-toast";
+import { setUser } from "@/store/userStore";
+import { useHistory } from "react-router-dom";
 
 interface PinCodeInputProps {
   onBack: () => void;
@@ -11,6 +18,55 @@ interface PinCodeInputProps {
 const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
   const [pinCode, setPinCode] = useState("");
   const [countdown, setCountdown] = useState(30);
+  const history = useHistory();
+  const [verifyValidationCode, { loading }] = useAstroMutation(VerifyEmail, {
+    context: { server: USER_SERVICE_GQL },
+    onCompleted: (data: any) => {
+      const user = data?.verifyEmail?.data;
+      setUser({
+        authenticated: true,
+        email: user?.email,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        token: user?.token,
+      });
+      if (user?.newUser) {
+        toast.success("Account created successfully.");
+        history.push("/welcome-form/intro");
+      } else {
+        history.push("/newsfeed");
+      }
+    },
+    onError: (error) => {
+      toast.error(
+        error?.message ||
+          "Error occured while checking email address. Please try again."
+      );
+    },
+  });
+  const [ResendCode, { loading: ResendLoading }] = useAstroMutation(
+    SendVerificationMail,
+    {
+      context: { server: USER_SERVICE_GQL },
+      variables: {
+        email,
+      },
+      onCompleted: (data: any) => {
+        const success = data?.sendVerficationMail?.status?.success;
+
+        if (success) {
+          toast.success("Verification code sent successfully.");
+          setCountdown(30);
+        }
+      },
+      onError: (error) => {
+        toast.error(
+          error?.message ||
+            "Error occured while checking email address. Please try again."
+        );
+      },
+    }
+  );
 
   useEffect(() => {
     if (countdown > 0) {
@@ -21,12 +77,20 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit PIN code", pinCode);
+
+    if (!pinCode || pinCode.length < 6) {
+      return toast.error("Please enter your PIN code.");
+    }
+    verifyValidationCode({
+      variables: {
+        email,
+        verificationCode: Number(pinCode),
+      },
+    });
   };
 
   const onResend = () => {
-    console.log("Resend PIN code");
-    setCountdown(30);
+    ResendCode();
   };
 
   return (
@@ -72,11 +136,14 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
           <li>Make sure you're on the correct website</li>
         </ul>
       </div>
-      <SubmitButton />
+      <SubmitButton
+        isLoading={loading}
+        disabled={pinCode.length < 6 || loading || ResendLoading}
+      />
       <button
         type="button"
         onClick={onResend}
-        disabled={countdown > 0}
+        disabled={countdown > 0 || loading || ResendLoading}
         className={`w-full mt-4 bg-gray-200 text-gray-700 p-4 rounded-lg text-lg font-semibold transition duration-300 flex items-center justify-center ${
           countdown > 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300"
         }`}

@@ -1,25 +1,22 @@
 import React, { useRef, memo } from "react";
-// import { useHistory } from "react-router-dom";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
-import { GoogleLogin } from "@/datasource/graphql/user";
+import { GoogleLogin } from "@/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 export const GoogleAuth = memo(() => {
-  const googlebuttonref = useRef<any>(),
-    history =[]
+  const googlebuttonref = useRef<any>();
 
   const params = new URLSearchParams(window.location.search);
 
-  const [Googlelogin, { loading }] = useAstroMutation(GoogleLogin, {
+  const [Googlelogin] = useAstroMutation(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       console.log("login data", data);
       if (data.google?.status?.success && data.google && data.google.data) {
         console.log("login data", data.google.data);
 
-        document.getElementById("close-auth-modal")?.click();
-        history.push("/feed");
+        // history.push("/feed");
       }
     },
     onError: (error) => {
@@ -43,7 +40,7 @@ export const GoogleAuth = memo(() => {
     // @ts-ignore
     window?.google.accounts.id.initialize({
       client_id:
-        "608310021370-snd65n66i5e9nt1nb15pgfpuuvkqevfq.apps.googleusercontent.com",
+        "1001592245381-rbpoecv2se6v3avlkisbbsfpl09cjfs4.apps.googleusercontent.com",
       callback: onGoogleSignIn,
       auto_select: false,
     });

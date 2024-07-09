@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 import GoogleAuth from "./GoogleAuth";
 import SubmitButton from "./SubmitButton";
 import { useAstroMutation } from "@/datasource/apollo-client";
-import { checkEmail } from "@/graphql/user";
+import { checkEmail } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
 

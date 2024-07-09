@@ -9,9 +9,11 @@ import ThreadHeader from '@/components/layout/thread-header.astro';
 import ThreadAction from '@/components/thread/thread.action.astro';
 import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
+import { Toaster, toast } from "react-hot-toast";
 
 const { slug } = Astro.params;
 console.log("Fetching data for slug:", slug);
+const loadingToastId = toast.loading('Loading...');
 
 let post = null;
 let error = null;
@@ -105,6 +107,8 @@ try {
   if (!post) {
     throw new Error('Post not found');
   }
+    toast.dismiss(loadingToastId);
+
 } catch (e) {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);
@@ -153,6 +157,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
 ---
 
 <MainLayout title={post ? `${heading}` : 'Thread'}>
+  <Toaster position="top-center" reverseOrder={false} />
   {error && (
     <div class="error-container">
       <h2>Error</h2>
@@ -165,8 +170,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
       <ThreadHeader heading={heading} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
-
-      <ul class='pt-6'>
+       <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
             {/* User info can be added here if needed */}

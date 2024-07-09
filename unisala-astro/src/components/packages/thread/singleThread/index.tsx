@@ -4,7 +4,18 @@ import SingleThread from './template';
 import { ThreadSkeleton } from '@/components/packages/skeleton/thread';
 // import { trackEvent } from '@/components/packages/analytics';
 
+import toast, { Toaster } from 'react-hot-toast';
 
+const notify = () => toast('Here is your toast.');
+
+const Toast = () => {
+  return (
+    <div>
+      <button onClick={notify}>Make me a toast</button>
+      <Toaster />
+    </div>
+  );
+};
 const Thread = ({ post }: { post: any }) => {
   // useEffect(() => {
   //   if (post) {

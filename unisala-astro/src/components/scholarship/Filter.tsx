@@ -6,8 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateSearchParam } from "@/lib/urlParamsUtils";
-import { X } from "lucide-react";
+ import { X } from "lucide-react";
+import { updateSearchParam } from "@/utils/lib/urlParamsUtils";
 
 interface FilterState {
   gpa: string;

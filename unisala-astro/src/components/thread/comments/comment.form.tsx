@@ -1,5 +1,6 @@
 import { fetchApi } from '@/utils/api.utility';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface CommentFormProps {
   postId: string;
@@ -82,8 +83,12 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
       if (result.data.addComment.status.success) {
         // onCommentAdded(result.data.addComment.data);
         setCommentText('');
+        toast.success('Comment posted successfully!');
+
       } else {
         setError(result.data.addComment.status.message);
+        toast.error('Failed to post comment. Please try again.');
+
       }
     } catch (error) {
       console.error('Error submitting comment:', error);
@@ -93,6 +98,11 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
     }
   };
 
+
+  toast('Test toast');
+  toast('Test toast');
+  toast('Test toast');
+  toast('Test toast');
   return (
     <form onSubmit={submitComment} className='mb-6'>
       <div className='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-blue-800 dark:border-gray-700'>

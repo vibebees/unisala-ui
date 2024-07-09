@@ -1,7 +1,7 @@
 import React, { useRef, memo } from "react";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
-import { GoogleLogin } from "@/graphql/user";
+import { GoogleLogin } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
 export const GoogleAuth = memo(() => {

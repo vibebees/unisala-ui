@@ -1,5 +1,5 @@
+import { cn } from "@/utils/lib/utils";
 import React, { type FC } from "react";
-import { cn } from "@/lib/utils";
 
 interface SpinnerProps {
   className?: string;

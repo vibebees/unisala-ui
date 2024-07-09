@@ -4,11 +4,10 @@ import React, { useState, useEffect } from "react";
 import { Lock, RefreshCw, ArrowLeft } from "lucide-react";
 import SubmitButton from "./SubmitButton";
 import { useAstroMutation } from "@/datasource/apollo-client";
-import { SendVerificationMail, VerifyEmail } from "@/graphql/user";
+import { SendVerificationMail, VerifyEmail } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
 import { setUser } from "@/store/userStore";
-import { useHistory } from "react-router-dom";
 
 interface PinCodeInputProps {
   onBack: () => void;
@@ -18,7 +17,7 @@ interface PinCodeInputProps {
 const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
   const [pinCode, setPinCode] = useState("");
   const [countdown, setCountdown] = useState(30);
-  const history = useHistory();
+  const history =  []
   const [verifyValidationCode, { loading }] = useAstroMutation(VerifyEmail, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data: any) => {

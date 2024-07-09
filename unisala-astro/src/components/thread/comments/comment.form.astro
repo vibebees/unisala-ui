@@ -1,0 +1,112 @@
+---
+// comment.form.astro
+const { postId = "6686f5fe401e1aad76fa8259" } = Astro.props;
+---
+
+<form id="commentForm" class='mb-6'>
+  <div class='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-blue-800 dark:border-gray-700'>
+    <label for='comment' class='sr-only'>Your comment</label>
+    <textarea
+      id='comment'
+      name='comment'
+      rows='6'
+      class='px-0 w-full text-sm sm:text-base text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800'
+      placeholder='Write a comment...'
+      required
+    ></textarea>
+  </div>
+  <button
+    type='submit'
+    id='submitComment'
+    class='inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
+  >
+    Post comment
+  </button>
+  <p id="errorMessage" class="text-red-500 mt-2 hidden"></p>
+</form>
+
+<script define:vars={{ postId }}>
+  import { fetchApi } from "@/utils/api.utility";
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('commentForm');
+    const submitButton = document.getElementById('submitComment');
+    const errorMessage = document.getElementById('errorMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const commentText = document.getElementById('comment').value;
+      
+      submitButton.disabled = true;
+      submitButton.textContent = 'Posting...';
+      errorMessage.classList.add('hidden');
+
+      const query = `
+        mutation addComment($postId: String!, $commentText: String!) {
+          addComment(postId: $postId, commentText: $commentText) {
+            status {
+              success
+              message
+            }
+            data {
+              _id
+              userId
+              postId
+              parentId
+              commentText
+              commentImage
+              date
+              repliesCount
+              upVoteCount
+              replyTo
+              upVoted
+              user {
+                _id
+                firstName
+                lastName
+                username
+                picture
+              }
+            }
+          }
+        }
+      `;
+
+      try {
+        const response = await fetchApi('http://localhost:4444/graphql', {
+          method: 'POST',
+          body: JSON.stringify({
+            query,
+            variables: { postId, commentText }
+          }),
+        });
+
+        if (response.errors) {
+          throw new Error(response.errors[0].message);
+        }
+
+        if (response.data.addComment.status.success) {
+          // Clear the form
+          document.getElementById('comment').value = '';
+          
+          // Dispatch a custom event to notify that a new comment was added
+          const newCommentEvent = new CustomEvent('newComment', { detail: response.data.addComment.data });
+          document.dispatchEvent(newCommentEvent);
+
+          console.log('Comment added successfully');
+        } else {
+          throw new Error(response.data.addComment.status.message);
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        errorMessage.textContent = error.message || 'An error occurred while posting the comment.';
+        if (errorMessage) {
+          errorMessage.classList.remove('hidden');
+        }
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Post comment';
+      }
+    });
+  });
+</script>

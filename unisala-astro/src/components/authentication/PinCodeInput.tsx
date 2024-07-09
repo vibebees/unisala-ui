@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Lock, RefreshCw, ArrowLeft } from "lucide-react";
@@ -6,6 +7,8 @@ import { useAstroMutation } from "@/datasource/apollo-client";
 import { SendVerificationMail, VerifyEmail } from "@/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
+import { setUser } from "@/store/userStore";
+import { useHistory } from "react-router-dom";
 
 interface PinCodeInputProps {
   onBack: () => void;
@@ -15,10 +18,24 @@ interface PinCodeInputProps {
 const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
   const [pinCode, setPinCode] = useState("");
   const [countdown, setCountdown] = useState(30);
+  const history = useHistory();
   const [verifyValidationCode, { loading }] = useAstroMutation(VerifyEmail, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data: any) => {
-      console.log("data", data);
+      const user = data?.verifyEmail?.data;
+      setUser({
+        authenticated: true,
+        email: user?.email,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        token: user?.token,
+      });
+      if (user?.newUser) {
+        toast.success("Account created successfully.");
+        history.push("/welcome-form/intro");
+      } else {
+        history.push("/newsfeed");
+      }
     },
     onError: (error) => {
       toast.error(
@@ -60,6 +77,7 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!pinCode || pinCode.length < 6) {
       return toast.error("Please enter your PIN code.");
     }

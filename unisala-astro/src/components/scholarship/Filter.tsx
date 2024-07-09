@@ -6,30 +6,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-interface Range {
-  min: string;
-  max: string;
-}
+import { updateSearchParam } from "@/lib/urlParamsUtils";
+import { X } from "lucide-react";
 
 interface FilterState {
-  gpa: Range;
-  sat: Range;
-  act: Range;
-  amount: Range;
+  gpa: string;
+  sat: string;
+  act: string;
+  amount: string;
   level: string;
 }
 
 const initialState: FilterState = {
-  gpa: { min: "", max: "" },
-  sat: { min: "", max: "" },
-  act: { min: "", max: "" },
-  amount: { min: "", max: "" },
+  gpa: "",
+  sat: "",
+  act: "",
+  amount: "",
   level: "",
 };
 
 const Filter: React.FC = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(initialState);
 
   useEffect(() => {
@@ -46,98 +42,154 @@ const Filter: React.FC = () => {
     setFilters(newFilters);
   }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    key: keyof FilterState,
-    subKey?: "min" | "max"
-  ) => {
-    const { value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [key]: subKey ? { ...(prev[key] as Range), [subKey]: value } : value,
-    }));
-  };
-
-  const applyFilters = () => {
-    const params = new URLSearchParams();
-    (Object.entries(filters) as [keyof FilterState, Range | string][]).forEach(
-      ([key, value]) => {
-        if (typeof value === "object") {
-          if (value.min) params.set(`${key}Min`, value.min);
-          if (value.max) params.set(`${key}Max`, value.max);
-        } else if (value) {
-          params.set(key, value);
-        }
-      }
-    );
-    window.history.pushState({}, "", `?${params.toString()}`);
-    setIsFilterOpen(false);
-  };
-
   const resetFilters = () => {
     setFilters(initialState);
     window.history.pushState({}, "", window.location.pathname);
-    setIsFilterOpen(false);
+  };
+
+  const handleChange = (key: string, value: string) => {
+    updateSearchParam(key, value);
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
   return (
-    <div className="relative mt-8">
+    <div className="relative mt-4">
       <div
         style={{
           gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
         }}
-        className="grid gap-5 "
+        className="grid gap-5 text-neutral-800"
       >
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Undergraduate</SelectItem>
-            <SelectItem value="dark">Graduate</SelectItem>
-            <SelectItem value="system">Postgraduate</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Amount" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">5000 - 10000</SelectItem>
-            <SelectItem value="dark">10000 - 20000</SelectItem>
-            <SelectItem value="system">20000 - 50000</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="SAT Score" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">1000 - 1200</SelectItem>
-            <SelectItem value="dark">1200 - 1400</SelectItem>
-            <SelectItem value="system">1400 - 1600</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="ACT Score" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">1000 - 1200</SelectItem>
-            <SelectItem value="dark">1200 - 1400</SelectItem>
-            <SelectItem value="system">1400 - 1600</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="GPA Score" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">1000 - 1200</SelectItem>
-            <SelectItem value="dark">1200 - 1400</SelectItem>
-            <SelectItem value="system">1400 - 1600</SelectItem>
-          </SelectContent>
-        </Select>
+        <div>
+          <label
+            htmlFor="level"
+            className="text-sm font-medium text-neutral-800"
+          >
+            Level
+          </label>
+          <Select
+            onValueChange={(value) => {
+              handleChange("level", value);
+            }}
+            value={filters.level}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="udergraduate">Undergraduate</SelectItem>
+              <SelectItem value="graduate">Graduate</SelectItem>
+              <SelectItem value="postgraduate">Postgraduate</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="level"
+            className="text-sm font-medium text-neutral-800"
+          >
+            Amount
+          </label>
+          <Select
+            onValueChange={(value) => {
+              handleChange("amount", value);
+            }}
+            value={filters.amount}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Amount" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5000-10000">5000 - 10000</SelectItem>
+              <SelectItem value="10000-20000">10000 - 20000</SelectItem>
+              <SelectItem value="20000-50000">20000 - 50000</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="level"
+            className="text-sm font-medium text-neutral-800"
+          >
+            SAT Score
+          </label>
+          <Select
+            onValueChange={(value) => {
+              handleChange("sat", value);
+            }}
+            value={filters.sat}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="SAT Score" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1000-12000">1000 - 1200</SelectItem>
+              <SelectItem value="1200-1400">1200 - 1400</SelectItem>
+              <SelectItem value="1400-1600">1400 - 1600</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="level"
+            className="text-sm font-medium text-neutral-800"
+          >
+            ACT Score
+          </label>
+          <Select
+            onValueChange={(value) => {
+              handleChange("act", value);
+            }}
+            value={filters.act}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="ACT Score" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1000-1200">1000 - 1200</SelectItem>
+              <SelectItem value="1200-1400">1200 - 1400</SelectItem>
+              <SelectItem value="1400-1600">1400 - 1600</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="level"
+            className="text-sm font-medium text-neutral-800"
+          >
+            GPA Score
+          </label>
+          <Select
+            onValueChange={(value) => {
+              handleChange("gpa", value);
+            }}
+            value={filters.gpa}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="GPA Score" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1000-1200">1000 - 1200</SelectItem>
+              <SelectItem value="1200-1400">1200 - 1400</SelectItem>
+              <SelectItem value="1400-1600">1400 - 1600</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className=" flex items-end">
+          <button
+            onClick={resetFilters}
+            className="text-sm gap-2 py-1 h-10 bg-neutral-100 duration-200 ease-linear active:scale-90 hover:bg-neutral-200 rounded-lg px-3 flex items-center"
+          >
+            Clear filters <X size={15} />
+          </button>
+        </div>
       </div>
     </div>
   );

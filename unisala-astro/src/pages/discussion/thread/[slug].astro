@@ -10,8 +10,8 @@ import ThreadAction from '@/components/thread/thread.action.astro';
 import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
 import { Toaster, toast } from "react-hot-toast";
-
-const { slug } = Astro.params;
+import ThreadActionTsx from '@/components/thread/actions/upvote';
+const { slug ="" } = Astro.params;
 console.log("Fetching data for slug:", slug);
 const loadingToastId = toast.loading('Loading...');
 
@@ -180,13 +180,22 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
             />
           </div>
         </li>
-        <ThreadAction
+        {/* <ThreadAction
           heading={heading}
           username={post.user.username}
           date={formatDate(post.date)}
           claps={post.upVoteCount}
           comments={post.postCommentsCount}
+        /> */}
+        <ThreadActionTsx
+          heading={heading}
+          username={post.user.username}
+          date={post.date}
+          claps={post.upVoteCount}
+          comments={post.postCommentsCount}
+          postId={slug}
         />
+          
       </ul>
     </section>
   )}

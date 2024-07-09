@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CommentForm from './comment.form';
 
 interface Comment {
+  replies: any;
   _id: string;
   userId: string;
   postId: string;
@@ -24,6 +25,7 @@ interface Comment {
 
 interface CommentsProps {
   postId: string;
+  parentId?: string;
 }
 
 const CommentFooter: React.FC = () => (
@@ -153,6 +155,13 @@ const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => (
       <CommentHeader comment={comment} />
       <CommentBody commentText={comment.commentText} />
       <CommentFooter />
+      {comment?.replies?.length > 0 && (
+        <div className='pl-6 mt-4'>
+          {comment.replies.map((reply) => (
+            <CommentItem key={reply._id} comment={reply} />
+          ))}
+        </div>
+      )}
     </article>
   );
 
@@ -168,7 +177,7 @@ const CommentList: React.FC<{ comments: Comment[] }> = ({ comments }) => (
 
   
 
-const Comments: React.FC<CommentsProps> = ({ postId }) => {
+const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -214,7 +223,7 @@ const Comments: React.FC<CommentsProps> = ({ postId }) => {
           },
           body: JSON.stringify({
             query,
-            variables: { postId, parentId: null }
+            variables: { postId, parentId }
           }),
         });
 
@@ -236,7 +245,7 @@ const Comments: React.FC<CommentsProps> = ({ postId }) => {
     };
 
     fetchComments();
-  }, [postId]);
+  }, [postId, parentId]);
 
   const handleCommentAdded = (newComment: Comment) => {
     setComments(prevComments => [newComment, ...prevComments]);

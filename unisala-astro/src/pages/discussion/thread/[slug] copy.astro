@@ -3,12 +3,13 @@ export const prerender = false;
 
 import MainLayout from '@/layouts/main-layout.astro';
 import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
+// import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.astro';
 import ThreadHeader from '@/components/layout/thread-header.astro';
 import ThreadAction from '@/components/thread/thread.action.astro';
-import { Badge } from '@/components/ui/badge';
-import linkifyHtml from 'linkify-html';
+
+
 
 const { slug } = Astro.params;
 console.log("Fetching data for slug:", slug);
@@ -17,65 +18,57 @@ let post = null;
 let error = null;
 
 const query = `
-  query getPostById($id: String!, $user: String) {
-    getPostById(id: $id, user: $user) {
-      status {
-        success
-        message
-      }
-      post {
-        _id
-        postText
-        postCommentsCount
-        admissionAndApplicationRating
-        financialAidAndScholarshipRating
-        academicProgramsAndDepartmentRating
-        studentLifeAndServiceRating
-        careerAndAlumniResourceRating
-        postType
-        postImage
-        videoURL
-        date
-        tags {
-          _id
-          name
-          parentId
-          image
-          description
+query getPostById($id: String!, $user: String) {
+      getPostById(id: $id, user: $user) {
+        status {
+          success
+          message
         }
-        postTags {
-          tagType
-          tag {
+        post {
+          _id
+          postText
+          postCommentsCount
+          admissionAndApplicationRating
+          financialAidAndScholarshipRating
+          academicProgramsAndDepartmentRating
+          studentLifeAndServiceRating
+          careerAndAlumniResourceRating
+          postType
+          postImage
+          videoURL
+          date
+          tags {
             _id
             name
+            parentId
+            image
+            description
           }
-        }
-        upVoted
-        images
-        upVoteCount
-        user {
-          _id
-          username
-          firstName
-          lastName
-          picture
-        }
-        comments {
-          _id
-          commentText
+          postTags{
+            tagType
+            tag{
+              _id
+              name
+            }
+          }
           upVoted
+          images
           upVoteCount
           user {
             _id
-            firstName
-            lastName
-            picture
             username
+            picture
+          }
+          comments {
+            _id
+            commentText
+            upVoted
+            upVoteCount
+           
           }
         }
       }
     }
-  }
 `;
 
 try {
@@ -86,7 +79,7 @@ try {
     },
     body: JSON.stringify({
       query,
-      variables: { id: slug, user: null },
+      variables: { id: slug, user: null }, // Add user if needed
     }),
   });
 
@@ -110,87 +103,18 @@ try {
   error = e instanceof Error ? e.message : String(e);
 }
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
-}
-
-function extractHeading(text) {
-  const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
-  if (headingMatch) return headingMatch[1].trim();
-
-  let cleanText = text
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  cleanText = cleanText
-    .replace(/(\d{4})([A-Z])/g, '$1\n$2')
-    .replace(/([.:])(\d+)/g, '$1\n$2')
-    .replace(/([a-z])([A-Z])/g, '$1\n$2');
-
-  const lines = cleanText.split('\n');
-  let heading = lines.slice(0, 2).join(' - ');
-
-  if (heading.length > 150) {
-    heading = heading.slice(0, 147) + '...';
-  }
-
-  return heading || 'Thread Details';
-}
-
-const heading = post ? extractHeading(post.postText) : 'Loading...';
-const linkifiedText = post ? linkifyHtml(post.postText, {
-  defaultProtocol: 'https',
-  className: 'custom-link',
-  target: {
-    url: '_blank'
-  }
-}) : '';
-
 ---
 
-<MainLayout title={post ? `${heading}` : 'Thread'}>
+<MainLayout title={post ? `${post.postText.slice(0, 20)}...` : 'Thread'}>
   {error && (
     <div class="error-container">
       <h2>Error</h2>
       <p>{error}</p>
     </div>
   )}
-  
+  <ThreadHeader heading={"heading"} username={"username"} date={new Date().toString()} />
+
   {!post && !error && <ThreadSkeleton />}
   
-  {post && (
-    <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={heading} username={post.user.username} date={post.date} />
-
-      <ul class='pt-6'>
-        <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
-          <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
-            {/* User info can be added here if needed */}
-          </div>
-
-          <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
-            <SingleThread
-              htmlText={linkifiedText}
-              _id={post._id}
-              tags={post.tags}
-              videoURL={post.videoURL}
-            />
-          </div>
-        </li>
-        <ThreadAction
-          heading={heading}
-          username={post.user.username}
-          date={formatDate(post.date)}
-          claps={post.upVoteCount}
-          comments={post.postCommentsCount}
-        />
-      </ul>
-    </section>
-  )}
-  
-  <Comments />
+  {post &&  <SingleThread post = {post}  />}
 </MainLayout>

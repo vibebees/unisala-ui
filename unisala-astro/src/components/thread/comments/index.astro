@@ -1,7 +1,15 @@
 ---
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+// Comments.astro
+export const prerender = false;
 
-const GetCommentList = gql`
+//import from params postId
+const { postId } = Astro.props;
+const parentId = null; // Or provide a parent ID if needed
+
+let comments = [];
+let error = null;
+
+const query = `
   query commentList($postId: String!, $parentId: String) {
     commentList(postId: $postId, parentId: $parentId) {
       status {
@@ -33,29 +41,33 @@ const GetCommentList = gql`
   }
 `;
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4444/graphql',
-  cache: new InMemoryCache()
-});
-
-const postId = "66745b5cc312c94b099e0f4c"; // Replace with actual post ID
-const parentId = null; // Or provide a parent ID if needed
-
-let comments = [];
-let error = null;
-
 try {
-  const { data } = await client.query({
-    query: GetCommentList,
-    variables: { postId, parentId }
+  const response = await fetch('http://localhost:4444/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables: { postId, parentId }
+    }),
   });
 
-  comments = data.commentList.data;
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+
+  comments = result.data.commentList.data;
 } catch (e) {
   console.error("Error fetching comments:", e);
-  error = e.message;
+  error = e instanceof Error ? e.message : String(e);
 }
-
 ---
 
 <section class='bg-white dark:bg-black-900 py-8 lg:py-6 antialiased'>

@@ -32,7 +32,7 @@ const Reply: FC<ReplyProps> = ({
   return (
     <div>
       <ModalCustom
-        header={"Add a Comment" + postId}
+        header={"Add a Comment" }
         ModalData={
           <ReplyInput
             isReply={isReply}

@@ -189,5 +189,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
     </section>
   )}
   
-  <Comments client:only />
+  <!-- //pass postId from slug -->
+
+  <Comments client:visible postId = {slug}/>
 </MainLayout>

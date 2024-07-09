@@ -107,8 +107,6 @@ try {
   if (!post) {
     throw new Error('Post not found');
   }
-    toast.dismiss(loadingToastId);
-
 } catch (e) {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);

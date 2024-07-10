@@ -6,6 +6,8 @@ import { useAstroMutation } from '@/datasource/apollo-client';
 import toast from 'react-hot-toast';
 import { UpVote } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { BookmarkIconFilled, BookmarkIconOutline } from '@/components/packages/icons/bookmark';
+import { CopyIconFilled, CopyIconOutline } from '@/components/packages/icons/copy';
 
 interface Props extends HTMLAttributes<"div"> {
   heading: string;
@@ -24,6 +26,8 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
   const [upVoteError, setUpVoteError] = useState<any>(null);
   const [upvoteCount, setUpvoteCount] = useState(initialClaps);
   const [isUpvoted, setIsUpvoted] = useState(upVoted);
+  const [bookmarkOn, setBookmarkOn] = useState(false);
+  const [copyLink, setCopyLink] = useState(false);
 
   const [UpVotePost, { loading }] = useAstroMutation(UpVote, {
     context: { server: USER_SERVICE_GQL },
@@ -76,11 +80,12 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
         </button>
       </div>
       <div className="flex items-center space-x-4">
-        <button className="hover:text-gray-700">
-          {/* <Icon name="lucide:bookmark"  /> */}
+        <button className="hover:text-gray-700" onClick={e => setBookmarkOn(!bookmarkOn)}>
+        {bookmarkOn ? <BookmarkIconFilled /> : <BookmarkIconOutline />}
         </button>
-        <button className="hover:text-gray-700">
-          {/* <Icon name="lucide:share" /> */}
+
+        <button className="hover:text-gray-700"  onClick={e => setCopyLink(!copyLink)}>
+        {copyLink ? <CopyIconFilled /> : <CopyIconOutline />}
         </button>
       </div>
       {upVoteError && <p className="text-red-500">{upVoteError.message}</p>}

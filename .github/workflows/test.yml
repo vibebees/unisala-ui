@@ -41,11 +41,13 @@ jobs:
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            sudo rm -rf ~/unisala-web/unisala-ionic
+            sudo rm -rf ~/unisala-web/unisala-astro
+            mkdir -p ~/unisala-web/unisala-ionic
+            mkdir -p ~/unisala-web/unisala-astro
             sudo chown -R ec2-user:ec2-user ~/unisala-web
-            sudo rm -rf ~/unisala-web/unisala-astro/{*,.[!.]*,..?*}
-            sudo rm -rf ~/unisala-web/unisala-ionic/{*,.[!.]*,..?*}
+            echo "Directories ~/unisala-web/unisala-ionic and ~/unisala-web/unisala-astro recreated"
 
-            echo "Directory ~/unisala-web cleared"
 
 
       # Deploy Ionic build artifacts

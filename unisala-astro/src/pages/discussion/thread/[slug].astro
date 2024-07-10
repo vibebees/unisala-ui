@@ -11,13 +11,14 @@ import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
 import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
+import { fetchApi } from '@/utils/api.utility';
 const { slug ="" } = Astro.params;
 console.log("Fetching data for slug:", slug);
 const loadingToastId = toast.loading('Loading...');
 
 let post = null;
 let error = null;
-
+// Remove the assignment to prerender
 const query = `
   query getPostById($id: String!, $user: String) {
     getPostById(id: $id, user: $user) {
@@ -81,26 +82,18 @@ const query = `
 `;
 
 try {
-  const response = await fetch('http://localhost:4444/graphql', {
+  const result = await fetchApi('http://localhost:4444/graphql', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify({
       query,
       variables: { id: slug, user: null },
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const result = await response.json();
-
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
+  console.log({result});
 
   post = result.data?.getPostById?.post;
 
@@ -111,7 +104,6 @@ try {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);
 }
-
 function formatDate(dateString) {
   const date = new Date(dateString);
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -152,9 +144,23 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   }
 }) : '';
 
+
+const handleUpvote = async (postId: string) => {
+  try {
+    // Call the upvote mutation or API endpoint here
+    // await upvoteMutation(postId);
+    alert('Upvoted');
+  } catch (error) {
+    // Handle the error
+    console.error(error);
+  }
+};
+
+
 ---
 
 <MainLayout title={post ? `${heading}` : 'Thread'}>
+
   <Toaster position="top-center" reverseOrder={false} />
   {error && (
     <div class="error-container">
@@ -191,9 +197,11 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
           heading={heading}
           username={post.user.username}
           date={post.date}
-          claps={post.upVoteCount}
           comments={post.postCommentsCount}
           postId={slug}
+          initialClaps={post.upVoteCount}
+          client:only 'react'
+          upVoted={post.upVoted}
         />
           
       </ul>
@@ -202,5 +210,5 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   
   <!-- //pass postId from slug -->
 
-  <Comments client:visible postId = {slug}/>
+  <Comments client:visible  postId = {slug}/>
 </MainLayout>

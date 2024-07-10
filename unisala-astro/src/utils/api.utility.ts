@@ -1,15 +1,15 @@
 import { getCache } from "./cache";
 
-// utils.js
 export async function fetchApi(url: string | URL | Request, options: Record<string, any> = {}) {
     const authData: { accessToken?: string } | null = getCache('authData');
     const accessToken = authData?.accessToken;
     
-    console.log('accessToken', accessToken)
+    console.log('AuthData:', authData); // Debug log
+    console.log('AccessToken:', accessToken); // Debug log
     const defaultOptions = {
       headers: {
         'Content-Type': 'application/json',
-        ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
+        ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
       },
     };
   
@@ -22,6 +22,7 @@ export async function fetchApi(url: string | URL | Request, options: Record<stri
       },
     };
   
+
     const response = await fetch(url, mergedOptions);
   
     if (!response.ok) {
@@ -29,4 +30,4 @@ export async function fetchApi(url: string | URL | Request, options: Record<stri
     }
   
     return response.json();
-  }
+}

@@ -174,15 +174,38 @@ const CommentList: React.FC<{ comments: Comment[] }> = ({ comments }) => (
     </>
   );
 
-
+  const CommentSkeleton: React.FC = () => (
+    <div className="animate-pulse p-6 mb-3 bg-white rounded-lg border border-gray-200 dark:bg-gray-900 dark:border-gray-700 w-full">
+      <div className="flex items-center space-x-3 mb-4">
+        <div className="rounded-full bg-gray-300 h-10 w-10"></div>
+        <div className="flex-1 space-y-2">
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          <div className="h-3 bg-gray-300 rounded w-1/3"></div>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-3 bg-gray-300 rounded"></div>
+        <div className="h-3 bg-gray-300 rounded w-5/6"></div>
+      </div>
+    </div>
+  );
   
+  const CommentsSketelon = () => (
+    <>
+    <CommentSkeleton />
+    <CommentSkeleton />
+    <CommentSkeleton />
+  </>
+  )
 
 const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchComments = async () => {
+      setLoading(true);
       const query = `
         query commentList($postId: String!, $parentId: String) {
           commentList(postId: $postId, parentId: $parentId) {
@@ -241,6 +264,8 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
       } catch (e) {
         console.error("Error fetching comments:", e);
         setError(e instanceof Error ? e.message : String(e));
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -381,9 +406,13 @@ return (
           postId={postId}
           onCommentAdded={handleCommentAdded}
         />
-        {error && <p className="text-red-500">{error}</p>}
-        <CommentList comments={comments} />
-      </div>
+       {error && <p className="text-red-500">{error}</p>}
+        {loading ? (
+          <CommentsSketelon/>
+        ) : (
+          <CommentList comments={comments} />
+        )}
+        </div>
     </section>
   );
 };

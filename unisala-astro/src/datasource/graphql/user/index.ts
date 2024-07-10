@@ -860,6 +860,7 @@ export const checkEmail = gql`
         upVotesCount
         success
         message
+        voteExist
       }
     }
   `,

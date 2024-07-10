@@ -18,14 +18,16 @@ import {
 import getServiceConfig from "./index";
 
 import config from "./config";
+import { getCache } from "@/utils/cache";
+import { setContext } from '@apollo/client/link/context';
 
 const {
-    messagingServiceAddress,
-    universityServiceAddress,
-    messageSocketAddress,
-    userServiceAddress,
-    callSocketAddress,
-  } = getServiceConfig(),
+  messagingServiceAddress,
+  universityServiceAddress,
+  messageSocketAddress,
+  userServiceAddress,
+  callSocketAddress,
+} = getServiceConfig(),
   responseLink = new ApolloLink((operation, forward) => {
     return new Observable((observer) => {
       const processOperation = async () => {
@@ -52,7 +54,7 @@ const {
 
       processOperation();
 
-      return () => {}; // Cleanup function if necessary
+      return () => { }; // Cleanup function if necessary
     });
   }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
@@ -72,7 +74,7 @@ const {
     uri: userServiceAddress + "/graphql",
     server: USER_SERVICE_GQL,
   } as any),
-  httpLink = split(
+  httpLink2 = split(
     (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
     universityServerGql,
     split(
@@ -84,13 +86,40 @@ const {
       )
     )
   );
-export const client = new ApolloClient({
-    link: from([responseLink, errorLink, httpLink]),
+
+const authData: { accessToken?: string } | null = getCache('authData') || {};
+const accessToken = authData?.accessToken;
+
+const httpLink = split(
+  (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
+  universityServerGql,
+  split(
+    (operation) => operation.getContext().server === MESSAGE_SERVICE_GQL,
+    messageServerGql,
+    split(
+      (operation) => operation.getContext().server === USER_SERVICE_GQL,
+      userServerGql
+    )
+  )
+);
+
+// Add this new authLink
+const authLink = setContext((_, { headers }) => {
+  const authData = getCache('authData');
+  const token = authData?.accessToken;
+  
+  return {
     headers: {
-      authorization: "",
-    },
-    cache: new InMemoryCache(),
-  }),
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  };
+});
+
+export const client = new ApolloClient({
+  link: from([authLink, responseLink, errorLink, httpLink]),
+  cache: new InMemoryCache(),
+}),
   messageSocket = () => {
     const socketOptions = {
       path: "",

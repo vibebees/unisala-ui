@@ -1,5 +1,4 @@
 // import React  from 'react';
-import { useEffect } from 'react';
 import SingleThread from './template';
 import { ThreadSkeleton } from '@/components/packages/skeleton/thread';
 // import { trackEvent } from '@/components/packages/analytics';

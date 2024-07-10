@@ -157,9 +157,7 @@ const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => (
       <CommentFooter />
       {comment?.replies?.length > 0 && (
         <div className='pl-6 mt-4'>
-          {comment.replies.map((reply) => (
-            <CommentItem key={reply._id} comment={reply} />
-          ))}
+         
         </div>
       )}
     </article>

@@ -1,8 +1,7 @@
 import React from "react";
 // import { Buttons } from "@components/defaults/index";
 // import Share from "@components/packages/share";
-import { Reply, Save, Upvote } from "../actions";
-
+/*
 interface ThreadFooterProps {
   upVoteCount: number;
   upVoted: boolean;
@@ -69,4 +68,10 @@ const ThreadFooter = ({
   );
 };
 
+export default ThreadFooter;
+*/
+const ThreadFooter = () => (
+  <>Thread footer
+  </>
+)
 export default ThreadFooter;

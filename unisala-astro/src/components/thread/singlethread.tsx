@@ -20,7 +20,7 @@ const ThreadExpand = ({
   _id,
   tags,
   videoURL,
-}) => {
+}: ThreadExpandProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showSeeMore, setShowMore] = useState(true);
   const TextRef = useRef(null);

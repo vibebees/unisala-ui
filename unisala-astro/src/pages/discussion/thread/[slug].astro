@@ -104,13 +104,9 @@ try {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);
 }
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
-}
 
-function extractHeading(text) {
+
+function extractHeading(text: string) {
   const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
   if (headingMatch) return headingMatch[1].trim();
 

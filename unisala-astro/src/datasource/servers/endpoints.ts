@@ -9,7 +9,6 @@ import {
   Observable,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-// import { io } from "socket.io-client";
 import {
   MESSAGE_SERVICE_GQL,
   UNIVERSITY_SERVICE_GQL,
@@ -87,7 +86,7 @@ const {
     )
   );
 
-const authData: { accessToken?: string } | null = getCache('authData') || {};
+const authData: { accessToken?: string } | null = getCache('authData') || {} as { accessToken?: string };
 const accessToken = authData?.accessToken;
 
 const httpLink = split(
@@ -105,13 +104,13 @@ const httpLink = split(
 
 // Add this new authLink
 const authLink = setContext((_, { headers }) => {
-  const authData = getCache('authData');
-  const token = authData?.accessToken;
+  const authData: { accessToken?: string } | null = getCache('authData') || {} as { accessToken?: string };
+  const {accessToken} = authData
   
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: accessToken ? `Bearer ${accessToken}` : "",
     }
   };
 });

@@ -35,17 +35,7 @@ const Reply = ({
 
   return (
     <div>
-      <ModalCustom
-        header="Add a Comment"
-       
-      >
-        <button className="ThreadFooterBtn">
-          <CommentIcon className={cn("w-6 fill-neutral-400")} />
-          {!isReply && (
-           repliesCount || 0
-          )}
-        </button>
-      </ModalCustom>
+    
     </div>
   );
 };

@@ -163,9 +163,9 @@ const handleUpvote = async (postId: string) => {
       <p>{error}</p>
     </div>
   )}
-  
+
   {!post && !error && <ThreadSkeleton />}
-  
+
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
       <ThreadHeader heading={linkifyHtml(heading)} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
@@ -198,11 +198,11 @@ const handleUpvote = async (postId: string) => {
           client:only 'react'
           upVoted={post.upVoted}
         />
-          
+
       </ul>
     </section>
   )}
-  
+
   <!-- //pass postId from slug -->
 
   <Comments client:visible  postId = {slug}/>

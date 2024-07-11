@@ -169,7 +169,7 @@ const handleUpvote = async (postId: string) => {
   
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={heading} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
+      <ThreadHeader heading={linkifyHtml(heading)} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
        <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>

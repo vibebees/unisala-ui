@@ -32,30 +32,6 @@ jobs:
           npm run build
         working-directory: unisala-astro
 
-     # Prepare and clear the deployment directory on the server with timestamps
-      - name: Clear deployment directory
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: "13.200.175.61"
-          username: "ec2-user"
-          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            date
-            echo "Starting to clear deployment directory"
-            sudo rm -rf ~/unisala-web/unisala-ionic
-            echo "Ionic directory cleared"
-            sudo rm -rf ~/unisala-web/unisala-astro
-            echo "Astro directory cleared"
-            mkdir -p ~/unisala-web/unisala-ionic
-            mkdir -p ~/unisala-web/unisala-astro
-            echo "Directories recreated"
-            sudo chown -R ec2-user:ec2-user ~/unisala-web
-            echo "Ownership changed"
-            date
-            exit 0
-
-
 
       # Deploy Ionic build artifacts
       - name: Deploy Ionic build artifacts

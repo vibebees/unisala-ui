@@ -1,0 +1,209 @@
+---
+export const prerender = false;
+
+import MainLayout from '@/layouts/main-layout.astro';
+import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
+import SingleThread from '@/components/packages/thread/singleThread/index';
+import Comments from '@/components/thread/comments/index.tsx';
+import ThreadHeader from '@/components/layout/thread-header.astro';
+import ThreadAction from '@/components/thread/thread.action.astro';
+import { Badge } from '@/components/ui/badge';
+import linkifyHtml from 'linkify-html';
+import { Toaster, toast } from "react-hot-toast";
+import ThreadActionTsx from '@/components/thread/actions/upvote';
+import { fetchApi } from '@/utils/api.utility';
+const { slug ="" } = Astro.params;
+console.log("Fetching data for slug:", slug);
+const loadingToastId = toast.loading('Loading...');
+
+let post = null;
+let error = null;
+// Remove the assignment to prerender
+const query = `
+  query getPostById($id: String!, $user: String) {
+    getPostById(id: $id, user: $user) {
+      status {
+        success
+        message
+      }
+      post {
+        _id
+        postText
+        postCommentsCount
+        admissionAndApplicationRating
+        financialAidAndScholarshipRating
+        academicProgramsAndDepartmentRating
+        studentLifeAndServiceRating
+        careerAndAlumniResourceRating
+        postType
+        postImage
+        videoURL
+        date
+        tags {
+          _id
+          name
+          parentId
+          image
+          description
+        }
+        postTags {
+          tagType
+          tag {
+            _id
+            name
+          }
+        }
+        upVoted
+        images
+        upVoteCount
+        user {
+          _id
+          username
+          firstName
+          lastName
+          picture
+        }
+        comments {
+          _id
+          commentText
+          upVoted
+          upVoteCount
+          user {
+            _id
+            firstName
+            lastName
+            picture
+            username
+          }
+        }
+      }
+    }
+  }
+`;
+
+try {
+  const result = await fetchApi('http://localhost:4444/graphql', {
+    method: 'POST',
+    body: JSON.stringify({
+      query,
+      variables: { id: slug, user: null },
+    }),
+  });
+
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+  console.log({result});
+
+  post = result.data?.getPostById?.post;
+
+  if (!post) {
+    throw new Error('Post not found');
+  }
+} catch (e) {
+  console.error("Error fetching post:", e);
+  error = e instanceof Error ? e.message : String(e);
+}
+
+function extractHeading(text: string) {
+  const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
+  if (headingMatch) return headingMatch[1].trim();
+
+  let cleanText = text
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  cleanText = cleanText
+    .replace(/(\d{4})([A-Z])/g, '$1\n$2')
+    .replace(/([.:])(\d+)/g, '$1\n$2')
+    .replace(/([a-z])([A-Z])/g, '$1\n$2');
+
+  const lines = cleanText.split('\n');
+  let heading = lines.slice(0, 2).join(' - ');
+
+  if (heading.length > 150) {
+    heading = heading.slice(0, 147) + '...';
+  }
+
+  return heading || 'Thread Details';
+}
+
+const heading = post ? extractHeading(post.postText) : 'Loading...';
+const linkifiedText = post ? linkifyHtml(post.postText, {
+  defaultProtocol: 'https',
+  className: 'custom-link',
+  target: {
+    url: '_blank'
+  }
+}) : '';
+
+
+const handleUpvote = async (postId: string) => {
+  try {
+    // Call the upvote mutation or API endpoint here
+    // await upvoteMutation(postId);
+    alert('Upvoted');
+  } catch (error) {
+    // Handle the error
+    console.error(error);
+  }
+};
+
+
+---
+
+<MainLayout title={post ? `${heading}` : 'Thread'}>
+
+  <Toaster position="top-center" reverseOrder={false} />
+  {error && (
+    <div class="error-container">
+      <h2>Error</h2>
+      <p>{error}</p>
+    </div>
+  )}
+  
+  {!post && !error && <ThreadSkeleton />}
+  
+  {post && (
+    <section class='container max-w-screen-lg space-y-6 pt-12'>
+      <ThreadHeader heading={linkifyHtml(heading)} username={post.user.username} date={post.date} claps={post.upVoteCount} comments={post.postCommentsCount} />
+       <ul class='pt-6'>
+        <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
+          <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
+            {/* User info can be added here if needed */}
+          </div>
+
+          <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
+            <SingleThread
+            post = {post}
+            />
+          </div>
+        </li>
+        {/* <ThreadAction
+          heading={heading}
+          username={post.user.username}
+          date={formatDate(post.date)}
+          claps={post.upVoteCount}
+          comments={post.postCommentsCount}
+        /> */}
+        <ThreadActionTsx
+          heading={heading}
+          username={post.user.username}
+          date={post.date}
+          comments={post.postCommentsCount}
+          postId={slug}
+          initialClaps={post.upVoteCount}
+          client:only 'react'
+          upVoted={post.upVoted}
+        />
+          
+      </ul>
+    </section>
+  )}
+  
+  <!-- //pass postId from slug -->
+
+  <Comments client:visible  postId = {slug}/>
+</MainLayout>

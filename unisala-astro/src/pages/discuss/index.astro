@@ -1,0 +1,21 @@
+---
+import PageHeader from '@/components/page-header.astro';
+import { Badge } from '@/components/ui/badge';
+import MainLayout from '@/layouts/main-layout.astro';
+import { getCollection } from 'astro:content';
+ 
+---
+
+<MainLayout title='Thread'>
+  <section class='container max-w-screen-lg space-y-6 pt-12'>
+    <PageHeader
+      heading={"heading"}
+      text='Reproduce Astro Starlog template with Tailwind CSS & shadcn/ui.'
+    />
+
+    <ul class='pt-6'>
+      <script></script>
+     test page
+    </ul>
+  </section>
+</MainLayout>

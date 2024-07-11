@@ -47,7 +47,7 @@ jobs:
             mkdir -p ~/unisala-web/unisala-astro
             sudo chown -R ec2-user:ec2-user ~/unisala-web
             echo "Directories ~/unisala-web/unisala-ionic and ~/unisala-web/unisala-astro recreated"
-            exit
+            exit 0
 
 
 

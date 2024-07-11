@@ -105,7 +105,6 @@ try {
   error = e instanceof Error ? e.message : String(e);
 }
 
-
 function extractHeading(text: string) {
   const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
   if (headingMatch) return headingMatch[1].trim();

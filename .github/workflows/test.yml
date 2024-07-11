@@ -1,4 +1,4 @@
-name: Test
+name: Test/Release
 
 on:
   push:
@@ -42,8 +42,8 @@ jobs:
           port: 22
           source: "unisala-ionic/dist/index.html"  # Test with a small file
           target: "~/unisala-web/test/"
-          timeout: 600  # Increase timeout
-          command_timeout: 600  # Increase command timeout
+          timeout: 600s  # Increase timeout
+          command_timeout: 600s  # Increase command timeout
           debug: true
 
       # Deploy Ionic build artifacts with increased timeout
@@ -56,8 +56,8 @@ jobs:
           port: 22
           source: "unisala-ionic/dist/*"  # Ensure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/unisala-ionic/"
-          timeout: 600  # Increase timeout
-          command_timeout: 600  # Increase command timeout
+          timeout: 600s  # Increase timeout
+          command_timeout: 600s  # Increase command timeout
           rm: true
           debug: true
 
@@ -71,8 +71,8 @@ jobs:
           port: 22
           source: "unisala-astro/dist/*"  # Ensure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/unisala-astro/"
-          timeout: 600  # Increase timeout
-          command_timeout: 600  # Increase command timeout
+          timeout: 600s  # Increase timeout
+          command_timeout: 600s  # Increase command timeout
           rm: true
           debug: true
 

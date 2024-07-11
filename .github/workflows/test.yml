@@ -47,7 +47,6 @@ jobs:
 
             echo "Directory ~/unisala-web cleared"
 
-
       # Deploy Ionic build artifacts
       - name: Deploy Ionic build artifacts
         uses: appleboy/scp-action@master

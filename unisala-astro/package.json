@@ -7,19 +7,7 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "prepare": "husky"
-  },
-  "husky": {
-    "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
+    "astro": "astro"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -46,6 +34,7 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-intersection-observer": "^9.10.3",
+    "tailwind-merge": "^2.4.0",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
@@ -57,7 +46,6 @@
     "classnames": "^2.5.1",
     "husky": "^9.0.11",
     "rollup-plugin-visualizer": "^5.12.0",
-    "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   }
 }

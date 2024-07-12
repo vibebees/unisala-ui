@@ -30,6 +30,8 @@ jobs:
         run: |
           npm install
           npm run build
+          cp package.json dist/
+          cp package-lock.json dist/
         working-directory: unisala-astro
 
   # Prepare and clear the deployment directory on the server

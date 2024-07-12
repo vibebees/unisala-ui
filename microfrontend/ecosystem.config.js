@@ -10,10 +10,10 @@ module.exports = {
     },
     {
       name: 'unisala-astro',
-      script: 'http-server',
-      args: '-p 3001 ./unisala-astro/dist/client --proxy http://localhost:3001?',
+      script: './unisala-astro/dist/start-astro-server.mjs',
       env: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        PORT: 3001
       }
     }
   ]

@@ -72,6 +72,19 @@ jobs:
           source: "unisala-astro/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/"
 
+
+      # Install production dependencies for Astro
+      - name: Install Astro production dependencies
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "65.0.152.95"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/unisala-web/unisala-astro/dist
+            npm install --production
+
       # Reload Nginx to apply changes
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8

@@ -69,7 +69,7 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
             <div className="w-4 h-4 border-2 border-gray-500 rounded-full animate-spin"></div>
           ) : (
             <>
-              {isUpvoted ? <FireIconFilled /> : <FireIconOutline />}
+              {true ? <FireIconFilled /> : <FireIconOutline />}
               <span>{upvoteCount}</span>
             </>
           )}

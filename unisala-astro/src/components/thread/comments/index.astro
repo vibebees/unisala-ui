@@ -1,6 +1,7 @@
 ---
 // Comments.astro
 export const prerender = false;
+import { userServer } from '@/datasource/servers/endpoints';
 import CommentForm from './comment.form';
 
 const { postId } = Astro.props;
@@ -42,7 +43,7 @@ const query = `
 `;
 
 try {
-  const response = await fetch('http://localhost:4444/graphql', {
+  const response = await fetch(userServer, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -12,6 +12,7 @@ import linkifyHtml from 'linkify-html';
 import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
+import { userServer } from '@/datasource/servers/endpoints';
 const { slug ="" } = Astro.params;
 console.log("Fetching data for slug:", slug);
 const loadingToastId = toast.loading('Loading...');
@@ -82,7 +83,7 @@ const query = `
 `;
 
 try {
-  const result = await fetchApi('http://localhost:4444/graphql', {
+  const result = await fetchApi(userServer, {
     method: 'POST',
     body: JSON.stringify({
       query,

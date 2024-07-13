@@ -237,7 +237,7 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
       `;
 
       try {
-        const response = await fetch('http://localhost:4444/graphql', {
+        const response = await fetch('http://test.unisala.com/user/graphql', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -82,7 +82,7 @@ const query = `
 `;
 
 try {
-  const result = await fetchApi('http://localhost:4444/graphql', {
+  const result = await fetchApi('http://test.unisala.com/user/graphql', {
     method: 'POST',
     body: JSON.stringify({
       query,

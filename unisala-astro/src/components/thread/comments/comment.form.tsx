@@ -56,7 +56,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
       }
     `;
 
-    return fetchApi('http://localhost:4444/graphql', {
+    return fetchApi('http://test.unisala.com/user/graphql', {
       method: 'POST',
       body: JSON.stringify({
         query,

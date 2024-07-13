@@ -73,7 +73,7 @@ const { postId = "6686f5fe401e1aad76fa8259" } = Astro.props;
       `;
 
       try {
-        const response = await fetchApi('http://localhost:4444/graphql', {
+        const response = await fetchApi('http://test.unisala.com/user/graphql', {
           method: 'POST',
           body: JSON.stringify({
             query,

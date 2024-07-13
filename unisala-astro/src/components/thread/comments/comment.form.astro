@@ -26,8 +26,7 @@ const { postId = "6686f5fe401e1aad76fa8259" } = Astro.props;
 </form>
 
 <script define:vars={{ postId }}>
-  import { userServer } from '@/datasource/servers/endpoints';
-import { fetchApi } from "@/utils/api.utility";
+  import { fetchApi } from "@/utils/api.utility";
 
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('commentForm');
@@ -74,7 +73,7 @@ import { fetchApi } from "@/utils/api.utility";
       `;
 
       try {
-        const response = await fetchApi(userServer, {
+        const response = await fetchApi('http://localhost:4444/graphql', {
           method: 'POST',
           body: JSON.stringify({
             query,

@@ -55,7 +55,7 @@ export const ReplyBox: React.FC<{
         if (parentId) {
           const topLevelCacheKey = { 
             query: GetCommentList, 
-            variables: { postId }
+            variables: { postId , parentId, commentText: replyText}
           };
           const topLevelData = cache.readQuery(topLevelCacheKey);
 

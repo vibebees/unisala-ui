@@ -12,7 +12,7 @@ type ServiceConfig = {
 };
 
 // The configuration function
-export const getServiceConfig = (): ServiceConfig => {
+const getServiceConfig = (): ServiceConfig => {
   switch (config.NODE_ENV) {
     case "DEVELOPMENT":
       return {
@@ -40,19 +40,10 @@ export const getServiceConfig = (): ServiceConfig => {
       };
     default:
       return {
-        messagingServiceAddress: "",
-        universityServiceAddress: "",
-        messageSocketAddress: "",
-        userServiceAddress: "",
-        callSocketAddress: "",
         base: "https://unisala.com"
       };
   }
-},
-  userServiceAddress = getServiceConfig().userServiceAddress,
-  messagingServiceAddress = getServiceConfig().messagingServiceAddress,
-  universityServiceAddress = getServiceConfig().universityServiceAddress,
-  base = getServiceConfig().base,
-  userServiceGql = `${userServiceAddress}/graphql`,
-  messagingServiceGql = `${messagingServiceAddress}/graphql`,
-  universityServiceGql = `${universityServiceAddress}/graphql`;
+};
+
+// Export the configuration function using ESModule syntax
+export default getServiceConfig;

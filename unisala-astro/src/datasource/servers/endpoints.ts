@@ -14,7 +14,7 @@ import {
   UNIVERSITY_SERVICE_GQL,
   USER_SERVICE_GQL,
 } from "./types";
-import getServiceConfig from "./index";
+import {getServiceConfig} from "./index";
 
 import config from "./config";
 import { getCache } from "@/utils/cache";

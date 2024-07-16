@@ -1,3 +1,4 @@
+import { userServiceGql } from '@/datasource/servers';
 import { fetchApi } from '@/utils/api.utility';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -56,7 +57,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
       }
     `;
 
-    return fetchApi('http://test.unisala.com/user/graphql', {
+    return fetchApi(userServiceGql, {
       method: 'POST',
       body: JSON.stringify({
         query,

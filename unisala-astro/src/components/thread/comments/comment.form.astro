@@ -1,7 +1,8 @@
 ---
 // comment.form.astro
 const { postId = "6686f5fe401e1aad76fa8259" } = Astro.props;
----
+import {userServiceGql} from '@/datasource/servers/index';
+ ---
 
 <form id="commentForm" class='mb-6'>
   <div class='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-blue-800 dark:border-gray-700'>
@@ -73,7 +74,7 @@ const { postId = "6686f5fe401e1aad76fa8259" } = Astro.props;
       `;
 
       try {
-        const response = await fetchApi('http://test.unisala.com/user/graphql', {
+        const response = await fetchApi(userServiceGql, {
           method: 'POST',
           body: JSON.stringify({
             query,

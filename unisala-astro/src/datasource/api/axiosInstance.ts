@@ -1,10 +1,10 @@
 import axios from "axios";
-import urls from "../servers/index";
+import {base} from "../servers/index";
 import { getCache, setCache } from "../../utils/cache";
 
 
 const axiosOjb = () => {
-  const authBaseURL = urls().base;
+  const authBaseURL = base;
   let authData: any = getCache("authData") || { accessToken: false },
     { accessToken } = authData || { accessToken: false };
   return {
@@ -29,7 +29,7 @@ authInstance.interceptors.response.use(
     // eslint-disable-next-line
     if (
       error.response.status === 401 &&
-      originalRequest.url ===  urls().base + "/refreshToken/"
+      originalRequest.url ===  base + "/refreshToken/"
     ) {
       window.location.href = "/";
       return Promise.reject(error);
@@ -47,7 +47,7 @@ authInstance.interceptors.response.use(
         const now = Date.now();
         if (tokenParts.exp > now) {
           return axios
-            .post(urls()["base"] + "/refreshToken", {
+            .post(base + "/refreshToken", {
               token: refreshToken,
             })
             .then((response) => {

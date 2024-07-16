@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CommentForm from './comment.form';
+import { userServiceGql } from '@/datasource/servers';
 
 interface Comment {
   replies: any;
@@ -237,7 +238,7 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
       `;
 
       try {
-        const response = await fetch('http://test.unisala.com/user/graphql', {
+        const response = await fetch(userServiceGql, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

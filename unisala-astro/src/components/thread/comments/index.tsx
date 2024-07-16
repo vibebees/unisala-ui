@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CommentForm from './comment.form';
 import { userServiceGql } from '@/datasource/servers';
-
+import {toast} from 'react-hot-toast';
+import { fetchApi } from '@/utils/api.utility';
+import { useAstroQuery } from '@/datasource/apollo-client';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { GetCommentList } from '@/datasource/graphql/user';
 interface Comment {
   replies: any;
   _id: string;
@@ -197,79 +201,28 @@ const CommentList: React.FC<{ comments: Comment[] }> = ({ comments }) => (
   </>
   )
 
+
+
+
+
+
+
 const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      setLoading(true);
-      const query = `
-        query commentList($postId: String!, $parentId: String) {
-          commentList(postId: $postId, parentId: $parentId) {
-            status {
-              success
-              message
-            }
-            validToken
-            data {
-              _id
-              userId
-              postId
-              parentId
-              commentText
-              commentImage
-              date
-              repliesCount
-              upVoteCount
-              replyTo
-              upVoted
-              user {
-                _id
-                firstName
-                lastName
-                username
-                picture
-              }
-            }
-          }
-        }
-      `;
 
-      try {
-        const response = await fetch(userServiceGql, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query,
-            variables: { postId, parentId }
-          }),
-        });
+  const { loading, error } = useAstroQuery(GetCommentList, {
+    variables: { postId, parentId },
+    onCompleted: (data) => {
+      setComments(data.commentList.data);
+    },
+    context: { server: USER_SERVICE_GQL },
+  });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
-        const result = await response.json();
 
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        setComments(result.data.commentList.data);
-      } catch (e) {
-        console.error("Error fetching comments:", e);
-        setError(e instanceof Error ? e.message : String(e));
-      }finally{
-        setLoading(false);
-      }
-    };
-
-    fetchComments();
-  }, [postId, parentId]);
 
   const handleCommentAdded = (newComment: Comment) => {
     setComments(prevComments => [newComment, ...prevComments]);
@@ -405,7 +358,7 @@ return (
           postId={postId}
           onCommentAdded={handleCommentAdded}
         />
-       {error && <p className="text-red-500">{error}</p>}
+       {error && <p className="text-red-500">{"error"}</p>}
         {loading ? (
           <CommentsSketelon/>
         ) : (

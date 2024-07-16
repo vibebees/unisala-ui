@@ -1,7 +1,7 @@
 import { userServiceGql } from '@/datasource/servers';
 import { fetchApi } from '@/utils/api.utility';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
 
 interface CommentFormProps {
   postId: string;

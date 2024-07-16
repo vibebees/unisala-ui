@@ -3,6 +3,7 @@
 export const prerender = false;
 import { userServiceGql } from '@/datasource/servers';
 import CommentForm from './comment.form';
+import { fetchApi } from '@/utils/api.utility';
 
 const { postId } = Astro.props;
 const parentId = null; // Or provide a parent ID if needed
@@ -43,13 +44,8 @@ const query = `
 `;
 
 try {
-  const response = await fetch(userServiceGql, {
+  const response = await fetchApi(userServiceGql, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-
     body: JSON.stringify({
       query,
       variables: { postId, parentId }

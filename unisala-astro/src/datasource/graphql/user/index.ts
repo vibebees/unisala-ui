@@ -621,6 +621,7 @@ export const checkEmail = gql`
           success
           message
         }
+        isPostUpVotedByCurrentUser  
         validToken
         data {
           _id

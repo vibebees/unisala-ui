@@ -16,6 +16,8 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 const { slug ="" } = Astro.params;
 const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
+import {Toast} from '@/components/ui/toast';
+
 let post = null;
 let error = null;
 // Remove the assignment to prerender
@@ -155,9 +157,9 @@ const handleUpvote = async (postId: string) => {
 ---
 
 <MainLayout title={post ? `${heading}` : 'Thread'}>
+<Toast client:load />
 
-  <Toaster position="top-center" reverseOrder={false} />
-  {error && (
+{error && (
     <div class="error-container">
       <h2>Error</h2>
       <p>{error}</p>
@@ -205,5 +207,5 @@ const handleUpvote = async (postId: string) => {
   
   <!-- //pass postId from slug -->
 
-  <Comments client:visible  postId = {slug}/>
+  <Comments client:only ='react'  postId = {slug}/>
 </MainLayout>

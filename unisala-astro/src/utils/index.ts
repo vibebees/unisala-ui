@@ -1,5 +1,6 @@
 // Import the configuration using ESModule syntax
-import config from "./config";
+
+import config from "@/datasource/servers/config";
 
 // Define a type for the configuration object
 type ServiceConfig = {
@@ -40,6 +41,11 @@ const getServiceConfig = (): ServiceConfig => {
       };
     default:
       return {
+        messagingServiceAddress: "",
+        universityServiceAddress: "",
+        messageSocketAddress: "",
+        userServiceAddress: "",
+        callSocketAddress: "",
         base: "https://unisala.com"
       };
   }

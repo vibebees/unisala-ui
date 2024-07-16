@@ -653,6 +653,23 @@ export const checkEmail = gql`
           success
           message
         }
+          data{
+              _id
+            userId
+            postId
+            parentId
+            commentText
+            commentImage
+            upVoteCount
+            replyTo
+            date
+            user{
+              firstName
+              lastName
+            }
+            upVoted
+            repliesCount
+          }
       }
     }
   `,

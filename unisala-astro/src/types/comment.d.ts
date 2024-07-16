@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-interface Icomment {
+// src/types/comment.d.ts
+export interface Comment {
   _id: string;
   postId: string;
   parentId: string;
@@ -11,4 +11,13 @@ interface Icomment {
   user: IUser;
   upVoted?: boolean;
   repliesCount?: number;
+}
+
+
+interface IUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  picture: string | null;
 }

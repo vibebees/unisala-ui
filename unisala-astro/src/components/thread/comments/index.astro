@@ -82,10 +82,6 @@ try {
     <CommentForm 
         postId={postId}
         client:visible
-        onCommentAdded={(newComment) => {
-          
-          // You might want to update the comments list here
-        }} 
     />
     {error && <p class="text-red-500">{error}</p>}
     {comments.map((comment: { user: { picture: any; firstName: unknown; lastName: unknown; }; date: string | number | Date | null | undefined; _id: any; }) => (

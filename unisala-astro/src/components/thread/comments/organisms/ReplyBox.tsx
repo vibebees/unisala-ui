@@ -36,7 +36,8 @@ export const ReplyBox: React.FC<{
           query: GetCommentList, 
           variables: previousReplyExist ? { postId, parentId } : { postId }
         };
-        const currentLevelData = cache.readQuery(currentLevelCacheKey);
+        // { commentList?: any } | null 
+        const currentLevelData :{commentList?:any} | null = cache.readQuery(currentLevelCacheKey);
 
         if (currentLevelData?.commentList) {
           const updatedCurrentLevelData = {
@@ -57,7 +58,7 @@ export const ReplyBox: React.FC<{
             query: GetCommentList, 
             variables: { postId , parentId, commentText: replyText}
           };
-          const topLevelData = cache.readQuery(topLevelCacheKey);
+          const topLevelData: {commentList?:any} |null = cache.readQuery(topLevelCacheKey);
 
           if (topLevelData?.commentList) {
             const updatedTopLevelData = {
@@ -106,7 +107,7 @@ export const ReplyBox: React.FC<{
           query: GetCommentList, 
           variables
         };
-        const existingData = cache.readQuery(cacheKey);
+        const existingData: { commentList?: any } | null = cache.readQuery(cacheKey);
         if (existingData?.commentList) {
           const updatedData = {
             commentList: {

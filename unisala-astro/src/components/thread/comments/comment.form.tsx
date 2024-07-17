@@ -27,7 +27,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
         const newComment = data.addComment.data;
         console.log('New comment:', newComment);
     
-        const existingData = cache.readQuery({
+        const existingData: {commentList?:any} | null = cache.readQuery({
           query: GetCommentList,
           variables: { postId },
         });
@@ -95,7 +95,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
     }
   };
 
-  function adjustHeight(element) {
+  function adjustHeight(element: HTMLElement) {
     element.style.height = 'auto';
     element.style.height = (element.scrollHeight) + 'px';
   }

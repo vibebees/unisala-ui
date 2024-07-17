@@ -46,7 +46,7 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
           variables: variables
         };
 
-        const existingData = cache.readQuery(cacheKey);
+        const existingData : {commentList?: any} | null = cache.readQuery(cacheKey);
         if (existingData?.commentList) {
           const updatedData = {
             commentList: {

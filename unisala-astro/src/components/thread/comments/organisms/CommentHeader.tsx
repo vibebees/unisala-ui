@@ -31,7 +31,7 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
               minute: 'numeric'
             })}
           >
-            {formatCommentDate(comment?.date)}
+            {formatCommentDate(comment?.date?.toString())}
           </time>
         </p>
       </div>

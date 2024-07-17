@@ -1,5 +1,6 @@
 // src/types/comment.d.ts
 export interface Comment {
+  userId: string;
   _id: string;
   postId: string;
   parentId: string;

@@ -12,8 +12,10 @@ interface Props extends HTMLAttributes<"div"> {
   claps: number;
   comments: number;
   className?: string;
+  firstName?: string;
+  lastName?: string;
 }
-const { heading, username, date, claps, comments, className, ...attrs } = Astro.props;
+const { heading, username, date, claps, comments, firstName, lastName, className, ...attrs } = Astro.props;
 ---
 
 <div class={cn("space-y-4", className)} {...attrs}>
@@ -21,8 +23,10 @@ const { heading, username, date, claps, comments, className, ...attrs } = Astro.
     {heading}
   </h1>
   <div class="flex items-center space-x-4 text-sm mb-6">
-    <span class="font-medium">@{username}</span>
-    <!-- <button class="text-green-600 hover:text-green-700 font-large">Follow</button> -->
+    <span class="font-larget">{firstName} {lastName}</span>
+    <!-- <span class="font-medium">@{firstName} {lastName}</span> -->
+
+    <!-- <span class="text-green-600 hover:text-green-700 font-large">Follow</span> -->
   </div>
   <div class="text-gray-500 text-sm">
     {formatCommentDate(date)}

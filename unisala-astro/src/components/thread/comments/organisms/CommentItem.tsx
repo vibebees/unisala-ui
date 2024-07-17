@@ -10,7 +10,9 @@ import { CommentSkeleton } from "./CommentSkeleton";
 import { CommentList } from "./CommentList";
 import { ReplyBox } from "./ReplyBox";
 import { toast } from "react-hot-toast";
-export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
+import { sendGAEvent } from "@/utils/analytics/events";
+
+export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> = ({ comment, nestedComment = false }) => {
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -22,6 +24,12 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
 
   const handleViewReplies = () => {
     setShowReplies(true);
+    sendGAEvent('thread_action', {
+      category: 'threads',
+      label: 'view_replies',
+      postId: comment.postId,
+      commentId: comment._id,
+    });
   };
 
   const handleEdit = () => {
@@ -87,6 +95,12 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
   const handleDelete = async () => {
     try {
       await deleteComment({ variables: { id: comment._id } });
+      sendGAEvent('thread_action', {
+        category: 'threads',
+        label: 'delete_comment',
+        postId: comment.postId,
+        commentId: comment._id,
+      })
     } catch (error) {
       console.error('Error removing comment:', error);
     }
@@ -99,7 +113,15 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
         <ReplyBox
           postId={comment.postId}
           parentId={comment.parentId}
-          onCancel={() => setIsEditing(false)}
+          onCancel={() => {
+            setIsEditing(false)
+            sendGAEvent('thread_action', {
+              category: 'threads',
+              label: 'cancel_edit_comment',
+              postId: comment.postId,
+              commentId: comment._id,
+            })
+          }}
           commentText={comment.commentText}
           previousReplyExist={!!comment.repliesCount}
           onReplyAdded={() => {
@@ -112,7 +134,17 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
       ) : (
         <>
           <CommentBody commentText={comment.commentText} />
-          <CommentFooter onReply={() => setShowReplyBox(true)} />
+          <CommentFooter onReply={() => {
+            setShowReplyBox(true);
+            sendGAEvent('thread_action', {
+              category: 'threads',
+              label: 'reply_comment_button',
+              postId: comment.postId,
+              commentId: comment._id,
+              parentId: comment.parentId,
+              nestedComment,
+            });
+          }} />
         </>
       )}
       {showReplyBox && !isEditing && (
@@ -120,7 +152,16 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
           previousReplyExist={!!comment.repliesCount}
           parentId={comment.parentId || comment._id}
           postId={comment.postId}
-          onCancel={() => setShowReplyBox(false)}
+          onCancel={() => {
+            setShowReplyBox(false);
+            sendGAEvent('thread_action', {
+              category: 'threads',
+              label: 'reply_comment_cancel',
+              postId: comment.postId,
+              commentId: comment._id,
+              parentId: comment.parentId,
+            });
+          }}
         />
       )}
       {(comment?.repliesCount ?? 0) > 0 && (
@@ -137,7 +178,7 @@ export const CommentItem: React.FC<{ comment: Comment }> = ({ comment }) => {
           ) : error ? (
             <p className="text-red-500">Error loading replies</p>
           ) : (
-            <CommentList comments={data?.commentList?.data} />
+            <CommentList comments={data?.commentList?.data} nestedComment ={true} />
           )}
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { AddComment, GetCommentList, EditComment } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+import { sendGAEvent } from "@/utils/analytics/events";
 import { useEffect, useRef, useState } from "react";
 import { toast } from 'react-hot-toast';
 interface Comment {
@@ -37,7 +38,6 @@ export const ReplyBox: React.FC<{
   commentId
 }) => {
     const [replyText, setReplyText] = useState(commentText);
-
     const [addComment, { loading: addCommentLoading }] = useAstroMutation(AddComment, {
       context: { server: USER_SERVICE_GQL },
       update: (cache, { data }) => {
@@ -64,7 +64,7 @@ export const ReplyBox: React.FC<{
             */
            // for 1a and 2a
            const topLevelCacheKey = { query: GetCommentList, variables: { postId } };
-           
+
            const repliesCacheKey = { query: GetCommentList, variables: { postId, parentId } };
          
             // Read cache data
@@ -200,7 +200,11 @@ export const ReplyBox: React.FC<{
             commentText: replyText,
           }
         });
-        console.log('Update Result:', result);
+        sendGAEvent('thread_action', {
+          category: 'threads',
+          label: 'edit_comment_done',
+          postId,
+        })
       } else {
         const result = await addComment({
           variables: {
@@ -209,11 +213,13 @@ export const ReplyBox: React.FC<{
             commentText: replyText,
           }
         });
-        console.log('Add Result:', result);
-      }
+        sendGAEvent('thread_action', {
+          category: 'threads',
+          label: 'reply_comment_done',
+          postId,
+        })      }
 
       setReplyText('');
-      onCancel();
     };
 
     const loading = addCommentLoading || updateLoading;
@@ -235,7 +241,18 @@ export const ReplyBox: React.FC<{
 
           className="w-full p-2 border rounded-lg dark:bg-gray-800 dark:text-white"
           value={replyText}
-          onChange={(e) => setReplyText(e.target.value)}
+          onChange={(e) => {
+            setReplyText(e.target.value);
+            // only send ga event once
+            if (replyText.length === 1 && e.target.value.length > 0) {
+              sendGAEvent('thread_action', {
+                category: 'threads',
+                label: 'reply_comment_typing',
+                postId,
+                commentId
+              });
+            }
+          }}
           placeholder={isEditing ? "Edit your comment..." : "Write a reply..."}
           style={{ minHeight: '60px', resize: 'none', overflow: 'hidden' }}
 

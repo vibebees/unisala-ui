@@ -1,3 +1,4 @@
+import { sendGAEvent } from "@/utils/analytics/events";
 import { getCache } from "@/utils/cache";
 import { useState } from "react";
  interface CommentOptionsButtonProps {
@@ -25,11 +26,21 @@ export const CommentOptionsButton: React.FC<CommentOptionsButtonProps> = ({
   const handleEdit = () => {
     onEdit();
     setIsOpen(false);
+    sendGAEvent('thread_action', {
+      category: 'threads',
+      label: 'edit_comment_button',
+      commentId,
+    });
   };
 
   const handleDelete = () => {
     onDelete();
     setIsOpen(false);
+    sendGAEvent('thread_action', {
+      category: 'threads',
+      label: 'delete_comment_button',
+      commentId,
+    });
   };
 
   // If the user is not the author, don't render the button at all

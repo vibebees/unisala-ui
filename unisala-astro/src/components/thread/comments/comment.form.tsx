@@ -3,9 +3,10 @@ import { AddComment, GetCommentList } from '@/datasource/graphql/user';
 import { userServiceGql } from '@/datasource/servers';
 import { client } from '@/datasource/servers/endpoints';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { sendGAEvent } from '@/utils/analytics/events';
 import { fetchApi } from '@/utils/api.utility';
 import React, { useEffect, useState } from 'react';
-import {toast} from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 interface CommentFormProps {
   postId: string;
@@ -13,11 +14,13 @@ interface CommentFormProps {
   replyTo?: string;
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo }) => {
+const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyTo }) => {
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
- 
+  const [hasStartedTyping, setHasStartedTyping] = useState(false);
+
+
 
 
   const [addComment, { loading }] = useAstroMutation(AddComment, {
@@ -26,12 +29,12 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
       if (data?.addComment?.status?.success) {
         const newComment = data.addComment.data;
         console.log('New comment:', newComment);
-    
-        const existingData: {commentList?:any} | null = cache.readQuery({
+
+        const existingData: { commentList?: any } | null = cache.readQuery({
           query: GetCommentList,
           variables: { postId },
         });
-    
+
         if (existingData?.commentList) {
           const updatedData = {
             commentList: {
@@ -40,7 +43,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
             },
           };
           console.log('Updated data:', updatedData);
-    
+
           cache.writeQuery({
             query: GetCommentList,
             variables: { postId },
@@ -78,6 +81,11 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
 
     try {
       const result = await addComment({ variables });
+      sendGAEvent('thread_action', {
+        category: 'threads',
+        label: 'add_comment',
+        postId,
+      })
       if (result?.data?.addComment?.status?.success) {
         setCommentText('');
         toast.success('Comment posted successfully!');
@@ -94,7 +102,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
       setIsSubmitting(false);
     }
   };
-
+ 
   function adjustHeight(element: HTMLElement) {
     element.style.height = 'auto';
     element.style.height = (element.scrollHeight) + 'px';
@@ -110,12 +118,21 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId ='', parentId, replyTo
           required
           value={commentText}
           onChange={(e) => {
+            
             setCommentText(e.target.value);
             adjustHeight(e.target);
+            if (!hasStartedTyping) {
+              setHasStartedTyping(true);
+              sendGAEvent('thread_action', {
+                category: 'threads',
+                label: 'typing_comment',
+                postId,
+              });
+            }
           }}
-  disabled={isSubmitting}
-  style={{ minHeight: '24px', resize: 'none', overflow: 'hidden' }}
-></textarea>
+          disabled={isSubmitting}
+          style={{ minHeight: '24px', resize: 'none', overflow: 'hidden' }}
+        ></textarea>
       </div>
       {error && <p className="text-red-500 mb-2">{error}</p>}
       <button

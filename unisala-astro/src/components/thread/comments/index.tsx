@@ -39,7 +39,7 @@ return (
         {loading ? (
           <CommentSkeleton/>
         ) : (
-          <CommentList comments={data?.commentList?.data} />
+          <CommentList comments={data?.commentList?.data} nestedComment={false} />
         )}
         </div>
     </section>

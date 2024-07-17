@@ -9,6 +9,7 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { BookmarkIconFilled, BookmarkIconOutline } from '@/components/packages/icons/bookmark';
 import { CopyIconFilled, CopyIconOutline } from '@/components/packages/icons/copy';
 import { client } from '@/datasource/servers/endpoints';
+import { sendGAEvent } from '@/utils/analytics/events';
 
 interface Props extends HTMLAttributes<"div"> {
   heading: string;
@@ -47,6 +48,11 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
 
   const handleCopyLink = async () => {
     try {
+      sendGAEvent('thread_action', {
+        category: 'threads',
+        label: 'copy_thread_link',
+        postId,
+      });
       await navigator.clipboard.writeText(window.location.href);
       setCopyLink(true);
       toast.success('Link copied to clipboard!');
@@ -57,6 +63,11 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
   };
 
   const handleUpvote = async () => {
+    sendGAEvent('thread_action', {
+      category: 'threads',
+      label: 'upvote',
+      postId,
+    });
     setIsUpvoted(!isUpvoted);
     setUpVoteLoading(true);
     try {

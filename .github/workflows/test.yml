@@ -76,7 +76,7 @@ jobs:
 
 
       # Install production dependencies for Astro
-      - name: Install Astro production dependencies
+      - name: Install Astro production dependenciesls
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: "65.0.152.95"

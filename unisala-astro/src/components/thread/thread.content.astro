@@ -158,13 +158,7 @@ const handleUpvote = async (postId: string) => {
 <MainLayout title={post ? `${heading}` : 'Thread'}>
 
   <Toaster position="top-center" reverseOrder={false} />
-  {error && (
-    <div class="error-container">
-      <h2>Error</h2>
-      <p>{error}</p>
-    </div>
-  )}
-  
+
   {!post && !error && <ThreadSkeleton />}
   
   {post && (

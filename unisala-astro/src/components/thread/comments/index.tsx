@@ -22,8 +22,9 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
     fetchPolicy: 'cache-and-network',
     context: { server: USER_SERVICE_GQL },
   });
-
-
+if(error){
+  return <div></div>
+}
 return (
     <section className='bg-white dark:bg-black-900 py-8 lg:py-6 antialiased'>
       <div className='max-w-4xl mx-auto px-4'>
@@ -35,7 +36,6 @@ return (
         <CommentForm 
           postId={postId}
         />
-       {error && <p className="text-red-500">{"error"}</p>}
         {loading ? (
           <CommentSkeleton/>
         ) : (

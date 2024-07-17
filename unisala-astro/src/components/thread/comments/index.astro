@@ -83,7 +83,6 @@ try {
         postId={postId}
         client:visible
     />
-    {error && <p class="text-red-500">{error}</p>}
     {comments.map((comment: { user: { picture: any; firstName: unknown; lastName: unknown; }; date: string | number | Date | null | undefined; _id: any; }) => (
       <article class='p-6 mb-3 text-base bg-white rounded-lg border border-gray-200 dark:bg-gray-900 dark:border-gray-700 w-full'>
         <footer class='flex justify-between items-center mb-2'>

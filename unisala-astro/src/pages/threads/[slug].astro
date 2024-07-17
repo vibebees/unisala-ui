@@ -17,9 +17,9 @@ const { slug ="" } = Astro.params;
 const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
-
+import { FourOhFour } from '@/components/ui/404';
 let post = null;
-let error = null;
+let error: string = '';
 // Remove the assignment to prerender
 const query = `
   query getPostById($id: String!, $user: String) {
@@ -159,12 +159,7 @@ const handleUpvote = async (postId: string) => {
 <MainLayout title={post ? `${heading}` : 'Thread'}>
 <Toast client:load />
 
-{error && (
-    <div class="error-container">
-      <h2>Error</h2>
-      <p>{error}</p>
-    </div>
-  )}
+{error && <FourOhFour message={error} />}
   
   {!post && !error && <ThreadSkeleton />}
   

@@ -19,6 +19,7 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
             alt={comment?.user?.firstName}
           />
           {comment?.user?.firstName} {comment?.user?.lastName}
+
         </p>
         <p className='text-sm text-gray-600 dark:text-gray-400'>
           <time
@@ -35,7 +36,11 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
           </time>
         </p>
       </div>
-      <CommentOptionsButton commentId={comment._id} onEdit={onEdit} onDelete={onDelete} />
+      <CommentOptionsButton 
+        onEdit={onEdit} 
+        onDelete={onDelete}
+        commentId={comment._id}
+      commentUserId={comment?.userId} />
     </footer>
   );
 };

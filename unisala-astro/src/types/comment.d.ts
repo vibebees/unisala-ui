@@ -20,4 +20,6 @@ interface IUser {
   lastName: string;
   username: string;
   picture: string | null;
+  userId: string;
+  
 }

@@ -1,13 +1,24 @@
+import { getCache } from "@/utils/cache";
 import { useState } from "react";
-
-interface CommentOptionsButtonProps {
+ interface CommentOptionsButtonProps {
   commentId: string;
+  commentUserId: string;
   onEdit: () => void;
   onDelete: () => void;
 }
-
-export const CommentOptionsButton: React.FC<CommentOptionsButtonProps> = ({ commentId, onEdit, onDelete }) => {
+export const CommentOptionsButton: React.FC<CommentOptionsButtonProps> = ({ 
+  commentId, 
+  commentUserId, 
+  onEdit, 
+  onDelete 
+}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Get the current user's ID from local storage
+  const currentUserId = getCache<{ id: string }>("authData")?.id;
+
+  // Check if the current user is the author of the comment
+  const isAuthor = currentUserId === commentUserId;
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -20,6 +31,11 @@ export const CommentOptionsButton: React.FC<CommentOptionsButtonProps> = ({ comm
     onDelete();
     setIsOpen(false);
   };
+
+  // If the user is not the author, don't render the button at all
+  if (!isAuthor) {
+    return null;
+  }
 
   return (
     <div className="relative">
@@ -57,11 +73,6 @@ export const CommentOptionsButton: React.FC<CommentOptionsButtonProps> = ({ comm
             <li>
               <button onClick={handleDelete} className='block w-full text-left py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>
                 Remove
-              </button>
-            </li>
-            <li>
-              <button className='block w-full text-left py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>
-                Report
               </button>
             </li>
           </ul>

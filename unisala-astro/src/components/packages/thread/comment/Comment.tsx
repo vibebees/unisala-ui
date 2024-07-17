@@ -5,8 +5,6 @@ import ThreadHeader from "../organism/ThreadHeader";
 import EditComments from "./EditComment";
 import { ThreadFooter } from "../organism";
 import { useAuth } from "@/context/AuthContext";
-import CommentOptions from "./CommentOptions";
-import AuthValidator from "@/components/packages/authentication/AuthValidator";
 
 interface CommentProps {
   __typename?: "Comment";

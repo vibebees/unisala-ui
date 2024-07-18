@@ -153,7 +153,6 @@ const handleUpvote = async (postId: string) => {
   }
 };
 
-console.log(post?.user)
 ---
 
 <MainLayout title={post ? `${heading}` : 'Thread'}>
@@ -178,20 +177,20 @@ console.log(post?.user)
         </li>
         {/* <ThreadAction
           heading={heading}
-          username={post.user.username}
+          username={post?.user.username}
           date={formatDate(post.date)}
           claps={post.upVoteCount}
           comments={post.postCommentsCount}
         /> */}
         <ThreadActionTsx
           heading={heading}
-          username={post.user.username}
-          date={post.date}
-          comments={post.postCommentsCount}
+          username={post?.user?.username}
+          date={post?.date}
+          comments={post?.postCommentsCount}
           postId={slug}
-          initialClaps={post.upVoteCount}
+          initialClaps={post?.upVoteCount}
           client:only 'react'
-          upVoted={post.upVoted}
+          upVoted={post?.upVoted}
         />
           
       </ul>

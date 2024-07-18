@@ -29,7 +29,6 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
   const [upvoteCount, setUpvoteCount] = useState(initialClaps);
   const [bookmarkOn, setBookmarkOn] = useState(false);
   const [copyLink, setCopyLink] = useState(false);
-
   const [UpVotePost, { loading }] = useAstroMutation(UpVote, {
     context: { server: USER_SERVICE_GQL },
     variables: {
@@ -86,6 +85,7 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
   commentList = data?.getCommentList
 
   const [isUpvoted, setIsUpvoted] = useState(commentList?.isPostUpVotedByCurrentUser);
+
   return (
     <div className={`flex items-center justify-between text-gray-500 ${showBorder && "border-t border-b"} py-4`}>
       <div className="flex items-center space-x-4">

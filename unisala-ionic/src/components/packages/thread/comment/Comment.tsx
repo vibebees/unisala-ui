@@ -81,6 +81,7 @@ const Comment: FC<CommentProps> = ({
         <AuthValidator>
           <ThreadFooter
             _id={_id}
+            postId={postId}
             isReply={true}
             parentId={parentId || _id}
             replyTo={user?.username}

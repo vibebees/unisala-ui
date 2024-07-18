@@ -1,0 +1,44 @@
+---
+import { formatCommentDate } from "@/utils/date";
+import { cn } from "@/utils/lib/utils";
+import { Icon } from "astro-icon/components";
+import type { HTMLAttributes } from "astro/types";
+// import ThreadAction from "@/components/thread/thread.action.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  heading: string;
+  username: string;
+  date: string;
+  claps: number;
+  comments: number;
+  className?: string;
+  firstName?: string;
+  lastName?: string;
+}
+const { heading, username, date, claps, comments, firstName, lastName, className, ...attrs } = Astro.props;
+---
+
+<div class={cn("space-y-4", className)} {...attrs}>
+  <h1 class="font-heading text-4xl mb-4 leading-tight">
+    {heading}
+  </h1>
+  <div class="flex items-center space-x-4 text-sm mb-6">
+    <span class="font-larget">{firstName} {lastName}</span>
+    <!-- <span class="font-medium">@{firstName} {lastName}</span> -->
+
+    <!-- <span class="text-green-600 hover:text-green-700 font-large">Follow</span> -->
+  </div>
+  <div class="text-gray-500 text-sm">
+    {formatCommentDate(date)}
+  </div>
+
+
+  <!-- <ThreadAction
+    heading={heading}
+    username={username}
+    date={date}
+    claps={claps}
+    comments={comments}
+    showBorder={true}
+  /> -->
+</div>

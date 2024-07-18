@@ -30,13 +30,18 @@ function ShowOtherComments({
       context: { server: USER_SERVICE_GQL },
     });
 
-  const [comments, setComments] = useState(data?.commentList?.data ?? []);
-  const [commentToShow, setCommentToShow] = useState(
-    data?.commentList?.data[0] ?? {}
-  );
+  const showValidComments = (commentData = []) => {
+    return commentData.filter((comment: { postId?: string }) => comment?.postId);
+  }
+
+  const [ comments, setComments ] = useState(data?.commentList?.data ?? []);
+  const commentsList = data?.commentList?.data ?? [];
+  const [commentToShow, setCommentToShow] = useState(showValidComments( commentsList ?? [])  );
 
   useEffect(() => {
     if (postId !== null && parentId !== null) {
+  console.log({postId, parentId})
+
       getCommentList({
         variables: {
           postId,

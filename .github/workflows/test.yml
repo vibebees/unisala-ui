@@ -30,13 +30,17 @@ jobs:
         run: |
           npm install
           npm run build
+          cp package.json dist/
+          cp package-lock.json dist/
+          cp start-astro-server.mjs dist/
+
         working-directory: unisala-astro
 
   # Prepare and clear the deployment directory on the server
       - name: Clear deployment directory
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.200.175.61"
+          host: "65.0.152.95"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
@@ -52,7 +56,7 @@ jobs:
       - name: Deploy Ionic build artifacts
         uses: appleboy/scp-action@master
         with:
-          host: "13.200.175.61"
+          host: "65.0.152.95"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
@@ -63,18 +67,31 @@ jobs:
       - name: Deploy Astro build artifacts
         uses: appleboy/scp-action@master
         with:
-          host: "13.200.175.61"
+          host: "65.0.152.95"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
           source: "unisala-astro/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
           target: "~/unisala-web/"
 
+
+      # Install production dependencies for Astro
+      - name: Install Astro production dependenciesls
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "65.0.152.95"
+          username: "ec2-user"
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/unisala-web/unisala-astro/dist
+            npm install --production
+
       # Reload Nginx to apply changes
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "13.200.175.61"
+          host: "65.0.152.95"
           username: "ec2-user"
           key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           port: 22
@@ -83,4 +100,3 @@ jobs:
             echo "Nginx reloaded for both Ionic and Astro"
             pm2 restart unisala-astro
             pm2 restart unisala-ionic
-

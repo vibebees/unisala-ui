@@ -50,8 +50,7 @@ Lighthouse score of 100, indicating that it meets the highest standards in perfo
 ## Component Diagram
 ![blog](public/AstroLayoutDiagram.drawio.svg)
 
-## Application Design
-![blog](public/screenshot.png)
+
 
 Clone this repository to get started with your project:
 

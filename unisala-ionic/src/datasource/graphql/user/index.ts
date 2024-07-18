@@ -892,6 +892,7 @@ export const Login = gql`
         upVotesCount
         success
         message
+        voteExist
       }
     }
   `,

@@ -16,6 +16,7 @@ import { GetSavedList } from "@datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@datasource/servers/types";
 
 function index({ userId, firstName }) {
+  console.log({userId, firstName})
   return (
     <Query
       query={GetSavedList}

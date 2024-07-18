@@ -1,0 +1,13 @@
+---
+import StepOne from "@/pages/welcome-form/intro.astro";
+import StepSecond from "@/pages/welcome-form/step-one.astro";
+
+const searchParams = Astro.url.searchParams;
+
+const step = searchParams.get("step");
+
+---
+
+<div>
+  <StepSecond />
+</div>

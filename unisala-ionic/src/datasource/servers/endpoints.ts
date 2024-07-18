@@ -65,39 +65,32 @@ const {
     });
   }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-    try {
-      if (graphQLErrors) {
-        for (let err of graphQLErrors) {
-          const { message } = err || {};
-          const { statusCode } = JSON.parse(message) || {};
-          switch (statusCode) {
-            // case 400:
-            case 401:
-              return fromPromise(
-                getNewToken().catch((error) => {
-                  return error; // Consider whether you should be returning 'error' here
-                })
-              )
-                .filter((value) => {
-                  return Boolean(value);
-                })
-                .flatMap((accessToken) => {
-                  const oldHeaders = operation.getContext().headers;
-                  operation.setContext({
-                    headers: {
-                      ...oldHeaders,
-                      authorization: `Bearer ${accessToken}`,
-                    },
-                  });
-                  return forward(operation);
-                });
+    if (graphQLErrors) {
+      for (let err of graphQLErrors) {
+        console.log(`[GraphQL error]: Message: ${err.message}`);
 
-            default:
-          }
+        // If you have specific error codes you want to handle, you can still do so
+        // but don't try to parse the message as JSON
+        if (err.extensions && err.extensions.code === 'UNAUTHENTICATED') {
+          return fromPromise(
+            getNewToken().catch((error) => {
+              console.error('Failed to get new token:', error);
+              return null;
+            })
+          )
+            .filter(Boolean)
+            .flatMap((accessToken) => {
+              const oldHeaders = operation.getContext().headers;
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: `Bearer ${accessToken}`,
+                },
+              });
+              return forward(operation);
+            });
         }
       }
-    } catch (err) {
-      console.log(err);
     }
 
     if (networkError) {

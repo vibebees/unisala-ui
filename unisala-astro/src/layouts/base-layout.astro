@@ -6,16 +6,28 @@ type Props = {
   title: string;
   description?: string;
   bodyClass?: string;
+  ogImage?: string;
+  ogType?: string;
+  author?: string;
+  publishedTime?: string;
 };
 
-const { title, description, bodyClass } = Astro.props;
+const { title, description, bodyClass, ogImage, ogType, author, publishedTime } = Astro.props;
 ---
 
 
 
 <html lang="en" class="scroll-smooth">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead 
+      title={title} 
+      description={description} 
+      image={ogImage}
+      ogType={ogType}
+      author={author}
+      publishedTime={publishedTime}
+    />
+    
   </head>
   <body class={cn("flex flex-col min-h-screen", bodyClass)}>
     <slot />

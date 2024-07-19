@@ -10,9 +10,14 @@ type Props = {
   title: string;
   description?: string;
   mainClass?: string;
+  bodyClass?: string;
+  ogImage?: string;
+  ogType?: string;
+  author?: string;
+  publishedTime?: string;
 };
 
-const { title, description, mainClass } = Astro.props;
+const { title, description, mainClass , ogImage, ogType, author, publishedTime} = Astro.props;
 
 
 
@@ -22,7 +27,14 @@ const gaId = import.meta.env.GA_ID || 'G-MD5HNN6SQS';
 
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+ title={title} 
+ description={description}   
+ ogImage ={ogImage} 
+ ogType ={ogType} 
+ author ={author}
+ publishedTime={publishedTime}
+ >
   <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
   <script define:vars={{ gaId }}>
     window.dataLayer = window.dataLayer || [];

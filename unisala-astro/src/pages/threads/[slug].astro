@@ -155,7 +155,14 @@ const handleUpvote = async (postId: string) => {
 
 ---
 
-<MainLayout title={post ? `${heading}` : 'Thread'}>
+<MainLayout
+ title={post ? `${heading}` : 'Thread'}
+ ogType="article"
+  description={post ? linkifiedText : 'Loading...'}
+  ogImage={post?.postImage}
+  author={post?.user?.firstName + ' ' + post?.user?.lastName}
+  publishedTime={post?.date}
+>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
   

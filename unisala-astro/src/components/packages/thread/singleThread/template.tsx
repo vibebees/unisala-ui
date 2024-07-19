@@ -93,16 +93,17 @@ const SingleThread: FC<SingleThreadProps> = ({
           'edit'
         ) : (
           <>
+           {images && images.length > 0 && (
+              // 'image'
+              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
+            )}
             <ThreadExpand
               htmlText={postText!}
               _id={_id}
               tags={tags as any}
               videoURL={videoURL}
             />
-            {images && images.length > 0 && (
-              // 'image'
-              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
-            )}
+           
           </>
         )}
       </div>

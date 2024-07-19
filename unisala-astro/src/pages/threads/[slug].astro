@@ -153,13 +153,14 @@ const handleUpvote = async (postId: string) => {
   }
 };
 
+let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.png';
 ---
 
 <MainLayout
  title={post ? `${heading}` : 'Thread'}
  ogType="article"
   description={post ? linkifiedText : 'Loading...'}
-  ogImage={post?.postImage}
+  ogImage={postImages}
   author={post?.user?.firstName + ' ' + post?.user?.lastName}
   publishedTime={post?.date}
 >

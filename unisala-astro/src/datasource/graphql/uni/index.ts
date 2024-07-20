@@ -1,4 +1,5 @@
-import { gql } from "@apollo/client"
+/* eslint-disable no-unused-vars */
+import { gql } from "@apollo/client";
 
 export const GetProfessor = gql`
     query GetProfessor(
@@ -615,13 +616,73 @@ export const GetProfessor = gql`
     }
   `,
   searchDepartmentRatingForSchool = gql`
-  query searchDepartmentRatingForSchool($subject: String  $unitId: Int) {
-    searchDepartmentRatingForSchool(subject: $subject, unitId: $unitId) {
-      unitId
-      ratings_list
-      subject
-      overall_rating
-      overall_rating
+    query searchDepartmentRatingForSchool($subject: String, $unitId: Int) {
+      searchDepartmentRatingForSchool(subject: $subject, unitId: $unitId) {
+        unitId
+        ratings_list
+        subject
+        overall_rating
+        overall_rating
+      }
     }
-  }
-`
+  `,
+  ScholarshipV2 = gql`
+    query searchScholarshipV2(
+      $scholarshipType: ScholarshipTypeEnum
+      $level: LevelTypeEnum
+      $internationalSpecific: Boolean
+      $transferSpecific: Boolean
+      $forUndergraduate: Boolean
+      $forGraduate: Boolean
+      $gpa: RangeInput
+      $act: RangeInput
+      $sat: RangeInput
+      $gre: RangeInput
+      $gmat: RangeInput
+      $page: Int
+      $pageSize: Int
+    ) {
+      searchScholarshipV2(
+        scholarshipType: $scholarshipType
+        level: $level
+        internationalSpecific: $internationalSpecific
+        transferSpecific: $transferSpecific
+        forUndergraduate: $forUndergraduate
+        forGraduate: $forGraduate
+        gpa: $gpa
+        act: $act
+        sat: $sat
+        gre: $gre
+        gmat: $gmat
+        page: $page
+        pageSize: $pageSize
+      ) {
+        unitId
+        university_name
+        scholarship_name
+        international_specific
+        level
+        transfer_specific
+        scholarship_url
+        gpa {
+          max
+          min
+        }
+        act {
+          max
+          min
+        }
+        sat {
+          max
+          min
+        }
+        awards {
+          award_name
+          scholarship_amount {
+            amount
+            disbursement_schedule
+          }
+        }
+      }
+    }
+  `;

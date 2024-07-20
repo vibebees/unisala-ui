@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 interface IPost {
   __typename: string;
   section: string;
@@ -62,7 +63,7 @@ interface IPost {
       _id: string;
       name: string;
     };
-  }
+  };
 }
 
 interface IEvent {

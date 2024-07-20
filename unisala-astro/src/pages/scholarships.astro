@@ -2,6 +2,123 @@
 import MainLayout from "@/layouts/main-layout.astro";
 import ScholarshipCard from "@/components/scholarship/ScholarshipCard.astro";
 import Filter from "@/components/scholarship/Filter";
+import { fetchApi } from "@/utils/api.utility";
+import type { Variable } from "lucide-react";
+
+const query = `query searchScholarshipV2(
+      $scholarshipType: String
+      $level: String
+      $internationalSpecific: String
+      $transferSpecific: String
+      $forUndergraduate: String
+      $forGraduate: String
+      $gpa: RangeInput
+      $act: RangeInput
+      $sat: RangeInput
+      $gre: RangeInput
+      $gmat: RangeInput
+      $page: Int
+      $pageSize: Int
+    ) {
+      searchDepartmentRatingForSchool(
+        scholarshipType: $scholarshipType
+        level: $level
+        internationalSpecific: $internationalSpecific
+        transferSpecific: $transferSpecific
+        forUndergraduate: $forUndergraduate
+        forGraduate: $forGraduate
+        gpa: $gpa
+        act: $act
+        sat: $sat
+        gre: $gre
+        gmat: $gmat
+        page: $page
+        pageSize: $pageSize
+      ) {
+        unitId
+        university_name
+        scholarship_name
+        international_specific
+        level
+        transfer_specific
+        scholarship_url
+        gpa {
+          max
+          min
+        }
+        act {
+          max
+          min
+        }
+        sat {
+          max
+          min
+        }
+        awards {
+          award_name
+          scholarship_amount {
+            amount
+            disbursement_schedule
+          }
+        }
+        non_score_eligibility_requirements
+        highestLevelOfOffering
+        undergraduateOffering
+        graduateOffering
+        grantsMedicalDegree
+        grantsMedicalDegree
+        hasHospital
+        missionStatement
+        bio
+        briefAddress
+        ownType
+        pictures
+        tags
+}
+        }
+    `;
+try {
+  const result = await fetchApi("http://localhost:9999/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      Variables: {
+        scholarshipType: "MERIT_BASED",
+        level: "Undergraduate",
+        internationalSpecific: "yes",
+        transferSpecific: "no",
+        forUndergraduate: "yes",
+        forGraduate: "no",
+        gpa: {
+          min: 3.0,
+          max: 4.0,
+        },
+        act: {
+          min: 20,
+          max: 30,
+        },
+        sat: {
+          min: 1000,
+          max: 1200,
+        },
+        gre: {
+          min: 0,
+          max: 0,
+        },
+        gmat: {
+          min: 0,
+          max: 0,
+        },
+        page: 1,
+        pageSize: 10,
+      },
+    }),
+  });
+  // console.log("result", result);
+} catch (error) {}
 ---
 
 <MainLayout title="Discover Scholarships">

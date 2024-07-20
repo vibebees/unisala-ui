@@ -1,27 +1,8 @@
 import React, { useState } from "react";
-import {
-  University,
-  Star,
-  GraduationCap,
-  Award,
-  DollarSign,
-  CalendarDays,
-  CheckCircle,
-  Info,
-  ClipboardList,
-  RefreshCw,
-  Book,
-  AlertCircle,
-  PlusCircle,
-  Layers,
-  UserCheck,
-  ChevronDown,
-  ArrowRight,
-} from "lucide-react";
 
 interface IAward {
-  award_name: string;
-  scholarship_amount: {
+  award_name?: string;
+  scholarship_amount?: {
     amount: string;
     disbursement_schedule: string;
   };
@@ -44,7 +25,9 @@ interface Scholarship {
   sat: { min: number; max: number };
   act: { min: number; max: number };
   awards: IAward[];
-  application_deadline: string;
+  international_specific: boolean;
+  transfer_specific: boolean;
+  application_deadline: string | null;
   eligible_majors: string[];
   duration: number;
   duration_description: string;
@@ -62,239 +45,177 @@ interface ScholarshipCardProps {
 const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const renderIfAvailable = (value: any, render: (val: any) => JSX.Element) => {
-    return value !== undefined && value !== null && value !== ""
-      ? render(value)
-      : null;
-  };
-
   return (
-    <div className="bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden mb-8 w-full font-inter">
-      <div className="bg-blue-50 p-6 border-b border-gray-200 flex justify-between items-center transition-colors duration-300 hover:bg-blue-100">
+    <div className="scholarship-card">
+      <div className="card-header">
         <div>
-          {renderIfAvailable(scholarship.scholarship_name, (name) => (
-            <h2 className="text-2xl font-semibold text-gray-700">{name}</h2>
-          ))}
-          {renderIfAvailable(scholarship.university_name, (uniName) => (
-            <p className="text-blue-600 flex items-center gap-2 mt-2">
-              <University size={18} /> {uniName}
-            </p>
-          ))}
+          <h2 className="title">{scholarship?.scholarship_name}</h2>
+          <p className="institution">
+            <i className="fas fa-university"></i>
+            {scholarship?.university_name}
+          </p>
         </div>
-        <button className="inline-flex items-center gap-2 bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-full font-medium text-sm hover:bg-blue-600 hover:text-white transition-colors duration-300">
-          <Star size={18} /> Favorite
+        <button className="favorite-btn">
+          <i className="fas fa-star"></i> Favorite
         </button>
       </div>
-
-      <div className="p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {renderIfAvailable(scholarship.level, (level) => (
-            <InfoItem icon={GraduationCap} label="Level" value={level} />
-          ))}
-          {renderIfAvailable(scholarship.scholarship_type, (type) => (
-            <InfoItem icon={Award} label="Type" value={type} />
-          ))}
-          {renderIfAvailable(
-            scholarship.awards?.[0]?.scholarship_amount,
-            (amount) => (
-              <InfoItem
-                icon={DollarSign}
-                label="Amount"
-                value={`${amount.amount} ${amount.disbursement_schedule}`}
-                className="text-green-500 font-semibold"
-              />
-            )
+      <div className="card-body">
+        <div className="info-grid">
+          <div className="info-item">
+            <span className="label">
+              <i className="fas fa-graduation-cap"></i> Level
+            </span>
+            <span className="value">{scholarship?.level}</span>
+          </div>
+          <div className="info-item">
+            <span className="label">
+              <i className="fas fa-award"></i> Type
+            </span>
+            <span className="value">{scholarship.scholarship_type}</span>
+          </div>
+          {scholarship.awards.length > 0 &&
+            scholarship.awards[0]?.scholarship_amount && (
+              <div className="info-item">
+                <span className="label">
+                  <i className="fas fa-dollar-sign"></i> Amount
+                </span>
+                <span className="value amount">
+                  {scholarship.awards[0].scholarship_amount.amount}
+                  {
+                    scholarship.awards[0].scholarship_amount
+                      .disbursement_schedule
+                  }
+                </span>
+              </div>
+            )}
+          {scholarship.application_deadline && (
+            <div className="info-item">
+              <span className="label">
+                <i className="fas fa-calendar-alt"></i> Deadline
+              </span>
+              <span className="value deadline">
+                {new Date(
+                  scholarship?.application_deadline
+                ).toLocaleDateString()}
+              </span>
+            </div>
           )}
-          {renderIfAvailable(scholarship.application_deadline, (deadline) => (
-            <InfoItem
-              icon={CalendarDays}
-              label="Deadline"
-              value={new Date(deadline).toLocaleDateString()}
-              className="text-red-600 font-medium"
-            />
-          ))}
         </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg text-blue-600 font-medium flex items-center gap-2 mb-3">
-            <CheckCircle size={20} /> Eligibility Criteria
+        <div className="eligibility">
+          <h3>
+            <i className="fas fa-check-circle"></i> Eligibility Criteria
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {renderIfAvailable(scholarship.gpa, (gpa) => (
-              <EligibilityItem
-                icon={GraduationCap}
-                label="GPA"
-                value={`${gpa.min} - ${gpa.max}`}
-              />
-            ))}
-            {renderIfAvailable(scholarship.sat, (sat) => (
-              <EligibilityItem
-                icon={GraduationCap}
-                label="SAT"
-                value={`${sat.min} - ${sat.max}`}
-              />
-            ))}
-            {renderIfAvailable(scholarship.act, (act) => (
-              <EligibilityItem
-                icon={GraduationCap}
-                label="ACT"
-                value={`${act.min} - ${act.max}`}
-              />
-            ))}
+          <div className="eligibility-grid">
+            <div className="eligibility-item">
+              <i className="fas fa-graduation-cap"></i>
+              <span className="label">GPA</span>
+              <span className="value">
+                {scholarship?.gpa.min} - {scholarship?.gpa.max}
+              </span>
+            </div>
+            <div className="eligibility-item">
+              <i className="fas fa-file-alt"></i>
+              <span className="label">SAT</span>
+              <span className="value">
+                {scholarship?.sat?.min} - {scholarship?.sat?.max}
+              </span>
+            </div>
+            <div className="eligibility-item">
+              <i className="fas fa-pencil-alt"></i>
+              <span className="label">ACT</span>
+              <span className="value">
+                {scholarship?.act?.min} - {scholarship?.act?.max}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="bg-gray-50 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-        {renderIfAvailable(scholarship.scholarship_url, (url) => (
-          <a
-            href={url}
-            className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium text-sm hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2"
-          >
-            Apply Now <ArrowRight size={18} />
-          </a>
-        ))}
+      <div className="card-footer">
+        <a href={scholarship.scholarship_url} className="apply-btn">
+          Apply Now <i className="fas fa-arrow-right"></i>
+        </a>
         <button
-          onClick={() => setExpanded(!expanded)}
-          className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded-full font-medium text-sm hover:bg-blue-50 transition-colors duration-300 flex items-center gap-2"
+          className="expand-btn"
+          aria-expanded={expanded}
+          onClick={(e) => {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }}
         >
-          {expanded ? "Show Less" : "Show More"}
-          <ChevronDown
-            size={18}
-            className={`transform transition-transform duration-300 ${
-              expanded ? "rotate-180" : ""
-            }`}
-          />
+          <span className="expand-text">Show More</span>
+          <span className="collapse-text">Show Less</span>
+          <i className="fas fa-chevron-down"></i>
         </button>
       </div>
-
-      {expanded && (
-        <div className="bg-gray-50 p-6 border-t border-gray-200">
-          <h3 className="text-xl text-blue-600 font-medium flex items-center gap-2 mb-4">
-            <Info size={20} /> Additional Information
-          </h3>
-          {renderIfAvailable(
-            scholarship.application_requirements,
-            (requirements) => (
-              <ExpandedSection
-                title="Application Requirements"
-                icon={ClipboardList}
-              >
-                <ul className="list-none pl-6">
-                  {requirements.map((req, index) => (
-                    <li
-                      key={index}
-                      className="mb-2 relative before:content-['✓'] before:absolute before:-left-6 before:text-green-600"
-                    >
-                      {req}
-                    </li>
-                  ))}
-                </ul>
-              </ExpandedSection>
-            )
-          )}
-          {renderIfAvailable(scholarship.renewal_criteria, (criteria) => (
-            <ExpandedSection title="Renewal Criteria" icon={RefreshCw}>
-              {renderIfAvailable(criteria.min_gpa, (gpa) => (
-                <p className="flex items-center gap-2 mb-2">
-                  <GraduationCap size={18} className="text-blue-600" />
-                  Minimum GPA:{" "}
-                  <span className="font-semibold text-blue-600">{gpa}</span>
-                </p>
+      <div className="expanded-content">
+        <h3 className="expanded-title">
+          <i className="fas fa-info-circle"></i> Additional Information
+        </h3>
+        {scholarship?.application_requirements.length > 0 && (
+          <div className="expanded-section">
+            <h4>
+              <i className="fas fa-clipboard-list"></i> Application Requirements
+            </h4>
+            <ul>
+              {scholarship?.application_requirements.map((req, index) => (
+                <li key={index}>{req}</li>
               ))}
-              {renderIfAvailable(criteria.min_credit_hours, (hours) => (
-                <p className="flex items-center gap-2 mb-2">
-                  <Book size={18} className="text-blue-600" />
-                  Minimum Credit Hours:{" "}
-                  <span className="font-semibold text-blue-600">{hours}</span>
-                </p>
-              ))}
-              {renderIfAvailable(criteria.other_requirements, (other) => (
-                <p className="flex items-center gap-2">
-                  <AlertCircle size={18} className="text-blue-600" />
-                  Other: {other}
-                </p>
-              ))}
-            </ExpandedSection>
-          ))}
-          <ExpandedSection title="Additional Information" icon={PlusCircle}>
-            {renderIfAvailable(scholarship.duration_description, (duration) => (
-              <p className="mb-2">
-                <CalendarDays size={18} className="text-blue-600 inline mr-2" />
-                Duration: {duration}
-              </p>
-            ))}
-            {renderIfAvailable(scholarship.stackable, (stackable) => (
-              <p className="mb-2">
-                <Layers size={18} className="text-blue-600 inline mr-2" />
-                Stackable:{" "}
-                <span className="font-semibold text-blue-600">
-                  {stackable ? "Yes" : "No"}
-                </span>
-              </p>
-            ))}
-            {renderIfAvailable(
-              scholarship.special_instructions,
-              (instructions) => (
-                <p className="mb-2">
-                  <Info size={18} className="text-blue-600 inline mr-2" />
-                  Special Instructions: {instructions}
-                </p>
-              )
-            )}
-            {renderIfAvailable(
-              scholarship.non_score_eligibility_requirements,
-              (requirements) => (
-                <p>
-                  <UserCheck size={18} className="text-blue-600 inline mr-2" />
-                  Non-Score Eligibility: {requirements}
-                </p>
-              )
-            )}
-          </ExpandedSection>
+            </ul>
+          </div>
+        )}
+        <div className="expanded-section">
+          <h4>
+            <i className="fas fa-sync-alt"></i> Renewal Criteria
+          </h4>
+          <p>
+            <i className="fas fa-graduation-cap"></i> Minimum GPA:{" "}
+            <span className="highlight">
+              {scholarship?.renewal_criteria?.min_gpa}
+            </span>
+          </p>
+          <p>
+            <i className="fas fa-book"></i> Minimum Credit Hours:{" "}
+            <span className="highlight">
+              {scholarship?.renewal_criteria?.min_credit_hours}
+            </span>
+          </p>
+          <p>
+            <i className="fas fa-exclamation-circle"></i> Other:{" "}
+            {scholarship?.renewal_criteria?.other_requirements}
+          </p>
         </div>
-      )}
+        <div className="expanded-section">
+          <h4>
+            <i className="fas fa-plus-circle"></i> Additional Information
+          </h4>
+          {scholarship?.duration_description && (
+            <p>
+              <i className="fas fa-calendar-alt"></i> Duration:{" "}
+              {scholarship?.duration_description}
+            </p>
+          )}
+          <p>
+            <i className="fas fa-layer-group"></i> Stackable:{" "}
+            <span className="highlight">
+              {scholarship?.stackable ? "Yes" : "No"}
+            </span>
+          </p>
+          {scholarship?.special_instructions && (
+            <p>
+              <i className="fas fa-info-circle"></i> Special Instructions:{" "}
+              {scholarship?.special_instructions}
+            </p>
+          )}
+          {scholarship?.non_score_eligibility_requirements && (
+            <p>
+              <i className="fas fa-user-check"></i> Non-Score Eligibility:{" "}
+              {scholarship?.non_score_eligibility_requirements}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
-
-const InfoItem: React.FC<{
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  className?: string;
-}> = ({ icon: Icon, label, value, className }) => (
-  <div className="flex flex-col">
-    <span className="text-sm text-gray-600 mb-1 flex items-center gap-2">
-      <Icon size={18} className="text-blue-600" /> {label}
-    </span>
-    <span className={`text-base text-gray-800 ${className}`}>{value}</span>
-  </div>
-);
-
-const EligibilityItem: React.FC<{
-  icon: React.ElementType;
-  label: string;
-  value: string;
-}> = ({ icon: Icon, label, value }) => (
-  <div className="flex flex-col items-center text-center border border-gray-200 rounded-lg p-3 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-    <Icon size={24} className="text-blue-600 mb-2" />
-    <span className="text-sm text-gray-600 mb-1">{label}</span>
-    <span className="text-base font-semibold text-gray-800">{value}</span>
-  </div>
-);
-
-const ExpandedSection: React.FC<{
-  title: string;
-  icon: React.ElementType;
-  children: React.ReactNode;
-}> = ({ title, icon: Icon, children }) => (
-  <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 transition-all duration-300 hover:shadow-md hover:scale-[1.01]">
-    <h4 className="text-lg text-blue-600 font-medium flex items-center gap-2 mb-3">
-      <Icon size={20} /> {title}
-    </h4>
-    {children}
-  </div>
-);
 
 export default ScholarshipCard;

@@ -1,8 +1,9 @@
 ---
 import MainLayout from "@/layouts/main-layout.astro";
 import ScholarshipCard from "@/components/scholarship/ScholarshipCard.astro";
-import Filter from "@/components/scholarship/Filter";
+import ScholarShip from "@/components/scholarship/ScholarShip";
 import { fetchApi } from "@/utils/api.utility";
+import "../styles/scholarship.css";
 import type { Variable } from "lucide-react";
 
 const query = `query searchScholarshipV2(
@@ -128,7 +129,8 @@ try {
         <div class="scholarship-title">
           <h1 class="font-bold">Available Scholarships</h1>
         </div>
-        <Filter client:only="react" />
+
+        <ScholarShip client:only="react" />
       </div>
 
       <div class="grid-container">

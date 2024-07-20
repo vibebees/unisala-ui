@@ -660,6 +660,7 @@ export const GetProfessor = gql`
         unitId
         university_name
         scholarship_name
+        scholarship_type
         international_specific
         level
         transfer_specific
@@ -683,6 +684,14 @@ export const GetProfessor = gql`
             disbursement_schedule
           }
         }
+        application_requirements
+        application_deadline
+        eligible_majors
+        duration
+        duration_description
+        special_instructions
+        non_score_eligibility_requirements
+        stackable
       }
     }
   `;

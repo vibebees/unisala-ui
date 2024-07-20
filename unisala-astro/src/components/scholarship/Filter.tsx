@@ -8,9 +8,6 @@ import {
 } from "@/components/ui/select";
 import { X } from "lucide-react";
 import { updateSearchParam } from "@/utils/lib/urlParamsUtils";
-import { useAstroQuery } from "@/datasource/apollo-client";
-import { ScholarshipV2 } from "@/datasource/graphql/uni";
-import { UNIVERSITY_SERVICE_GQL } from "@/datasource/servers/types";
 
 interface FilterState {
   gpa: string;
@@ -30,14 +27,6 @@ const initialState: FilterState = {
 
 const Filter: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>(initialState);
-
-  const { data, loading, error } = useAstroQuery(ScholarshipV2, {
-    context: { server: UNIVERSITY_SERVICE_GQL },
-    fetchPolicy: "cache-and-network",
-    variables: {
-      scholarshipType: "MERIT_BASED",
-    },
-  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -61,14 +50,6 @@ const Filter: React.FC = () => {
       [key]: value,
     }));
   };
-
-  console.log("loading", loading);
-  console.log("error", error);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message || "error message"}</div>;
-
-  console.log("data from scholarship", data);
 
   return (
     <div className="relative mt-4">

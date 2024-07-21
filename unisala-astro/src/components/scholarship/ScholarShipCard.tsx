@@ -163,27 +163,38 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
             </ul>
           </div>
         )}
-        <div className="expanded-section">
-          <h4>
-            <i className="fas fa-sync-alt"></i> Renewal Criteria
-          </h4>
-          <p>
-            <i className="fas fa-graduation-cap"></i> Minimum GPA:{" "}
-            <span className="highlight">
-              {scholarship?.renewal_criteria?.min_gpa}
-            </span>
-          </p>
-          <p>
-            <i className="fas fa-book"></i> Minimum Credit Hours:{" "}
-            <span className="highlight">
-              {scholarship?.renewal_criteria?.min_credit_hours}
-            </span>
-          </p>
-          <p>
-            <i className="fas fa-exclamation-circle"></i> Other:{" "}
-            {scholarship?.renewal_criteria?.other_requirements}
-          </p>
-        </div>
+        {scholarship?.renewal_criteria?.min_gpa ||
+          scholarship?.renewal_criteria?.min_credit_hours ||
+          (scholarship?.renewal_criteria?.other_requirements && (
+            <div className="expanded-section">
+              <h4>
+                <i className="fas fa-sync-alt"></i> Renewal Criteria
+              </h4>
+              {scholarship?.renewal_criteria?.min_gpa && (
+                <p>
+                  <i className="fas fa-graduation-cap"></i> Minimum GPA:{" "}
+                  <span className="highlight">
+                    {scholarship?.renewal_criteria?.min_gpa}
+                  </span>
+                </p>
+              )}
+              {scholarship?.renewal_criteria?.min_credit_hours && (
+                <p>
+                  <i className="fas fa-book"></i> Minimum Credit Hours:{" "}
+                  <span className="highlight">
+                    {scholarship?.renewal_criteria?.min_credit_hours}
+                  </span>
+                </p>
+              )}
+              {scholarship?.renewal_criteria?.other_requirements && (
+                <p>
+                  <i className="fas fa-exclamation-circle"></i> Other:{" "}
+                  {scholarship?.renewal_criteria?.other_requirements}
+                </p>
+              )}
+            </div>
+          ))}
+        {/* Addition information CARD */}
         <div className="expanded-section">
           <h4>
             <i className="fas fa-plus-circle"></i> Additional Information

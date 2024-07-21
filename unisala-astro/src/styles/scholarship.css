@@ -70,7 +70,7 @@
 
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
     margin-top: 1rem;
@@ -419,6 +419,29 @@
 
 .scholarship-card:has(.expand-btn[aria-expanded="true"]) .expand-btn .collapse-text {
     display: inline;
+}
+
+.apply-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    transition: all 0.5s ease-in-out
+}
+
+.apply-btn:hover {
+    background-color: #006eff98;
+    color: #ffffff;
+
+
+}
+
+.apply-btn i {
+    transition: transform 0.5s ease-in-out;
+}
+
+.apply-btn:hover.apply-btn i {
+    transform: translateX(5px);
+
 }
 
 @media (max-width: 640px) {

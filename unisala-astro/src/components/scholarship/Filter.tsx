@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -8,26 +8,15 @@ import {
 } from "@/components/ui/select";
 import { X } from "lucide-react";
 import { updateSearchParam } from "@/utils/lib/urlParamsUtils";
+import { initialState, type FilterState } from "./ScholarShip";
+import DropdownInput from "./DropDownInput";
 
-interface FilterState {
-  gpa: string;
-  sat: string;
-  act: string;
-  amount: string;
-  level: string;
+interface FilterProps {
+  filters: FilterState;
+  setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
 }
 
-const initialState: FilterState = {
-  gpa: "",
-  sat: "",
-  act: "",
-  amount: "",
-  level: "",
-};
-
-const Filter: React.FC = () => {
-  const [filters, setFilters] = useState<FilterState>(initialState);
-
+const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const newFilters = Object.keys(initialState).reduce((acc, key) => {
@@ -75,54 +64,43 @@ const Filter: React.FC = () => {
               <SelectValue placeholder="Select level" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="undergraduate">Undergraduate</SelectItem>
-              <SelectItem value="graduate">Graduate</SelectItem>
-              <SelectItem value="postgraduate">Postgraduate</SelectItem>
+              <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+              <SelectItem value="Graduate">Graduate</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* Amount Select */}
-        <div>
+        {/* <div>
           <label
             htmlFor="amount"
             className="text-sm font-medium text-neutral-800"
           >
             Amount
           </label>
-          <Select
-            onValueChange={(value) => handleChange("amount", value)}
+          <DropdownInput
+            placeholder="Amount"
             value={filters.amount}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Amount" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5000-10000">5000 - 10000</SelectItem>
-              <SelectItem value="10000-20000">10000 - 20000</SelectItem>
-              <SelectItem value="20000-50000">20000 - 50000</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+            onChange={(value) => handleChange("amount", value)}
+            options={["5000-10000", "10000-20000", "20000-50000"]}
+            formatOption={(option) => `$${option}`}
+            inputMode="numeric"
+          />
+        </div> */}
 
         {/* SAT Score Select */}
         <div>
           <label htmlFor="sat" className="text-sm font-medium text-neutral-800">
             SAT Score
           </label>
-          <Select
-            onValueChange={(value) => handleChange("sat", value)}
+          <DropdownInput
+            placeholder="SAT Score"
+            onChange={(value) => handleChange("sat", value)}
+            options={["1000-1200", "1200-1400", "1400-1600"]}
+            formatOption={(option) => option}
+            inputMode="numeric"
             value={filters.sat}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="SAT Score" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1000-1200">1000 - 1200</SelectItem>
-              <SelectItem value="1200-1400">1200 - 1400</SelectItem>
-              <SelectItem value="1400-1600">1400 - 1600</SelectItem>
-            </SelectContent>
-          </Select>
+          />
         </div>
 
         {/* ACT Score Select */}
@@ -130,19 +108,15 @@ const Filter: React.FC = () => {
           <label htmlFor="act" className="text-sm font-medium text-neutral-800">
             ACT Score
           </label>
-          <Select
-            onValueChange={(value) => handleChange("act", value)}
+
+          <DropdownInput
+            placeholder="ACT Score"
+            onChange={(value) => handleChange("act", value)}
+            options={["20-24", "25-29", "30-36"]}
+            formatOption={(option) => option}
+            inputMode="numeric"
             value={filters.act}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="ACT Score" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="20-24">20 - 24</SelectItem>
-              <SelectItem value="25-29">25 - 29</SelectItem>
-              <SelectItem value="30-36">30 - 36</SelectItem>
-            </SelectContent>
-          </Select>
+          />
         </div>
 
         {/* GPA Score Select */}
@@ -150,20 +124,15 @@ const Filter: React.FC = () => {
           <label htmlFor="gpa" className="text-sm font-medium text-neutral-800">
             GPA Score
           </label>
-          <Select
-            onValueChange={(value) => handleChange("gpa", value)}
+
+          <DropdownInput
+            placeholder="GPA Score"
+            onChange={(value) => handleChange("gpa", value)}
+            options={["2.0-2.5", "2.6-3.0", "3.1-3.5", "3.6-4.0"]}
+            formatOption={(option) => option}
+            inputMode="numeric"
             value={filters.gpa}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="GPA Score" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2.0-2.5">2.0 - 2.5</SelectItem>
-              <SelectItem value="2.6-3.0">2.6 - 3.0</SelectItem>
-              <SelectItem value="3.1-3.5">3.1 - 3.5</SelectItem>
-              <SelectItem value="3.6-4.0">3.6 - 4.0</SelectItem>
-            </SelectContent>
-          </Select>
+          />
         </div>
 
         {/* Clear Filters Button */}

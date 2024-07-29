@@ -134,3 +134,7 @@ export const client = new ApolloClient({
   userServer = userServiceAddress,
   messageServer = messagingServiceAddress,
   universityServer = universityServiceAddress;
+
+
+
+  

@@ -97,6 +97,18 @@ export const URLupdate = (key: string, value: string) => {
 
 
 export function stripHtmlTags(html: string): string {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
+  return html.replace(/<[^>]*>/g, '');
+
+}
+export function stripHtmlTagsServerSide(html: string): string {
+  return html.replace(/<[^>]*>/g, '');
+}
+
+export const similarThreadHeading = (text:string) =>{ 
+return stripHtmlTags(text).substring(0, 50)
+}
+
+export const similarThreadDetail = (text:string) =>{
+  return stripHtmlTags(text).substring(50, 250)
+
 }

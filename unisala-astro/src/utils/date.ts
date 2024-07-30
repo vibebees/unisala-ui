@@ -1,4 +1,4 @@
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { parseISO, format, differenceInDays, formatDistanceToNow } from 'date-fns';
 
 export const formatCommentDate = (dateString: string) => {
     const date = parseISO(dateString);
@@ -18,12 +18,28 @@ export const formatCommentDate = (dateString: string) => {
     }
   };
 
-  export function formatDate(date: Date) {
-    // Format: Jan 01, 2021
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    }).format(date);
-  }
   
+export function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) {
+    return 'No Date';
+  }
+
+  try {
+    const date = parseISO(dateString);
+    const now = new Date();
+    const diffDays = differenceInDays(now, date);
+
+    if (diffDays === 0) {
+      return 'Today';
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return format(date, 'MMM d, yyyy');
+    }
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return 'Error Formatting Date';
+  }
+}

@@ -11,7 +11,6 @@ import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
 import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
-import {ThreadSuggestions} from '@/components/thread/organisms/thread.suggestion'
 import { fetchApi } from '@/utils/api.utility';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 const { slug ="" } = Astro.params;
@@ -20,6 +19,9 @@ import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
 import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
+import { stripHtmlTagsServerSide } from '@/utils/lib/utils';
+import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
+
 let post = null;
 let error: string = '';
 // Remove the assignment to prerender
@@ -163,7 +165,7 @@ const handleUpvote = async (postId: string) => {
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={linkifyHtml(heading)} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
+      <ThreadHeader heading={stripHtmlTagsServerSide(linkifyHtml(heading))} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
        <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
@@ -204,5 +206,5 @@ const handleUpvote = async (postId: string) => {
       author ="Prashant Basnet"
       authorDescription='Software engineer @ Unisala'
   />
-  <ThreadSuggestions  client:only ='react' />
+  <ThreadSuggestions  />
 </MainLayout>

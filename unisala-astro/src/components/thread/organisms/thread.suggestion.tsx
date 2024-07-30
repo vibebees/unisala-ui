@@ -1,4 +1,9 @@
+import React, { useMemo } from 'react';
+import { useAstroQuery } from "@/datasource/apollo-client";
 import { SimilarThread } from "./similar.thread"
+import { getNewsFeed } from "@/datasource/graphql/user";
+import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+
 const articles = [
     {
         title: "How to quickly deploy a static website",
@@ -32,18 +37,36 @@ const articles = [
 
 
 export const ThreadSuggestions = () => {
+    const { loading, error, data } = useAstroQuery(getNewsFeed, {
+        variables: {
+            feedQuery: {
+                feedType: "specificSpace",
+                feedId: "650b292f076ea53586758b94",
+                page: 0
+            }
+        },
+        context: { server: USER_SERVICE_GQL },
+    });
+
+    const posts = useMemo(() => data?.fetchFeedV2.data || [], [data]);
+
+    console.log({ posts });
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
     return (
-        <>
-            <SimilarThread
-                articles={articles}
-                title="Paul Moore"
-                titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
-            />
-             <SimilarThread
-                articles={articles}
-                title=" Recommended from Unisala"
-                titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
-            />
+      <>
+        <SimilarThread
+            articles={posts}
+            title="Paul Moore"
+            titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
+        />
+        <SimilarThread
+            articles={articles}
+            title="Paul Moore1"
+            titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
+        />
         </>
-    )
-}
+    );
+};

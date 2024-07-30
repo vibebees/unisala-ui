@@ -9,14 +9,6 @@ export function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function formatDate(date: Date) {
-  // Format: Jan 01, 2021
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
 
 export function extractSegmentURL(path: string) {
   if (!path) return "";
@@ -103,3 +95,8 @@ export const URLupdate = (key: string, value: string) => {
   return params?.toString();
 };
 
+
+export function stripHtmlTags(html: string): string {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || "";
+}

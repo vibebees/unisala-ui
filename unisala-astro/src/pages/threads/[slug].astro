@@ -97,7 +97,6 @@ try {
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
-  console.log({result});
 
   post = result.data?.getPostById?.post;
 
@@ -205,5 +204,5 @@ const handleUpvote = async (postId: string) => {
       author ="Prashant Basnet"
       authorDescription='Software engineer @ Unisala'
   />
-  <ThreadSuggestions/>
+  <ThreadSuggestions  client:only ='react' />
 </MainLayout>

@@ -3,6 +3,13 @@
 import { fetchApi } from '@/utils/api.utility';
 import { SimilarThread } from './similar.thread';
 import { userServiceGql } from '@/datasource/servers';
+// Declare the prop
+interface Props {
+  feedId?: string;
+}
+
+ 
+const { feedId =""  } = Astro.props;
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -207,7 +214,7 @@ try {
       variables: {
         feedQuery: {
           feedType: "specificSpace",
-          feedId: "650b292f076ea53586758b94",
+          feedId,
           page: 0
         }
       },
@@ -231,8 +238,9 @@ try {
 
 {!error && (
   <SimilarThread
+    client:only
     articles={posts}
-    title="More from this space"
+    title="recommended for you"
     titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
   />
 )}

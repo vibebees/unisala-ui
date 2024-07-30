@@ -155,6 +155,7 @@ const handleUpvote = async (postId: string) => {
     console.error(error);
   }
 };
+console.log('slug', post);
 
 ---
 
@@ -203,8 +204,8 @@ const handleUpvote = async (postId: string) => {
   <!-- //pass postId from slug -->
   <Comments client:only ='react'  postId = {slug}/>
   <ThreadAuthor
-      author ="Prashant Basnet"
-      authorDescription='Software engineer @ Unisala'
+      author ={post.user.firstName + ' ' + post.user.lastName}
+      authorDescription=''
   />
-  <ThreadSuggestions  />
+  <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
 </MainLayout>

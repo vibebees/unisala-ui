@@ -97,18 +97,18 @@ export const URLupdate = (key: string, value: string) => {
 
 
 export function stripHtmlTags(html: string): string {
-  return html.replace(/<[^>]*>/g, '');
+  return html?.replace(/<[^>]*>/g, '');
 
 }
 export function stripHtmlTagsServerSide(html: string): string {
-  return html.replace(/<[^>]*>/g, '');
+  return html?.replace(/<[^>]*>/g, '');
 }
 
 export const similarThreadHeading = (text:string) =>{ 
-return stripHtmlTags(text).substring(0, 50)
+return stripHtmlTags(text)?.substring(0, 50)
 }
 
 export const similarThreadDetail = (text:string) =>{
-  return stripHtmlTags(text).substring(50, 250)
+  return stripHtmlTags(text)?.substring(50, 250)
 
 }

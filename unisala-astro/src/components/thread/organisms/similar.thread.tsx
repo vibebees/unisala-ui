@@ -35,16 +35,16 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
                 </div>
                 <div className="grid gap-8 md:grid-cols-2">
                     {articles.map((article, index) => {
-                        let image = article?.images.length > 0 ? article.images[0] : extractImageFromPostText({postText:article?.postText, user: true});
+                        let image = article?.images?.length > 0 ? article?.images[0] : extractImageFromPostText({postText:article?.postText, user: true});
                         return (
                             <article key={index} className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 relative">
                                 <div className="flex justify-between items-center mb-5 text-gray-500">
                                     <span className="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
                                         <svg className="mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clipRule="evenodd"></path><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path></svg>
-                                        {article.postTags.tag.name}
+                                        {article?.postTags?.tag.name}
                                     </span>
                                     <span className="text-sm">
-                                        {article.date ? formatDate(article?.date) : 'No Date'}
+                                        {article?.date ? formatDate(article?.date) : 'No Date'}
                                     </span>
                                 </div>
                                 <h4 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -63,8 +63,8 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
                                 </p>
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center space-x-4">
-                                        <img className="w-7 h-7 rounded-full" src={ image ?? ''} alt={`${article.user.firstName + article.user.lastName} avatar`} />
-                                        <span className="font-medium dark:text-white">{article.user.firstName + article.user.lastName}</span>
+                                        <img className="w-7 h-7 rounded-full" src={ image ?? ''} alt={`${article?.user?.firstName + article?.user?.lastName} avatar`} />
+                                        <span className="font-medium dark:text-white">{article?.user?.firstName + article?.user?.lastName}</span>
                                     </div>
                                     <a
                                         href={`/threads/${article._id}`}

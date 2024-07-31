@@ -3,7 +3,6 @@ import { useAstroQuery } from "@/datasource/apollo-client";
 import { SimilarThread } from "./similar.thread"
 import { getNewsFeed } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
-import { SimilarThread2 } from './similar.thread2';
 
 
 export const ThreadSuggestions = () => {

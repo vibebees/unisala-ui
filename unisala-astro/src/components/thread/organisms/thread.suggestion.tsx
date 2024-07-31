@@ -4,7 +4,6 @@ import { SimilarThread } from "./similar.thread"
 import { getNewsFeed } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 
-
 export const ThreadSuggestions = () => {
     const { loading, error, data } = useAstroQuery(getNewsFeed, {
         variables: {

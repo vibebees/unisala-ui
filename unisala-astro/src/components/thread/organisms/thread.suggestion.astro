@@ -3,13 +3,13 @@
 import { fetchApi } from '@/utils/api.utility';
 import { SimilarThread } from './similar.thread';
 import { userServiceGql } from '@/datasource/servers';
+// import { GetTopActiveSpaces } from '@/datasource/graphql/user';
 // Declare the prop
 interface Props {
   feedId?: string;
 }
 
- 
-const { feedId =""  } = Astro.props;
+let { feedId = '' } = Astro.props;
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -207,18 +207,48 @@ let posts = [];
 let error = '';
 
 try {
+  const GetTopActiveSpaces = `
+    query getTopActiveSpaces($limit: Int) {
+      getTopActiveSpaces(limit: $limit) {
+        status {
+          success
+          message
+        }
+        spaceCategory {
+          _id
+          name
+          parentId
+        }
+      }
+    }
+  `;
+
+  if (feedId === '') {
+    const spaceSuggestion = await fetchApi(userServiceGql, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: GetTopActiveSpaces,
+        variables: {
+          limit: 1
+        }
+      })
+    });
+    const spaceData = await spaceSuggestion?.data?.getTopActiveSpaces?.spaceCategory;
+    console.log({spaceData});
+    feedId = spaceData?.length > 0 ? spaceData[0]._id : '';
+   }
   const result = await fetchApi(userServiceGql, {
     method: 'POST',
     body: JSON.stringify({
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: "specificSpace",
+          feedType: 'specificSpace',
           feedId,
           page: 0
         }
-      },
-    }),
+      }
+    })
   });
 
   if (result.errors) {
@@ -227,20 +257,22 @@ try {
 
   posts = result.data?.fetchFeedV2?.data || [];
 
+  console.log({posts});
 } catch (e) {
-  console.error("Error fetching feed:", e);
+  console.error('Error fetching feed:', e);
   error = e instanceof Error ? e.message : String(e);
 }
-
 ---
 
 {error && <div>Error: {error}</div>}
 
-{!error && (
-  <SimilarThread
-    client:only
-    articles={posts}
-    title="recommended for you"
-    titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
-  />
-)}
+{
+  !error && (
+    <SimilarThread
+      client:only
+      articles={posts}
+      title="recommended for you"
+      titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
+    />
+  )
+}

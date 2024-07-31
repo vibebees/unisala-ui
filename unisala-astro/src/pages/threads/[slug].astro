@@ -6,15 +6,10 @@ import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
 import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.tsx';
 import ThreadHeader from '@/components/layout/thread-header.astro';
-import ThreadAction from '@/components/thread/thread.action.astro';
-import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
-import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 const { slug ="" } = Astro.params;
-const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
@@ -145,28 +140,17 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
 }) : '';
 
 
-const handleUpvote = async (postId: string) => {
-  try {
-    // Call the upvote mutation or API endpoint here
-    // await upvoteMutation(postId);
-    alert('Upvoted');
-  } catch (error) {
-    // Handle the error
-    console.error(error);
-  }
-};
-console.log('slug', post);
-
+const articleTitle = stripHtmlTagsServerSide(linkifyHtml(heading))
 ---
 
-<MainLayout title={post ? `${heading}` : 'Thread'}>
+<MainLayout title={articleTitle}>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
   
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={stripHtmlTagsServerSide(linkifyHtml(heading))} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
+      <ThreadHeader heading={articleTitle} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
        <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
@@ -179,13 +163,7 @@ console.log('slug', post);
             />
           </div>
         </li>
-        {/* <ThreadAction
-          heading={heading}
-          username={post?.user.username}
-          date={formatDate(post.date)}
-          claps={post.upVoteCount}
-          comments={post.postCommentsCount}
-        /> */}
+       
         <ThreadActionTsx
           heading={heading}
           username={post?.user?.username}

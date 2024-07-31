@@ -47,11 +47,11 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
 
   if (userData === null) {
     return (
-      <section className='bg-white dark:bg-black-900 py-8 lg:py-6 antialiased'>
-        <div className='max-w-4xl mx-auto px-4'>
-          <CtaLogin message='Login to view comments' />
-        </div>
-      </section>
+      <section className='bg-white dark:bg-gray-900 py-8 lg:py-6 antialiased'>
+      <div className='max-w-4xl mx-auto px-4'>
+        <CtaLogin message='Login to view comments' />
+      </div>
+    </section>
     )
   }
   return (

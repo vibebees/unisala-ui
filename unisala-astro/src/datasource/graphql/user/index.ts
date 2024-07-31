@@ -1356,7 +1356,7 @@ export const checkEmail = gql`
       }
     }
   `,
-  GetTopActiveSpaces = gql`
+  GetTopActiveSpaces = `
     query getTopActiveSpaces($limit: Int) {
       getTopActiveSpaces(limit: $limit) {
         status {

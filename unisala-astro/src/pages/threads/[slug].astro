@@ -204,7 +204,7 @@ console.log('slug', post);
   <!-- //pass postId from slug -->
   <Comments client:only ='react'  postId = {slug}/>
   <ThreadAuthor
-      author ={post.user.firstName + ' ' + post.user.lastName}
+      author ={post?.user?.firstName + ' ' + post?.user?.lastName}
       authorDescription=''
   />
   <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />

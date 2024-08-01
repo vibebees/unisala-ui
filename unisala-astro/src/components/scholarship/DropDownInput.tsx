@@ -45,7 +45,7 @@ const DropdownInput: FC<DropdownInputProps> = ({
         onChange={handleInputChange}
         onFocus={() => setIsOpen(true)}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-        className={`w-full ${className}`}
+        className={`w-full max-md:h-8 ${className}`}
         inputMode={inputMode}
         onKeyDown={(e) => {
           if (e.key === "Backspace" && e.currentTarget.value.includes("-")) {
@@ -60,7 +60,7 @@ const DropdownInput: FC<DropdownInputProps> = ({
               <p
                 key={index}
                 onClick={() => handleOptionClick(option)}
-                className="hover:bg-neutral-200 cursor-pointer px-3 rounded-sm py-1"
+                className="hover:bg-neutral-200 max-md:text-xs cursor-pointer px-3 rounded-sm py-1"
               >
                 {formatOption(option)}
               </p>

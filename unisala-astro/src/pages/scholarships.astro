@@ -73,7 +73,7 @@ const query = `query searchScholarshipV2(
         stackable
         }} `;
 try {
-  const result = await fetchApi("http://localhost:9999/graphql", {
+  const result = await fetchApi("http://test.unisala.com/uni/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -101,10 +101,10 @@ try {
           <h1 class="font-bold">Available Scholarships</h1>
         </div>
 
-        <!-- <ScholarShip client:only="react" /> -->
+        <ScholarShip client:only="react" />
       </div>
 
-      <div class="grid-container">
+      <div class="grid-container astro-scholarship">
         {
           data?.length > 0 &&
             data.map((scholarship: any) => {

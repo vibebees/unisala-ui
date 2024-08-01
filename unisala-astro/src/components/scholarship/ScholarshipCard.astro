@@ -1,83 +1,99 @@
 ---
 // ScholarshipCard.astro
-const scholarship = {
-  scholarship_name: "Freshmen Merit Scholarship",
-  university_name: "Texas Tech University",
-  unitId: 229115,
-  scholarship_type: "Merit-Based",
-  level: "Undergraduate",
-  scholarship_url: "https://www.depts.ttu.edu/scholarships/incFreshman.php",
-  gpa: { min: 3.96, max: 4.0 },
-  sat: { min: 1500, max: 1600 },
-  act: { min: 34, max: 36 },
-  awards: [
-    {
-      award_name: "Freshmen Merit Scholarship",
-      scholarship_amount: {
-        amount: "$9,000",
-        disbursement_schedule: "per year",
-      },
-    },
-  ],
-  application_deadline: "2024-05-01",
-  eligible_majors: ["All"],
-  duration: 8,
-  duration_description:
-    "Renewable for up to 4 consecutive years (eight total terms)",
-  application_requirements: [
-    "No additional application required",
-    "Must enroll in a minimum of 12 hours for fall & spring terms",
-  ],
-  renewal_criteria: {
-    min_gpa: 3.5,
-    min_credit_hours: 30,
-    other_requirements: "Maintain full-time enrollment",
-  },
-  stackable: true,
-  special_instructions:
-    "Award amount is determined by test score and unweighted high school GPA",
-  non_score_eligibility_requirements: "Must be an incoming freshman",
-};
+interface IAward {
+  award_name?: string;
+  scholarship_amount?: {
+    amount: string;
+    disbursement_schedule: string;
+  };
+}
+
+interface RenewalCriteria {
+  min_gpa: number;
+  min_credit_hours: number;
+  other_requirements: string;
+}
+
+interface Scholarship {
+  scholarship_name: string;
+  university_name: string;
+  unitId: number;
+  scholarship_type: string;
+  level: string;
+  scholarship_url: string;
+  gpa: { min: number; max: number };
+  sat: { min: number; max: number };
+  act: { min: number; max: number };
+  awards: IAward[];
+  international_specific: boolean;
+  transfer_specific: boolean;
+  application_deadline: string | null;
+  eligible_majors: string[];
+  duration: number;
+  duration_description: string;
+  application_requirements: string[];
+  renewal_criteria: RenewalCriteria;
+  stackable: boolean;
+  special_instructions: string;
+  non_score_eligibility_requirements: string;
+}
+
+interface Props {
+  scholarship: Scholarship;
+}
+
+const { scholarship } = Astro.props as Props;
 ---
 
 <div class="scholarship-card">
   <div class="card-header">
     <div>
-      <h2 class="title">{scholarship.scholarship_name}</h2>
+      <h2 class="title">{scholarship?.scholarship_name}</h2>
       <p class="institution">
         <i class="fas fa-university"></i>
         {scholarship.university_name}
       </p>
     </div>
-    <button class="favorite-btn">
+    <!-- <button class="favorite-btn">
       <i class="fas fa-star"></i> Favorite
-    </button>
+    </button> -->
   </div>
   <div class="card-body">
     <div class="info-grid">
       <div class="info-item">
         <span class="label"><i class="fas fa-graduation-cap"></i> Level</span>
-        <span class="value">{scholarship.level}</span>
+        <span class="value">{scholarship?.level}</span>
       </div>
       <div class="info-item">
         <span class="label"><i class="fas fa-award"></i> Type</span>
-        <span class="value">{scholarship.scholarship_type}</span>
+        <span class="value">{scholarship?.scholarship_type}</span>
       </div>
-      <div class="info-item">
-        <span class="label"><i class="fas fa-dollar-sign"></i> Amount</span>
-        <span class="value amount"
-          >{scholarship.awards[0].scholarship_amount.amount}
-          {scholarship.awards[0].scholarship_amount.disbursement_schedule}</span
-        >
-      </div>
-      <div class="info-item">
-        <span class="label"><i class="fas fa-calendar-alt"></i> Deadline</span>
-        <span class="value deadline"
-          >{
-            new Date(scholarship.application_deadline).toLocaleDateString()
-          }</span
-        >
-      </div>
+      {
+        scholarship.awards.length > 0 &&
+          scholarship.awards[0]?.scholarship_amount && (
+            <div class="info-item">
+              <span class="label">
+                <i class="fas fa-dollar-sign" /> Amount
+              </span>
+              <span class="value amount">
+                {scholarship.awards[0].scholarship_amount.amount}
+                {scholarship.awards[0].scholarship_amount.disbursement_schedule}
+              </span>
+            </div>
+          )
+      }
+      {
+        scholarship.application_deadline && (
+          <div class="info-item">
+            <span class="label">
+              <i class="fas fa-calendar-alt" /> Deadline
+            </span>
+            <span class="value deadline">
+              {new Date(scholarship?.application_deadline).toLocaleDateString()}
+            </span>
+          </div>
+        )
+      }
     </div>
     <div class="eligibility">
       <h3><i class="fas fa-check-circle"></i> Eligibility Criteria</h3>
@@ -85,23 +101,23 @@ const scholarship = {
         <div class="eligibility-item">
           <i class="fas fa-graduation-cap"></i>
           <span class="label">GPA</span>
-          <span class="value"
-            >{scholarship.gpa.min} - {scholarship.gpa.max}</span
-          >
+          <span class="value">
+            {scholarship?.gpa.min} - {scholarship?.gpa.max}
+          </span>
         </div>
         <div class="eligibility-item">
           <i class="fas fa-file-alt"></i>
           <span class="label">SAT</span>
-          <span class="value"
-            >{scholarship.sat.min} - {scholarship.sat.max}</span
-          >
+          <span class="value">
+            {scholarship?.sat.min} - {scholarship?.sat.max}
+          </span>
         </div>
         <div class="eligibility-item">
           <i class="fas fa-pencil-alt"></i>
           <span class="label">ACT</span>
-          <span class="value"
-            >{scholarship.act.min} - {scholarship.act.max}</span
-          >
+          <span class="value">
+            {scholarship?.act?.min} - {scholarship?.act?.max}
+          </span>
         </div>
       </div>
     </div>
@@ -120,53 +136,84 @@ const scholarship = {
     <h3 class="expanded-title">
       <i class="fas fa-info-circle"></i> Additional Information
     </h3>
-    <div class="expanded-section">
-      <h4><i class="fas fa-clipboard-list"></i> Application Requirements</h4>
-      <ul>
-        {scholarship.application_requirements.map((req) => <li>{req}</li>)}
-      </ul>
-    </div>
-    <div class="expanded-section">
-      <h4><i class="fas fa-sync-alt"></i> Renewal Criteria</h4>
-      <p>
-        <i class="fas fa-graduation-cap"></i> Minimum GPA: <span
-          class="highlight">{scholarship.renewal_criteria.min_gpa}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-book"></i> Minimum Credit Hours: <span
-          class="highlight"
-          >{scholarship.renewal_criteria.min_credit_hours}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-exclamation-circle"></i> Other: {
-          scholarship.renewal_criteria.other_requirements
-        }
-      </p>
-    </div>
+    {
+      scholarship.application_requirements.length > 0 && (
+        <div class="expanded-section">
+          <h4>
+            <i class="fas fa-clipboard-list" /> Application Requirements
+          </h4>
+          <ul>
+            {scholarship?.application_requirements.map((req) => (
+              <li>{req}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      (scholarship.renewal_criteria?.min_gpa ||
+        scholarship.renewal_criteria?.min_credit_hours ||
+        scholarship.renewal_criteria?.other_requirements) && (
+        <div class="expanded-section">
+          <h4>
+            <i class="fas fa-sync-alt" /> Renewal Criteria
+          </h4>
+          {scholarship.renewal_criteria?.min_gpa && (
+            <p>
+              <i class="fas fa-graduation-cap" /> Minimum GPA:{" "}
+              <span class="highlight">
+                {scholarship.renewal_criteria.min_gpa}
+              </span>
+            </p>
+          )}
+          {scholarship.renewal_criteria?.min_credit_hours && (
+            <p>
+              <i class="fas fa-book" /> Minimum Credit Hours:{" "}
+              <span class="highlight">
+                {scholarship.renewal_criteria.min_credit_hours}
+              </span>
+            </p>
+          )}
+          {scholarship.renewal_criteria?.other_requirements && (
+            <p>
+              <i class="fas fa-exclamation-circle" /> Other:{" "}
+              {scholarship.renewal_criteria.other_requirements}
+            </p>
+          )}
+        </div>
+      )
+    }
     <div class="expanded-section">
       <h4><i class="fas fa-plus-circle"></i> Additional Information</h4>
+      {
+        scholarship?.duration_description && (
+          <p>
+            <i class="fas fa-calendar-alt" /> Duration:{" "}
+            {scholarship?.duration_description}
+          </p>
+        )
+      }
       <p>
-        <i class="fas fa-calendar-alt"></i> Duration: {
-          scholarship.duration_description
-        }
+        <i class="fas fa-layer-group"></i> Stackable: <span class="highlight">
+          {scholarship?.stackable ? "Yes" : "No"}
+        </span>
       </p>
-      <p>
-        <i class="fas fa-layer-group"></i> Stackable: <span class="highlight"
-          >{scholarship.stackable ? "Yes" : "No"}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-info-circle"></i> Special Instructions: {
-          scholarship.special_instructions
-        }
-      </p>
-      <p>
-        <i class="fas fa-user-check"></i> Non-Score Eligibility: {
-          scholarship.non_score_eligibility_requirements
-        }
-      </p>
+      {
+        scholarship.special_instructions && (
+          <p>
+            <i class="fas fa-info-circle" /> Special Instructions:{" "}
+            {scholarship?.special_instructions}
+          </p>
+        )
+      }
+      {
+        scholarship.non_score_eligibility_requirements && (
+          <p>
+            <i class="fas fa-user-check" /> Non-Score Eligibility:{" "}
+            {scholarship?.non_score_eligibility_requirements}
+          </p>
+        )
+      }
     </div>
   </div>
 </div>

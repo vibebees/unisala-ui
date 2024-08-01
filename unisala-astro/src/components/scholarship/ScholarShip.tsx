@@ -53,8 +53,6 @@ const ScholarShip = () => {
       }
     });
 
-    console.log("newObj", newOjb);
-
     setVariables(newOjb);
   }, [filters]);
 
@@ -70,8 +68,8 @@ const ScholarShip = () => {
             !error &&
             data &&
             data?.searchScholarshipV2.length > 0 &&
-            data?.searchScholarshipV2.map((scholarship: any) => (
-              <ScholarshipCard key={scholarship.id} scholarship={scholarship} />
+            data?.searchScholarshipV2.map((scholarship: any, index) => (
+              <ScholarshipCard key={index} scholarship={scholarship} />
             ))}
         </div>
         <div

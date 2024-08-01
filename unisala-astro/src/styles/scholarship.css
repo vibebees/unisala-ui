@@ -456,3 +456,29 @@
         justify-content: center;
     }
 }
+
+@media (max-width:570px) {
+
+    .eligibility-grid {
+        grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
+    }
+
+    .apply-btn {
+        background: #a7d0ff75;
+        color: blue;
+        text-align: center;
+    }
+
+    .grid-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+
+    }
+
+    .container {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+}

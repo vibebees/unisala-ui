@@ -4,15 +4,15 @@ import ScholarshipCard from "@/components/scholarship/ScholarshipCard.astro";
 import ScholarShip from "@/components/scholarship/ScholarShip";
 import { fetchApi } from "@/utils/api.utility";
 import "../styles/scholarship.css";
-import type { Variable } from "lucide-react";
+let data = [];
 
 const query = `query searchScholarshipV2(
-      $scholarshipType: String
-      $level: String
-      $internationalSpecific: String
-      $transferSpecific: String
-      $forUndergraduate: String
-      $forGraduate: String
+      $scholarshipType: ScholarshipTypeEnum
+      $level: LevelTypeEnum
+      $internationalSpecific: Boolean
+      $transferSpecific: Boolean
+      $forUndergraduate: Boolean
+      $forGraduate: Boolean
       $gpa: RangeInput
       $act: RangeInput
       $sat: RangeInput
@@ -21,7 +21,7 @@ const query = `query searchScholarshipV2(
       $page: Int
       $pageSize: Int
     ) {
-      searchDepartmentRatingForSchool(
+      searchScholarshipV2(
         scholarshipType: $scholarshipType
         level: $level
         internationalSpecific: $internationalSpecific
@@ -36,9 +36,10 @@ const query = `query searchScholarshipV2(
         page: $page
         pageSize: $pageSize
       ) {
-        unitId
+          unitId
         university_name
         scholarship_name
+        scholarship_type
         international_specific
         level
         transfer_specific
@@ -62,22 +63,15 @@ const query = `query searchScholarshipV2(
             disbursement_schedule
           }
         }
+        application_requirements
+        application_deadline
+        eligible_majors
+        duration
+        duration_description
+        special_instructions
         non_score_eligibility_requirements
-        highestLevelOfOffering
-        undergraduateOffering
-        graduateOffering
-        grantsMedicalDegree
-        grantsMedicalDegree
-        hasHospital
-        missionStatement
-        bio
-        briefAddress
-        ownType
-        pictures
-        tags
-}
-        }
-    `;
+        stackable
+        }} `;
 try {
   const result = await fetchApi("http://localhost:9999/graphql", {
     method: "POST",
@@ -86,40 +80,17 @@ try {
     },
     body: JSON.stringify({
       query,
-      Variables: {
-        scholarshipType: "MERIT_BASED",
-        level: "Undergraduate",
-        internationalSpecific: "yes",
-        transferSpecific: "no",
-        forUndergraduate: "yes",
-        forGraduate: "no",
-        gpa: {
-          min: 3.0,
-          max: 4.0,
-        },
-        act: {
-          min: 20,
-          max: 30,
-        },
-        sat: {
-          min: 1000,
-          max: 1200,
-        },
-        gre: {
-          min: 0,
-          max: 0,
-        },
-        gmat: {
-          min: 0,
-          max: 0,
-        },
-        page: 1,
+
+      variables: {
+        level: "Graduate",
         pageSize: 10,
       },
     }),
   });
-  // console.log("result", result);
-} catch (error) {}
+  data = result.data.searchScholarshipV2;
+} catch (error) {
+  console.log("something went wrong in astro scholarships", error);
+}
 ---
 
 <MainLayout title="Discover Scholarships">
@@ -130,14 +101,16 @@ try {
           <h1 class="font-bold">Available Scholarships</h1>
         </div>
 
-        <ScholarShip client:only="react" />
+        <!-- <ScholarShip client:only="react" /> -->
       </div>
 
       <div class="grid-container">
-        <ScholarshipCard />
-        <ScholarshipCard />
-        <ScholarshipCard />
-        <ScholarshipCard />
+        {
+          data?.length > 0 &&
+            data.map((scholarship: any) => {
+              return <ScholarshipCard scholarship={scholarship} />;
+            })
+        }
       </div>
     </section>
   </div>
@@ -155,11 +128,5 @@ try {
     color: #006eff;
     margin-left: 5px;
     font-size: 1.5rem;
-  }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-    gap: 1rem;
   }
 </style>

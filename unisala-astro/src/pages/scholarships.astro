@@ -4,6 +4,7 @@ import ScholarshipCard from "@/components/scholarship/ScholarshipCard.astro";
 import ScholarShip from "@/components/scholarship/ScholarShip";
 import { fetchApi } from "@/utils/api.utility";
 import "../styles/scholarship.css";
+import { universityServiceGql } from "@/datasource/servers";
 let data = [];
 
 const query = `query searchScholarshipV2(
@@ -73,7 +74,8 @@ const query = `query searchScholarshipV2(
         stackable
         }} `;
 try {
-  const result = await fetchApi("http://test.unisala.com/uni/graphql", {
+  console.log("fetching astro scholarships *************** ");
+  const result = await fetchApi(universityServiceGql, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -81,6 +81,7 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
                 </span>
                 <span className="value amount">
                   {scholarship.awards[0].scholarship_amount.amount}
+                  <br />
                   {
                     scholarship.awards[0].scholarship_amount
                       .disbursement_schedule

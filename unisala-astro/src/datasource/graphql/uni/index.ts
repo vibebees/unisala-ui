@@ -628,12 +628,12 @@ export const GetProfessor = gql`
   `,
   ScholarshipV2 = gql`
     query searchScholarshipV2(
-      $scholarshipType: ScholarshipTypeEnum
-      $level: LevelTypeEnum
-      $internationalSpecific: Boolean
-      $transferSpecific: Boolean
-      $forUndergraduate: Boolean
-      $forGraduate: Boolean
+      $scholarshipType: String
+      $level: String
+      $internationalSpecific: String
+      $transferSpecific: String
+      $forUndergraduate: String
+      $forGraduate: String
       $gpa: RangeInput
       $act: RangeInput
       $sat: RangeInput
@@ -692,6 +692,7 @@ export const GetProfessor = gql`
         special_instructions
         non_score_eligibility_requirements
         stackable
+        _id
       }
     }
   `;

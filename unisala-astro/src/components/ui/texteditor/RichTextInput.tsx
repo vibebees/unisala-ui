@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { authInstance } from "@/datasource/api/axiosInstance";
 import { universityServiceAddress } from "@/datasource/servers";
- import "quill-mention";
+import "quill-mention";
 import "quill-mention/dist/quill.mention.css";
-import React, {type FC, useMemo, useRef } from "react";
+import React, { type FC, useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import './quil.css'
 
 const Link = Quill.import("formats/link");
 Link.sanitize = function (url: string) {
@@ -18,8 +19,7 @@ Link.sanitize = function (url: string) {
 const getUniversitites = async (searchTerm: string) => {
   try {
     const res = await authInstance.get(
-      `${universityServiceAddress}/keyword/schoolname/${
-        searchTerm.trim().length === 0 ? "New York" : searchTerm.trim()
+      `${universityServiceAddress}/keyword/schoolname/${searchTerm.trim().length === 0 ? "New York" : searchTerm.trim()
       }/5`
     );
     const formattedData = res.data.map((item: any) => {
@@ -43,15 +43,18 @@ interface RichTextInputProps {
   onChange: (e: any) => void;
   id?: string;
   theme?: string;
+  placeholder?: string;
 }
 
 const RichTextInput: FC<RichTextInputProps> = ({
-  value,
+  value: initialValue,
   onChange,
   id = "rich-text-input",
-  theme ="snow",
+  theme = "snow",
+  placeholder = "Write something...",
 }) => {
   const quillRef = useRef<any>(null);
+  const [content, setContent] = useState(initialValue);
 
   const mention = useMemo(
     () => ({
@@ -94,7 +97,6 @@ const RichTextInput: FC<RichTextInputProps> = ({
         { align: [] },
         { indent: "-1" },
         { indent: "+1" },
-
         "clean",
       ],
     ],
@@ -103,21 +105,52 @@ const RichTextInput: FC<RichTextInputProps> = ({
     },
     mention,
   };
-  
+
+  useEffect(() => {
+    // Load content from localStorage when component mounts
+    const savedContent = localStorage.getItem(id);
+    if (savedContent) {
+      setContent(savedContent);
+      onChange(savedContent);
+    } else {
+      // If no saved content, use the initial value
+      setContent(initialValue);
+    }
+  }, [id, onChange, initialValue]);
+
+  useEffect(() => {
+    // Save content to localStorage whenever it changes
+    if (content !== undefined) {
+      localStorage.setItem(id, content);
+    }
+  }, [id, content]);
+
+  const handleChange = (newContent: string) => {
+    setContent(newContent);
+    onChange(newContent);
+  };
+
   return (
     <div>
-      <div className="min-h-72 text-black relative">
+      <div className="min-h-72 text-black relative flex flex-col">
         <ReactQuill
           ref={quillRef}
-          theme ={'snow'}
+          theme="snow"
           id={id}
-          className=" text-black h-full  thisistes w-full"
-          value={value}
-          // style={{ minHeight: "200px" }}
+          placeholder={placeholder}
+          className="flex flex-col-reverse h-full w-full transition-colors duration-200 ease-in-out
+     text-gray-900 dark:text-white
+     bg-transparent
+     [&_.ql-editor]:bg-transparent
+     [&_.ql-editor]:text-gray-900 [&_.ql-editor]:dark:text-white
+     [&_.ql-editor.ql-blank::before]:text-gray-400 [&_.ql-editor.ql-blank::before]:dark:text-gray-500
+     [&_.ql-toolbar]:bg-gray-100 [&_.ql-toolbar]:dark:bg-gray-700
+     [&_.ql-toolbar]:border-t [&_.ql-toolbar]:border-gray-300 [&_.ql-toolbar]:dark:border-gray-600
+     [&_.ql-toolbar]:sticky [&_.ql-toolbar]:bottom-0 [&_.ql-toolbar]:z-10
+     [&_.ql-editor]:font-sourcesans [&_.ql-editor_h1]:font-playfair [&_.ql-editor_h2]:font-playfair [&_.ql-editor_h3]:font-playfair"
+          value={content}
           modules={modules}
-          onChange={(e) => {
-            onChange(e);
-          }}
+          onChange={handleChange}
         />
       </div>
     </div>

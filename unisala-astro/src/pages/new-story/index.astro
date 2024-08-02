@@ -1,0 +1,59 @@
+---
+import MainLayout from '@/layouts/main-layout.astro';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+---
+
+<MainLayout title='Create Post'>
+    <div class='container max-w-screen-md mx-auto pt-12 pb-32'>
+        <form class='space-y-8'>
+            <div>
+                <Input
+                    type='text'
+                    placeholder='Title'
+                    className='text-4xl font-bold border-none shadow-none focus:ring-0 px-0'
+                />
+            </div>
+            <div>
+                <Textarea
+                    placeholder='Tell your story...'
+                    client:only
+                    className='min-h-[70vh] text-xl border-none shadow-none focus:ring-0 px-0'
+                    autoGrow={true}
+                />
+            </div>
+        </form>
+    </div>
+
+    <div
+        class='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-2'
+    >
+        <div class='container max-w-screen-md mx-auto'>
+            <div class='flex items-center justify-between'>
+                <div class='flex space-x-2'>
+                    <Button variant='ghost' size='sm'>B</Button>
+                    <Button variant='ghost' size='sm'><i>I</i></Button>
+                    <Button variant='ghost' size='sm'>Link</Button>
+                    <Button variant='ghost' size='sm'>H1</Button>
+                    <Button variant='ghost' size='sm'>H2</Button>
+                    <Button variant='ghost' size='sm'>"</Button>
+                    <Button variant='ghost' size='sm'>List</Button>
+                </div>
+                <Button>Publish</Button>
+            </div>
+        </div>
+    </div>
+</MainLayout>
+
+<style>
+    /* Custom styles to remove default input and textarea styles */
+    input,
+    textarea {
+        @apply bg-transparent;
+    }
+    input:focus,
+    textarea:focus {
+        @apply outline-none;
+    }
+</style>

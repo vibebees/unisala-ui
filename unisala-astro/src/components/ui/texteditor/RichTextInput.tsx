@@ -42,12 +42,14 @@ interface RichTextInputProps {
   value: string;
   onChange: (e: any) => void;
   id?: string;
+  theme?: string;
 }
 
 const RichTextInput: FC<RichTextInputProps> = ({
   value,
   onChange,
   id = "rich-text-input",
+  theme ="snow",
 }) => {
   const quillRef = useRef<any>(null);
 
@@ -101,17 +103,17 @@ const RichTextInput: FC<RichTextInputProps> = ({
     },
     mention,
   };
-
+  
   return (
     <div>
       <div className="min-h-72 text-black relative">
         <ReactQuill
           ref={quillRef}
-          theme="snow"
+          theme ={'snow'}
           id={id}
           className=" text-black h-full  thisistes w-full"
           value={value}
-          style={{ minHeight: "200px" }}
+          // style={{ minHeight: "200px" }}
           modules={modules}
           onChange={(e) => {
             onChange(e);

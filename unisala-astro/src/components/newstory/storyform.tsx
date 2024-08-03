@@ -3,8 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import type { PostDraft } from '@/types/post';
 import { lazy, Suspense } from 'react';
-const TextareaEditor = lazy(() =>  import('@/components/ui/textarea').then(module => ({ default: module.TextareaEditor })));
-const TextareaAutoGrow = lazy(() => import('@/components/ui/textAreaAutoGrow').then(module => ({ default: module.TextareaAutoGrow })));
+import { fetchApi } from '@/utils/api.utility';
+import { userServiceGql } from '@/datasource/servers';
+import { useAstroMutation } from '@/datasource/apollo-client';
+import { AddPost } from '@/datasource/graphql/user';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
+const TextareaAutoGrow = lazy(() => import('@/components/ui/textArea').then(module => ({ default: module.TextareaAutoGrow })));
 
 interface PostFormProps {
     initialPostDraft: PostDraft;
@@ -13,38 +18,32 @@ interface PostFormProps {
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     const [postDraft, setPostDraft] = useState<PostDraft>(initialPostDraft);
 
-    useEffect(() => {
-        const savedPostDraft = localStorage.getItem('postDraft');
-        if (savedPostDraft) {
-            setPostDraft(JSON.parse(savedPostDraft) as PostDraft);
-        }
-    }, []);
+    const [addPost] = useAstroMutation(AddPost, {
+        context: { server: USER_SERVICE_GQL },
+        onCompleted: (data) => {
+            localStorage.removeItem('new.story.title');
+            localStorage.removeItem('new.story.postText');
+        },
+        onError: (error) => {
 
-    useEffect(() => {
-        localStorage.setItem('postDraft', JSON.stringify(postDraft));
-    }, [postDraft]);
+        },
+    });
 
-    const handleChange = <K extends keyof PostDraft>(field: K, value: PostDraft[K]): void => {
-        setPostDraft(prev => ({ ...prev, [field]: value }));
-    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
+        let postDraft = {
+            title: localStorage.getItem('new.story.title') || '',
+            postText: localStorage.getItem('new.story.postText') || '',
+            id: 'others'
+        }
         try {
-            const response = await fetch('/api/publish-post', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            addPost({
+                variables: {
+                    ...postDraft,
                 },
-                body: JSON.stringify(postDraft),
             });
-            if (response.ok) {
-                alert('Post published successfully!');
-                setPostDraft(initialPostDraft);
-                localStorage.removeItem('postDraft');
-            } else {
-                throw new Error('Failed to publish post');
-            }
+     
         } catch (error) {
             console.error('Error publishing post:', error);
             alert('Failed to publish post. Please try again.');
@@ -60,9 +59,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                         className='min-h-[100px]'
                         maxHeight='50vh'
                         name='title'
-                        id='title-input'
-                        value={postDraft.title}
-                        setValue={(value: string) => handleChange('title', value)}
+                        key='new.story.title'
                     />
                 </div>
                 <div>
@@ -70,10 +67,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                         placeholder='Tell your story...'
                         item={{}}
                         postData={postDraft}
-                        setPostData={setPostDraft}
                         name='postText'
-                        value={postDraft.postText}
-                        setValue={(value: string) => handleChange('postText', value)}
+                        key='new.story.postText'
                     />
                 </div>
                 <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 transition-colors duration-200 ease-in-out'>

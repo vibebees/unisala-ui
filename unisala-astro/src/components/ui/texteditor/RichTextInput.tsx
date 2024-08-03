@@ -4,17 +4,15 @@ import "react-quill/dist/quill.snow.css";
 import './RichTextInput.css'
 
 interface RichTextInputProps {
-  value: string;
-  onChange: (content: string) => void;
-  id?: string;
+  initialValue: string;
+  key?: string;
   placeholder?: string;
 }
 
 const RichTextInput: React.FC<RichTextInputProps> = ({
-  value: initialValue,
-  onChange,
-  id = "rich-text-input",
+ initialValue,
   placeholder = "Write something...",
+  key = "new.story.postText",
 }) => {
   const [content, setContent] = useState<string>(initialValue);
   const quillRef = useRef<ReactQuill>(null);
@@ -47,24 +45,22 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   ];
 
   useEffect(() => {
-    const savedContent = localStorage.getItem(id);
+    const savedContent = localStorage.getItem(key);
     if (savedContent) {
       setContent(savedContent);
-      onChange(savedContent);
     } else {
       setContent(initialValue);
     }
-  }, [id, onChange, initialValue]);
+  }, [key, initialValue]);
 
   useEffect(() => {
     if (content !== undefined) {
-      localStorage.setItem(id, content);
+      localStorage.setItem(key, content);
     }
-  }, [id, content]);
+  }, [key, content]);
 
   const handleChange = (newContent: string) => {
     setContent(newContent);
-    onChange(newContent);
   };
 
   const showToolbar = useCallback(() => {

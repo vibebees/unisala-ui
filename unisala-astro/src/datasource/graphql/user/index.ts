@@ -195,6 +195,7 @@ export const checkEmail = gql`
       $studentLifeAndServiceRating: Int
       $careerAndAlumniResourceRating: Int
       $postTags: PostTagsInput
+      $title: String!
     ) {
       addPost(
         postText: $postText
@@ -219,6 +220,7 @@ export const checkEmail = gql`
         studentLifeAndServiceRating: $studentLifeAndServiceRating
         careerAndAlumniResourceRating: $careerAndAlumniResourceRating
         postTags: $postTags
+        title: $title
       ) {
         status {
           success
@@ -418,6 +420,7 @@ export const checkEmail = gql`
           university
           conversation
           major
+          title
         }
       }
     }

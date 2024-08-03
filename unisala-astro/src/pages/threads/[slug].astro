@@ -28,6 +28,7 @@ const query = `
         message
       }
       post {
+       title
         _id
         postText
         postCommentsCount
@@ -77,6 +78,7 @@ const query = `
             username
           }
         }
+          
       }
     }
   }
@@ -130,17 +132,9 @@ function extractHeading(text: string) {
   return heading || 'Thread Details';
 }
 
-const heading = post ? extractHeading(post.postText) : 'Loading...';
-const linkifiedText = post ? linkifyHtml(post.postText, {
-  defaultProtocol: 'https',
-  className: 'custom-link',
-  target: {
-    url: '_blank'
-  }
-}) : '';
-
-
-const articleTitle = stripHtmlTagsServerSide(linkifyHtml(heading))
+const heading = post ? extractHeading(post?.postText) : 'Loading...';
+const title = post && post?.title?.length > 0 ? post?.title : heading;
+const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
 ---
 
 <MainLayout title={articleTitle}>

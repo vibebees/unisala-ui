@@ -83,3 +83,7 @@
   font-style: italic;
   color: #999;
 }
+
+.ql-editor p {
+  margin-bottom: 1.5em;
+}

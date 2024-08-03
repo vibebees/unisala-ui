@@ -8,6 +8,8 @@ import { userServiceGql } from '@/datasource/servers';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import toast from 'react-hot-toast';
+import { navigator } from '@/utils/lib/URLupdate';
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textArea').then(module => ({ default: module.TextareaAutoGrow })));
 
@@ -23,9 +25,10 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         onCompleted: (data) => {
             localStorage.removeItem('new.story.title');
             localStorage.removeItem('new.story.postText');
+            toast.success("Your Story is Published!");
+            navigator('/threads/' + data?.addPost?.post?._id);
         },
         onError: (error) => {
-
         },
     });
 

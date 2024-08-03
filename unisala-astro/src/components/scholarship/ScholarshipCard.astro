@@ -46,7 +46,7 @@ const { scholarship } = Astro.props as Props;
 ---
 
 <div class="scholarship-card-wrapper">
-  <div class="scholarship-card">
+  <div class="scholarship-card" data-scholarship-id={scholarship.unitId}>
     <div class="card-header">
       <div>
         <h2 class="title">{scholarship?.scholarship_name}</h2>
@@ -248,6 +248,8 @@ const { scholarship } = Astro.props as Props;
 </div>
 
 <script>
+  import { sendGAEvent } from "@/utils/analytics/events";
+
   document.addEventListener("DOMContentLoaded", () => {
     const expandBtns = document.querySelectorAll(".expand-btn");
     const applyBtns = document.querySelectorAll(".apply-btn");
@@ -261,6 +263,16 @@ const { scholarship } = Astro.props as Props;
       btn.addEventListener("click", () => {
         const expanded = btn.getAttribute("aria-expanded") === "true" || false;
         btn.setAttribute("aria-expanded", String(!expanded));
+        const scholarshipCard = btn.closest(".scholarship-card");
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+
+        sendGAEvent("scholarship_card_expand", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          value: expanded ? 0 : 1,
+        });
       });
     });
 
@@ -272,6 +284,18 @@ const { scholarship } = Astro.props as Props;
           (iframes[index] as HTMLIFrameElement).src = scholarshipUrl;
           (externalLinks[index] as HTMLAnchorElement).href = scholarshipUrl;
           loadingOverlays[index].classList.remove("hidden");
+          const scholarshipCard = btn.closest(".scholarship-card");
+          const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+            .scholarshipId;
+          const scholarshipName = (
+            scholarshipCard as HTMLDivElement
+          ).querySelector(".title")?.textContent;
+
+          sendGAEvent("scholarship_apply_click", {
+            category: "Scholarship",
+            label: scholarshipName || "",
+            value: parseInt(scholarshipId || "0"),
+          });
         }
       });
     });
@@ -280,13 +304,42 @@ const { scholarship } = Astro.props as Props;
       btn.addEventListener("click", () => {
         (iframeWrappers[index] as HTMLDivElement).style.display = "none";
         (iframes[index] as HTMLIFrameElement).src = "";
+
+        const scholarshipCard = btn.closest(".scholarship-card");
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+
+        sendGAEvent("scholarship_iframe_close", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          value: parseInt(scholarshipId || "0"),
+        });
+      });
+    });
+
+    externalLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const scholarshipCard = link.closest(".scholarship-card");
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+
+        sendGAEvent("scholarship_external_link_click", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          value: parseInt(scholarshipId || "0"),
+        });
       });
     });
 
     iframes.forEach((iframe, index) => {
       iframe.addEventListener("load", () => {
         loadingOverlays[index].classList.add("hidden");
-        console.log("iframe loaded");
       });
     });
   });

@@ -70,7 +70,7 @@ const ScholarShip = () => {
             !error &&
             data &&
             data?.searchScholarshipV2.length > 0 &&
-            data?.searchScholarshipV2.map((scholarship: any, index) => (
+            data?.searchScholarshipV2.map((scholarship: any, index: any) => (
               <ScholarshipCard key={index} scholarship={scholarship} />
             ))}
         </div>

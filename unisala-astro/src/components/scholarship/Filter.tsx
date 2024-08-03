@@ -11,6 +11,7 @@ import { updateSearchParam } from "@/utils/lib/urlParamsUtils";
 import { initialState, type FilterState } from "./ScholarShip";
 import DropdownInput from "./DropDownInput";
 import { majors } from "@/constants/majors";
+import { sendGAEvent } from "@/utils/analytics/events";
 
 const AutoComplete = lazy(() => import("@/components/ui/AutoCompleteInput"));
 
@@ -33,6 +34,10 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
   const resetFilters = () => {
     setFilters(initialState);
     window.history.pushState({}, "", window.location.pathname);
+    sendGAEvent("reset_filters", {
+      category: "Scholarship",
+      label: "Reset Filters",
+    });
   };
 
   const handleChange = (key: keyof FilterState, value: string) => {
@@ -41,16 +46,16 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
       ...prev,
       [key]: value,
     }));
+    sendGAEvent("filter_change", {
+      category: "Scholarship",
+      label: `Filter: ${key}`,
+      keyValue: value,
+    });
   };
 
   return (
     <div className="relative mt-4">
-      <div
-        // style={{
-        //   gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-        // }}
-        className="grid gap-5 max-md:gap-2 text-neutral-800 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] max-md:grid-cols-[repeat(auto-fill,minmax(150px,0.5fr))]"
-      >
+      <div className="grid gap-5 max-md:gap-2 text-neutral-800 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] max-md:grid-cols-[repeat(auto-fill,minmax(150px,0.5fr))]">
         {/* Level Select */}
         <div>
           <label
@@ -72,6 +77,8 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Majors Select */}
         <div>
           <label
             htmlFor="majors"
@@ -88,24 +95,6 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             />
           </Suspense>
         </div>
-
-        {/* Amount Select */}
-        {/* <div>
-          <label
-            htmlFor="amount"
-            className="text-sm font-medium text-neutral-800"
-          >
-            Amount
-          </label>
-          <DropdownInput
-            placeholder="Amount"
-            value={filters.amount}
-            onChange={(value) => handleChange("amount", value)}
-            options={["5000-10000", "10000-20000", "20000-50000"]}
-            formatOption={(option) => `$${option}`}
-            inputMode="numeric"
-          />
-        </div> */}
 
         {/* SAT Score Select */}
         <div>
@@ -133,7 +122,6 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
           >
             ACT Score
           </label>
-
           <DropdownInput
             placeholder="ACT Score"
             onChange={(value) => handleChange("act", value)}
@@ -141,7 +129,6 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             formatOption={(option) => option}
             inputMode="numeric"
             value={filters.act}
-            className=""
           />
         </div>
 
@@ -153,7 +140,6 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
           >
             GPA Score
           </label>
-
           <DropdownInput
             placeholder="GPA Score"
             onChange={(value) => handleChange("gpa", value)}

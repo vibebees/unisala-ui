@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { sendGAEvent } from "@/utils/analytics/events";
 
 interface IAward {
   award_name?: string;
@@ -46,6 +47,41 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
   const [expanded, setExpanded] = useState(false);
   const [showIframe, setShowIframe] = useState(false);
 
+  const handleExpand = () => {
+    setExpanded(!expanded);
+    sendGAEvent("scholarship_card_expand", {
+      category: "Scholarship",
+      label: scholarship.scholarship_name,
+      value: expanded ? 0 : 1,
+    });
+  };
+
+  const handleApplyNow = () => {
+    setShowIframe(true);
+    sendGAEvent("scholarship_apply_click", {
+      category: "Scholarship",
+      label: scholarship.scholarship_name,
+      value: scholarship.unitId,
+    });
+  };
+
+  const handleExternalLinkClick = () => {
+    sendGAEvent("scholarship_external_link_click", {
+      category: "Scholarship",
+      label: scholarship.scholarship_name,
+      value: scholarship.unitId,
+    });
+  };
+
+  const handleIframeClose = () => {
+    setShowIframe(false);
+    sendGAEvent("scholarship_iframe_close", {
+      category: "Scholarship",
+      label: scholarship.scholarship_name,
+      value: scholarship.unitId,
+    });
+  };
+
   return (
     <>
       {showIframe && (
@@ -57,14 +93,12 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="iframe-external-link"
+                onClick={handleExternalLinkClick}
               >
                 <i className="fas fa-external-link-alt"></i>
               </a>
 
-              <button
-                className="iframe-close-btn"
-                onClick={() => setShowIframe(false)}
-              >
+              <button className="iframe-close-btn" onClick={handleIframeClose}>
                 Close
               </button>
             </div>
@@ -171,16 +205,13 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
           </div>
         </div>
         <div className="card-footer">
-          <button onClick={() => setShowIframe(true)} className="apply-btn">
+          <button onClick={handleApplyNow} className="apply-btn">
             Apply Now <i className="fas fa-arrow-right"></i>
           </button>
           <button
             className="expand-btn"
             aria-expanded={expanded}
-            onClick={(e) => {
-              e.preventDefault();
-              setExpanded(!expanded);
-            }}
+            onClick={handleExpand}
           >
             <span className="expand-text">Show More</span>
             <span className="collapse-text">Show Less</span>

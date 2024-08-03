@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-// import "./FloatingToolbar.css"; // Make sure to create this CSS file
 import './RichTextInput.css'
+
 interface RichTextInputProps {
   value: string;
   onChange: (content: string) => void;
@@ -19,6 +19,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   const [content, setContent] = useState<string>(initialValue);
   const quillRef = useRef<ReactQuill>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
+  const [isInteractingWithToolbar, setIsInteractingWithToolbar] = useState(false);
 
   const modules = {
     toolbar: {
@@ -27,7 +28,6 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
         // Define custom handlers here if needed
       }
     },
-    // You might want to add other modules like clipboard or history
     clipboard: {
       // Add clipboard module options
     },
@@ -35,16 +35,17 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       // Add history module options
     }
   };
-const formats = [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'blockquote', 'code-block',
-  'list', 'bullet', 'indent',
-  'direction',
-  'size',
-  'color', 'background',
-  'link', 'image', 'video'
-];
+
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline',
+    'blockquote', 'code-block',
+    'list', 'bullet', 
+    'size',
+    'color', 'background',
+    'link', 'image', 'video'
+  ];
+
   useEffect(() => {
     const savedContent = localStorage.getItem(id);
     if (savedContent) {
@@ -67,22 +68,33 @@ const formats = [
   };
 
   const showToolbar = useCallback(() => {
-    const quill = quillRef.current?.getEditor();
-    const selection = quill?.getSelection();
-    if (selection && selection.length > 0 && toolbarRef.current) {
-      const bounds = quill.getBounds(selection.index, selection.length);
-      const toolbar = toolbarRef.current;
-      toolbar.style.display = 'block';
-      toolbar.style.left = `${bounds.left}px`;
-      toolbar.style.top = `${bounds.top - toolbar.offsetHeight - 10}px`;
+    if (toolbarRef.current) {
+      const quill = quillRef.current?.getEditor();
+      const selection = quill?.getSelection();
+      if (selection && selection.length > 0) {
+        const bounds = quill.getBounds(selection.index, selection.length);
+        const toolbar = toolbarRef.current;
+        toolbar.style.display = 'flex';
+        
+        // Position the toolbar above the selection
+        toolbar.style.top = `${bounds.top - toolbar.offsetHeight - 5}px`;
+        toolbar.style.left = '0';
+        toolbar.style.right = '0';
+        
+        // Ensure the toolbar is fully visible
+        const editorRect = quill.root.getBoundingClientRect();
+        if (bounds.top - toolbar.offsetHeight < editorRect.top) {
+          toolbar.style.top = `${bounds.bottom + 5}px`;
+        }
+      }
     }
   }, []);
 
   const hideToolbar = useCallback(() => {
-    if (toolbarRef.current) {
+    if (toolbarRef.current && !isInteractingWithToolbar) {
       toolbarRef.current.style.display = 'none';
     }
-  }, []);
+  }, [isInteractingWithToolbar]);
 
   useEffect(() => {
     const quill = quillRef.current?.getEditor();
@@ -96,37 +108,30 @@ const formats = [
       });
     }
 
+    const toolbar = toolbarRef.current;
+    if (toolbar) {
+      toolbar.addEventListener('mouseenter', () => setIsInteractingWithToolbar(true));
+      toolbar.addEventListener('mouseleave', () => setIsInteractingWithToolbar(false));
+    }
+
     return () => {
-      // Clean up event listener when component unmounts
       quill?.off('selection-change');
+      if (toolbar) {
+        toolbar.removeEventListener('mouseenter', () => setIsInteractingWithToolbar(true));
+        toolbar.removeEventListener('mouseleave', () => setIsInteractingWithToolbar(false));
+      }
     };
   }, [showToolbar, hideToolbar]);
 
   return (
     <div className="rich-text-editor-container">
-      <div id="floating-toolbar" ref={toolbarRef} className="ql-toolbar ql-snow">
-        <button className="ql-bold"></button>
-        <button className="ql-italic"></button>
-        <button className="ql-underline"></button>
-        <button className="ql-strike"></button>
-        <button className="ql-blockquote"></button>
-        <button className="ql-code-block"></button>
-        <button className="ql-header" value="1"></button>
-        <button className="ql-header" value="2"></button>
-        <button className="ql-list" value="ordered"></button>
-        <button className="ql-list" value="bullet"></button>
-        <button className="ql-script" value="sub"></button>
-        <button className="ql-script" value="super"></button>
-        <button className="ql-indent" value="-1"></button>
-        <button className="ql-indent" value="+1"></button>
-        <button className="ql-direction" value="rtl"></button>
-        <select className="ql-size">
-          <option value="small"></option>
-          <option selected></option>
-          <option value="large"></option>
-          <option value="huge"></option>
-        </select>
-        <select className="ql-header">
+      <div id="floating-toolbar" ref={toolbarRef}
+     className="ql-toolbar ql-snow absolute left-0 flex items-center width-100px "
+
+        >
+        <button className="ql-clean"></button>
+
+      <select className="ql-header">
           <option value="1"></option>
           <option value="2"></option>
           <option value="3"></option>
@@ -135,6 +140,16 @@ const formats = [
           <option value="6"></option>
           <option selected></option>
         </select>
+
+        <button className="ql-bold"></button>
+        <button className="ql-italic"></button>
+        <button className="ql-underline"></button>
+        <button className="ql-blockquote"></button>
+        <button className="ql-link"></button>
+        <button className="ql-image"></button>
+        <button className="ql-code-block"></button>
+        <button className="ql-list" value="ordered"></button>
+        <button className="ql-list" value="bullet"></button>
         <select className="ql-color">
           <option value="red"></option>
           <option value="green"></option>
@@ -153,11 +168,9 @@ const formats = [
           <option value="#d0d1d2"></option>
           <option selected></option>
         </select>
-        <button className="ql-link"></button>
-        <button className="ql-image"></button>
+      
+
         <button className="ql-video"></button>
-        <button className="ql-formula"></button>
-        <button className="ql-clean"></button>
       </div>
       <ReactQuill
         ref={quillRef}
@@ -168,7 +181,6 @@ const formats = [
         formats={formats}
         placeholder={placeholder}
       />
-
     </div>
   );
 };

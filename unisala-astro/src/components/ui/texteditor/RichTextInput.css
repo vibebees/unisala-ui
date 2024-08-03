@@ -1,47 +1,85 @@
-.rich-text-editor-container {
-    position: relative;
-  }
-  
-  /* Styles for the default top toolbar */
-  .ql-toolbar.ql-snow {
-    border: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    border-radius: 3px;
-    margin-bottom: 10px;
-  }
-  
-  /* Styles for the floating toolbar */
-  #floating-toolbar {
-    display: none;
-    position: absolute;
-    z-index: 1000;
-    background: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    border-radius: 3px;
-    padding: 5px;
-  }
-  
-  .ql-toolbar.ql-snow .ql-formats {
-    margin-right: 15px;
-  }
-  
-  .ql-snow.ql-toolbar button {
-    width: 28px;
-    height: 28px;
-    padding: 3px 5px;
-  }
-  
-  /* Remove border from the editor area */
-  .ql-container.ql-snow {
-    border: none;
-  }
-  
-  /* Optional: Add some padding to the editor area for better spacing */
-  .ql-editor {
-    padding: 12px 15px;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 
-  .ql-toolbar.ql-snow .ql-formats {
-    margin-right: 15px;
-  }
+.rich-text-editor-container {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  padding: 0; /* Add this line */
+
+}
+
+/* Styles for the default top toolbar */
+.ql-toolbar.ql-snow {
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  border-radius: 3px;
+  margin-bottom: 5px;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Styles for the floating toolbar */
+#floating-toolbar {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  border-radius: 3px;
+  padding: 5px;
+  font-family: 'Playfair Display', serif;
+  width: fit-content;
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 15px;
+}
+
+.ql-snow.ql-toolbar button {
+  width: 28px;
+  height: 28px;
+  padding: 3px 5px;
+}
+
+/* Remove border from the editor area */
+.ql-container.ql-snow {
+  border: none;
+}
+
+/* Styles for the editor area */
+.ql-editor {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  line-height: 1.6;
+  padding: 8px 10px; /* Reduce padding */
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
+
+.ql-editor h1 {
+  font-size: 32px;
+}
+
+.ql-editor h2 {
+  font-size: 28px;
+}
+
+.ql-editor h3 {
+  font-size: 24px;
+}
+
+/* Optional: Add a subtle background color to the editor for better visual separation */
+.ql-container.ql-snow {
+  background-color: #f9f9f9;
+  border-radius: 3px;
+}
+
+/* Optional: Style the placeholder text */
+.ql-editor.ql-blank::before {
+  font-style: italic;
+  color: #999;
+}

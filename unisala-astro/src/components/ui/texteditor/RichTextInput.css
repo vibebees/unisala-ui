@@ -1,0 +1,47 @@
+.rich-text-editor-container {
+    position: relative;
+  }
+  
+  /* Styles for the default top toolbar */
+  .ql-toolbar.ql-snow {
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  
+  /* Styles for the floating toolbar */
+  #floating-toolbar {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 3px;
+    padding: 5px;
+  }
+  
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 15px;
+  }
+  
+  .ql-snow.ql-toolbar button {
+    width: 28px;
+    height: 28px;
+    padding: 3px 5px;
+  }
+  
+  /* Remove border from the editor area */
+  .ql-container.ql-snow {
+    border: none;
+  }
+  
+  /* Optional: Add some padding to the editor area for better spacing */
+  .ql-editor {
+    padding: 12px 15px;
+  }
+
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 15px;
+  }

@@ -1,49 +1,16 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { TextareaEditor } from '@/components/ui/textarea';
-import { TextareaAutoGrow } from '@/components/ui/textAreaAutoGrow';
+import StoryForm from '@/components/newstory/stroyform';
+import type { PostDraft } from '@/types/post';
+
+const initialPostDraft: PostDraft = {
+    title: '',
+    tags: [],
+    reviewSubCategories: '',
+    postText: '',
+};
 ---
 
 <MainLayout title='Create Post'>
-    <div class='container max-w-screen-md mx-auto pt-12 pb-32'>
-        <form id='postForm'>
-            <div>
-                <TextareaAutoGrow
-                client:only='react'
-                placeholder='Title'
-                className='min-h-[100px] '
-                maxHeight='50vh'
-                name='title'
-                id='title-input'
-              />
-            </div>
-            <div>
-                <TextareaEditor
-                    client:only
-                    placeholder='Tell your story...'
-                    className='min-h-[70vh] text-xl focus:ring-0 px-0'
-                    item={{}}
-                    postData={{}}
-                    setPostData={() => {}}
-                    name='content'
-                />
-            </div>
-        </form>
-    </div>
-
-    <div class='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 transition-colors duration-200 ease-in-out'>
-        <div class='container max-w-screen-md mx-auto'>
-            <div class='flex items-center justify-end'>
-                <Button 
-                    type='submit' 
-                    form='postForm'
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                >
-                    Publish
-                </Button>
-            </div>
-        </div>
-    </div>
+    <StoryForm client:only initialPostDraft={initialPostDraft} />
 </MainLayout>

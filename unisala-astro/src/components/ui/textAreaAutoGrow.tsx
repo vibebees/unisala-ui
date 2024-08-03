@@ -1,9 +1,11 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   maxHeight?: string;
   id?: string;
+  setValue?: (value: string) => void;
+  value: string;
 }
 
 const TextareaAutoGrow: React.FC<TextareaProps> = ({ 
@@ -11,10 +13,11 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
   id = 'textarea-auto-grow', 
   name,
   className,
+  setValue = () => {},
+  value,
   ...props 
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [value, setValue] = useState("");
 
   useEffect(() => {
     // Load saved content from localStorage when component mounts
@@ -59,33 +62,40 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
 
   return (
     <textarea
-      {...props}
-      ref={textareaRef}
-      id={id}
-      name={name}
-      rows={1}
-      style={{ 
-        resize: "none", 
-        overflow: "auto",
-        maxHeight: maxHeight,
-        fontFamily: "'Montserrat', sans-serif",
-        fontSize: "2rem",
-        lineHeight: "1.6",
-        border: "none",
-        outline: "none",
-        boxShadow: "none",
-        appearance: "none",
-        WebkitAppearance: "none",
-        MozAppearance: "none",
-      }}
-      value={value}
-      onChange={handleChange}
-      className={`block p-2.5 w-full bg-transparent
-        text-gray-900 dark:text-white
-        placeholder-gray-500 dark:placeholder-gray-400
-        focus:ring-0 focus:outline-none
-        ${className || ""}`}
-    />
+  {...props}
+  ref={textareaRef}
+  id={id}
+  name={name}
+  rows={1}
+  style={{
+    resize: "none",
+    overflow: "auto",
+    maxHeight: maxHeight,
+    fontFamily: "'Playfair Display', serif",
+    fontSize: "2rem",
+    lineHeight: "1.8",
+    border: "none",
+    outline: "none",
+    transition: "all 0.3s ease",
+    background: "transparent",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+  }}
+  value={value}
+  onChange={handleChange}
+  className={`
+    block w-full p-4
+    text-gray-900 dark:text-white
+    placeholder-gray-500 dark:placeholder-gray-400
+    bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900
+    rounded-lg
+    focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-700
+    focus:bg-white dark:focus:bg-gray-800
+    focus:shadow-lg
+    ${className || ""}
+  `}
+/>
   );
 };
 

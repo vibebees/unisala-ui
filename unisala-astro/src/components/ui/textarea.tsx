@@ -11,11 +11,8 @@ export interface TextareaProps
 }
 
 const TextareaEditor: FC<TextareaProps> = ({ item, postData,placeholder, setPostData =() =>{}}) => {
-console.log(typeof setPostData, setPostData)
   return (
     <>
-      {/* <Typography className="text-sm mb-1">{item?.name}</Typography> */}
-      <div>
         <RichTextInput
           id={item?.id}
           placeholder={placeholder}
@@ -26,7 +23,6 @@ console.log(typeof setPostData, setPostData)
           })}
           value={postData?.postText} 
              />
-      </div>
     </>
   );
 };

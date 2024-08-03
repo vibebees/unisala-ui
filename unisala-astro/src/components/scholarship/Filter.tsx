@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import {
   Select,
   SelectContent,
@@ -10,6 +10,9 @@ import { X } from "lucide-react";
 import { updateSearchParam } from "@/utils/lib/urlParamsUtils";
 import { initialState, type FilterState } from "./ScholarShip";
 import DropdownInput from "./DropDownInput";
+import { majors } from "@/constants/majors";
+
+const AutoComplete = lazy(() => import("@/components/ui/AutoCompleteInput"));
 
 interface FilterProps {
   filters: FilterState;
@@ -68,6 +71,22 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
               <SelectItem value="Graduate">Graduate</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div>
+          <label
+            htmlFor="majors"
+            className="text-sm max-md:text-xs font-medium text-neutral-800"
+          >
+            Majors
+          </label>
+          <Suspense fallback={<div>Loading...</div>}>
+            <AutoComplete
+              value={filters.major}
+              setValue={(value) => handleChange("major", value)}
+              options={majors}
+              placeholder="Select major"
+            />
+          </Suspense>
         </div>
 
         {/* Amount Select */}

@@ -482,3 +482,20 @@
         padding-right: 3px;
     }
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #88888877;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+::-webkit-scrollbar-track:hover {
+    background-color: #f1f1f1;
+}

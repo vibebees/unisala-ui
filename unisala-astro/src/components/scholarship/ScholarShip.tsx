@@ -13,6 +13,7 @@ export interface FilterState {
   act: string;
   amount: string;
   level: string;
+  major: string;
 }
 
 export const initialState: FilterState = {
@@ -21,6 +22,7 @@ export const initialState: FilterState = {
   act: "",
   amount: "",
   level: "",
+  major: "",
 };
 
 const ScholarShip = () => {

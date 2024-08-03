@@ -18,6 +18,8 @@
     "@astrojs/tailwind": "^5.1.0",
     "@iconify-json/lucide": "^1.1.188",
     "@nanostores/react": "^0.7.2",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.1.1",
     "@types/react-dom": "^18.3.0",

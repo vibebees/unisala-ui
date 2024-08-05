@@ -26,8 +26,8 @@ export function MainNavigationMenu() {
 
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/home" className={navigationMenuTriggerStyle()}>
-            Home
+          <NavigationMenuLink href="/new-story" className={navigationMenuTriggerStyle()}>
+            New Story
           </NavigationMenuLink>
         </NavigationMenuItem>
 

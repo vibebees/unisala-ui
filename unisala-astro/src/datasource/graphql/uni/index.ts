@@ -628,12 +628,12 @@ export const GetProfessor = gql`
   `,
   ScholarshipV2 = gql`
     query searchScholarshipV2(
-      $scholarshipType: String
-      $level: String
-      $internationalSpecific: String
-      $transferSpecific: String
-      $forUndergraduate: String
-      $forGraduate: String
+      $scholarshipType: ScholarshipTypeEnum
+      $level: LevelTypeEnum
+      $internationalSpecific: Boolean
+      $transferSpecific: Boolean
+      $forUndergraduate: Boolean
+      $forGraduate: Boolean
       $gpa: RangeInput
       $act: RangeInput
       $sat: RangeInput

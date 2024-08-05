@@ -8,19 +8,19 @@ import { universityServiceGql } from "@/datasource/servers";
 let data = [];
 
 const query = `query searchScholarshipV2(
-      $scholarshipType: ScholarshipTypeEnum
-      $level: LevelTypeEnum
-      $internationalSpecific: Boolean
-      $transferSpecific: Boolean
-      $forUndergraduate: Boolean
-      $forGraduate: Boolean
-      $gpa: RangeInput
-      $act: RangeInput
-      $sat: RangeInput
-      $gre: RangeInput
-      $gmat: RangeInput
-      $page: Int
-      $pageSize: Int
+        $scholarshipType: ScholarshipTypeEnum
+        $level: LevelTypeEnum
+        $internationalSpecific: Boolean
+        $transferSpecific: Boolean
+        $forUndergraduate: Boolean
+        $forGraduate: Boolean
+        $gpa: RangeInput
+        $act: RangeInput
+        $sat: RangeInput
+        $gre: RangeInput
+        $gmat: RangeInput
+        $page: Int
+        $pageSize: Int
     ) {
       searchScholarshipV2(
         scholarshipType: $scholarshipType
@@ -84,7 +84,7 @@ try {
       query,
 
       variables: {
-        level: "Graduate",
+        level: "Undergraduate",
         pageSize: 10,
       },
     }),

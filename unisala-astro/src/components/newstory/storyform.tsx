@@ -1,7 +1,7 @@
 // components/PostForm.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import type { PostDraft } from '@/types/post';
+import type { PostDraft, TopicOptions } from '@/types/post';
 import { lazy, Suspense } from 'react';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
@@ -10,17 +10,17 @@ import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
+import PreviewModal from '../ui/modal';
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
-import PreviewModal from '@/components/ui/modal';
 interface PostFormProps {
     initialPostDraft: PostDraft;
 }
 
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
-    const [postDraft, setPostDraft] = useState<PostDraft>(initialPostDraft);
+    const [postDraft, setPostDraft] = useState<PostDraft>({});
     const [showPreview, setShowPreview] = useState(false);
-
+    const [topics, setTopics] = useState<TopicOptions[]>([]);
     const [addPost] = useAstroMutation(AddPost, {
         context: { server: USER_SERVICE_GQL },
         onCompleted: (data) => {
@@ -32,19 +32,15 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         onError: (error) => {
         },
     });
-    const handlePublish = (topics: string[]) => {
-        const finalDraft = { ...postDraft, topics };
-        // addPost({
-        //     variables: finalDraft,
-        // });
-    };
+ 
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault();
+    const handlePublish = async (e:any): Promise<void> => {
         let postDraft = {
             title: localStorage.getItem('new.story.title') || '',
             postText: localStorage.getItem('new.story.postText') || '',
-            id: 'others'
+            id: 'others',
+            tags:topics
+
         }
         try {
             addPost({
@@ -52,7 +48,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     ...postDraft,
                 },
             });
-
+    
         } catch (error) {
             console.error('Error publishing post:', error);
             alert('Failed to publish post. Please try again.');
@@ -112,6 +108,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     }}
                     onClose={() => setShowPreview(false)}
                     onPublish={handlePublish}
+                    topics={topics}
+                    setTopics={setTopics}
                 />
             )}
         </div>

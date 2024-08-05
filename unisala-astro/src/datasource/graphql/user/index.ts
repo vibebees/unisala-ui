@@ -175,7 +175,7 @@ export const checkEmail = gql`
     mutation addPost(
       $postText: String!
       $unitId: Float
-      $tags: [ID]
+      $tags: [TagsInput]
       $postTag: String
       $id: String!
       $levelOfStudy: String
@@ -253,11 +253,11 @@ export const checkEmail = gql`
             images
           }
           tags {
+             name
+             entityType
+             universityCount
+             unitId
             _id
-            name
-            parentId
-            image
-            description
           }
           postType
           levelOfStudy

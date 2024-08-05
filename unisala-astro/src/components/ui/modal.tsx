@@ -3,6 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './button';
 import { extractImageFromPostText } from '@/utils/lib/image';
 import { stripHtmlTags } from '@/utils/lib/utils';
+import AsyncAutoComplete from './asyncSelect';
+import { userServer } from '@/datasource/servers/endpoints';
+import type { TopicOptions } from '@/types/post';
+
+
 
 interface PreviewModalProps {
   postDraft: {
@@ -10,25 +15,20 @@ interface PreviewModalProps {
     postText: string;
   };
   onClose: () => void;
-  onPublish: (topics: string[], imageUrl: string | null) => void;
+  onPublish: (topics: TopicOptions[], imageUrl: string | null) => void;
+  topics: TopicOptions[];
+  setTopics: (topics: TopicOptions[]) => void;
 }
 
-const PreviewModal: React.FC<PreviewModalProps> = ({ postDraft, onClose, onPublish }) => {
-  const [topics, setTopics] = useState<string[]>([]);
-  const [newTopic, setNewTopic] = useState('');
+const PreviewModal: React.FC<PreviewModalProps> = ({ postDraft, onClose, onPublish, topics, setTopics }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
+ 
   useEffect(() => {
     const extractedImage = extractImageFromPostText({ user: false, postText: postDraft.postText });
     setImageUrl(extractedImage);
   }, [postDraft.postText]);
 
-  const addTopic = () => {
-    if (newTopic && topics.length < 5) {
-      setTopics([...topics, newTopic]);
-      setNewTopic('');
-    }
-  };
+
 
   return (
     <div className="fixed inset-0 bg-white  z-50 overflow-y-auto flex items-center justify-center">
@@ -69,21 +69,14 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ postDraft, onClose, onPubli
           <div className="md:col-span-2">
             <p className=" p-4 text-sm text-gray-600 mb-4">Add or change topics (up to 5) so readers know what your story is about</p>
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              {topics.map((topic, index) => (
-                <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                  {topic}
-                </span>
-              ))}
-            </div>
-
+            
             <div className="flex gap-2 mb-6">
-              <input
-                type="text"
-                value={newTopic}
-                onChange={(e) => setNewTopic(e.target.value)}
-                className="flex-grow border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Add a topic..."
+              
+              <AsyncAutoComplete
+                topics={topics}
+                setTopics={setTopics}
+                placeholder="Enter a topic"
+                apiEndpoint={`${userServer}/tags`}
               />
              
             </div>

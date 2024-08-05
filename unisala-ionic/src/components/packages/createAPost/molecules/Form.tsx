@@ -53,7 +53,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
 
   postData.postTags = {
     tagType: isSpace ? "space" : isOrg ? "org" : "uni",
-    tagId:tags[0],
+    tagId:tags && tags.length > 0 ?tags[0] :'',
   };
   const feedType = currentFeedType(useLocation());
 
@@ -122,6 +122,7 @@ const Form: FC<IFormProps> = ({ metaData = {}, postData, setPostData }) => {
       /* eslint-disable */
     } else {
       if (postData?.postText?.length > 0 || (files && files?.length > 0)) {
+        delete postData.tags;
         addPost({
           variables: {
             ...postData,

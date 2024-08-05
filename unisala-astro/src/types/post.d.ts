@@ -152,3 +152,14 @@ type TPostDataType =
   | null
   | tags
   | unitId;
+
+
+
+
+  export interface TopicOptions {
+    name: string;
+    entityType: string;
+    universityCount: number;
+    unitId: number
+    _id: string; 
+  }

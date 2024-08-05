@@ -12,9 +12,7 @@ export const updateCacheForNewPost = ({ cache, post, feedType, filterByTags }) =
   const tags = post?.tags?.length > 0 ? post?.tags : []
   console.log(filterByTags, tags, post?.unitId, feedType)
   // if publishing from university profile
-  if (feedType === "uniWall") {
-    tags.push(post?.unitId)
-  }
+
   //if only published from newsfeed i.e not published from any space or org
   if (tags?.length === 0 ) {
     prependPostToNewsFeed({cache, post, feedType, filterByTags});

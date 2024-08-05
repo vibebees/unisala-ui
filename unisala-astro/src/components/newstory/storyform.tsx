@@ -11,7 +11,7 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
-const TextareaAutoGrow = lazy(() => import('@/components/ui/textArea').then(module => ({ default: module.TextareaAutoGrow })));
+const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
 import PreviewModal from '@/components/ui/modal';
 interface PostFormProps {
     initialPostDraft: PostDraft;

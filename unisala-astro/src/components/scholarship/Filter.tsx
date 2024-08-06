@@ -121,6 +121,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             formatOption={(option) => option}
             inputMode="numeric"
             value={filters.sat}
+            disabled={filters.act !== ""}
             className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
           />
         </div>
@@ -139,6 +140,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             options={["20-24", "25-29", "30-36"]}
             formatOption={(option) => option}
             inputMode="numeric"
+            disabled={filters.sat !== ""}
             value={filters.act}
             className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
           />

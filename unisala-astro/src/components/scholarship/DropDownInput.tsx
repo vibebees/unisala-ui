@@ -11,6 +11,7 @@ interface DropdownInputProps {
   formatOption?: (option: string) => string;
   inputMode?: "text" | "numeric";
   className?: string;
+  disabled?: boolean;
 }
 
 const DropdownInput: FC<DropdownInputProps> = ({
@@ -18,10 +19,10 @@ const DropdownInput: FC<DropdownInputProps> = ({
   value,
   onChange,
   options,
-
   formatOption = (option) => option,
   inputMode = "text",
   className = "",
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,6 +44,7 @@ const DropdownInput: FC<DropdownInputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={handleInputChange}
+        disabled={disabled}
         onFocus={() => setIsOpen(true)}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
         className={`w-full max-md:h-8 ${className}`}

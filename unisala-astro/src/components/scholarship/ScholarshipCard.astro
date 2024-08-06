@@ -267,10 +267,13 @@ const { scholarship } = Astro.props as Props;
         const scholarshipName = (
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
 
         sendGAEvent("scholarship_card_expand", {
           category: "Scholarship",
           label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
           value: expanded ? 0 : 1,
         });
       });
@@ -294,6 +297,7 @@ const { scholarship } = Astro.props as Props;
           sendGAEvent("scholarship_apply_click", {
             category: "Scholarship",
             label: scholarshipName || "",
+            scholarshipId: scholarshipId || "",
             value: parseInt(scholarshipId || "0"),
           });
         }
@@ -315,6 +319,7 @@ const { scholarship } = Astro.props as Props;
         sendGAEvent("scholarship_iframe_close", {
           category: "Scholarship",
           label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
           value: parseInt(scholarshipId || "0"),
         });
       });
@@ -332,6 +337,7 @@ const { scholarship } = Astro.props as Props;
         sendGAEvent("scholarship_external_link_click", {
           category: "Scholarship",
           label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
           value: parseInt(scholarshipId || "0"),
         });
       });

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
- import clsx from "clsx";
 
 interface ThreadExpandProps {
   htmlText: string;
@@ -21,7 +20,6 @@ const ThreadExpand = ({
   tags,
   videoURL,
 }: ThreadExpandProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [showSeeMore, setShowMore] = useState(true);
   const TextRef = useRef(null);
   let showSeeMoreOptionAtWordCount: number = 40;

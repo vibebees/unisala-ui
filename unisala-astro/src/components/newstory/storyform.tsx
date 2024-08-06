@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import type { PostDraft, TopicOptions } from '@/types/post';
 import { lazy, Suspense } from 'react';
-import { fetchApi } from '@/utils/api.utility';
-import { userServiceGql } from '@/datasource/servers';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
@@ -17,8 +15,8 @@ interface PostFormProps {
     initialPostDraft: PostDraft;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
-    const [postDraft, setPostDraft] = useState<PostDraft>({});
+const PostForm: React.FC<PostFormProps> = () => {
+    const postDraft = useState<PostDraft>();
     const [showPreview, setShowPreview] = useState(false);
     const [topics, setTopics] = useState<TopicOptions[]>([]);
     const [addPost] = useAstroMutation(AddPost, {
@@ -81,9 +79,6 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                 <div>
                     <TextareaEditor
                         placeholder='Tell your story...'
-                        item={{}}
-                        postData={postDraft}
-                        name='postText'
                         key='new.story.postText'
                     />
                 </div>

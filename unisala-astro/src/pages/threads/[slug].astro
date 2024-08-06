@@ -1,13 +1,13 @@
 ---
 export const prerender = false;
-
+import { lazy } from 'react';
 import MainLayout from '@/layouts/main-layout.astro';
 import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
 import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.tsx';
 import ThreadHeader from '@/components/layout/thread-header.astro';
 import linkifyHtml from 'linkify-html';
-import ThreadActionTsx from '@/components/thread/actions/upvote';
+const ThreadActionTsx = lazy(() => import('@/components/thread/actions/upvote'));
 import { fetchApi } from '@/utils/api.utility';
 const { slug ="" } = Astro.params;
 import {userServiceGql} from '@/datasource/servers/index';

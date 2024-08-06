@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { LoadingScreen } from '@/components/ui/loading';
 import { extractImageFromPostText } from '@/utils/lib/image';
 import { sendGAEvent } from '@/utils/analytics/events';
+import type { IPost } from '@/types/post';
 
 interface SimilarThreadProps {
     articles: IPost[];

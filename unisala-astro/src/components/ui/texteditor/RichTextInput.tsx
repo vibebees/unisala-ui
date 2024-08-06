@@ -68,18 +68,24 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       const quill = quillRef.current?.getEditor();
       const selection = quill?.getSelection();
       if (selection && selection.length > 0) {
-        const bounds = quill.getBounds(selection.index, selection.length);
+        let bounds
+        const quill = quillRef.current?.getEditor();
+        if (quill) {
+          bounds = quill.getBounds(selection.index, selection.length);
+        }
         const toolbar = toolbarRef.current;
         toolbar.style.display = 'flex';
         
         // Position the toolbar above the selection
-        toolbar.style.top = `${bounds.top - toolbar.offsetHeight - 5}px`;
+        if (bounds) {
+          toolbar.style.top = `${bounds.top - toolbar.offsetHeight - 5}px`;
+        }
         toolbar.style.left = '0';
         toolbar.style.right = '0';
         
         // Ensure the toolbar is fully visible
-        const editorRect = quill.root.getBoundingClientRect();
-        if (bounds.top - toolbar.offsetHeight < editorRect.top) {
+        const editorRect = quill?.root.getBoundingClientRect();
+        if (bounds && editorRect && bounds.top - toolbar.offsetHeight < editorRect.top) {
           toolbar.style.top = `${bounds.bottom + 5}px`;
         }
       }
@@ -111,7 +117,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     }
 
     return () => {
-      quill?.off('selection-change');
+      quill?.off('selection-change', () => {});
       if (toolbar) {
         toolbar.removeEventListener('mouseenter', () => setIsInteractingWithToolbar(true));
         toolbar.removeEventListener('mouseleave', () => setIsInteractingWithToolbar(false));

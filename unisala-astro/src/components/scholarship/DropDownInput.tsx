@@ -26,7 +26,7 @@ const DropdownInput: FC<DropdownInputProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (e: any) => {
-    if (e.target.value.match(/^[0-9-]*$/)) {
+    if (e.target.value.match(/^[0-9.-]*$/)) {
       onChange(e.target.value);
     }
   };

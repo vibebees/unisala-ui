@@ -55,12 +55,12 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
 
   return (
     <div className="relative mt-4">
-      <div className="grid gap-5 max-md:gap-2 text-neutral-800 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] max-md:grid-cols-[repeat(auto-fill,minmax(150px,0.5fr))]">
+      <div className="grid gap-5 max-md:gap-2 text-neutral-800 dark:text-neutral-200 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] max-md:grid-cols-[repeat(auto-fill,minmax(150px,0.5fr))]">
         {/* Level Select */}
         <div>
           <label
             htmlFor="level"
-            className="text-sm max-md:text-xs font-medium text-neutral-800"
+            className="text-sm max-md:text-xs font-medium text-neutral-800 dark:text-neutral-300"
           >
             Level
           </label>
@@ -68,12 +68,19 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             onValueChange={(value) => handleChange("level", value)}
             value={filters.level}
           >
-            <SelectTrigger className="w-full max-md:h-8 max-md:text-xs">
+            <SelectTrigger className="w-full max-md:h-8 max-md:text-xs dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
               <SelectValue placeholder="Select level" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Undergraduate">Undergraduate</SelectItem>
-              <SelectItem value="Graduate">Graduate</SelectItem>
+            <SelectContent className="dark:bg-neutral-800 dark:border-neutral-700">
+              <SelectItem
+                value="Undergraduate"
+                className="dark:text-neutral-200"
+              >
+                Undergraduate
+              </SelectItem>
+              <SelectItem value="Graduate" className="dark:text-neutral-200">
+                Graduate
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -82,16 +89,19 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
         <div>
           <label
             htmlFor="majors"
-            className="text-sm max-md:text-xs font-medium text-neutral-800"
+            className="text-sm max-md:text-xs font-medium text-neutral-800 dark:text-neutral-300"
           >
             Majors
           </label>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={<div className="dark:text-neutral-200">Loading...</div>}
+          >
             <AutoComplete
               value={filters.major}
               setValue={(value) => handleChange("major", value)}
               options={majors}
               placeholder="Select major"
+              className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
             />
           </Suspense>
         </div>
@@ -100,7 +110,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
         <div>
           <label
             htmlFor="sat"
-            className="text-sm max-md:text-xs font-medium text-neutral-800"
+            className="text-sm max-md:text-xs font-medium text-neutral-800 dark:text-neutral-300"
           >
             SAT Score
           </label>
@@ -111,6 +121,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             formatOption={(option) => option}
             inputMode="numeric"
             value={filters.sat}
+            className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
           />
         </div>
 
@@ -118,7 +129,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
         <div>
           <label
             htmlFor="act"
-            className="text-sm max-md:text-xs font-medium text-neutral-800"
+            className="text-sm max-md:text-xs font-medium text-neutral-800 dark:text-neutral-300"
           >
             ACT Score
           </label>
@@ -129,6 +140,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
             formatOption={(option) => option}
             inputMode="numeric"
             value={filters.act}
+            className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
           />
         </div>
 
@@ -136,17 +148,18 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
         <div>
           <label
             htmlFor="gpa"
-            className="text-sm max-md:text-xs font-medium text-neutral-800"
+            className="text-sm max-md:text-xs font-medium text-neutral-800 dark:text-neutral-300"
           >
             GPA Score
           </label>
           <DropdownInput
             placeholder="GPA Score"
             onChange={(value) => handleChange("gpa", value)}
-            options={["2.0-2.5", "2.6-3.0", "3.1-3.5", "3.6-4.0"]}
+            options={["2.0-2.5", "2.5-3.0", "3.0-3.5", "3.5-4.0"]}
             formatOption={(option) => option}
             inputMode="numeric"
             value={filters.gpa}
+            className="dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
           />
         </div>
 
@@ -154,7 +167,7 @@ const Filter: React.FC<FilterProps> = ({ filters, setFilters }) => {
         <div className="flex items-end">
           <button
             onClick={resetFilters}
-            className="text-sm gap-2 py-1 h-10 max-md:h-7 max-md:rounded-md bg-neutral-100 duration-200 ease-linear active:scale-90 hover:bg-neutral-200 rounded-lg px-3 flex items-center"
+            className="text-sm gap-2 py-1 h-10 max-md:h-7 max-md:rounded-md bg-neutral-100 dark:bg-neutral-700 duration-200 ease-linear active:scale-90 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg px-3 flex items-center text-neutral-800 dark:text-neutral-200"
           >
             Clear filters <X size={15} />
           </button>

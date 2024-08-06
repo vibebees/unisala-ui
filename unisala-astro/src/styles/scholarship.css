@@ -613,3 +613,190 @@
     }
 
 }
+
+
+html.dark {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+html.dark .scholarship-card {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+html.dark .card-header {
+    background-color: #003d8a22;
+    border-bottom-color: #3a3a3a;
+}
+
+html.dark .card-header:hover {
+    background-color: #003d8a33;
+}
+
+html.dark .title {
+    color: #e0e0e0;
+}
+
+html.dark .institution {
+    color: #4da3ff;
+}
+
+html.dark .info-item .label {
+    color: #b0b0b0;
+}
+
+html.dark .info-item .value {
+    color: #e0e0e0;
+}
+
+html.dark .amount {
+    color: #2eeb8e;
+}
+
+html.dark .deadline {
+    color: #ff6b6b;
+}
+
+html.dark .eligibility h3,
+html.dark .fa-check-circle {
+    color: #4caf50;
+}
+
+html.dark .description h3 {
+    color: #4da3ff;
+}
+
+html.dark .eligibility p,
+html.dark .description p {
+    color: #b0b0b0;
+}
+
+html.dark .eligibility-item {
+    border-color: #3a3a3a;
+    background-color: #2a2a2a;
+}
+
+html.dark .eligibility-item:hover {
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+html.dark .eligibility-item i {
+    color: #4da3ff;
+}
+
+html.dark .eligibility-item .label {
+    color: #b0b0b0;
+}
+
+html.dark .eligibility-item .value {
+    color: #e0e0e0;
+}
+
+html.dark .card-footer {
+    background-color: #222222;
+}
+
+html.dark .favorite-btn {
+    background-color: #2a2a2a;
+    color: #4da3ff;
+    border-color: #4da3ff;
+}
+
+html.dark .favorite-btn:hover {
+    background-color: #4da3ff;
+    color: #2a2a2a;
+}
+
+html.dark .more-info-btn {
+    background-color: #4da3ff;
+    color: #2a2a2a;
+}
+
+html.dark .more-info-btn:hover {
+    background-color: #3a8fd6;
+}
+
+html.dark .expand-btn {
+    background-color: #2a2a2a;
+    color: #4da3ff;
+    border-color: #4da3ff;
+}
+
+html.dark .expand-btn:hover {
+    background-color: #003d8a33;
+}
+
+html.dark .expanded-content {
+    background-color: #222222;
+}
+
+html.dark .expanded-title {
+    color: #4da3ff;
+}
+
+html.dark .expanded-section {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #e0e0e0;
+}
+
+html.dark .expanded-section:hover {
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+html.dark .expanded-section h4 {
+    color: #4da3ff;
+}
+
+html.dark .expanded-section ul li::before {
+    color: #4caf50;
+}
+
+html.dark .highlight {
+    color: #4da3ff;
+}
+
+html.dark .apply-btn:hover {
+    background-color: #003d8aaa;
+    color: #ffffff;
+}
+
+html.dark .iframe-container {
+    background-color: #2a2a2a;
+}
+
+html.dark .iframe-close-btn,
+html.dark .iframe-external-link {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+    color: #e0e0e0;
+}
+
+html.dark .loading-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+html.dark .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: #4da3ff;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+    background-color: #555555aa;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+}
+
+html.dark ::-webkit-scrollbar-track:hover {
+    background-color: #2a2a2a;
+}
+
+@media (max-width:570px) {
+    html.dark .apply-btn {
+        background: #003d8a75;
+        color: #4da3ff;
+    }
+}

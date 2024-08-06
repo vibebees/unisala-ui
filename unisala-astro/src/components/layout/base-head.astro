@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site";
 import "@/styles/global.css";
+import { extractImageFromPostText } from "@/utils/lib/image";
 import { ViewTransitions } from "astro:transitions";
 
 interface Props {
@@ -46,7 +47,7 @@ const {
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, siteConfig.url).toString()} />
+<meta property="og:image" content={extractImageFromPostText({user: false, postText:description})} />
 <meta property="og:site_name" content={siteConfig.name} />
 
 <!-- Twitter -->

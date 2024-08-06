@@ -71,3 +71,7 @@ export const getFeedChipValues = (keys: Array<string>) => {
   });
 };
 
+
+export const navigator = (url: string) => {
+  window.location.href = url
+}

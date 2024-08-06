@@ -206,7 +206,6 @@ export const Login = gql`
     mutation addPost(
       $postText: String!
       $unitId: Float
-      $tags: [ID]
       $postTag: String
       $id: String!
       $levelOfStudy: String
@@ -230,7 +229,6 @@ export const Login = gql`
       addPost(
         postText: $postText
         unitId: $unitId
-        tags: $tags
         postTag: $postTag
         id: $id
         levelOfStudy: $levelOfStudy
@@ -281,13 +279,6 @@ export const Login = gql`
               userId
             }
             images
-          }
-          tags {
-            _id
-            name
-            parentId
-            image
-            description
           }
           postType
           levelOfStudy

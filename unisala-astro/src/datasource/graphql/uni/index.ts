@@ -692,6 +692,7 @@ export const GetProfessor = gql`
         special_instructions
         non_score_eligibility_requirements
         stackable
+        _id
       }
     }
   `;

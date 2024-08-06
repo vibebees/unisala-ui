@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
+export interface PostDraft {
+  title: string;
+  tags: string[];
+  reviewSubCategories: string;
+  postText: string;
+}
 
-interface IPost {
+export interface IPost {
   __typename: string;
   section: string;
   postText: string;
@@ -18,7 +24,6 @@ interface IPost {
   type: "post" | "event" | "university" | "suggestedSpace" | "suggestedOrgs";
   saved: boolean;
   videoURL: string;
-  event: IEvent;
   tags: ISpaceOrg[];
   date: string;
   _id: string;
@@ -64,6 +69,8 @@ interface IPost {
       name: string;
     };
   };
+  title: string;
+
 }
 
 interface IEvent {
@@ -145,3 +152,14 @@ type TPostDataType =
   | null
   | tags
   | unitId;
+
+
+
+
+  export interface TopicOptions {
+    name: string;
+    entityType: string;
+    universityCount: number;
+    unitId: number
+    _id: string; 
+  }

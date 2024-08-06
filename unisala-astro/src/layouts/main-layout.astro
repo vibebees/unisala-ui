@@ -5,6 +5,9 @@ import { cn } from '@/utils/lib/utils';
 import BaseLayout from './base-layout.astro';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { siteConfig } from '@/config/site';
+import { MainNavigationMenu } from "@/components/main-navigation-menu";
+import { navMenuConfig } from "@/config/nav-menu";
+import { SheetMobileNav } from "@/components/layout/sheet-mobile-nav";
 
 type Props = {
   title: string;
@@ -50,7 +53,9 @@ const gaId = import.meta.env.GA_ID || 'G-MD5HNN6SQS';
     /> -->
 
     <!-- if use Navigation Menu on desktop -->
-    <!-- <SheetMobileNav
+
+    <MainNavigationMenu slot="left-header" client:load />
+    <SheetMobileNav
       mainNavItems={[...navMenuConfig.links]}
       sidebarNavItems={[
         ...navMenuConfig.pagesNav,
@@ -58,8 +63,7 @@ const gaId = import.meta.env.GA_ID || 'G-MD5HNN6SQS';
       ]}
       slot="mobile-nav-header"
       client:load
-    /> -->
-
+    />
     <div class='flex items-center gap-x-4' slot='right-header'>
       <ThemeToggle client:load />
     </div>

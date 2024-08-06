@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { authInstance } from "@datasource/api/axiosInstance";
 import "quill-mention";
-import "quill-mention/dist/quill.mention.css";
+// import "quill-mention/dist/quill.mention.css";
 import React, { FC, useMemo, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";

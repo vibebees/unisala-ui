@@ -1,22 +1,23 @@
 ---
 export const prerender = false;
-import { lazy } from 'react';
+
 import MainLayout from '@/layouts/main-layout.astro';
 import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
 import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.tsx';
 import ThreadHeader from '@/components/layout/thread-header.astro';
+import ThreadAction from '@/components/thread/thread.action.astro';
+import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
-const ThreadActionTsx = lazy(() => import('@/components/thread/actions/upvote'));
+import { Toaster, toast } from "react-hot-toast";
+import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 const { slug ="" } = Astro.params;
+const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
-import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
-import { stripHtmlTagsServerSide } from '@/utils/lib/utils';
-import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
-
 let post = null;
 let error: string = '';
 // Remove the assignment to prerender
@@ -28,7 +29,6 @@ const query = `
         message
       }
       post {
-       title
         _id
         postText
         postCommentsCount
@@ -78,12 +78,11 @@ const query = `
             username
           }
         }
-          
       }
     }
   }
 `;
-
+console.log({userServiceGql})
 try {
   const result = await fetchApi(userServiceGql, {
     method: 'POST',
@@ -96,6 +95,7 @@ try {
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
+  console.log({result});
 
   post = result.data?.getPostById?.post;
 
@@ -132,19 +132,42 @@ function extractHeading(text: string) {
   return heading || 'Thread Details';
 }
 
-const heading = post ? extractHeading(post?.postText) : 'Loading...';
-const title = post && post?.title?.length > 0 ? post?.title : heading;
-const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
+const heading = post ? extractHeading(post.postText) : 'Loading...';
+const linkifiedText = post ? linkifyHtml(post.postText, {
+  defaultProtocol: 'https',
+  className: 'custom-link',
+  target: {
+    url: '_blank'
+  }
+}) : '';
+
+
+const handleUpvote = async (postId: string) => {
+  try {
+    // Call the upvote mutation or API endpoint here
+    // await upvoteMutation(postId);
+    alert('Upvoted');
+  } catch (error) {
+    // Handle the error
+    console.error(error);
+  }
+};
+
+let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.png';
 ---
 
-<MainLayout title={articleTitle}>
+<MainLayout
+ title={post ? `${heading}` : 'Thread'}
+  description={post ? linkifiedText : 'Loading...'}
+  publishedTime={post?.date}
+></MainLayout>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
   
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={articleTitle} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
+      <ThreadHeader heading={linkifyHtml(heading)} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
        <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
@@ -157,7 +180,13 @@ const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
             />
           </div>
         </li>
-       
+        {/* <ThreadAction
+          heading={heading}
+          username={post?.user.username}
+          date={formatDate(post.date)}
+          claps={post.upVoteCount}
+          comments={post.postCommentsCount}
+        /> */}
         <ThreadActionTsx
           heading={heading}
           username={post?.user?.username}
@@ -165,7 +194,7 @@ const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
           comments={post?.postCommentsCount}
           postId={slug}
           initialClaps={post?.upVoteCount}
-          client:only = 'react'
+          client:only 'react'
           upVoted={post?.upVoted}
         />
           
@@ -174,10 +203,6 @@ const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
   )}
   
   <!-- //pass postId from slug -->
+
   <Comments client:only ='react'  postId = {slug}/>
-  <ThreadAuthor
-      author ={post?.user?.firstName + ' ' + post?.user?.lastName}
-      authorDescription=''
-  />
-  <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
 </MainLayout>

@@ -165,7 +165,7 @@ const articleTitle = stripHtmlTagsServerSide(linkifyHtml(title))
           comments={post?.postCommentsCount}
           postId={slug}
           initialClaps={post?.upVoteCount}
-          client:only 'react'
+          client:only = 'react'
           upVoted={post?.upVoted}
         />
           

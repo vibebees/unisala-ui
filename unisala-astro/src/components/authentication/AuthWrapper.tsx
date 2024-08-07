@@ -3,10 +3,17 @@ import EmailInput from "./EmailInput";
 import NameInput from "./NameInput";
 import PinCodeInput from "./PinCodeInput";
 import { Toaster } from "react-hot-toast";
-import { getCache } from "@/utils/cache";
+import { getCache, setCache } from "@/utils/cache";
 import { setUser } from "@/store/userStore";
+import { navigator } from "@/utils/lib/URLupdate";
 
-const AuthWrapper: React.FC = () => {
+interface AuthWrapperProps {
+  afterState: string
+}
+const AuthWrapper: React.FC <AuthWrapperProps> = ({
+  afterState 
+}) => {
+  console.log({afterState})
   const [authState, setAuthState] = useState<"email" | "name" | "pincode">(
     "email"
   );
@@ -17,14 +24,24 @@ const AuthWrapper: React.FC = () => {
     lastName: "",
   });
 
+  
   useLayoutEffect(() => {
     const user: any = getCache("authData");
     if (user) {
       setUser(user);
-      window.location.href = "/feed";
+      
+      // Check if there's a redirect URL in the afterState prop
+      if (afterState) {
+        // Decode the URL-encoded redirect path
+        const decodedRedirect = decodeURIComponent(afterState);
+        
+        // Navigate to the decoded redirect URL
+        window.location.href = decodedRedirect;
+      }
     }
-  }, []);
+  }, [afterState]);
 
+  
   return (
     <div className="w-full  flex container">
       <Toaster />

@@ -1,3 +1,4 @@
+import { CtaLogin } from '@/components/ui/ctaLogin';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddComment, GetCommentList } from '@/datasource/graphql/user';
 import { userServiceGql } from '@/datasource/servers';
@@ -5,6 +6,7 @@ import { client } from '@/datasource/servers/endpoints';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { sendGAEvent } from '@/utils/analytics/events';
 import { fetchApi } from '@/utils/api.utility';
+import { getCache } from '@/utils/cache';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -19,7 +21,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
-
+  const userData = getCache('authData');
 
 
 
@@ -107,6 +109,18 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
     element.style.height = 'auto';
     element.style.height = (element.scrollHeight) + 'px';
   }
+
+
+  if (userData === null) {
+    return (
+      <section className='bg-white dark:bg-gray-900 py-8 lg:py-6 antialiased'>
+      <div className='max-w-4xl mx-auto px-4'>
+        <CtaLogin message='Your prespective' />
+      </div>
+    </section>
+    )
+  }
+
   return (
     <form onSubmit={submitComment} className='mb-6'>
       <div className='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-blue-800 dark:border-gray-700'>

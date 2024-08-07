@@ -1,7 +1,9 @@
+import { CtaLogin } from "@/components/ui/ctaLogin";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { AddComment, GetCommentList, EditComment } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import { sendGAEvent } from "@/utils/analytics/events";
+import { getCache } from "@/utils/cache";
 import { useEffect, useRef, useState } from "react";
 import { toast } from 'react-hot-toast';
 interface Comment {
@@ -234,6 +236,19 @@ export const ReplyBox: React.FC<{
     useEffect(() => {
       adjustTextareaHeight();
     }, [replyText]);
+    const userData = getCache('authData');
+
+
+  if (userData === null) {
+    return (
+      <section className='bg-white dark:bg-gray-900 py-8 lg:py-6 antialiased'>
+      <div className='max-w-4xl mx-auto px-4'>
+        <CtaLogin message='Login to post comments' />
+      </div>
+    </section>
+    )
+  }
+
     return (
       <div className="mt-4">
         <textarea

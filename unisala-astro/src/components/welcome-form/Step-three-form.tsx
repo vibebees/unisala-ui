@@ -6,20 +6,30 @@ import Button from './atoms/Button';
 import Option from './atoms/Option';
 import { shakeWebsite } from '@/utils/lib/utils';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { getCache } from '@/utils/cache';
+import { navigator } from '@/utils/lib/URLupdate';
+import { Toast } from '@/components/ui/toast';
+import toast from 'react-hot-toast';
 
 const StepThreeForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(
     localStorage.getItem('studyLevel') || ''
   );
   const [editProfile, { loading }] = useAstroMutation(EditProfile, {
-    context: { server: USER_SERVICE_GQL }
+    context: { server: USER_SERVICE_GQL },
+    onCompleted: (data) => {
+      toast.success("Profile is setup successfully!");
+      navigator();
+  },
+  onError: (error) => {
+  },
   });
 
   const handleStatusChange = (event: any) => {
     localStorage.setItem('studyLevel', event.target.value);
     setSelectedStatus(event.target.value);
   };
-
+  const userData = getCache('authData');
   const options = [
     { value: 'bachelor', Icon: BookOpen, label: 'Bachelor' },
     { value: 'masters', Icon: FlaskConical, label: 'Masters' },
@@ -30,7 +40,9 @@ const StepThreeForm = () => {
     const userStatus = localStorage.getItem('userStatus');
     const interestedSubjects = localStorage.getItem('interestedSubjects');
     const studyLevel = localStorage.getItem('studyLevel');
-
+    const currentUrl = new URL(window.location.href);
+    const redirect = currentUrl.searchParams.get('redirect');
+    
     if (!userStatus || !interestedSubjects || !studyLevel) {
       if (!userStatus) {
         window.location.href = 'step-one';
@@ -58,6 +70,8 @@ const StepThreeForm = () => {
 
   return (
     <div className="welcome-form-container animate-fadeIn">
+           <Toast />
+
       <h2 className="text-3xl font-bold text-gray-800 mb-2 animate-slideDown flex items-center">
         <GraduationCap className="mr-2" size={32} />
         What degree are you pursuing?

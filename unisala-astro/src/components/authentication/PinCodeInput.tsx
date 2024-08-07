@@ -6,6 +6,7 @@ import { SendVerificationMail, VerifyEmail } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
 import { setUser } from "@/store/userStore";
+import { navigator } from "@/utils/lib/URLupdate";
 
 interface PinCodeInputProps {
   onBack: () => void;
@@ -19,7 +20,6 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data: any) => {
       const user = data?.verifyEmail?.data;
-      console.log("user", user);
       setUser({
         id: user?.id,
         authenticated: true,
@@ -32,10 +32,10 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
       });
       if (user?.newUser) {
         toast.success("Account created successfully.");
-        window.location.href = "/welcome-form/intro";
+        navigator('/welcome-form/intro')
       } else {
         toast.success("Logged in successfully.");
-        window.location.href = "/feed";
+        navigator()
       }
     },
     onError: (error) => {

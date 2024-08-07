@@ -567,9 +567,9 @@ export const checkEmail = gql`
     mutation editProfile(
       $picture: String
       $coverPicture: String
-      $username: String!
-      $firstName: String!
-      $lastName: String!
+      $username: String
+      $firstName: String
+      $lastName: String
       $location: String
       $oneLinerBio: String
       $birthday: String

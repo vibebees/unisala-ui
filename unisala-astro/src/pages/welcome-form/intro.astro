@@ -32,7 +32,7 @@ import WelcomeFormLayout from "@/components/layout/Welcome-form-Layout.astro";
     const redirect = currentUrl.searchParams.get('redirect');
     
     // Get the link element
-    const link = document.getElementById('getStartedLink');
+    const link = document.getElementById('getStartedLink') as HTMLAnchorElement;
     
     if (link && redirect) {
       // Append the redirect to the existing href

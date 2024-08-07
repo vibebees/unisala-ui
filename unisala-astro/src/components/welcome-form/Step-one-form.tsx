@@ -63,9 +63,11 @@ const StepTwoForm = () => {
         />
 
         <Button
-          url="intro"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
+          onclick={() => {
+            navigator("/welcome-form/step-one");
+          }}
         />
       </div>
     </div>

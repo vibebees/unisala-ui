@@ -108,7 +108,13 @@ export const navigator = ( url:string = '') => {
       
         if (url === '') {
           // If no URL is provided, serve the redirect or go to default
-          window.location.href = redirectUrl ? decodeURIComponent(redirectUrl) : '/new-story';
+          const currentUrl = new URL(window.location.origin);
+          const redirectPath = redirectUrl ? decodeURIComponent(redirectUrl) : '/new-story';
+          
+          // Ensure the redirectPath starts with a '/'
+          currentUrl.pathname = redirectPath.startsWith('/') ? redirectPath : `/${redirectPath}`;
+          
+          window.location.href = currentUrl.toString();
         } else {
           // If a URL is provided, attach the current redirect to it
           const newUrl = new URL(url, window.location.origin);

@@ -19,6 +19,7 @@ import {getServiceConfig} from "./index";
 import config from "./config";
 import { getCache } from "@/utils/cache";
 import { setContext } from '@apollo/client/link/context';
+import toast from "react-hot-toast";
 
 const {
   messagingServiceAddress,
@@ -57,6 +58,26 @@ const {
     });
   }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      for (let err of graphQLErrors) {
+        // Try to parse the error message
+        try {
+          const parsedError = JSON.parse(err.message);
+          if (parsedError.statusCode === 401 && parsedError.message.includes("You are not logged in")) {
+            toast.error("You are not logged in. Please login to continue.");
+            // Here you can add logic to redirect to login page or refresh token
+            // For example:
+            // window.location.href = '/login';
+            // or dispatch an action to your state management system:
+            // store.dispatch(logoutUser());
+          }
+        } catch (e) {
+          // If parsing fails, it's not the error format we're looking for
+          console.log(`[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`);
+        }
+      }
+    }
+
     if (networkError) {
       console.log(`[Network error]: ${networkError}`);
     }
@@ -72,19 +93,7 @@ const {
   userServerGql = new HttpLink({
     uri: userServiceAddress + "/graphql",
     server: USER_SERVICE_GQL,
-  } as any),
-  httpLink2 = split(
-    (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
-    universityServerGql,
-    split(
-      (operation) => operation.getContext().server === MESSAGE_SERVICE_GQL,
-      messageServerGql,
-      split(
-        (operation) => operation.getContext().server === USER_SERVICE_GQL,
-        userServerGql
-      )
-    )
-  );
+  } as any)
 
 const authData: { accessToken?: string } | null = getCache('authData') || {} as { accessToken?: string };
 const accessToken = authData?.accessToken;

@@ -7,12 +7,16 @@ interface RichTextInputProps {
   initialValue: string;
   key?: string;
   placeholder?: string;
+  theme?: 'light' | 'dark';
+
 }
 
 const RichTextInput: React.FC<RichTextInputProps> = ({
  initialValue,
   placeholder = "Write something...",
   key = "new.story.postText",
+  theme = 'light'
+
 }) => {
   const [content, setContent] = useState<string>(initialValue);
   const quillRef = useRef<ReactQuill>(null);
@@ -126,7 +130,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   }, [showToolbar, hideToolbar]);
 
   return (
-    <div className="rich-text-editor-container">
+    <div className={`rich-text-editor-container ${theme}`}>
       <div id="floating-toolbar" ref={toolbarRef}
      className="ql-toolbar ql-snow absolute left-0 flex items-center width-100px "
 

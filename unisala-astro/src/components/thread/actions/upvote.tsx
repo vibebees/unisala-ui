@@ -113,7 +113,6 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
         {copyLink ? <CopyIconFilled /> : <CopyIconOutline />}
         </button>
       </div>
-      {upVoteError && <p className="text-red-500">{upVoteError.message}</p>}
     </div>
   );
 };

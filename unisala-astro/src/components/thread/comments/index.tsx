@@ -45,11 +45,7 @@ const Comments: React.FC<CommentsProps> = ({ postId, parentId }) => {
             Discussion ({data?.commentList?.data?.length || 0})
           </h2>
         </div>
-        {userData ? (
-          <LoggedInUserView />
-        ) : (
-          <CtaLogin message="Login to view comments" />
-        )}
+        <LoggedInUserView />
       </div>
     </section>
   );

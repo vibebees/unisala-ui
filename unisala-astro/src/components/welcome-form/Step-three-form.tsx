@@ -78,9 +78,7 @@ const StepThreeForm = () => {
         }
       }).then(() => {
         // After successful profile edit, redirect if the parameter exists
-        if (redirect) {
-          window.location.href = decodeURIComponent(redirect);
-        }
+       
       });
     }
   };

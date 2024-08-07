@@ -8,7 +8,8 @@ import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
-import PreviewModal from '../ui/modal';
+import PreviewModal from './storyPreviewModal';
+import { getCache } from '@/utils/cache';
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
 interface PostFormProps {
@@ -30,6 +31,13 @@ const PostForm: React.FC<PostFormProps> = () => {
         onError: (error) => {
         },
     });
+    const userData = getCache('authData');
+    useEffect(() => {
+        console.log()
+        if (!userData) {
+            navigator('/auth?redirect=new-story');
+        }
+    }, [userData]);
  
 
     const handlePublish = async (e:any): Promise<void> => {

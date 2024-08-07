@@ -40,19 +40,31 @@ const StepThreeForm = () => {
     const userStatus = localStorage.getItem('userStatus');
     const interestedSubjects = localStorage.getItem('interestedSubjects');
     const studyLevel = localStorage.getItem('studyLevel');
+  
+    // Get the current URL and extract the redirect parameter
     const currentUrl = new URL(window.location.href);
     const redirect = currentUrl.searchParams.get('redirect');
     
     if (!userStatus || !interestedSubjects || !studyLevel) {
+      let redirectPath = '';
+  
       if (!userStatus) {
-        window.location.href = 'step-one';
+        redirectPath = 'step-one';
+      } else if (!interestedSubjects) {
+        redirectPath = 'step-two';
+      } else if (!studyLevel) {
+        redirectPath = 'step-three';
       }
-      if (!interestedSubjects) {
-        window.location.href = 'step-two';
+  
+      if (redirectPath) {
+        // Append the redirect parameter if it exists
+        const finalRedirectPath = redirect 
+          ? `${redirectPath}?redirect=${encodeURIComponent(redirect)}`
+          : redirectPath;
+        
+        window.location.href = finalRedirectPath;
       }
-      if (!studyLevel) {
-        window.location.href = 'step-three';
-      }
+  
       shakeWebsite();
     } else {
       const data = {
@@ -63,6 +75,11 @@ const StepThreeForm = () => {
       editProfile({
         variables: {
           ...data
+        }
+      }).then(() => {
+        // After successful profile edit, redirect if the parameter exists
+        if (redirect) {
+          window.location.href = decodeURIComponent(redirect);
         }
       });
     }
@@ -111,6 +128,7 @@ const StepThreeForm = () => {
           url="step-two"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
+          onclick={() => {navigator('/welcome-form/step-two')}}
         />
       </div>
     </div>

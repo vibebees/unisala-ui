@@ -5,6 +5,7 @@ import ScholarShip from "@/components/scholarship/ScholarShip";
 import { fetchApi } from "@/utils/api.utility";
 import "../styles/scholarship.css";
 import { universityServiceGql } from "@/datasource/servers";
+import ScholarshipFeedback from "@/components/scholarship/ScholarshipFeedback";
 let data = [];
 
 const query = `query searchScholarshipV2(
@@ -104,6 +105,11 @@ try {
         </div>
 
         <ScholarShip client:only="react" />
+
+        <div
+          class="my-3 h-px w-full bg-neutral-600 opacity-45 dark:bg-neutral-300"
+        >
+        </div>
       </div>
 
       <div class="grid-container astro-scholarship">
@@ -116,6 +122,8 @@ try {
       </div>
     </section>
   </div>
+
+  <ScholarshipFeedback client:load />
 </MainLayout>
 
 <style>

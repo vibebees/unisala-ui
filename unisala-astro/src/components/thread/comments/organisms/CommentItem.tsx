@@ -37,7 +37,6 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
   const handleEdit = () => {
     setIsEditing(true);
   };
-  console.log({userData})
  
   const [deleteComment] = useAstroMutation(DeleteComment, {
     context: { server: USER_SERVICE_GQL },

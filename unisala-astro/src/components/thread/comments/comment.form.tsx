@@ -1,3 +1,4 @@
+import { CommentIconOutline } from '@/components/packages/icons/comments';
 import { CtaLogin } from '@/components/ui/ctaLogin';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddComment, GetCommentList } from '@/datasource/graphql/user';
@@ -7,6 +8,7 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { sendGAEvent } from '@/utils/analytics/events';
 import { fetchApi } from '@/utils/api.utility';
 import { getCache } from '@/utils/cache';
+import { Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -15,6 +17,7 @@ interface CommentFormProps {
   parentId?: string;
   replyTo?: string;
 }
+
 
 const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyTo }) => {
   const [commentText, setCommentText] = useState('');
@@ -114,9 +117,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
   if (userData === null) {
     return (
       <section className='bg-white dark:bg-gray-900 py-8 lg:py-6 antialiased'>
-      <div className='max-w-4xl mx-auto px-4'>
-        <CtaLogin message='Your prespective' />
-      </div>
+        <div className='max-w-4xl mx-auto px-4 flex items-center'>
+          <CtaLogin message='I want to comment' />
+        </div>
     </section>
     )
   }

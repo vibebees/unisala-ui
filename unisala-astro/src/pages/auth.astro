@@ -1,6 +1,6 @@
 ---
 import MainLayout from "@/layouts/main-layout.astro";
-import AuthWrapper from "@/components/authentication/AuthWrapper";
+import {AuthWrapperReact} from '@/components/authentication/authWrapperReact'
 const redirectUrl = Astro.url.searchParams.get('redirect') || '';
 
 ---
@@ -13,6 +13,6 @@ const redirectUrl = Astro.url.searchParams.get('redirect') || '';
   <div
     class="flex flex-col items-center justify-center h-[calc(100vh-100px)] overflow-hidden"
   >
-    <AuthWrapper client:only="react" afterState={redirectUrl} />
+    <AuthWrapperReact client:only="react" afterState={redirectUrl} />
   </div>
 </MainLayout>

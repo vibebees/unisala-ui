@@ -5,55 +5,46 @@ import PinCodeInput from "./PinCodeInput";
 import { Toaster } from "react-hot-toast";
 import { getCache, setCache } from "@/utils/cache";
 import { setUser } from "@/store/userStore";
-import { navigator } from "@/utils/lib/URLupdate";
 
 interface AuthWrapperProps {
-  afterState: string
+  afterState: string;
+  children?: React.ReactNode;
 }
-const AuthWrapper: React.FC <AuthWrapperProps> = ({
-  afterState 
-}) => {
-  console.log({afterState})
-  const [authState, setAuthState] = useState<"email" | "name" | "pincode">(
-    "email"
-  );
 
+export const AuthWrapperReact: React.FC<AuthWrapperProps> = ({
+  afterState,
+  children
+}) => {
+  console.log({afterState});
+  const [authState, setAuthState] = useState<"email" | "name" | "pincode">("email");
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<{ firstName: string; lastName: string }>({
     firstName: "",
     lastName: "",
   });
 
-  
   useLayoutEffect(() => {
     const user: any = getCache("authData");
     if (user) {
       setUser(user);
-      
-      // Check if there's a redirect URL in the afterState prop
       if (afterState) {
-        // Decode the URL-encoded redirect path
         const decodedRedirect = decodeURIComponent(afterState);
-        
-        // Navigate to the decoded redirect URL
         window.location.href = decodedRedirect;
       }
     }
   }, [afterState]);
 
-  
   return (
-    <div className="w-full  flex container">
+    <div className="w-full flex container">
       <Toaster />
       <div className="w-1/2 max-md:hidden flex items-center justify-start">
         <img
           src="/auth-bg.png"
           alt="Auth illustration"
-          className="max-w-full -translate-x-40  dark:mix-blend-normal max-h-full mix-blend-multiply object-cover"
+          className="max-w-full -translate-x-40 dark:mix-blend-normal max-h-full mix-blend-multiply object-cover"
         />
       </div>
-
-      <div className="w-1/2 h-full max-md:w-full flex items-center justify-center ">
+      <div className="w-1/2 h-full max-md:w-full flex items-center justify-center">
         <div className="w-full h-full">
           {authState === "email" && (
             <EmailInput
@@ -76,8 +67,7 @@ const AuthWrapper: React.FC <AuthWrapperProps> = ({
           )}
         </div>
       </div>
+      {children}
     </div>
   );
 };
-
-export default AuthWrapper;

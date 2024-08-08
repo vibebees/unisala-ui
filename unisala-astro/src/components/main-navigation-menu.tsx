@@ -27,14 +27,14 @@ export function MainNavigationMenu() {
 
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/new-story" className={navigationMenuTriggerStyle()}>
+        <NavigationMenuLink href="/new-story" className={navigationMenuTriggerStyle()}>
             New Story
           <PenOutLine/>
 
           </NavigationMenuLink>
         </NavigationMenuItem>
-
-        {/* <NavigationMenuItem>
+{/* 
+        <NavigationMenuItem>
           <NavigationMenuTrigger>{pages.title}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -45,6 +45,16 @@ export function MainNavigationMenu() {
           </NavigationMenuContent>
         </NavigationMenuItem> */}
 
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>{examples.title}</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              {examples.items?.map((example) => (
+                <ListItem key={example.title} {...example} />
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
 
         {links ? (
           <NavigationMenuItem>

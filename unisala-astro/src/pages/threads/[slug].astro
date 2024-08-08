@@ -18,6 +18,9 @@ const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
+import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
+import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
+
 let post = null;
 let error: string = '';
 // Remove the assignment to prerender
@@ -205,4 +208,10 @@ let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.p
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>
+  <ThreadAuthor
+      author ={post?.user?.firstName + ' ' + post?.user?.lastName}
+      authorDescription=''
+  />
+  <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
+
 </MainLayout>

@@ -37,10 +37,14 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #d3dae2;
-
     transition:
         background-color 0.3s ease,
         color 0.3s ease;
+}
+
+.card-header button {
+    width: fit-content;
+    margin-left: 7px;
 }
 
 .card-header:hover {

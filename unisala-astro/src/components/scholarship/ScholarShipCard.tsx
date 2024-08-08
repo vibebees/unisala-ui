@@ -129,9 +129,18 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
               {scholarship?.university_name}
             </p>
           </div>
-          {/* <button className="favorite-btn">
-            <i className="fas fa-star"></i> Favorite
-          </button> */}
+          <button title="Share scholarship" className="favorite-btn">
+            <i
+              className="fas fa-share"
+              onClick={() => {
+                sendGAEvent("scholarship_favorite_click", {
+                  category: "Scholarship",
+                  label: scholarship.scholarship_name,
+                  value: scholarship.unitId,
+                });
+              }}
+            ></i>
+          </button>
         </div>
         <div className="card-body">
           <div className="info-grid">

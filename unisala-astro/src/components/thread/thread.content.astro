@@ -14,7 +14,6 @@ import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
 import { userServer } from '@/datasource/servers/endpoints';
 const { slug ="" } = Astro.params;
-console.log("Fetching data for slug:", slug);
 const loadingToastId = toast.loading('Loading...');
 
 let post = null;
@@ -94,7 +93,6 @@ try {
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
-  console.log({result});
 
   post = result.data?.getPostById?.post;
 

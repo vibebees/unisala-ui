@@ -15,7 +15,6 @@ export const AuthWrapperReact: React.FC<AuthWrapperProps> = ({
   afterState,
   children
 }) => {
-  console.log({afterState});
   const [authState, setAuthState] = useState<"email" | "name" | "pincode">("email");
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<{ firstName: string; lastName: string }>({

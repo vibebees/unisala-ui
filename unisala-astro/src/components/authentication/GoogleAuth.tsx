@@ -12,10 +12,7 @@ export const GoogleAuth = memo(() => {
   const [Googlelogin] = useAstroMutation(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
-      console.log("login data", data);
       if (data.google?.status?.success && data.google && data.google.data) {
-        console.log("login data", data.google.data);
-
         // history.push("/feed");
       }
     },

@@ -18,8 +18,6 @@ export const ThreadSuggestions = () => {
 
     const posts = useMemo(() => data?.fetchFeedV2.data || [], [data]);
 
-    console.log({ posts });
-
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 

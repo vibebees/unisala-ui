@@ -33,7 +33,6 @@ const PostForm: React.FC<PostFormProps> = () => {
     });
     const userData = getCache('authData');
     useEffect(() => {
-        console.log()
         if (!userData) {
             navigator('/auth?redirect=new-story');
         }

@@ -10,9 +10,10 @@ interface SimilarThreadProps {
     articles: IPost[];
     title: string;
     titleDescription: string;
+    id: string;
 }
 
-export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, titleDescription }) => {
+export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, titleDescription, id }) => {
 
     function handleThreadClick(id: string, action: string) {
         sendGAEvent('suggested_thread', {
@@ -22,12 +23,9 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
             type: action + '_click'
           });
     }
-
-    if(articles.length === 0) {
-        return null;
-    }
+ 
     return (
-        <section className="bg-white dark:bg-gray-900">
+        <section className="bg-white dark:bg-gray-900" id={id}>
             <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
                 <div className="grid gap-8 lg:grid-cols-2">
                     <p className="mb-5 font-light text-gray-500 dark:text-gray-400">
@@ -42,17 +40,18 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
                                 <div className="flex justify-between items-center mb-5 text-gray-500">
                                     <span className="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
                                         <svg className="mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clipRule="evenodd"></path><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path></svg>
-                                        {article?.postTags?.tag.name}
-                                    </span>
+                                        {article?.postTags?.tag?.name || ''}
+
+</span>
                                     <span className="text-sm">
                                         {article?.date ? formatDate(article?.date) : 'No Date'}
                                     </span>
                                 </div>
                                 <h4 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                     <a
-                                        href={`/threads/${article._id}`}
+                                        href={`/threads/${article?._id}`}
                                         onClick={(e) => {
-                                            handleThreadClick(article._id, 'heading');
+                                            handleThreadClick(article?._id, 'heading');
                                         }}
                                         data-astro-reload
                                     >

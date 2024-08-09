@@ -19,6 +19,8 @@ import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
 import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
+import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
+
 import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
 
 let post = null;
@@ -98,13 +100,10 @@ try {
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
-  console.log({result});
 
   post = result.data?.getPostById?.post;
 
-  if (!post) {
-    throw new Error('Post not found');
-  }
+
 } catch (e) {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);
@@ -156,7 +155,8 @@ const handleUpvote = async (postId: string) => {
   }
 };
 
-let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.png';
+
+console.log('post?.user?._id', post?.user?._id)
 ---
 
 <MainLayout
@@ -212,6 +212,10 @@ let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.p
       author ={post?.user?.firstName + ' ' + post?.user?.lastName}
       authorDescription=''
   />
+
+  <SameWriterSuggestions  feedId ={post?.user?._id}  />
+  <hr />
   <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
+
 
 </MainLayout>

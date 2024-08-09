@@ -59,7 +59,7 @@ const {
   }),
   errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
-      for (let err of graphQLErrors) {
+      for (const err of graphQLErrors) {
         // Try to parse the error message
         try {
           const parsedError = JSON.parse(err.message);

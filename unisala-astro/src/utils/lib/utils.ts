@@ -25,7 +25,7 @@ export async function getSeasonInfo() {
   const currentMonth = currentDate.getMonth() + 1;
 
   let season = "";
-  let seasonYear = currentDate.getFullYear();
+  const seasonYear = currentDate.getFullYear();
   let nextSeason = "";
   let nextYear = seasonYear;
 

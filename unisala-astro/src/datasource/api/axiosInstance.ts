@@ -5,7 +5,7 @@ import { getCache, setCache } from "../../utils/cache";
 
 const axiosOjb = () => {
   const authBaseURL = base;
-  let authData: any = getCache("authData") || { accessToken: false },
+  const authData: any = getCache("authData") || { accessToken: false },
     { accessToken } = authData || { accessToken: false };
   return {
     baseURL: authBaseURL,
@@ -26,7 +26,7 @@ authInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Prevent infinite loops
-    // eslint-disable-next-line
+     
     if (
       error.response.status === 401 &&
       originalRequest.url ===  base + "/refreshToken/"

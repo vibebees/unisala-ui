@@ -1,5 +1,5 @@
 
-let
+const
   AWS = {},
   S3_BUCKET = null,
   REGION = "us-east-1",

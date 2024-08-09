@@ -88,7 +88,7 @@ export function SheetMobileNav({
                             <a
                               href={subItem.href}
                               target={subItem?.external ? "_blank" : undefined}
-                              className="text-muted-foreground"
+                              className="text-muted-foreground" rel="noreferrer"
                             >
                               {subItem.title}
                             </a>

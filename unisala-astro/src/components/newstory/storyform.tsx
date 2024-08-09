@@ -41,7 +41,7 @@ const PostForm: React.FC<PostFormProps> = () => {
 
     const handlePublish = async (e:any): Promise<void> => {
 
-        let payloadTopics = topics.map((topic) => {
+        const payloadTopics = topics.map((topic) => {
             return {
                 name: topic?.name,
                 _id: topic?._id,
@@ -50,7 +50,7 @@ const PostForm: React.FC<PostFormProps> = () => {
                 entityType: topic?.entityType,
             }
         })
-        let postDraft = {
+        const postDraft = {
             title: localStorage.getItem('new.story.title') || '',
             postText: localStorage.getItem('new.story.postText') || '',
             id: 'others',

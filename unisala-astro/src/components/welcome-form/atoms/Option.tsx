@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import React, { type FC } from "react";
 
 interface OptionProps {

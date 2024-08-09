@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 interface IRadioButtons {
   label1: string;
   value1: string;

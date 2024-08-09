@@ -150,7 +150,7 @@ export const ReplyBox: React.FC<{
       update: (cache, { data }) => {
         if (data?.editComment?.status?.success) {
           const updatedComment = data.editComment.data;
-          let variables = { postId } as { postId: string; parentId?: string };
+          const variables = { postId } as { postId: string; parentId?: string };
           if (parentId) {
             variables.parentId = parentId;
           }

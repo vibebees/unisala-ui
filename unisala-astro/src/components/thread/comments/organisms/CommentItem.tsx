@@ -44,7 +44,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
     update: (cache, { data }) => {
       if (data?.deleteComment?.status?.success) {
         // Remove the comment from the cache
-        let variables: { postId: string; parentId?: string | null } = { postId: comment.postId };
+        const variables: { postId: string; parentId?: string | null } = { postId: comment.postId };
 
         if (comment.parentId) {
           variables.parentId = comment.parentId;

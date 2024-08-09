@@ -22,7 +22,7 @@ const ThreadExpand = ({
 }: ThreadExpandProps) => {
   const [showSeeMore, setShowMore] = useState(true);
   const TextRef = useRef(null);
-  let showSeeMoreOptionAtWordCount: number = 40;
+  const showSeeMoreOptionAtWordCount: number = 40;
 
 
 

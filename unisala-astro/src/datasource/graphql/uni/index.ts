@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import { gql } from "@apollo/client";
 
 export const GetProfessor = gql`

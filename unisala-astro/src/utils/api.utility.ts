@@ -4,7 +4,7 @@ export async function fetchApi(
   url: string | URL | Request,
   options: Record<string, any> = {}
 ) {
-  let accessToken: string | undefined = undefined;
+  const accessToken: string | undefined = undefined;
   try {
     // const authData: { accessToken?: string } | null = getCache("authData");
     // accessToken = authData?.accessToken;

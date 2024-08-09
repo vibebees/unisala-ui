@@ -32,7 +32,7 @@ interface OrgSpaceResponse {
   data: SpaceOrg;
 }
 
-// eslint-disable-next-line no-unused-vars
+ 
 interface GetOrgSpaceByIdResponse {
   getOrgSpaceById: OrgSpaceResponse;
 }

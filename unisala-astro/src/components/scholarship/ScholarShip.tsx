@@ -38,7 +38,7 @@ const ScholarShip = () => {
   });
 
   useEffect(() => {
-    let newOjb: any = { ...filters };
+    const newOjb: any = { ...filters };
     Object.keys(filters).forEach((key: any) => {
       if (!filters[key as keyof FilterState]) {
         delete newOjb[key];

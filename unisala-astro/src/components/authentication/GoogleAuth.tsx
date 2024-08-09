@@ -23,7 +23,7 @@ export const GoogleAuth = memo(() => {
 
   const onGoogleSignIn = (user: any) => {
     const { credential } = user;
-    let payload = {
+    const payload = {
       email: params.get("email"),
       spaceOrgName: params.get("org"),
       code: params.get("code"),

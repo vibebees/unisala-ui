@@ -34,7 +34,7 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
                 </div>
                 <div className="grid gap-8 md:grid-cols-2">
                     {articles.map((article, index) => {
-                        let image = article?.images?.length > 0 ? article?.images[0] : extractImageFromPostText({postText:article?.postText, user: true});
+                        const image = article?.images?.length > 0 ? article?.images[0] : extractImageFromPostText({postText:article?.postText, user: true});
                         return (
                             <article key={index} className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 relative">
                                 <div className="flex justify-between items-center mb-5 text-gray-500">

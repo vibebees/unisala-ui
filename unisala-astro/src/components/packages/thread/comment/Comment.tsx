@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import "../index.css";
-import ShowMore from "../organism/ShowPeopleComments";
-import ThreadHeader from "../organism/ThreadHeader";
 import EditComments from "./EditComment";
-import { ThreadFooter } from "../organism";
 import { useAuth } from "@/context/AuthContext";
 
 interface CommentProps {

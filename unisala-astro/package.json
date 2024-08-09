@@ -8,8 +8,10 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix"
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint . --fix",
+    "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'"
+
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -42,22 +44,25 @@
     "react-intersection-observer": "^9.10.3",
     "react-quill": "^2.0.0",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5"
+    "tailwindcss": "^3.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.3.2",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
     "astro-icon": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "eslint": "^9.8.0",
     "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-unused-imports": "^4.1.2",
     "globals": "^15.9.0",
     "husky": "^9.0.11",
     "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.1"
   }
 }

@@ -2,14 +2,11 @@ import React, { type FormEvent, useState } from "react";
 // import { useMutation } from "@apollo/client";
 // import RichTextInput from "../input/RichTextInput";
 // import { ThreadHeader } from "../thread/organism";
-import { AddComment } from "@/datasource/graphql/user";
 import { useAuth } from "@/context/AuthContext";
-import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import "./index.css";
 // import { AddCommentMutation } from "@/types/gqlTypes/graphql";
 import { currentFeedType } from "@/utils/lib/URLupdate";
 // import { useLocation } from "react-router-dom";
-import { updateCacheForNewComments } from "./updateCacheForCommets";
 
 interface ReplyInputProps {
   postId?: string;

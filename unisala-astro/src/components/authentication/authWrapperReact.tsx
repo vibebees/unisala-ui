@@ -3,7 +3,7 @@ import EmailInput from "./EmailInput";
 import NameInput from "./NameInput";
 import PinCodeInput from "./PinCodeInput";
 import { Toaster } from "react-hot-toast";
-import { getCache, setCache } from "@/utils/cache";
+import { getCache } from "@/utils/cache";
 import { setUser } from "@/store/userStore";
 
 interface AuthWrapperProps {

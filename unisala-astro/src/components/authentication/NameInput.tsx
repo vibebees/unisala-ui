@@ -1,9 +1,9 @@
  
-import React, { useState } from "react";
+import React from "react";
 import { User, ArrowLeft } from "lucide-react";
 import SubmitButton from "./SubmitButton";
 import { useAstroMutation } from "@/datasource/apollo-client";
-import { checkEmail, RegisterV2 } from "@/datasource/graphql/user";
+import { RegisterV2 } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
 

@@ -1,7 +1,6 @@
-import { formatCommentDate, formatDate } from '@/utils/date';
-import { similarThreadDetail, similarThreadHeading, stripHtmlTags } from '@/utils/lib/utils';
-import React, { useState } from 'react';
-import { LoadingScreen } from '@/components/ui/loading';
+import { formatDate } from '@/utils/date';
+import { similarThreadDetail, similarThreadHeading } from '@/utils/lib/utils';
+import React from 'react';
 import { extractImageFromPostText } from '@/utils/lib/image';
 import { sendGAEvent } from '@/utils/analytics/events';
 import type { IPost } from '@/types/post';

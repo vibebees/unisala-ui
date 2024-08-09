@@ -1,6 +1,5 @@
 // import { useHistory } from "react-router-dom";
 
-import { getCache, setCache } from "../cache";
 
 export const URLupdate = (key: string, value: string) => {
   const url = new URL(window.location.href);

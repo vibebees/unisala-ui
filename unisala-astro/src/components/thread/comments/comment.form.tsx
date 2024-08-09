@@ -1,15 +1,10 @@
-import { CommentIconOutline } from '@/components/packages/icons/comments';
 import { CtaLogin } from '@/components/ui/ctaLogin';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddComment, GetCommentList } from '@/datasource/graphql/user';
-import { userServiceGql } from '@/datasource/servers';
-import { client } from '@/datasource/servers/endpoints';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { sendGAEvent } from '@/utils/analytics/events';
-import { fetchApi } from '@/utils/api.utility';
 import { getCache } from '@/utils/cache';
-import { Icon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface CommentFormProps {

@@ -4,7 +4,6 @@ import {
   HttpLink,
   InMemoryCache,
   from,
-  fromPromise,
   split,
   Observable,
 } from "@apollo/client";

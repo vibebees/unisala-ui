@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import type { PostDraft, TopicOptions } from '@/types/post';
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';

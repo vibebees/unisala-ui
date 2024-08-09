@@ -6,7 +6,6 @@ import { GetCommentList } from '@/datasource/graphql/user';
 import { CommentSkeleton } from './organisms/CommentSkeleton';
 import { CommentList } from './organisms/CommentList';
 import { getCache } from '@/utils/cache';
-import { CtaLogin } from '@/components/ui/ctaLogin';
 
 interface CommentsProps {
   postId: string;

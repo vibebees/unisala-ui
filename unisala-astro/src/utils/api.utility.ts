@@ -1,4 +1,3 @@
-import { getCache } from "./cache";
 
 export async function fetchApi(
   url: string | URL | Request,

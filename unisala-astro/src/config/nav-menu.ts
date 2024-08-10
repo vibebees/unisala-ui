@@ -51,12 +51,20 @@ export const navMenuConfig: NavMenuConfig = {
     {
       title: "Scholarships",
       items: [
-        // {
-        //   title: "Static Blog",
-        //   href: "/blog",
-        //   description: "A Markdown/MDX blog built using Content Collections.",
-        //   image: "/images/examples/static-blog.jpg",
-        // },
+      
+        {
+          title: "Scholarships Explorer",
+          href: "/scholarships",
+          description: "Funds  based on your gpa and test scores.",
+          // image: "/images/examples/auth.jpg",
+        },
+
+          {
+          title: "Static Blog",
+          href: "/blog",
+          description: "A Markdown/MDX blog built using Content Collections.",
+          image: "/images/examples/static-blog.jpg",
+        },
         // {
         //   title: "Docs",
         //   href: "/docs/getting-started",
@@ -87,21 +95,15 @@ export const navMenuConfig: NavMenuConfig = {
         //   description: "Ecommerce pages fetching data from an API.",
         //   // image: "/images/examples/ecommerce.jpg",
         // },
-        {
-          title: "Scholarships Explorer",
-          href: "/scholarships",
-          description: "Funds  based on your gpa and test scores.",
-          // image: "/images/examples/auth.jpg",
-        },
       ],
     },
   ],
   links: [
-    // {
-    //   title: "Example",
-    //   href: "/example",
-    //   description: "Example description",
-    //   image: "/images/examples/image.jpg",
-    // },
+    {
+      title: "Universe",
+      href: "/universe",
+      description: "Example description",
+      image: "/images/examples/image.jpg",
+    },
   ],
 };

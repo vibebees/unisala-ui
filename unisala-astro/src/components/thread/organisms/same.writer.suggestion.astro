@@ -226,7 +226,6 @@ try {
     throw new Error(result.errors[0].message);
   }
   posts = result.data?.fetchFeedV2?.data || [];
-  console.log('post for writer fetched', posts.length)
 
 } catch (e) {
   console.error('Error fetching feed:', e);

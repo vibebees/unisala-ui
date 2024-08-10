@@ -31,7 +31,7 @@ export function MainNavigationMenu() {
 
           </NavigationMenuLink>
         </NavigationMenuItem>
-{/* 
+{/*
         <NavigationMenuItem>
           <NavigationMenuTrigger>{pages.title}</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -108,6 +108,7 @@ const ListItem: React.FC<MenuItem> = ({
               SOON
             </Badge>
           ) : null}
+          
           {launched ? (
             <Badge
               radius="sm"

@@ -8,15 +8,13 @@ interface RichTextInputProps {
   key?: string;
   placeholder?: string;
   theme?: 'light' | 'dark';
-
 }
 
 const RichTextInput: React.FC<RichTextInputProps> = ({
- initialValue,
+  initialValue,
   placeholder = "Write something...",
   key = "new.story.postText",
   theme = 'light'
-
 }) => {
   const [content, setContent] = useState<string>(initialValue);
   const quillRef = useRef<ReactQuill>(null);
@@ -27,14 +25,14 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     toolbar: {
       container: "#floating-toolbar",
       handlers: {
-        // Define custom handlers here if needed
+        // Custom handlers here
       }
     },
     clipboard: {
-      // Add clipboard module options
+      // Clipboard module options
     },
     history: {
-      // Add history module options
+      // History module options
     }
   };
 
@@ -73,21 +71,18 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       const selection = quill?.getSelection();
       if (selection && selection.length > 0) {
         let bounds
-        const quill = quillRef.current?.getEditor();
         if (quill) {
           bounds = quill.getBounds(selection.index, selection.length);
         }
         const toolbar = toolbarRef.current;
         toolbar.style.display = 'flex';
         
-        // Position the toolbar above the selection
         if (bounds) {
           toolbar.style.top = `${bounds.top - toolbar.offsetHeight - 5}px`;
         }
         toolbar.style.left = '0';
         toolbar.style.right = '0';
         
-        // Ensure the toolbar is fully visible
         const editorRect = quill?.root.getBoundingClientRect();
         if (bounds && editorRect && bounds.top - toolbar.offsetHeight < editorRect.top) {
           toolbar.style.top = `${bounds.bottom + 5}px`;
@@ -129,15 +124,28 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     };
   }, [showToolbar, hideToolbar]);
 
+  // New function to handle toolbar interactions
+  const handleToolbarInteraction = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const quill = quillRef.current?.getEditor();
+    const selection = quill?.getSelection();
+    if (selection) {
+      setTimeout(() => {
+        quill?.setSelection(selection);
+      }, 0);
+    }
+  }, []);
+
   return (
     <div className={`rich-text-editor-container ${theme}`}>
-      <div id="floating-toolbar" ref={toolbarRef}
-     className="ql-toolbar ql-snow absolute left-0 flex items-center width-100px "
-
-        >
+      <div 
+        id="floating-toolbar" 
+        ref={toolbarRef}
+        className="ql-toolbar ql-snow absolute left-0 flex items-center width-100px"
+        onMouseDown={handleToolbarInteraction}
+      >
         <button className="ql-clean"></button>
-
-      <select className="ql-header">
+        <select className="ql-header">
           <option value="1"></option>
           <option value="2"></option>
           <option value="3"></option>
@@ -146,13 +154,12 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
           <option value="6"></option>
           <option selected></option>
         </select>
-
         <button className="ql-bold"></button>
         <button className="ql-italic"></button>
         <button className="ql-underline"></button>
         <button className="ql-blockquote"></button>
         <button className="ql-link"></button>
-                <button className="ql-image"></button>
+        <button className="ql-image"></button>
         <button className="ql-code-block"></button>
         <button className="ql-list" value="ordered"></button>
         <button className="ql-list" value="bullet"></button>
@@ -174,8 +181,6 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
           <option value="#d0d1d2"></option>
           <option selected></option>
         </select>
-      
-
         <button className="ql-video"></button>
       </div>
       <ReactQuill

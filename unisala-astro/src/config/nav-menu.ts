@@ -59,12 +59,12 @@ export const navMenuConfig: NavMenuConfig = {
           // image: "/images/examples/auth.jpg",
         },
 
-          {
-          title: "Static Blog",
-          href: "/blog",
-          description: "A Markdown/MDX blog built using Content Collections.",
-          image: "/images/examples/static-blog.jpg",
-        },
+        //   {
+        //   title: "Static Blog",
+        //   href: "/blog",
+        //   description: "A Markdown/MDX blog built using Content Collections.",
+        //   image: "/images/examples/static-blog.jpg",
+        // },
         // {
         //   title: "Docs",
         //   href: "/docs/getting-started",
@@ -99,11 +99,11 @@ export const navMenuConfig: NavMenuConfig = {
     },
   ],
   links: [
-    {
-      title: "Universe",
-      href: "/universe",
-      description: "Example description",
-      image: "/images/examples/image.jpg",
-    },
+    // {
+    //   title: "Universe",
+    //   href: "/universe",
+    //   description: "Example description",
+    //   image: "/images/examples/image.jpg",
+    // },
   ],
 };

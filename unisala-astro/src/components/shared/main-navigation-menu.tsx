@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import type { MenuItem } from "@/types";
 import { navMenuConfig } from "@/config/nav-menu";
 import { cn } from "@/utils/lib/utils";
-import { PenOutLine } from "./packages/icons/Pen";
+import { PenOutLine } from "../packages/icons/Pen";
 
 const links = navMenuConfig.links;
 const pages = navMenuConfig.pagesNav[0];

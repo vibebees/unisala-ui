@@ -5,9 +5,10 @@ import { cn } from "@/utils/lib/utils";
 import BaseLayout from "./base-layout.astro";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/config/site";
-import { MainNavigationMenu } from "@/components/main-navigation-menu";
+import { MainNavigationMenu } from "@/components/shared/main-navigation-menu";
 import { navMenuConfig } from "@/config/nav-menu";
 import { SheetMobileNav } from "@/components/layout/sheet-mobile-nav";
+import ProfileAvatar from "@/components/shared/top_nav/ProfileAvatar";
 
 type Props = {
   title: string;
@@ -73,7 +74,8 @@ const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
       client:load
     />
     <div class="flex items-center gap-x-4" slot="right-header">
-      <ThemeToggle client:load />
+      <!-- <ThemeToggle client:load /> -->
+      <ProfileAvatar client:load />
     </div>
   </Header>
 

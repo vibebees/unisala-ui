@@ -11,6 +11,7 @@ import { CommentList } from "./CommentList";
 import { ReplyBox } from "./ReplyBox";
 import { toast } from "react-hot-toast";
 import { sendGAEvent } from "@/utils/analytics/events";
+import { getCache } from "@/utils/cache";
 
 export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> = ({ comment, nestedComment = false }) => {
   const [showReplies, setShowReplies] = useState(false);
@@ -21,6 +22,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
     skip: !showReplies,
     context: { server: USER_SERVICE_GQL },
   });
+  const userData = getCache('authData');
 
   const handleViewReplies = () => {
     setShowReplies(true);
@@ -35,7 +37,6 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
   const handleEdit = () => {
     setIsEditing(true);
   };
-
  
   const [deleteComment] = useAstroMutation(DeleteComment, {
     context: { server: USER_SERVICE_GQL },
@@ -43,7 +44,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
     update: (cache, { data }) => {
       if (data?.deleteComment?.status?.success) {
         // Remove the comment from the cache
-        let variables: { postId: string; parentId?: string | null } = { postId: comment.postId };
+        const variables: { postId: string; parentId?: string | null } = { postId: comment.postId };
 
         if (comment.parentId) {
           variables.parentId = comment.parentId;
@@ -109,7 +110,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
   return (
     <article className='p-6 mb-3 text-base bg-white rounded-lg border border-gray-200 dark:bg-gray-900 dark:border-gray-700 w-full'>
       <CommentHeader comment={comment} onEdit={handleEdit} onDelete={handleDelete} />
-      {isEditing ? (
+      {isEditing && userData !==null ? (
         <ReplyBox
           postId={comment.postId}
           parentId={comment.parentId}
@@ -147,7 +148,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
           }} />
         </>
       )}
-      {showReplyBox && !isEditing && (
+      {showReplyBox && !isEditing  && (
         <ReplyBox
           previousReplyExist={!!comment.repliesCount}
           parentId={comment.parentId || comment._id}

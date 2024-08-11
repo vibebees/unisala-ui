@@ -1,9 +1,6 @@
 import React from "react";
 // import { Buttons, Typography } from "../../../defaults";
-import ModalCustom from "@/components/packages/reusable/modal";
 // import ReplyInput from "@/components/packages/replyInput";
-import { CommentIcon } from "@/components/packages/icons";
-import { cn } from '@/utils/lib/utils';
 
 interface ReplyProps {
   repliesCount: number | null | undefined;

@@ -1,5 +1,3 @@
-/* eslint-disable no-unreachable */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Lock, RefreshCw, ArrowLeft } from "lucide-react";
 import SubmitButton from "./SubmitButton";
@@ -8,6 +6,7 @@ import { SendVerificationMail, VerifyEmail } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import toast from "react-hot-toast";
 import { setUser } from "@/store/userStore";
+import { navigator } from "@/utils/lib/URLupdate";
 
 interface PinCodeInputProps {
   onBack: () => void;
@@ -17,23 +16,26 @@ interface PinCodeInputProps {
 const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
   const [pinCode, setPinCode] = useState("");
   const [countdown, setCountdown] = useState(30);
-  const history =  []
   const [verifyValidationCode, { loading }] = useAstroMutation(VerifyEmail, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data: any) => {
       const user = data?.verifyEmail?.data;
       setUser({
+        id: user?.id,
         authenticated: true,
         email: user?.email,
         firstName: user?.firstName,
         lastName: user?.lastName,
-        token: user?.token,
+        accessToken: user?.accessToken,
+        refreshToken: user?.refreshToken,
+        newUser: user?.newUser,
       });
       if (user?.newUser) {
         toast.success("Account created successfully.");
-        history.push("/welcome-form/intro");
+        navigator('/welcome-form/intro')
       } else {
-        history.push("/newsfeed");
+        toast.success("Logged in successfully.");
+        navigator()
       }
     },
     onError: (error) => {

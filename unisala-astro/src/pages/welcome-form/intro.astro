@@ -18,11 +18,28 @@ import WelcomeFormLayout from "@/components/layout/Welcome-form-Layout.astro";
         U.S. academic 🎓 journey with Unisala. Tailored insights and a vibrant
         community🌍 await you. Dive in! 🚀
       </p>
-      <a href="step-one" class="block">
+      <a  id="getStartedLink" href="step-one" class="block">
         <button class="btn">Get Started</button>
       </a>
     </div>
   </div>
+
+  <script>
+    // Get the current URL
+    const currentUrl = new URL(window.location.href);
+    
+    // Get the redirect parameter
+    const redirect = currentUrl.searchParams.get('redirect');
+    
+    // Get the link element
+    const link = document.getElementById('getStartedLink') as HTMLAnchorElement;
+    
+    if (link && redirect) {
+      // Append the redirect to the existing href
+      link.href = `${link?.href}?redirect=${encodeURIComponent(redirect)}`;
+    }
+  </script>
+
 </WelcomeFormLayout>
 
 <style>

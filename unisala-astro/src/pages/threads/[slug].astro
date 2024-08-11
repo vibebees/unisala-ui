@@ -18,6 +18,11 @@ const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
+import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
+import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
+
+import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
+
 let post = null;
 let error: string = '';
 // Remove the assignment to prerender
@@ -95,13 +100,10 @@ try {
   if (result.errors) {
     throw new Error(result.errors[0].message);
   }
-  console.log({result});
 
   post = result.data?.getPostById?.post;
 
-  if (!post) {
-    throw new Error('Post not found');
-  }
+
 } catch (e) {
   console.error("Error fetching post:", e);
   error = e instanceof Error ? e.message : String(e);
@@ -153,17 +155,15 @@ const handleUpvote = async (postId: string) => {
   }
 };
 
-let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.png';
+
+console.log('post?.user?._id', post?.user?._id)
 ---
 
 <MainLayout
  title={post ? `${heading}` : 'Thread'}
- ogType="article"
   description={post ? linkifiedText : 'Loading...'}
-  ogImage={postImages}
-  author={post?.user?.firstName + ' ' + post?.user?.lastName}
   publishedTime={post?.date}
->
+></MainLayout>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
   
@@ -208,4 +208,14 @@ let postImages = post?.images?.length > 0 ? post?.images[0] : '/images/unisala.p
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>
+  <ThreadAuthor
+      author ={post?.user?.firstName + ' ' + post?.user?.lastName}
+      authorDescription=''
+  />
+
+  <SameWriterSuggestions  feedId ={post?.user?._id}  />
+  <hr />
+  <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
+
+
 </MainLayout>

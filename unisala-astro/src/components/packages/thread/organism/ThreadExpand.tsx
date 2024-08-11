@@ -22,7 +22,7 @@ const ThreadExpand = ({
 }: ThreadExpandProps) => {
   // const TextRef = useRef(null);
   // if the url includes thread then increase the word count to 100, else 40
-  let showSeeMoreOptionAtWordCount: number = 40;
+  const showSeeMoreOptionAtWordCount: number = 40;
 
 
 

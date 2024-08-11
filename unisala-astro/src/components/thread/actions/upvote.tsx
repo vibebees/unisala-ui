@@ -6,7 +6,6 @@ import { useAstroMutation } from '@/datasource/apollo-client';
 import { toast } from 'react-hot-toast';
 import { GetCommentList, UpVote } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
-import { BookmarkIconFilled, BookmarkIconOutline } from '@/components/packages/icons/bookmark';
 import { CopyIconFilled, CopyIconOutline } from '@/components/packages/icons/copy';
 import { client } from '@/datasource/servers/endpoints';
 import { sendGAEvent } from '@/utils/analytics/events';
@@ -113,7 +112,6 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
         {copyLink ? <CopyIconFilled /> : <CopyIconOutline />}
         </button>
       </div>
-      {upVoteError && <p className="text-red-500">{upVoteError.message}</p>}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import {
 import Button from "./atoms/Button";
 import Option from "./atoms/Option";
 import { shakeWebsite } from "@/utils/lib/utils";
+import { navigator } from "@/utils/lib/URLupdate";
 
 const StepTwoForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(
@@ -49,8 +50,7 @@ const StepTwoForm = () => {
 
       <div className="mt-8 flex flex-col ">
         <Button
-          url={selectedStatus ? "step-two" : null}
-          lable="Next"
+           lable="Next"
           className={`${
             selectedStatus ? "bg-blue-500 text-white" : "bg-neutral-300"
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
@@ -58,13 +58,16 @@ const StepTwoForm = () => {
             if (!selectedStatus) {
               shakeWebsite();
             }
+            selectedStatus ? navigator('/welcome-form/step-two') : null
           }}
         />
 
         <Button
-          url="intro"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
+          onclick={() => {
+            navigator("/welcome-form/step-one");
+          }}
         />
       </div>
     </div>

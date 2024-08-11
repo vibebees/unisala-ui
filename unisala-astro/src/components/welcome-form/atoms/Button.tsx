@@ -3,7 +3,7 @@ import { cn } from "@/utils/lib/utils";
 import React, { type FC } from "react";
 
 interface ButtonProps {
-  url: any;
+  url?: any;
   lable?: string;
   className?: string;
   onclick?: any;

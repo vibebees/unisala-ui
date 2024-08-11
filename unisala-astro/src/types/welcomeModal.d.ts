@@ -42,7 +42,7 @@ interface IWelcomeData {
   studyLevel: IStudyLevel;
 }
 
-// eslint-disable-next-line no-unused-vars
+ 
 interface IWelcomeMetaTagApiResponse {
   success: boolean;
   data: IWelcomeData;

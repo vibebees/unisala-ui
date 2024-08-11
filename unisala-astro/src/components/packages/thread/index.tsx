@@ -1,18 +1,6 @@
 import React, { useRef, useState } from "react";
-import "./index.css";
-import {
-  ShowPeopleComments,
-  ThreadEditable,
-  ThreadExpand,
-  ThreadHeader,
-  ThreadOptions,
-  ThreadRating,
-} from "./organism";
-// import Share from "@/components/packages/share";
-import ImageCollage from "./ImageCollages";
-import AuthValidator from "../authentication/AuthValidator";
-import { InView } from "react-intersection-observer";
 import useViewDuration from "@/hooks/useViewDuration";
+import type { IPost } from "@/types/post";
 
 interface ThreadProps {
   thread: IPost;
@@ -20,7 +8,7 @@ interface ThreadProps {
   feedId?: string;
 }
 
-const Thread = ({ thread, feedType, feedId }: ThreadProps) => {
+const Thread = ({ thread }: ThreadProps) => {
   const {
     _id,
     date,

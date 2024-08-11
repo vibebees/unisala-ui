@@ -1,5 +1,6 @@
 // import { useHistory } from "react-router-dom";
 
+
 export const URLupdate = (key: string, value: string) => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -71,3 +72,58 @@ export const getFeedChipValues = (keys: Array<string>) => {
   });
 };
 
+
+export const navigator = ( url:string = '') => {
+
+  /*
+
+   if preseveState is true, then 
+    redirect to the original page user was visiting
+    else redirect to the url passed
+
+    scenarios where navigator is used:
+    1. Preserve State
+       thread => login => thread
+        a. In thread, trying to comment
+        b. so when calling href = login(), pass afterState = thread
+        c. redirect to thread
+             
+    2. New State
+       home page => register => welcome page => discover page
+        a. In home page, trying to register
+        b. so when calling href = register(), pass afterState = home page
+        c. redirect to welcome page
+
+    3. Redirect to a new page
+        thread => login => home page
+        a. In thread, trying to login
+        b. so when calling href = login(), pass afterState = home page
+
+
+  */
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+      
+        if (url === '') {
+          // If no URL is provided, serve the redirect or go to default
+          const currentUrl = new URL(window.location.origin);
+          const redirectPath = redirectUrl ? decodeURIComponent(redirectUrl) : '/new-story';
+          
+          // Ensure the redirectPath starts with a '/'
+          currentUrl.pathname = redirectPath.startsWith('/') ? redirectPath : `/${redirectPath}`;
+          
+          window.location.href = currentUrl.toString();
+        } else {
+          // If a URL is provided, attach the current redirect to it
+          const newUrl = new URL(url, window.location.origin);
+          console.log({newUrl})
+          if (redirectUrl) {
+            newUrl.searchParams.set('redirect', redirectUrl);
+          }
+          window.location.href = newUrl.toString();
+        }
+
+}
+
+ 

@@ -9,14 +9,6 @@ export function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function formatDate(date: Date) {
-  // Format: Jan 01, 2021
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
 
 export function extractSegmentURL(path: string) {
   if (!path) return "";
@@ -33,7 +25,7 @@ export async function getSeasonInfo() {
   const currentMonth = currentDate.getMonth() + 1;
 
   let season = "";
-  let seasonYear = currentDate.getFullYear();
+  const seasonYear = currentDate.getFullYear();
   let nextSeason = "";
   let nextYear = seasonYear;
 
@@ -103,3 +95,20 @@ export const URLupdate = (key: string, value: string) => {
   return params?.toString();
 };
 
+
+export function stripHtmlTags(html: string): string {
+  return html?.replace(/<[^>]*>/g, '');
+
+}
+export function stripHtmlTagsServerSide(html: string): string {
+  return html?.replace(/<[^>]*>/g, '');
+}
+
+export const similarThreadHeading = (text:string) =>{ 
+return stripHtmlTags(text)?.substring(0, 50)
+}
+
+export const similarThreadDetail = (text:string) =>{
+  return stripHtmlTags(text)?.substring(50, 250)
+
+}

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 interface ICardLocation {
   city: string;
   stateAbbreviation: string;

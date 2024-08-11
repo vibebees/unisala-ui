@@ -1,7 +1,6 @@
 import React, { type FC } from "react";
 import {
   ThreadExpand,
-  ThreadFooter,
   // ThreadEditable,
   ThreadImages,
   ThreadRating,

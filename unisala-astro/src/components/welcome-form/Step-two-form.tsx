@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import Button from "./atoms/Button";
 import { shakeWebsite } from "@/utils/lib/utils";
+import { navigator } from "@/utils/lib/URLupdate";
+import { majors } from "@/constants/majors";
 
 interface FieldOfStudyProps {
   // Add any props if needed
@@ -13,70 +15,16 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
   const [selectedFields, setSelectedFields] = useState<string[]>(
     JSON.parse(localStorage.getItem("interestedSubjects") || "[]")
   );
-  const [filteredFields, setFilteredFields] = useState<string[]>([]);
-
-  const data = [
-    {
-      name: "computer science",
-      universityCount: 1554,
-    },
-    {
-      name: "computer information systems",
-      universityCount: 130,
-    },
-    {
-      name: "computer & informational tech.",
-      universityCount: 48,
-    },
-    {
-      name: "electrical engineering",
-      universityCount: 82,
-    },
-    {
-      name: "electronics",
-      universityCount: 38,
-    },
-    {
-      name: "elementary education",
-      universityCount: 30,
-    },
-    {
-      name: "architecture",
-      universityCount: 339,
-    },
-    {
-      name: "architectural engineering",
-      universityCount: 5,
-    },
-    {
-      name: "architectural technology",
-      universityCount: 1,
-    },
-    {
-      name: "civil engineering",
-      universityCount: 66,
-    },
-    {
-      name: "civil & environ engineering",
-      universityCount: 10,
-    },
-    {
-      name: "civil  environ engineering",
-      universityCount: 6,
-    },
-  ];
+  const [filteredMajors, setFilteredMajors] = useState<string[]>([]);
 
   useEffect(() => {
-    setFilteredFields(
-      data
-        .filter((field) =>
-          field.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map((field) => field.name) as string[]
+    const filtered = majors.filter((major) =>
+      major.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    setFilteredMajors(filtered);
   }, [searchTerm]);
 
-  const handleSearchChange = (e: any) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
@@ -129,8 +77,8 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
         )}
       </div>
 
-      <div className="max-h-64 overflow-y-auto  animate-fadeIn animation-delay-500">
-        {data.map((major, index) => (
+      <div className="max-h-64 overflow-y-auto animate-fadeIn animation-delay-500">
+        {filteredMajors.map((major, index) => (
           <label
             key={index}
             className="flex items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out animate-slideRight"
@@ -138,18 +86,17 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
           >
             <input
               type="checkbox"
-              checked={selectedFields.includes(major.name)}
-              onChange={() => toggleFieldSelection(major.name)}
-              className="form-checkbox h-5 w-5 text-blue-500  rounded focus:ring-blue-500 transition-all duration-300 ease-in-out"
+              checked={selectedFields.includes(major)}
+              onChange={() => toggleFieldSelection(major)}
+              className="form-checkbox h-5 w-5 text-blue-500 rounded focus:ring-blue-500 transition-all duration-300 ease-in-out"
             />
-            <span className="ml-3 text-gray-700">{major.name}</span>
+            <span className="ml-3 text-gray-700 capitalize">{major}</span>
           </label>
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col ">
+      <div className="mt-8 flex flex-col">
         <Button
-          url={selectedFields.length ? "step-three" : null}
           lable="Next"
           className={`${
             selectedFields.length ? "bg-blue-500 text-white" : "bg-neutral-300"
@@ -158,12 +105,15 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
             if (!selectedFields.length) {
               shakeWebsite();
             }
+            selectedFields.length
+              ? navigator("/welcome-form/step-three")
+              : null;
           }}
         />
         <Button
-          url="step-one"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
+          onclick={() => navigator("/welcome-form/step-one")}
         />
       </div>
     </div>

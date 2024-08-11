@@ -1,595 +1,351 @@
 ---
 // ScholarshipCard.astro
-const scholarship = {
-  scholarship_name: "Freshmen Merit Scholarship",
-  university_name: "Texas Tech University",
-  unitId: 229115,
-  scholarship_type: "Merit-Based",
-  level: "Undergraduate",
-  scholarship_url: "https://www.depts.ttu.edu/scholarships/incFreshman.php",
-  gpa: { min: 3.96, max: 4.0 },
-  sat: { min: 1500, max: 1600 },
-  act: { min: 34, max: 36 },
-  awards: [
-    {
-      award_name: "Freshmen Merit Scholarship",
-      scholarship_amount: {
-        amount: "$9,000",
-        disbursement_schedule: "per year",
-      },
-    },
-  ],
-  application_deadline: "2024-05-01",
-  eligible_majors: ["All"],
-  duration: 8,
-  duration_description:
-    "Renewable for up to 4 consecutive years (eight total terms)",
-  application_requirements: [
-    "No additional application required",
-    "Must enroll in a minimum of 12 hours for fall & spring terms",
-  ],
-  renewal_criteria: {
-    min_gpa: 3.5,
-    min_credit_hours: 30,
-    other_requirements: "Maintain full-time enrollment",
-  },
-  stackable: true,
-  special_instructions:
-    "Award amount is determined by test score and unweighted high school GPA",
-  non_score_eligibility_requirements: "Must be an incoming freshman",
-};
+interface IAward {
+  award_name?: string;
+  scholarship_amount?: {
+    amount: string;
+    disbursement_schedule: string;
+  };
+}
+
+interface RenewalCriteria {
+  min_gpa: number;
+  min_credit_hours: number;
+  other_requirements: string;
+}
+
+interface Scholarship {
+  scholarship_name: string;
+  university_name: string;
+  unitId: number;
+  scholarship_type: string;
+  level: string;
+  scholarship_url: string;
+  gpa: { min: number; max: number };
+  sat: { min: number; max: number };
+  act: { min: number; max: number };
+  awards: IAward[];
+  international_specific: boolean;
+  transfer_specific: boolean;
+  application_deadline: string | null;
+  eligible_majors: string[];
+  duration: number;
+  duration_description: string;
+  application_requirements: string[];
+  renewal_criteria: RenewalCriteria;
+  stackable: boolean;
+  special_instructions: string;
+  non_score_eligibility_requirements: string;
+}
+
+interface Props {
+  scholarship: Scholarship;
+}
+
+const { scholarship } = Astro.props as Props;
 ---
 
-<div class="scholarship-card">
-  <div class="card-header">
-    <div>
-      <h2 class="title">{scholarship.scholarship_name}</h2>
-      <p class="institution">
-        <i class="fas fa-university"></i>
-        {scholarship.university_name}
-      </p>
+<div class="scholarship-card-wrapper">
+  <div class="scholarship-card" data-scholarship-id={scholarship.unitId}>
+    <div class="card-header">
+      <div>
+        <h2 class="title">{scholarship?.scholarship_name}</h2>
+        <p class="institution">
+          <i class="fas fa-university"></i>
+          {scholarship.university_name}
+        </p>
+      </div>
+      <!-- <button class="favorite-btn">
+        <i class="fas fa-star"></i> Favorite
+      </button> -->
     </div>
-    <button class="favorite-btn">
-      <i class="fas fa-star"></i> Favorite
-    </button>
-  </div>
-  <div class="card-body">
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="label"><i class="fas fa-graduation-cap"></i> Level</span>
-        <span class="value">{scholarship.level}</span>
-      </div>
-      <div class="info-item">
-        <span class="label"><i class="fas fa-award"></i> Type</span>
-        <span class="value">{scholarship.scholarship_type}</span>
-      </div>
-      <div class="info-item">
-        <span class="label"><i class="fas fa-dollar-sign"></i> Amount</span>
-        <span class="value amount"
-          >{scholarship.awards[0].scholarship_amount.amount}
-          {scholarship.awards[0].scholarship_amount.disbursement_schedule}</span
-        >
-      </div>
-      <div class="info-item">
-        <span class="label"><i class="fas fa-calendar-alt"></i> Deadline</span>
-        <span class="value deadline"
-          >{
-            new Date(scholarship.application_deadline).toLocaleDateString()
-          }</span
-        >
-      </div>
-    </div>
-    <div class="eligibility">
-      <h3><i class="fas fa-check-circle"></i> Eligibility Criteria</h3>
-      <div class="eligibility-grid">
-        <div class="eligibility-item">
-          <i class="fas fa-graduation-cap"></i>
-          <span class="label">GPA</span>
-          <span class="value"
-            >{scholarship.gpa.min} - {scholarship.gpa.max}</span
-          >
+    <div class="card-body">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label"><i class="fas fa-graduation-cap"></i> Level</span>
+          <span class="value">{scholarship?.level}</span>
         </div>
-        <div class="eligibility-item">
-          <i class="fas fa-file-alt"></i>
-          <span class="label">SAT</span>
-          <span class="value"
-            >{scholarship.sat.min} - {scholarship.sat.max}</span
-          >
+        <div class="info-item">
+          <span class="label"><i class="fas fa-award"></i> Type</span>
+          <span class="value">{scholarship?.scholarship_type}</span>
         </div>
-        <div class="eligibility-item">
-          <i class="fas fa-pencil-alt"></i>
-          <span class="label">ACT</span>
-          <span class="value"
-            >{scholarship.act.min} - {scholarship.act.max}</span
-          >
+        {
+          scholarship.awards.length > 0 &&
+            scholarship.awards[0]?.scholarship_amount && (
+              <div class="info-item">
+                <span class="label">
+                  <i class="fas fa-dollar-sign" /> Amount
+                </span>
+                <span class="value amount">
+                  {scholarship.awards[0].scholarship_amount.amount}
+                  {
+                    scholarship.awards[0].scholarship_amount
+                      .disbursement_schedule
+                  }
+                </span>
+              </div>
+            )
+        }
+        {
+          scholarship.application_deadline && (
+            <div class="info-item">
+              <span class="label">
+                <i class="fas fa-calendar-alt" /> Deadline
+              </span>
+              <span class="value deadline">
+                {new Date(
+                  scholarship?.application_deadline
+                ).toLocaleDateString()}
+              </span>
+            </div>
+          )
+        }
+      </div>
+      <div class="eligibility">
+        <h3><i class="fas fa-check-circle"></i> Eligibility Criteria</h3>
+        <div class="eligibility-grid">
+          <div class="eligibility-item">
+            <i class="fas fa-graduation-cap"></i>
+            <span class="label">GPA</span>
+            <span class="value">
+              {scholarship?.gpa.min} - {scholarship?.gpa.max}
+            </span>
+          </div>
+          <div class="eligibility-item">
+            <i class="fas fa-file-alt"></i>
+            <span class="label">SAT</span>
+            <span class="value">
+              {scholarship?.sat.min} - {scholarship?.sat.max}
+            </span>
+          </div>
+          <div class="eligibility-item">
+            <i class="fas fa-pencil-alt"></i>
+            <span class="label">ACT</span>
+            <span class="value">
+              {scholarship?.act?.min} - {scholarship?.act?.max}
+            </span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="card-footer">
-    <a href={scholarship.scholarship_url} class="apply-btn">
-      Apply Now <i class="fas fa-arrow-right"></i>
-    </a>
-    <button class="expand-btn" aria-expanded="false">
-      <span class="expand-text">Show More</span>
-      <span class="collapse-text">Show Less</span>
-      <i class="fas fa-chevron-down"></i>
-    </button>
-  </div>
-  <div class="expanded-content">
-    <h3 class="expanded-title">
-      <i class="fas fa-info-circle"></i> Additional Information
-    </h3>
-    <div class="expanded-section">
-      <h4><i class="fas fa-clipboard-list"></i> Application Requirements</h4>
-      <ul>
-        {scholarship.application_requirements.map((req) => <li>{req}</li>)}
-      </ul>
+    <div class="card-footer">
+      <button
+        class="apply-btn"
+        data-scholarship-url={scholarship.scholarship_url}
+      >
+        Apply Now <i class="fas fa-arrow-right"></i>
+      </button>
+      <button class="expand-btn" aria-expanded="false">
+        <span class="expand-text">Show More</span>
+        <span class="collapse-text">Show Less</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
     </div>
-    <div class="expanded-section">
-      <h4><i class="fas fa-sync-alt"></i> Renewal Criteria</h4>
-      <p>
-        <i class="fas fa-graduation-cap"></i> Minimum GPA: <span
-          class="highlight">{scholarship.renewal_criteria.min_gpa}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-book"></i> Minimum Credit Hours: <span
-          class="highlight"
-          >{scholarship.renewal_criteria.min_credit_hours}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-exclamation-circle"></i> Other: {
-          scholarship.renewal_criteria.other_requirements
+    <div class="expanded-content">
+      <h3 class="expanded-title">
+        <i class="fas fa-info-circle"></i> Additional Information
+      </h3>
+      {
+        scholarship.application_requirements.length > 0 && (
+          <div class="expanded-section">
+            <h4>
+              <i class="fas fa-clipboard-list" /> Application Requirements
+            </h4>
+            <ul>
+              {scholarship?.application_requirements.map((req) => (
+                <li class="dark:text-neutral-200">{req}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+      {
+        (scholarship.renewal_criteria?.min_gpa ||
+          scholarship.renewal_criteria?.min_credit_hours ||
+          scholarship.renewal_criteria?.other_requirements) && (
+          <div class="expanded-section">
+            <h4>
+              <i class="fas fa-sync-alt" /> Renewal Criteria
+            </h4>
+            {scholarship.renewal_criteria?.min_gpa && (
+              <p>
+                <i class="fas fa-graduation-cap" /> Minimum GPA:{" "}
+                <span class="highlight">
+                  {scholarship.renewal_criteria.min_gpa}
+                </span>
+              </p>
+            )}
+            {scholarship.renewal_criteria?.min_credit_hours && (
+              <p>
+                <i class="fas fa-book" /> Minimum Credit Hours:{" "}
+                <span class="highlight">
+                  {scholarship.renewal_criteria.min_credit_hours}
+                </span>
+              </p>
+            )}
+            {scholarship.renewal_criteria?.other_requirements && (
+              <p>
+                <i class="fas fa-exclamation-circle" /> Other:{" "}
+                {scholarship.renewal_criteria.other_requirements}
+              </p>
+            )}
+          </div>
+        )
+      }
+      <div class="expanded-section">
+        <h4><i class="fas fa-plus-circle"></i> Additional Information</h4>
+        {
+          scholarship?.duration_description && (
+            <p>
+              <i class="fas fa-calendar-alt" /> Duration:{" "}
+              {scholarship?.duration_description}
+            </p>
+          )
         }
-      </p>
-    </div>
-    <div class="expanded-section">
-      <h4><i class="fas fa-plus-circle"></i> Additional Information</h4>
-      <p>
-        <i class="fas fa-calendar-alt"></i> Duration: {
-          scholarship.duration_description
+        <p>
+          <i class="fas fa-layer-group"></i> Stackable: <span class="highlight">
+            {scholarship?.stackable ? "Yes" : "No"}
+          </span>
+        </p>
+        {
+          scholarship.special_instructions && (
+            <p>
+              <i class="fas fa-info-circle" /> Special Instructions:{" "}
+              {scholarship?.special_instructions}
+            </p>
+          )
         }
-      </p>
-      <p>
-        <i class="fas fa-layer-group"></i> Stackable: <span class="highlight"
-          >{scholarship.stackable ? "Yes" : "No"}</span
-        >
-      </p>
-      <p>
-        <i class="fas fa-info-circle"></i> Special Instructions: {
-          scholarship.special_instructions
+        {
+          scholarship.non_score_eligibility_requirements && (
+            <p>
+              <i class="fas fa-user-check" /> Non-Score Eligibility:{" "}
+              {scholarship?.non_score_eligibility_requirements}
+            </p>
+          )
         }
-      </p>
-      <p>
-        <i class="fas fa-user-check"></i> Non-Score Eligibility: {
-          scholarship.non_score_eligibility_requirements
-        }
-      </p>
+      </div>
     </div>
   </div>
 </div>
-<style>
-  @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
-
-  .scholarship-card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: none;
-    margin-bottom: 2rem;
-    width: 100%;
-    font-family: "Inter", sans-serif;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #d3dae2;
-    align-self: start;
-  }
-
-  .card-header {
-    background-color: #006eff11;
-    padding: 1.5rem;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #d3dae2;
-
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
-  }
-
-  .card-header:hover {
-    background-color: #006fff1a;
-  }
-
-  .card-header:hover .title {
-    color: black;
-  }
-
-  .title {
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: 600;
-    color: #635a5a;
-  }
-
-  .institution {
-    font-size: 1rem;
-    margin: 0.5rem 0 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #2082ff;
-  }
-
-  .card-body {
-    padding: 1.5rem;
-  }
-
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-    margin-top: 1rem;
-  }
-
-  .info-item {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: #4a5568;
-    margin-bottom: 0.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .label i {
-    color: #2082ff;
-  }
-
-  .value {
-    font-size: 1rem;
-    color: #2d3748;
-  }
-
-  .amount {
-    color: #1cdb7c;
-    font-weight: 600;
-  }
-
-  .deadline {
-    color: #c53030;
-    font-weight: 500;
-  }
-
-  .eligibility h3,
-  .fa-check-circle {
-    color: #38c238;
-  }
-
-  .eligibility h3 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-  }
-
-  .eligibility,
-  .description {
-    margin-bottom: 1.5rem;
-  }
-
-  .description h3 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    color: #2e7bff;
-  }
-
-  .eligibility p,
-  .description p {
-    color: #4a5568;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .eligibility {
-    margin-top: 1rem;
-  }
-
-  .eligibility h3 {
-    color: #2082ff;
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .eligibility-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-  }
-
-  .eligibility-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    border-radius: 8px;
-    padding: 0.75rem;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-    border: 1px solid #e1e1e1;
-  }
-
-  .eligibility-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .eligibility-item i {
-    font-size: 1.5rem;
-    color: #2082ff;
-    margin-bottom: 0.5rem;
-  }
-
-  .eligibility-item .label {
-    font-size: 0.875rem;
-    color: #4a5568;
-    margin-bottom: 0.25rem;
-  }
-
-  .eligibility-item .value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2d3748;
-  }
-
-  .card-footer {
-    padding: 1rem;
-    background-color: #f7fafc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .favorite-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #ffffff;
-    color: #2082ff;
-    border: 1px solid #2082ff;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
-  }
-
-  .favorite-btn:hover {
-    background-color: #1e76e9;
-    color: #ffffff;
-  }
-
-  .more-info-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #2082ff;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-
-  .more-info-btn:hover {
-    background-color: #1a6cd6;
-  }
-
-  @media (max-width: 640px) {
-    .card-footer {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .favorite-btn,
-    .more-info-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .card-header,
-    .card-body,
-    .card-footer {
-      padding: 1rem;
-    }
-
-    .info-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .card-footer {
-    transition: border-bottom 0.3s ease;
-  }
-
-  .expand-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #ffffff;
-    color: #2082ff;
-    border: 1px solid #2082ff;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .expand-btn:hover {
-    background-color: #e6f0ff;
-  }
-
-  .expand-btn i {
-    transition: transform 0.3s ease;
-  }
-
-  .expand-btn .collapse-text {
-    display: none;
-  }
-
-  .expanded-content {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all 0.5s ease;
-    background-color: #f8fafc;
-    border-top: 1px solid transparent;
-  }
-
-  .expanded-title {
-    font-size: 1.25rem;
-    color: #2082ff;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .expanded-section {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #cdcdcd;
-    transition:
-      transform 0.5s ease,
-      box-shadow 0.5s ease;
-  }
-
-  .expanded-section:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: scale(1.01);
-  }
-
-  .expanded-section h4 {
-    font-size: 1rem;
-    color: #2082ff;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .expanded-section p {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .expanded-section ul {
-    list-style-type: none;
-    padding-left: 1.5rem;
-  }
-
-  .expanded-section ul li {
-    margin-bottom: 0.5rem;
-    position: relative;
-  }
-
-  .expanded-section ul li::before {
-    content: "\f00c";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: absolute;
-    left: -1.5rem;
-    color: #38a169;
-  }
-
-  .highlight {
-    font-weight: 600;
-    color: #2082ff;
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"]) .card-footer {
-    border-bottom-color: transparent;
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"]) .expanded-content {
-    max-height: 1000px;
-    opacity: 1;
-    padding: 1.5rem;
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"]) .expand-btn {
-    background-color: #e6f0ff;
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"]) .expand-btn i {
-    transform: rotate(180deg);
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"])
-    .expand-btn
-    .expand-text {
-    display: none;
-  }
-
-  .scholarship-card:has(.expand-btn[aria-expanded="true"])
-    .expand-btn
-    .collapse-text {
-    display: inline;
-  }
-
-  @media (max-width: 640px) {
-    .card-footer {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .apply-btn,
-    .expand-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-</style>
+<div class="iframe-wrapper" style="display: none;">
+  <div class="iframe-container">
+    <div class="w-full h-8 items-center gap-3 flex justify-end px-4">
+      <a
+        href="#"
+        class="iframe-external-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+      <button class="iframe-close-btn"> Close </button>
+    </div>
+    <iframe src={""} title="Scholarship Application" class="iframe"></iframe>
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>
 
 <script>
+  import { sendGAEvent } from "@/utils/analytics/events";
+
   document.addEventListener("DOMContentLoaded", () => {
     const expandBtns = document.querySelectorAll(".expand-btn");
+    const applyBtns = document.querySelectorAll(".apply-btn");
+    const iframeWrappers = document.querySelectorAll(".iframe-wrapper");
+    const iframeCloseBtns = document.querySelectorAll(".iframe-close-btn");
+    const iframes = document.querySelectorAll(".iframe");
+    const externalLinks = document.querySelectorAll(".iframe-external-link");
+    const loadingOverlays = document.querySelectorAll(".loading-overlay");
+
     expandBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const expanded = btn.getAttribute("aria-expanded") === "true" || false;
         btn.setAttribute("aria-expanded", String(!expanded));
+        const scholarshipCard = btn.closest(".scholarship-card");
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+
+        sendGAEvent("scholarship_card_expand", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
+          value: expanded ? 0 : 1,
+        });
+      });
+    });
+
+    applyBtns.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        const scholarshipUrl = btn.getAttribute("data-scholarship-url");
+        if (scholarshipUrl) {
+          (iframeWrappers[index] as HTMLIFrameElement).style.display = "flex";
+          (iframes[index] as HTMLIFrameElement).src = scholarshipUrl;
+          (externalLinks[index] as HTMLAnchorElement).href = scholarshipUrl;
+          loadingOverlays[index].classList.remove("deactive");
+          const scholarshipCard = btn.closest(".scholarship-card");
+          const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+            .scholarshipId;
+          const scholarshipName = (
+            scholarshipCard as HTMLDivElement
+          ).querySelector(".title")?.textContent;
+
+          sendGAEvent("scholarship_apply_click", {
+            category: "Scholarship",
+            label: scholarshipName || "",
+            scholarshipId: scholarshipId || "",
+            value: parseInt(scholarshipId || "0"),
+          });
+        }
+      });
+    });
+
+    iframeCloseBtns.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        (iframeWrappers[index] as HTMLDivElement).style.display = "none";
+        (iframes[index] as HTMLIFrameElement).src = "";
+
+        const scholarshipCard = btn.closest(".scholarship-card");
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+
+        sendGAEvent("scholarship_iframe_close", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
+          value: parseInt(scholarshipId || "0"),
+        });
+      });
+    });
+
+    externalLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const scholarshipCard = link.closest(".scholarship-card");
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+
+        sendGAEvent("scholarship_external_link_click", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
+          value: parseInt(scholarshipId || "0"),
+        });
+      });
+    });
+
+    iframes.forEach((iframe, index) => {
+      iframe.addEventListener("load", () => {
+        loadingOverlays[index].classList.add("deactive");
       });
     });
   });

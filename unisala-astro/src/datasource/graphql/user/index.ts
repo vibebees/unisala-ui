@@ -175,7 +175,7 @@ export const checkEmail = gql`
     mutation addPost(
       $postText: String!
       $unitId: Float
-      $tags: [ID]
+      $tags: [TagsInput]
       $postTag: String
       $id: String!
       $levelOfStudy: String
@@ -195,6 +195,7 @@ export const checkEmail = gql`
       $studentLifeAndServiceRating: Int
       $careerAndAlumniResourceRating: Int
       $postTags: PostTagsInput
+      $title: String!
     ) {
       addPost(
         postText: $postText
@@ -219,6 +220,7 @@ export const checkEmail = gql`
         studentLifeAndServiceRating: $studentLifeAndServiceRating
         careerAndAlumniResourceRating: $careerAndAlumniResourceRating
         postTags: $postTags
+        title: $title
       ) {
         status {
           success
@@ -251,11 +253,11 @@ export const checkEmail = gql`
             images
           }
           tags {
+             name
+             entityType
+             universityCount
+             unitId
             _id
-            name
-            parentId
-            image
-            description
           }
           postType
           levelOfStudy
@@ -418,6 +420,7 @@ export const checkEmail = gql`
           university
           conversation
           major
+          title
         }
       }
     }
@@ -564,9 +567,9 @@ export const checkEmail = gql`
     mutation editProfile(
       $picture: String
       $coverPicture: String
-      $username: String!
-      $firstName: String!
-      $lastName: String!
+      $username: String
+      $firstName: String
+      $lastName: String
       $location: String
       $oneLinerBio: String
       $birthday: String
@@ -1356,7 +1359,7 @@ export const checkEmail = gql`
       }
     }
   `,
-  GetTopActiveSpaces = gql`
+  GetTopActiveSpaces = `
     query getTopActiveSpaces($limit: Int) {
       getTopActiveSpaces(limit: $limit) {
         status {

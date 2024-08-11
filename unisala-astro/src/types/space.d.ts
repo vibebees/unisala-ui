@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 interface ITopSpace {
   _id: string;
   name: string;

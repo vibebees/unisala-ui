@@ -6,20 +6,30 @@ import Button from './atoms/Button';
 import Option from './atoms/Option';
 import { shakeWebsite } from '@/utils/lib/utils';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { getCache } from '@/utils/cache';
+import { navigator } from '@/utils/lib/URLupdate';
+import { Toast } from '@/components/ui/toast';
+import toast from 'react-hot-toast';
 
 const StepThreeForm = () => {
   const [selectedStatus, setSelectedStatus] = useState(
     localStorage.getItem('studyLevel') || ''
   );
   const [editProfile, { loading }] = useAstroMutation(EditProfile, {
-    context: { server: USER_SERVICE_GQL }
+    context: { server: USER_SERVICE_GQL },
+    onCompleted: (data) => {
+      toast.success("Profile is setup successfully!");
+      navigator();
+  },
+  onError: (error) => {
+  },
   });
 
   const handleStatusChange = (event: any) => {
     localStorage.setItem('studyLevel', event.target.value);
     setSelectedStatus(event.target.value);
   };
-
+  const userData = getCache('authData');
   const options = [
     { value: 'bachelor', Icon: BookOpen, label: 'Bachelor' },
     { value: 'masters', Icon: FlaskConical, label: 'Masters' },
@@ -30,17 +40,31 @@ const StepThreeForm = () => {
     const userStatus = localStorage.getItem('userStatus');
     const interestedSubjects = localStorage.getItem('interestedSubjects');
     const studyLevel = localStorage.getItem('studyLevel');
-
+  
+    // Get the current URL and extract the redirect parameter
+    const currentUrl = new URL(window.location.href);
+    const redirect = currentUrl.searchParams.get('redirect');
+    
     if (!userStatus || !interestedSubjects || !studyLevel) {
+      let redirectPath = '';
+  
       if (!userStatus) {
-        window.location.href = 'step-one';
+        redirectPath = 'step-one';
+      } else if (!interestedSubjects) {
+        redirectPath = 'step-two';
+      } else if (!studyLevel) {
+        redirectPath = 'step-three';
       }
-      if (!interestedSubjects) {
-        window.location.href = 'step-two';
+  
+      if (redirectPath) {
+        // Append the redirect parameter if it exists
+        const finalRedirectPath = redirect 
+          ? `${redirectPath}?redirect=${encodeURIComponent(redirect)}`
+          : redirectPath;
+        
+        window.location.href = finalRedirectPath;
       }
-      if (!studyLevel) {
-        window.location.href = 'step-three';
-      }
+  
       shakeWebsite();
     } else {
       const data = {
@@ -52,12 +76,17 @@ const StepThreeForm = () => {
         variables: {
           ...data
         }
+      }).then(() => {
+        // After successful profile edit, redirect if the parameter exists
+       
       });
     }
   };
 
   return (
     <div className="welcome-form-container animate-fadeIn">
+           <Toast />
+
       <h2 className="text-3xl font-bold text-gray-800 mb-2 animate-slideDown flex items-center">
         <GraduationCap className="mr-2" size={32} />
         What degree are you pursuing?
@@ -97,6 +126,7 @@ const StepThreeForm = () => {
           url="step-two"
           lable="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
+          onclick={() => {navigator('/welcome-form/step-two')}}
         />
       </div>
     </div>

@@ -12,10 +12,7 @@ export const GoogleAuth = memo(() => {
   const [Googlelogin] = useAstroMutation(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
-      console.log("login data", data);
       if (data.google?.status?.success && data.google && data.google.data) {
-        console.log("login data", data.google.data);
-
         // history.push("/feed");
       }
     },
@@ -26,7 +23,7 @@ export const GoogleAuth = memo(() => {
 
   const onGoogleSignIn = (user: any) => {
     const { credential } = user;
-    let payload = {
+    const payload = {
       email: params.get("email"),
       spaceOrgName: params.get("org"),
       code: params.get("code"),
@@ -40,7 +37,7 @@ export const GoogleAuth = memo(() => {
     // @ts-ignore
     window?.google.accounts.id.initialize({
       client_id:
-        "1001592245381-rbpoecv2se6v3avlkisbbsfpl09cjfs4.apps.googleusercontent.com",
+        "608310021370-snd65n66i5e9nt1nb15pgfpuuvkqevfq.apps.googleusercontent.com",
       callback: onGoogleSignIn,
       auto_select: false,
     });

@@ -21,17 +21,18 @@ const examples = navMenuConfig.examplesNav[0];
 
 export function MainNavigationMenu() {
   return (
-    <NavigationMenu>
-
+    <NavigationMenu className="">
       <NavigationMenuList>
         <NavigationMenuItem>
-        <NavigationMenuLink href="/new-story" className={navigationMenuTriggerStyle()}>
+          <NavigationMenuLink
+            href="/new-story"
+            className={navigationMenuTriggerStyle()}
+          >
             New Story
-          <PenOutLine/>
-
+            <PenOutLine />
           </NavigationMenuLink>
         </NavigationMenuItem>
-{/*
+        {/*
         <NavigationMenuItem>
           <NavigationMenuTrigger>{pages.title}</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -108,7 +109,7 @@ const ListItem: React.FC<MenuItem> = ({
               SOON
             </Badge>
           ) : null}
-          
+
           {launched ? (
             <Badge
               radius="sm"

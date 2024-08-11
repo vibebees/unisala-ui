@@ -110,7 +110,7 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
               onLoad={() => {
                 document
                   .querySelector(".loading-overlay")
-                  ?.classList.add("hidden");
+                  ?.classList.add("deactive");
               }}
             ></iframe>
             <div className="loading-overlay">
@@ -239,7 +239,9 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
               </h4>
               <ul>
                 {scholarship?.application_requirements.map((req, index) => (
-                  <li key={index}>{req}</li>
+                  <li key={index} className="dark:text-neutral-200">
+                    {req}
+                  </li>
                 ))}
               </ul>
             </div>

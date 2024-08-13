@@ -24,7 +24,6 @@ export const $user = atom<User>({
 });
 
 export const setUser = (user: User) => {
-  console.log("Setting user", user);
 
   $user.set(user);
 

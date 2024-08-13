@@ -16,6 +16,8 @@ export const GoogleAuth = memo(() => {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data.google?.status?.success && data.google && data.google.data) {
+        const user = data?.google?.data;
+
         setUser({
           id: user?.id,
           authenticated: true,

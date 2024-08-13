@@ -5,6 +5,7 @@ import { GoogleLogin } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import { navigator } from "@/utils/lib/URLupdate";
 import toast from "react-hot-toast";
+import { setUser } from "@/store/userStore";
 
 export const GoogleAuth = memo(() => {
   const googlebuttonref = useRef<any>();
@@ -15,6 +16,17 @@ export const GoogleAuth = memo(() => {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data.google?.status?.success && data.google && data.google.data) {
+        setUser({
+          id: user?.id,
+          authenticated: true,
+          email: user?.email,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          accessToken: user?.accessToken,
+          refreshToken: user?.refreshToken,
+          newUser: user?.newUser,
+        });
+
         if ( data?.google?.data?.newUser) {
           toast.success("Account created successfully.");
           navigator('/welcome-form/intro')

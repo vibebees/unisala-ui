@@ -166,7 +166,7 @@ console.log('post?.user?._id', post?.user?._id)
 ></MainLayout>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
-  
+
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
@@ -200,11 +200,11 @@ console.log('post?.user?._id', post?.user?._id)
           client:only 'react'
           upVoted={post?.upVoted}
         />
-          
+
       </ul>
     </section>
   )}
-  
+
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>

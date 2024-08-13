@@ -37,7 +37,7 @@ export const GoogleAuth = memo(() => {
     // @ts-ignore
     window?.google.accounts.id.initialize({
       client_id:
-        "608310021370-snd65n66i5e9nt1nb15pgfpuuvkqevfq.apps.googleusercontent.com",
+        "1001592245381-rbpoecv2se6v3avlkisbbsfpl09cjfs4.apps.googleusercontent.com",
       callback: onGoogleSignIn,
       auto_select: false,
     });

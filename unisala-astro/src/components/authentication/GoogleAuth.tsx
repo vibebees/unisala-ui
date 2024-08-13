@@ -3,6 +3,8 @@ import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+import { navigator } from "@/utils/lib/URLupdate";
+import toast from "react-hot-toast";
 
 export const GoogleAuth = memo(() => {
   const googlebuttonref = useRef<any>();
@@ -13,7 +15,13 @@ export const GoogleAuth = memo(() => {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data.google?.status?.success && data.google && data.google.data) {
-        // history.push("/feed");
+        if ( data?.google?.data?.newUser) {
+          toast.success("Account created successfully.");
+          navigator('/welcome-form/intro')
+        } else {
+          toast.success("Logged in successfully.");
+          navigator()
+        };
       }
     },
     onError: (error) => {

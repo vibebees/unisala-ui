@@ -178,7 +178,6 @@ const handleUpvote = async (postId: string) => {
   }
 };
 
-console.log(post)
 
 ---
 
@@ -235,6 +234,5 @@ console.log(post)
   <SameWriterSuggestions  feedId ={post?.user?._id}  />
   <hr />
   <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
-
 
 </MainLayout>

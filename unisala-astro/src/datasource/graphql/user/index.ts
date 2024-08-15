@@ -624,7 +624,7 @@ export const checkEmail = gql`
           success
           message
         }
-        isPostUpVotedByCurrentUser  
+        isPostUpVotedByCurrentUser
         validToken
         data {
           _id
@@ -1825,6 +1825,7 @@ export const checkEmail = gql`
       $space: Boolean
       $org: Boolean
       $orgId: ID
+      $post: Boolean
     ) {
       search(
         q: $q
@@ -1833,6 +1834,7 @@ export const checkEmail = gql`
         space: $space
         org: $org
         orgId: $orgId
+        post: $post
       ) {
         totalItems
         items {
@@ -1858,6 +1860,26 @@ export const checkEmail = gql`
         orgs {
           name
           description
+        }
+        posts{
+          _id
+          postText
+          postImage
+          date
+          upVoteCount
+          postCommentsCount
+          upVoted
+          saved
+          videoURL
+          user {
+            _id
+            firstName
+            lastName
+            username
+            picture
+            username
+          }
+            title
         }
       }
     }

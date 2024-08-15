@@ -104,11 +104,36 @@ export function stripHtmlTagsServerSide(html: string): string {
   return html?.replace(/<[^>]*>/g, '');
 }
 
-export const similarThreadHeading = (text:string) =>{ 
+export const similarThreadHeading = (text:string) =>{
 return stripHtmlTags(text)?.substring(0, 50)
 }
 
 export const similarThreadDetail = (text:string) =>{
   return stripHtmlTags(text)?.substring(50, 250)
 
+}
+
+export function extractHeading(text: string) {
+  const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
+  if (headingMatch) return headingMatch[1].trim();
+
+  let cleanText = text
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  cleanText = cleanText
+    .replace(/(\d{4})([A-Z])/g, '$1\n$2')
+    .replace(/([.:])(\d+)/g, '$1\n$2')
+    .replace(/([a-z])([A-Z])/g, '$1\n$2');
+
+  const lines = cleanText.split('\n');
+  let heading = lines.slice(0, 2).join(' - ');
+
+  if (heading.length > 150) {
+    heading = heading.slice(0, 147) + '...';
+  }
+
+  return heading || 'Thread Details';
 }

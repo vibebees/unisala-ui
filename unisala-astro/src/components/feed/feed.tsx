@@ -58,7 +58,7 @@ const StaffPick = ({ article }) => (
       </Avatar.Fallback>
     </Avatar.Root>
     <div className="ml-3">
-      <h3 className="text-sm font-medium">{article.title}</h3>
+      <h3 className="text-sm font-medium">{article.postText}</h3>
       <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
     </div>
   </div>
@@ -73,7 +73,7 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-3/4 md:pr-8">
-          <CoreFeed/>
+          <CoreFeed />
         </div>
         <div className="md:w-1/4">
           <div className="mb-8">

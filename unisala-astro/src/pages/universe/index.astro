@@ -1,621 +1,116 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
 import MediumFeed from '@/components/feed/feed.tsx';
+import { fetchApi } from '@/utils/api.utility';
+import { userServiceGql } from '@/datasource/servers';
 
-// Fetch the data from your API
-// const response = await fetch('YOUR_API_ENDPOINT');
-// const data = await response.json();
-const articles = [
-    {
-        "section": null,
-        "postText": "<h2>A Quick Guide for International Students Flying to the USA for this Fall. </h2><p><br></p><p><img src=\"https://i.ibb.co/CWTNN4P/Screenshot-2024-08-06-at-11-38-57-AM.png\"></p><p><br></p><p>Congratulation for securing spot in a U.S. university! Semester is approaching so many of you might have a flight coming up.  This post is written to ensure you've smooth transition to USA. As i am writing this article i am recalling my memory of 30+ hours of total travel time. From my experience i am sharing what can help you make your journey go smooth, to a new land with better experiences.</p><p><br></p><p><img src=\"https://i.ibb.co/12J9RD4/Screenshot-2024-08-06-at-11-41-06-AM.png\"></p><p><br></p><p><br></p><p>This guide is written to help you avoid common pitfalls like missing flights, losing luggage, and feeling overwhelmed during your long journey to the USA. Many students face challenges with time zones, connecting flights, and unfamiliar procedures. Let's make sure you're not one of them!</p><p><br></p><p>&nbsp;Here's what you need to know for your long flight:</p><p><br></p><h3><strong>Pack Smart</strong><img src=\"https://i.ibb.co/X33KyZg/Screenshot-2024-08-06-at-11-39-18-AM.png\"></h3><ol><li class=\"ql-indent-1\">Carry-on essentials: </li><li class=\"ql-indent-2\"> Important documents (passport, visa, I-20, acceptance letter)</li><li class=\"ql-indent-2\">a light jacket on the side</li><li class=\"ql-indent-2\"> Chargers/power bank</li><li class=\"ql-indent-2\"> Some Snacks  and empty water bottle </li><li class=\"ql-indent-2\"> Eye mask and travel pillow can help!</li><li class=\"ql-indent-1\">Ensure you tag you luggage properly with valid tags provided to you by airlines on the time of check in.  </li><li class=\"ql-indent-1\">Take picture of your luggage and bags</li><li class=\"ql-indent-2\">if miss-placed later you can show them the picture if asked for the details </li></ol><p><br></p><h3><strong>Flight Preparation</strong></h3><ol><li class=\"ql-indent-1\">Check all flight details<img src=\"https://i.ibb.co/Gx3pRM2/Screenshot-2024-08-06-at-11-38-39-AM.png\"></li><li class=\"ql-indent-2\">Be aware of <strong>time zones</strong></li><li class=\"ql-indent-2\"><strong>Pay</strong> especial <strong>attention</strong> to the boarding pass. </li><li class=\"ql-indent-2\">Use airline apps for updates</li><li class=\"ql-indent-2\"><strong>Don't rely </strong>on initial <strong>document</strong> handed to you by your <strong>travel agency</strong> as <strong>flight time</strong> could <strong>change</strong>  </li></ol><p><br></p><p><br></p><h3><strong>During Layovers/Transit</strong><img src=\"https://i.ibb.co/DCVynD6/Screenshot-2024-08-06-at-11-40-00-AM.png\"></h3><ol><li class=\"ql-indent-1\">If your transit in port of entry(USA) has short duration like 2-3 hours, then try to get to your gate early as possible, optimize on your time.</li><li class=\"ql-indent-1\">Set an alarm if resting</li><li class=\"ql-indent-1\">Even you get to your gate <strong>1 min late t</strong>hen min boarding<strong> door closes </strong>you will <strong>miss</strong> the <strong>flight</strong> </li></ol><p><br></p><p><br></p><h3><strong>Beat Jet Lag</strong><img src=\"https://i.ibb.co/10rd0g3/Screenshot-2024-08-06-at-11-40-46-AM.png\"></h3><ol><li class=\"ql-indent-1\">Stay hydrated</li><li class=\"ql-indent-2\">Fill up your water bottle after you clear security check in, so don't have dependency on air hostess. </li><li class=\"ql-indent-1\">Try to fall asleep in your plane so you have enough rest for your long flight ahead</li><li class=\"ql-indent-1\">You will be provided meal and snacks on long flights</li><li class=\"ql-indent-1\">Most likely domestic airlines won't serve free food, so if you're feeling hungry plan ahead.</li><li class=\"ql-indent-2\">You will have option to buy snacks but usually are more expensive in flight. </li></ol><p><br></p><p><br></p><h3><strong>Arrival Tips In Port of Entry:</strong></h3><p><img src=\"https://i.ibb.co/12J9RD4/Screenshot-2024-08-06-at-11-41-06-AM.png\"></p><ol><li>\tBe ready for immigration questions</li><li class=\"ql-indent-1\">With Documents like I20, passport</li><li class=\"ql-indent-1\">like your university name, majors</li><li class=\"ql-indent-1\">may be your stay/ accommodation questions</li><li class=\"ql-indent-2\">where are you going to stay?</li></ol><p><br></p><p><br></p><p><br></p><p><br></p><h3> 🤞, what happens if you miss your flight?</h3><ol><li>Ask the attendance in your gate, what you should, when you're late.</li><li>Normally they assist you to your airlines help desk</li><li class=\"ql-indent-1\"> ask for next available flight to the destination</li><li class=\"ql-indent-1\">They will get your next flight for <strong>free</strong></li><li><strong>What happens to my luggage?</strong></li><li class=\"ql-indent-1\">Checked in luggage will arrive to your destination airport even if you miss your flight</li><li class=\"ql-indent-1\">On your next flight you, go to your airlines helpdesk again and ask the the luggage</li></ol><p><br></p><p><br></p><p><br></p><p><br></p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": true,
-        "upVoteCount": 1,
-        "postCommentsCount": 1,
-        "type": "post",
-        "saved": null,
-        "postType": "reviewUniversity",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "org",
-            "tag": null,
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-08-06T16:52:04.689Z",
-        "_id": "66b254b430e908f1a046a17f",
-        "images": [],
-        "user": {
-            "firstName": "Prashant ",
-            "lastName": "Basnet",
-            "picture": null,
-            "username": "prashant.basnet324",
-            "_id": "64dd5983d1aa61cf8887f9fa",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3><strong>Sum of Two Integers without Using + or - operators</strong></h3><p>Blind 75. Binary</p><p><br></p><p>Given two integers&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">a</code>&nbsp;and&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">b</code>, return&nbsp;<em>the sum of the two integers without using the operators</em>&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">+</code>&nbsp;<em>and</em>&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">-</code>.</p><p><br></p><p>Input: a = 1, b = 2</p><p>Output: 3</p><p><br></p><p>How to add two numbers without using + operators?</p><p><br></p><p><img src=\"data:image/jpeg;base64,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\" alt=\"What Stock Photos, Royalty Free What ...\"></p><p><br></p><p><br></p><p><br></p><p>Before we solve the problem.</p><p>let's first understand what are some<strong> real world application</strong> of solving this problem?</p><p>what can you do with the technique learnt here?</p><p><img src=\"https://wpvip.edutopia.org/wp-content/uploads/2022/10/boss-169hero-realworld.jpg?w=2880&amp;quality=85\" alt=\"Real-World Applications of Classroom Learning | Edutopia\"></p><p><br></p><p>Note: <strong>Bitwise</strong> operation we will discuss <strong>later</strong> while solving this problem. </p><p><br></p><ol><li>&nbsp;Indexing, compression, and query optimisation in database engines</li><li>Graphics processing:</li><li class=\"ql-indent-1\">Pixel manipulation and color blending in image processing.</li><li>Embedded systems and microcontrollers:</li><li>Where hardware resources are limited, bitwise operations can be more efficient.</li><li>Database Indexing:</li><li class=\"ql-indent-1\">Where: In companies like Amazon for their product database or Google for their search index.</li><li class=\"ql-indent-1\">Quickly finding and sorting through millions of items.</li><li>Compression in Streaming Services:</li><li class=\"ql-indent-1\">Where: Netflix or YouTube for video streaming.</li><li class=\"ql-indent-1\">Application: Reducing video file sizes without losing much quality.</li><li class=\"ql-indent-1\">Bitwise: Allows for efficient manipulation of video data at the bit level.</li></ol><p><br></p><p><br></p><p><strong>Bitwise operations are typically faster than arithmetic operations.</strong></p><p>It's faster than traditional comparison methods for large datasets. They're often executed in a single CPU cycle.</p><p><br></p><p><br></p><p>From looking at the question:</p><p>&nbsp;&nbsp;1. Without using + operators how to add numbers?</p><p>&nbsp;&nbsp;2. Why is - even mentioned?</p><p><br></p><p><br></p><p>A instinct we can have, is how does computer does the sum operation in it's core?</p><p>when we use +,  only we understand it,</p><p>What is the logic that computer computes on?</p><p><br></p><ul><li>Also we know that in the computer language there is 0 and 1 which is binary.</li></ul><p><br></p><p><br></p><p>So let's think about this, thus the concept of bitwise operator, in other words binary calculation works?</p><p><br></p><p> let's see how numbers add up in binary</p><p>Decimal   &nbsp;Binary&nbsp;&nbsp; </p><p>&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;     \t\t\t\t 1 &nbsp;</p><p>&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t   10</p><p>&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t11</p><p>&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t100</p><p>&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t101</p><p>&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t110</p><p><br></p><p><br></p><ul><li>decimal&nbsp;(2 + 3), let's see how these works in binary</li></ul><ol><li class=\"ql-indent-1\">&nbsp;2 is 10, 3 is 11 from the above table of numbers</li></ol><p><br></p><p>a.&nbsp;</p><p><br></p><p>&nbsp;&nbsp;1 0</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;</p><p><br></p><p><br></p><p>b.&nbsp;</p><p><br></p><p>&nbsp;1&nbsp;&nbsp;</p><p>&nbsp;&nbsp;1 0</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;&nbsp;1 0 1&nbsp;&nbsp;&nbsp;</p><p><br></p><p>&nbsp;&nbsp;here, we have carry over</p><p>&nbsp;&nbsp;101 is 5.</p><p><br></p><p><br></p><ul><li>3 is 11 in binary, let's add 3 + 3</li></ul><p><br></p><p>a.&nbsp;&nbsp;</p><p>&nbsp;&nbsp;1</p><p>&nbsp;&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;&nbsp;&nbsp;0&nbsp;</p><p><br></p><p><br></p><p>here we have cary over, we need to <strong>learn how to handle cary over</strong></p><p>also when there is a cary over there is introduction 0 and 1 <strong>shift to the left</strong></p><p><br></p><p>b.&nbsp;</p><p><br></p><p>&nbsp;&nbsp;1</p><p>&nbsp;&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;&nbsp;&nbsp;0&nbsp;</p><p><br></p><p>&nbsp;&nbsp;here, 1 + 1 = 10, and we have 1 (carry over)</p><p>&nbsp;&nbsp;notice here we calculated, <strong>without the carry over </strong>then&nbsp;</p><p>&nbsp;&nbsp;<strong>calculated number + carryover</strong></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10 + 1 = 11</p><p><br></p><p>&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;&nbsp;1 0</p><p>again, we have 1 cary over going to the left</p><p>&nbsp;&nbsp;</p><p><br></p><p>&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>&nbsp;&nbsp;1 1</p><p>----------</p><p>&nbsp;1 1 0&nbsp;&nbsp;=&gt; 6 in decimal</p><p><br></p><p><br></p><ol><li>&nbsp;so the conclusion is how do we handle cary over?</li><li>&nbsp;add the number in place without carry over.</li><li>&nbsp;and how do we make a shift to the number?</li></ol><p><br></p><p><br></p><p><br></p><p>&nbsp;in bitwise operation, what are similar operators that can gear us up to handle these steps?</p><p><br></p><p><br></p><p>&nbsp;peseudo code:</p><p>&nbsp;function add(a, b) {</p><p>&nbsp;&nbsp;caluclation loop {</p><p>&nbsp;&nbsp;&nbsp;&nbsp;// identify carry</p><p>&nbsp;&nbsp;&nbsp;&nbsp;// Add without carry</p><p>&nbsp;&nbsp;&nbsp;&nbsp;// Shift carry</p><p>&nbsp;&nbsp;}</p><p>&nbsp;&nbsp;&nbsp;&nbsp;return total</p><p>}</p><p><br></p><p><br></p><p>now let's look at our bitwise operator pool:</p><p><br></p><p><br></p><p>1. AND (&amp;): identifyies where carry over happend for example 1 &amp; 1 = 10. In binary addition, a carry occurs when both bits are 1.</p><p>2. OR (|): Combines bits, resulting in 1 if either bit is 1.</p><p>3. XOR (^) (Exclusive OR) adds bits without handling carry. It returns 1 if bits are different, 0 if they're the same.</p><p>4. NOT (~). Inverts all bits. Can be used in subtraction algorithms.</p><p>5. Right Shift (&gt;&gt;),Can be used for division by powers of 2. Example: 1000 &gt;&gt; 1 = 0100</p><p>6. Left Shift(&lt;&lt;),&nbsp;We use this to move the carry to the next significant bit position.</p><p><br></p><p><br></p><p>form this pool, we match AND, XOR and Left Shift</p><p><br></p><p><br></p><p><br></p><p><br></p><blockquote>function add(a,b){</blockquote><blockquote>&nbsp;&nbsp;while(b !==0){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;// Identify carry</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let carry = a &amp; b</blockquote><blockquote>&nbsp;&nbsp;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;// Xor, add numbers without cary over</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;a = a ^ b</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;// left shift</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;b = carry &lt;&lt; 1</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;return a</blockquote><blockquote>}</blockquote><p><br></p><p><br></p><p>in short: Algorithm steps:</p><ul><li>Identify carry (AND)</li><li>Add without carry (XOR)</li><li>Shift carry (Left Shift)</li><li>Repeat until no carry</li></ul><p><br></p><p><img src=\"https://i.ibb.co/kGh7Gbg/Screenshot-2024-08-01-at-10-34-41-AM.png\"></p><p><br></p><p>this is how this problem can be solved. </p><p><br></p><p><br></p><p>Why it's important?</p><p> in short:</p><ul><li>Efficiency in large-scale systems</li><li>Optimization for speed and memory</li><li>Low-level control in hardware</li><li>Solving complex computational problems</li></ul><p><br></p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "space",
-            "tag": {
-                "_id": "65b9a6443a51e4d99e7774ac",
-                "name": "data structures and algorithms",
-                "__typename": "Tag"
-            },
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-08-01T17:56:33.460Z",
-        "_id": "66abcc5130e908f1a04697af",
-        "images": [],
-        "user": {
-            "firstName": "Array",
-            "lastName": "Alchemist",
-            "picture": null,
-            "username": "ArrayAlchemist",
-            "_id": "6538929978741849773d0e1a",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3>📚🦁 UNA 2025 Academic &amp; Presidential Scholarships 🦁📚</h3><p><br></p><p>🎓 University of North Alabama</p><p> 💰 Scholarships up to $12,000 + Housing per year!</p><p><br></p><p>📊 Eligibility:</p><ul><li>GPA: 3.00-4.00 (unweighted)</li><li>ACT: 20-36 or SAT: 1030-1600</li><li>No test scores? No problem! Options available</li></ul><p><br></p><p>🏆 Awards:</p><ul><li>Academic: $1,000 - $8,500/year</li><li>Presidential: $9,000 - $12,000/year + Housing</li></ul><p><br></p><p>🏠 Housing Scholarship: $4,000 for residence halls</p><p><br></p><p>📝 Key Notes:</p><ul><li>Superscoring available for ACT/SAT</li><li>Awards subject to final funding (Oct 1, 2024)</li><li>No refunds on excellence scholarships</li></ul><p>⏰ Important: Check UNA website for application deadlines!</p><p><br></p><p><br></p><h3>#UNAScholarships #ClassOf2029 #CollegeBound</h3>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "uni",
-            "tag": null,
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-31T14:10:30.630Z",
-        "_id": "66aa45d630e908f1a046957a",
-        "images": [],
-        "user": {
-            "firstName": "uni",
-            "lastName": "sala",
-            "picture": null,
-            "username": "unisala00",
-            "_id": "668f3c10971b8efd8e06065f",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": 101879,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3>Container with Most Water</h3><p>Blind 75. Array Question</p><p><br></p><p><img src=\"https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg\"></p><p><br></p><p>You are given an integer array&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">height</code>&nbsp;of length&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">n</code>. There are&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">n</code>&nbsp;vertical lines drawn such that the two endpoints of the&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">ith</code>&nbsp;line are&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">(i, 0)</code>&nbsp;and&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">(i, height[i])</code>.</p><p>Find two lines that together with the x-axis form a container, such that the container contains the most water.</p><p><br></p><p>Return&nbsp;<em>the maximum amount of water a container can store</em>.</p><p><strong>Notice</strong>&nbsp;that you may not slant the container.</p><p><br></p><p><br></p><p>Real world applications:</p><p><br></p><ol><li>Resources Allocation:</li><li class=\"ql-indent-1\">Logistics:</li><li class=\"ql-indent-2\">It could be used to optimize how to pack items of varying heights into containers</li><li class=\"ql-indent-1\">Urban planning:</li><li class=\"ql-indent-2\">To design optimal layouts for building or parking lots</li><li class=\"ql-indent-1\">VR space:</li><li class=\"ql-indent-2\">Determining optimial viewing areas in virtual environments.</li><li class=\"ql-indent-1\">Netflix:</li><li class=\"ql-indent-2\">Algorithms to maximize user watch time within available content</li></ol><p><br></p><p><br></p><p>These are <strong>some real world problems</strong> that can be solved using the solution of  container with max water.  Let's see how we can <strong>solve it?</strong></p><p><br></p><p><br></p><p>What are obvious conclusions given from question?</p><p>&nbsp;&nbsp;&nbsp;&nbsp;sliding window technique:</p><p><br></p><ol><li>\tCalculate max water that can fit in container with max wall</li><li class=\"ql-indent-1\">we need to calculate height of wall * breadth of wall</li><li class=\"ql-indent-1\">thus, we need to find area</li><li class=\"ql-indent-1\">height is given from heights[i],whereas breadth is given from index position</li><li>we need two pointers to compare two walls</li><li class=\"ql-indent-1\"> when to move what pointers?</li><li class=\"ql-indent-1\"> smaller walls pointer gets moved as we need to calculate max</li></ol><p><br></p><p><br></p><p><br></p><blockquote>&nbsp;&nbsp;function maxWater(heights){</blockquote><blockquote>&nbsp;&nbsp;let maxArea = 0</blockquote><blockquote>&nbsp;&nbsp;let l = 0</blockquote><blockquote>&nbsp;&nbsp;let r = heights.length - 1</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;while(l &lt; r){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let height = Math.min(heights[l], heights[r])</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let breadth = r - l</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;maxArea = Math.max(maxArea, height * breadth)</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(heights[l] &lt; heights[r]){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l++</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r--</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;return maxArea</blockquote><blockquote>}</blockquote><p><br></p><p>This is how this problem can be solved.</p><p><br></p><p><strong>Complexity:</strong></p><p>Time complexity is O(n), as we are iterating through the array once</p><p>Space complexity is O(1), as we don't have any array or storage</p><p><br></p><p><br></p><p><img src=\"https://i.ibb.co/4WDVh7S/Screenshot-2024-07-31-at-8-22-05-AM.png\"></p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "space",
-            "tag": {
-                "_id": "65b9a6443a51e4d99e7774ac",
-                "name": "data structures and algorithms",
-                "__typename": "Tag"
-            },
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-31T13:29:40.852Z",
-        "_id": "66aa3c4430e908f1a04694e7",
-        "images": [],
-        "user": {
-            "firstName": "Array",
-            "lastName": "Alchemist",
-            "picture": null,
-            "username": "ArrayAlchemist",
-            "_id": "6538929978741849773d0e1a",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h2>How we optimised our software loading time by 5x?</h2><p><br></p><p>Unisala was initially written in ionic react. The reason? Ionic is one stop cross platform development framework. You can develop </p><ol><li>Web app</li><li>Android app</li><li>Ios app</li></ol><p>all from one single code base. It sounded so good, why would anyone just pick ionic to build there app?</p><p>I have developed couple of application on ionic before unisala. I created e-commerce app on it before this. I never got to deploy it to real time user thus I was not exposed to the limitation of ionic app.</p><p><br></p><p><br></p><p><br></p><h3><strong>Discovery Phase:</strong></h3><p>We then started seeing the downside of the framework. We'd share university link or our thread page to the user and they'd come back saying hey the<strong> site is down</strong>. This was a common issue to us. </p><p><img src=\"https://i.ibb.co/Phs4c5n/Screenshot-2024-07-19-at-9-49-56-AM.png\"></p><p><br></p><p>We moved on, cause we can see the site was up and running from our side.</p><p>This pattern often repeated when we send links of site to new user.  As the complain increases we decided to do something, we started paying attention app's performance and user experience especially our build size, app loading times and compared it  </p><ul><li><strong>new user vs returning user</strong></li></ul><p><br></p><h3><br></h3><h3><strong>For Returning User:</strong></h3><p>Since the browser download the app size on the first fetch, for returning user it was not taking significant time to load the app.New users experienced long loading times</p><p><br></p><h3>New user:</h3><p><span style=\"color: rgb(74, 74, 74);\">Initially, our app first build size was 6mb.  We found out that to download the app for the first time user it was taking 2 mins on normal 3g internet which is our phone network. </span></p><p><br></p><p><span style=\"color: rgb(74, 74, 74);\">We discovered then we optimised trying to reduce the t</span>he size, we were able to reduce it to 3mb, with simple efforts. Just trimming heavier packages out of the app. But it was still taking 1 min to download i.e 3mb app size.</p><p><br></p><p>When  app takes more time to load, the drop rate increases, no way a user would wait 1 mins to try a new product. An ecommerce site like amazon would loose millions of dollar every second the site takes longer to load. </p><p><br></p><p><img src=\"https://i.ibb.co/bBvfr9y/Screenshot-2024-07-19-at-10-03-35-AM.png\"></p><p><br></p><p><br></p><p>We then tried our best to trim all the heavier package out of the product. The best we could optimize app size was to 2.2 mb. At this point we were even discussion whether to include ionic-icons package or not, this alone was 700kb.  </p><p><br></p><p>As we wanted our site to load in less than 5 seconds for 3g .e phone network, <span style=\"color: rgb(74, 74, 74);\">This clearly was not our solution.</span></p><p><br></p><p><strong style=\"color: rgb(74, 74, 74);\">Then we started looking for other solutions:</strong></p><p><br></p><p>How can we reduce our bundle size so it loads faster?</p><p><img src=\"https://i.ibb.co/NmCvBBP/Screenshot-2024-07-19-at-10-11-52-AM.png\"></p><p><br></p><ol><li>Should we have a micro front-ends?</li><li>landing page static app with current ionic app</li><li class=\"ql-indent-1\">where landing page would  have a static site that will load faster</li><li class=\"ql-indent-1\">then on the background we will download the bundle of ionic app while user is getting to know us.</li><li class=\"ql-indent-1\">At least the app loads fast. </li></ol><p><br></p><p><br></p><p><br></p><p>So then second question, chime in.</p><p>How should the landing page be added?</p><ol><li>Explored static HTML/CSS/JS landing page</li><li>A new micro service what is running on the server</li></ol><p> </p><p><strong>1. Static Page:</strong></p><p>Initially we experimented with just one single static page with html ,css , js.</p><p>we could just go to one of these sites like: <a href=\"https://colorlib.com/wp/template/sierra/\" rel=\"noopener noreferrer\" target=\"_blank\">colorlib</a> </p><p> A nice site was around more than an 1 mb, which is not what we wanted.</p><p><strong>2mb took around 40 seconds to 1 min, 1 mb would still take more than 20 sec. </strong></p><p><br></p><p><strong>2. Microfrontend:</strong></p><p>This was something new to me as a developer,. I have worked with micro services before but on the backend, i never created/worked on project where frontend had micro service. </p><p><br></p><p>We started experimenting with different library and framework our top choices was Next.js.</p><ol><li>Next Js</li><li class=\"ql-indent-1\">This is more robust framework, since we only wanted the landing page initally</li><li class=\"ql-indent-1\">This might be a overkill for just a landing page</li><li>Astro</li><li class=\"ql-indent-1\">A newer, lightweight static site generator</li><li class=\"ql-indent-1\"><span style=\"color: rgb(53, 56, 65);\">Astro’s focus on content as a static site builder have can&nbsp;</span><strong style=\"color: rgb(53, 56, 65);\">sensibly scale up to performant, powerful, dynamic web applications</strong></li><li class=\"ql-indent-1\"><span style=\"color: rgb(53, 56, 65);\">The island concept was very powerful, </span>allows  to use multiple frameworks in the same project</li><li class=\"ql-indent-1\">Enables partial hydration, loading JavaScript only where it's needed</li><li class=\"ql-indent-1\">&nbsp;Significantly improve performance by reducing the amount of JavaScript sent to the client</li><li class=\"ql-indent-1\">This was a perfect for us.</li></ol><p><br></p><p><br></p><p>So we experimented with <span style=\"color: rgb(74, 74, 74);\">both</span> next js and astro,  </p><ol><li class=\"ql-indent-1\">Core Web Vitals:&nbsp;A report card for websites. Google uses them to check if a website is fast and easy to use.<img src=\"https://i.ibb.co/HpbzbDv/Screenshot-2024-07-19-at-10-19-59-AM.png\"></li><li class=\"ql-indent-1\">Web vitals (app performance) <span style=\"color: rgb(74, 74, 74);\">in</span> astro than compared to other frameworks like next.js or gatsby, </li><li class=\"ql-indent-1\">Astro's score: 60% of Astro websites pass the test. That's really good!</li><li class=\"ql-indent-1\">others tools:</li><li class=\"ql-indent-2\">WordPress and Gatsby: 38% pass</li><li class=\"ql-indent-2\">Next.js: 24% pass</li><li class=\"ql-indent-2\">Nuxt: 20% pass</li></ol><p><br></p><p>What this means: Astro helps make websites that are faster and work better for users than most other popular tools.</p><p><br></p><p>we decided to stick with Astro.</p><p><br></p><h2>3 The result:</h2><p><br></p><p><strong>a. Faster loading times 5X:</strong></p><p><strong>     </strong>i<strong>.  </strong>Ionic app takes about 23 seconds for new user to see the thread</p><p><img src=\"https://i.ibb.co/jDSzhpy/Screenshot-2024-07-19-at-11-35-53-AM.png\"></p><p><br></p><p><br></p><p>ii. Astro loads in around 4seconds</p><p><img src=\"https://i.ibb.co/hgXBZxW/Screenshot-2024-07-19-at-11-37-09-AM.png\"></p><p>So , we see almost <strong>5X improvement in</strong> speed.</p><p><br></p><p><strong>b. Seo performance 90+ score:</strong></p><p><img src=\"https://i.ibb.co/C0cXWsP/Screenshot-2024-07-19-at-11-47-29-AM.png\"></p><ol><li class=\"ql-indent-1\">Seo<strong> </strong>is not so great as react inserts into a html dom object </li><li class=\"ql-indent-1\">Seo with ionic is around 80/100 by lighthouse</li><li class=\"ql-indent-1\">Whereas in astro it's 90+</li></ol><p><br></p><p><br></p><p><strong>c. All web-vitals reported by google light house has gone up. </strong></p><p>    i. Ionic web-vitals reported by lighthouse:</p><p><img src=\"https://i.ibb.co/NFzMxpd/Screenshot-2024-07-19-at-11-47-19-AM.png\"></p><p> ii. Astro web-<span style=\"color: rgb(74, 74, 74);\">vitals</span>:</p><p><img src=\"https://i.ibb.co/TcZRh1w/Screenshot-2024-07-19-at-11-47-13-AM.png\"></p><p><br></p><p><br></p><p><strong>d. Clean Readability:</strong> </p><p>\tionic app has nav-bar, search-bar, and other mobile app looking feel, which is more cluttered while reading a single article.While astro is more clean</p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><h3>Conclusion:</h3><p><br></p><p><img src=\"https://i.ibb.co/WzffcRP/Screenshot-2024-07-19-at-10-07-23-AM.png\"></p><p><br></p><p>Key Takeaways for developers:</p><ol><li>Performance Matters: Fast loading times are crucial for user retention and SEO.</li><li>Choose the Right Tool: Sometimes, a simpler, more focused tool (like Astro) can outperform a more comprehensive framework (like Ionic) for specific use cases.</li><li>Measure and Optimize: Regularly check your app's performance and be willing to make changes if needed.</li><li>Consider Your Users: Think about both new and returning users when optimising.</li><li>SEO is Important: Choose technologies that support good SEO practices.</li><li>User Experience: A clean, fast-loading site often provides a better user experience than a feature-rich but slow one.</li></ol><p><br></p><p>if you think this is helpful, let me know by upvoting or commenting. </p><h3><br></h3>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "space",
-            "tag": {
-                "_id": "64e01f8fc0d1339f580421a6",
-                "name": "software development",
-                "__typename": "Tag"
-            },
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-19T17:07:01.838Z",
-        "_id": "669a9d3530e908f1a04686d1",
-        "images": [
-            "https://unisala-user.s3.ap-south-1.amazonaws.com/7dc657b0-7173-44a2-a956-eff33cc521dd?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAUVJSKU373BLW7DKS%2F20240810%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20240810T204256Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGwaCmFwLXNvdXRoLTEiSDBGAiEAnkrmz0eWOLHoZGUQ3mDuXk%2BMqGpLQ6r2tK6UG10io4wCIQDj2RzsJj%2BMV5WeEs1PDC3PmVXusNZsVX4%2Fxp96Env0kiq%2FBQhlEAEaDDMyMDYxNzQ5MDE3NSIMqFxnEMCmr7t%2F12TWKpwFCOcxntH7CbR59HfCYmYTdg3a5YvRI2%2F9IJQaxEWU58%2BuNLVyCFHAN3SSpzlH%2Foj4%2B2h3VQItqYanCV9XTN0%2Fdl9rzqufbmFMa6Ef5poo%2BqlZln6Jvet3H0pafA908q3nnqisSqDhxhhEX1Zzehrod6nnax9y2n0IhPDnnMOKqD1KK8J0x26oYs7Lw28nQ4%2BoO8zjU6CMFByctj75WrhfGReg2FwXSmBKyyQ525%2FuCT6dEMN7KyHVDn%2F0g0306eCjCg%2F%2BBFg8dXmj4uYrwybXuJFbZTydG2LcKDl313ro0CWPXZJOCRcKcKsbmoN8hkXNBctxGTdfhxZmAlwqwP4UAEJq4Jgfi%2Fc%2BQ2VBMrnwQk7eKDoUNMQEIzrQOZdG%2F3qjxvynXR%2B1uwlKyRGfDo56yxlRiGNIs%2FrRdEwSC48zYrkNWisA%2BgeGlhw8E73piEIWdbcgkz4r8Q85DHiWI82M%2FB2TEx7udbddRU3U7WN4XB7oN%2B8yWmIvuom%2FtRkq0xbzIVgOMbR5Fx532xPFNJs0SQxqUh4g4LzbmYFRfQ5qvMQ4nuQUV%2FLnYCRk3u9O%2Fxzpc1xF7NAmkxHadKy3rbSWXXN7xf1zu2GK1J9qrvwsMVt6%2BprwYXOGepiZtRVR1cNj61t2%2FWkgZsXIgwEw0nb5AxyzepY%2Frsn8rYyMnTrnareFLxNV4GfDvf5dnqyJiDq5ibszwlTBIojSpHoWFFkiND%2B8MIvaNohXKvTktgg9Og%2Fhrzc%2FWwJq6H46gF3ozt9%2Fts9%2FMf4TfSsg5Fc7XdTdbdlzWD%2FCYJFQJEPwLerNrF0N8urf948aB9tVu2qHfKyk7EFOihkndo0w%2FSIRLEo4MAZsq%2FjNnA8guXDdlMGD6ofuvxTthZ%2Bg585juzEwyo7ftQY6sAHuPbl%2BHw2Gvpgx09BElKXUqdKMzBZVvzZRQi%2Frm%2F3hPDqKcFFdqemDoyn9G3pNSUcOcrOj0VZq%2BnUU0tAyO3IvaBtAwXE4tOXJc6%2FWmxnZa4ILLQc3bvX9B8jpy08XHlfc6x5F%2FBCdcCAWCCx55CKjeru34ZF7bjoGLdl39y7x2kg%2BLm%2Fg5SSmJknQ3r5gM%2FvZuITKEOVzZPn7g89vrGpB2jwahhhp%2BfJFs0kQMKRW6Q%3D%3D&X-Amz-Signature=247206ad0baaaa378e1d59b291e80992d944debb5d003cf10a8baadb6ab00b8b&X-Amz-SignedHeaders=host"
-        ],
-        "user": {
-            "firstName": "Prashant ",
-            "lastName": "Basnet",
-            "picture": null,
-            "username": "prashant.basnet324",
-            "_id": "64dd5983d1aa61cf8887f9fa",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": null,
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": null,
-        "upVoteCount": null,
-        "postCommentsCount": null,
-        "type": null,
-        "saved": null,
-        "postType": null,
-        "levelOfStudy": null,
-        "videoURL": null,
-        "postTags": null,
-        "event": null,
-        "date": null,
-        "_id": null,
-        "images": null,
-        "user": null,
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h2>Housing Guide for International Students at Southeastern Louisiana University</h2><h2><img src=\"https://i.ibb.co/7rwzVMM/Screenshot-2024-07-18-at-5-18-31-PM.png\"></h2><h2><br></h2><p>As an international student preparing to study at Southeastern Louisiana University, one of your primary concerns is likely finding suitable housing. This guide aims to answer the most common questions about your living arrangements in Hammond, Louisiana.</p><p><br></p><h3>On Campus Option:</h3><p><br></p><p>What are the on-campus housing options for international students?</p><p>As an international student there might be some degree of cultural shock from food to living style. So to experience a <strong>change</strong> living abroad, for the shake of experience you can also choose to live on campus. On-campus options include:</p><ul><li>Traditional residence halls (shared rooms and communal bathrooms)</li><li>Suite-style accommodations (shared living area with private or semi-private bathrooms)</li><li>Apartment-style housing (for upperclassmen and graduate students)</li><li><br></li></ul><p>To apply for on-campus housing, visit the<a href=\"https://www.southeastern.edu/admin/international/future_students/housing/\" rel=\"noopener noreferrer\" target=\"_blank\"> University Housing</a> and submit your application as early as possible.</p><p><br></p><h3>Off Campus Options:</h3><p><br></p><p>Are there any off-campus apartments or houses that are popular among international students?</p><p>Yes, several off-campus options are popular among international students.</p><p><br></p><h4><strong>1. Smith Properties</strong></h4><p>They own pretty much majority of rentals in Hammond, around the campus. Some of their properties are </p><ol><li>Higher trim and closer to uni</li><li class=\"ql-indent-1\">University Crossing:  very close to campus</li><li class=\"ql-indent-1\">St. Tropez  900+</li><li class=\"ql-indent-2\">some apartments are. two floor <img src=\"https://i.ibb.co/7rwzVMM/Screenshot-2024-07-18-at-5-18-31-PM.png\"></li><li class=\"ql-indent-1\">St. Regis <img src=\"https://i.ibb.co/QYd1SWc/Screenshot-2024-07-18-at-5-20-05-PM.png\"></li><li class=\"ql-indent-1\">Azalea Park:<img src=\"https://i.ibb.co/wLgzyJZ/Screenshot-2024-07-18-at-5-20-32-PM.png\"></li><li class=\"ql-indent-1\"> Pelican Park Apartments around</li><li>Affordable and also closer to uni:</li><li class=\"ql-indent-1\"> Columbus Drive :</li></ol><p><img src=\"https://i.ibb.co/KWzxvKP/Screenshot-2024-07-18-at-4-48-12-PM.png\"></p><p>\t\t</p><p>\t\t\tf. Hooks Drive owned by Smith: Offers affordable options <img src=\"https://i.ibb.co/6ZGVHyW/Screenshot-2024-07-18-at-4-44-39-PM.png\"></p><ol><li class=\"ql-indent-2\">I lived in Hooks drive owned by smith properties in my first semester.We took a lease of 6 months only. It was an affordable option.I shared the apartment with my other roommates</li></ol><p><br></p><p><br></p><p>Individual owned apartments with cheaper options:</p><p><br></p><p><br></p><p><br></p><h4><strong>2. Hooks Drive apartments owned by individual owners</strong></h4><p><br></p><p><img src=\"https://i.ibb.co/vjtj6Jr/Screenshot-2024-07-18-at-4-50-45-PM.png\"></p><p><img src=\"https://i.ibb.co/gy7vYNv/Screenshot-2024-07-18-at-4-50-52-PM.png\"></p><ol><li class=\"ql-indent-1\">Hooks drive apts owned by individual owners</li><li class=\"ql-indent-1\">Rent are around 600 per month</li><li class=\"ql-indent-2\">More affordable options like  $500-$600 per month, with potential discounts for paying multiple months in advance. with discount which can make it upto 400$ per month</li><li class=\"ql-indent-1\">These apartments are slower in maintenance if anythings goes wrong as they are owned by individual owners </li></ol><p><img src=\"https://i.ibb.co/dL7sdwb/Screenshot-2024-07-18-at-4-51-12-PM.png\"></p><p><br></p><p><br></p><h4><br></h4><h4><strong>3. Whitmar Drive Appartments</strong></h4><p><img src=\"https://i.ibb.co/G0s0pNn/Screenshot-2024-07-18-at-4-28-26-PM.png\"></p><p><br></p><p>From my second semester i lived in this apartments 56 whitmar drive. These were around 800$ per month. We shared the price, as 4 of us were living here. These had carpets and were cozy, shared laundry in complex. </p><ol><li>There are multiple other apartments on the whitmar street. </li><li>You can use google map to find more apartments around</li><li class=\"ql-indent-1\">or see how far it is from school.</li></ol><p><br></p><p><strong>Some FAQ are:</strong></p><p><br></p><ol><li><span>What is the </span><strong>average cost</strong><span> of rent for different types of housing in Hammond?</span> Rent in Hammond varies based on the type of accommodation and location:</li><li class=\"ql-indent-1\">Studio apartments: $575 - $850</li><li class=\"ql-indent-1\">1-bedroom apartments: $650 - $1,200</li><li class=\"ql-indent-1\">2-bedroom apartments: $900 - $1,500</li><li class=\"ql-indent-1\">3-4 bedroom houses: $1,100 - $2,000</li><li>How far are off-campus housing options from the university, and what transportation options are available?</li><li class=\"ql-indent-1\">Many popular off-campus housing options are within walking or biking distance of the university:</li><li class=\"ql-indent-1\">University Crossing and properties on North Oak Street are very close to campus</li><li class=\"ql-indent-1\">St. Tropez and Pelican Park Apartments on Pecan Street are also nearby</li></ol><p><strong>For locations further from campus</strong>, Hammond offers limited public transportation.   \t</p><p> Many students rely on bicycles, carpooling, or personal vehicles. </p><p><br></p><ol><li>Are there any specific neighbourhoods in Hammond that are recommended for students?</li><li class=\"ql-indent-1\">Areas close to campus are generally recommended for students:</li><li class=\"ql-indent-1\">North Oak Street</li><li class=\"ql-indent-1\">University Avenue</li><li class=\"ql-indent-1\">Pecan Street</li><li class=\"ql-indent-1\">Hooks Drive</li><li class=\"ql-indent-1\">Whitmar Drive (which can be litter futher, around 20 mins walk)</li><li class=\"ql-indent-1\">These areas are known for their student-friendly environments and proximity to campus facilities.</li><li>What utilities and amenities are typically included in on-campus and off-campus housing?</li><li class=\"ql-indent-1\">On-campus housing typically includes all utilities, internet, and basic furniture. For off-campus housing:</li><li class=\"ql-indent-1\">Some apartments include water and trash collection in the rent</li><li class=\"ql-indent-1\">Electricity, gas, and internet are often the tenant's responsibility</li><li class=\"ql-indent-1\">Most off-campus apartments are unfurnished</li></ol><p><br></p><p>Always clarify with the landlord or property manager what is included in the rent.</p><p><br></p><ol><li>Are there any international student-specific housing options or communities?</li><li class=\"ql-indent-1\">While there aren't specific housing options exclusively for international students, the on-campus residence halls and popular off-campus apartments often have diverse, international communities. The Office of Multicultural and International Student Affairs can provide more information about where international students typically live.</li><li>What documents do international students need to rent off-campus housing? Typically, you'll need:</li><li class=\"ql-indent-1\">A valid passport and student visa</li><li class=\"ql-indent-1\">Proof of enrollment at Southeastern Louisiana University</li><li class=\"ql-indent-1\">Proof of income or financial support (bank statements or scholarship letters)</li><li class=\"ql-indent-1\">A social security number (if you have one) or Individual Taxpayer Identification Number (ITIN)</li><li class=\"ql-indent-1\">A U.S. contact or guarantor (the university's international office may be able to assist with this)</li><li>Are there any housing options that offer short-term leases for students staying less than a year?</li><li class=\"ql-indent-1\">Most off-campus rentals require a 12-month lease. However, some options for shorter terms include:</li><li class=\"ql-indent-1\">Subletting from other students (especially during summer months)</li><li class=\"ql-indent-1\">Some properties on Hooks Drive may offer more flexible terms</li><li class=\"ql-indent-1\">Always clarify the lease terms before signing any agreement.</li><li>How early should international students start looking for housing before the semester begins?</li><li class=\"ql-indent-1\">Start your housing search as early as possible, ideally few months before your planned arrival. For on-campus housing, apply as soon as you're admitted. For off-campus housing, begin your search early to have the best selection of properties.</li><li>Are there any resources or offices at the university that can help international students find housing?</li><li class=\"ql-indent-1\">Yes, several university resources can assist:</li><li class=\"ql-indent-1\">The International Services Office can provide general guidance</li><li class=\"ql-indent-1\">The Office of Multicultural and International Student Affairs offers support for off-campus living challenges</li><li class=\"ql-indent-1\">The University Housing Office can help with on-campus options and provide advice about off-campus living</li></ol><p><br></p><p><br></p><p>What are the <strong>pros and cons of living on-campus vs. off-campus for international students?</strong></p><ol><li>On-campus Pros:</li><li class=\"ql-indent-2\">Close to classes and campus resources</li><li class=\"ql-indent-2\">Easier to meet other students</li><li class=\"ql-indent-2\">All-inclusive (utilities, internet, furniture)</li><li class=\"ql-indent-2\">More support from university staff.</li><li>On-campus Cons:</li><li class=\"ql-indent-2\">Generally more expensive</li><li class=\"ql-indent-2\">Less privacy</li><li class=\"ql-indent-2\">Subject to university rules and regulations</li><li>Off-campus Pros:</li><li class=\"ql-indent-2\">Often more affordable</li><li class=\"ql-indent-2\">More independence and privacy</li><li class=\"ql-indent-2\">Opportunity to experience local culture</li><li class=\"ql-indent-2\">Off-campus housing allows more freedom to cook familiar foods and practice cultural customs</li><li class=\"ql-indent-2\"><br></li><li>Off-campus Cons:</li><li class=\"ql-indent-1\">Need to set up utilities and internet</li><li class=\"ql-indent-1\">May need to buy furniture</li><li class=\"ql-indent-1\">Further from campus resources</li><li class=\"ql-indent-1\">More responsibility (cleaning, cooking, etc.)</li></ol><p><br></p><p><br></p><ol><li>What safety measures should international students consider when choosing housing?</li><li class=\"ql-indent-1\">Look for properties with good lighting and secure entrances</li><li class=\"ql-indent-1\">Check the neighbourhoods safety record (the university or local police department can provide crime statistics)</li><li class=\"ql-indent-1\">For off-campus housing, consider getting renter's insurance</li><li class=\"ql-indent-2\">One everyone has it, but it can cover you on disaster.</li><li class=\"ql-indent-2\">There was an incident that happened to one of the Nepalese graduate as the rice cooker or some pressure cooker exploded causing huge damage to the property and was fined around 50,000$</li><li class=\"ql-indent-2\">Don't worry normally this does not happen, but better to be covered.</li><li>What are some options for finding roommates, especially for international students?</li><li class=\"ql-indent-1\">you can connect with different groups in social media like NSAs or other international or student organization which can lead you. </li></ol><p><br></p><p>Remember, your housing choice significantly impacts your university experience. Take time to research your options, ask questions, and choose a living situation that best suits your needs and preferences.</p><p> Welcome to Southeastern Louisiana University, and best of luck with your housing search!</p><p><br></p><p><br></p><p>thumbs up you like this post! or make it more informative by adding more information of comments!</p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": true,
-        "upVoteCount": 5,
-        "postCommentsCount": 1,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "uni",
-            "tag": null,
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-18T22:28:18.708Z",
-        "_id": "6699970230e908f1a0467a91",
-        "images": [],
-        "user": {
-            "firstName": "Prashant ",
-            "lastName": "Basnet",
-            "picture": null,
-            "username": "prashant.basnet324",
-            "_id": "64dd5983d1aa61cf8887f9fa",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": 160612,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3><a href=\"https://leetcode.com/problems/3sum/\" rel=\"noopener noreferrer\" target=\"_blank\">3Sum</a></h3><p>#Leetcode #blind75 #array</p><p><img src=\"https://i.ibb.co/3sqbdsS/Screenshot-2024-07-15-at-2-04-44-PM.png\"></p><p>Hint</p><p>Given an integer array nums, return all the triplets&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">[nums[i], nums[j], nums[k]]</code>&nbsp;such that&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">i != j</code>,&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">i != k</code>, and&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">j != k</code>, and&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">nums[i] + nums[j] + nums[k] == 0</code>.</p><h3>Notice that the solution set must not contain duplicate triplets.</h3><p><br></p><p><br></p><p>In a simple word given an array, we need to find three numbers in the array that adds up to 0.</p><p><strong>Example 1:</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">Input: nums = [-1,0,1,2,-1,-4]\nOutput: [[-1,-1,2],[-1,0,1]]\nExplanation: \nnums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.\nnums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.\nnums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.\nThe distinct triplets are [-1,0,1] and [-1,-1,2].\nNotice that the order of the output and the order of the triplets does not matter.\n</pre><p><br></p><p><br></p><p><br></p><p>Before we dwelve to solve the problem. Let's first take time why is it important?</p><p><strong>The why?</strong></p><p>Why even bother to solve this problem?</p><p><br></p><ol><li>Amazon:</li><li class=\"ql-indent-1\">Product recommendation algorithm might use a variation of three sum to suggest bundles of three complementary items.</li><li class=\"ql-indent-1\">Warehouse Logistics, it might be used to optimize the placement of three frequently co-ordered items.</li><li>Apple:</li><li class=\"ql-indent-1\">Apple musics could use this algorithm to create a playlist with 3 genre of music</li><li>Spotify:</li><li class=\"ql-indent-1\">Playlist generation algorithms might use similar concepts to balance song selection across tempo, genre, and popularity.</li><li>Game theory and strategy:</li><li class=\"ql-indent-1\">In multiplayer games, finding balanced team compositions or strategies involving three players</li></ol><p><img src=\"https://i.ytimg.com/vi/fov6rcR20Jc/maxresdefault.jpg\" alt=\"*NEW* 3V3 GUNFIGHT GAME MODE IN CALL OF DUTY MOBILE GAMEPLAY SEASON 13 COD  MOBILE TEST SERVER\"></p><p>     \t5. Uber:</p><ol><li class=\"ql-indent-1\">Could use a variation for optimizing pickups/drop-offs for UberPool with three passengers.</li></ol><p><br></p><p><br></p><p><br></p><p><img src=\"https://blog.uber-cdn.com/cdn-cgi/image/width=2160,quality=80,onerror=redirect,format=auto/wp-content/uploads/2016/09/NYC_POOL-stories_blog_960x480_r3v4.jpg\" alt=\"Featured image for UberPOOL should be effortless for everyone\"></p><p><br></p><p><br></p><p><strong>This is why it's important to understand this algorithm.</strong></p><p><br></p><p>first before we solve a three sum problem , let's revise how we can solve two sum problem.</p><p><br></p><p><br></p><p><br></p><blockquote>function twoSum(nums, target){</blockquote><blockquote>&nbsp;&nbsp;let map = {}</blockquote><blockquote>&nbsp;&nbsp;for(i =0; i &lt; nums.length; i++){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(map[nums[i]]){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [i, map[nums[i]]]</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let desiredNum = target - nums[i]</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;map[desiredNum] = i</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>}</blockquote><p><br></p><p>now's let see if we can break down any pattern to solve the 3 sum problem.</p><p><br></p><ol><li>We need to compare three values</li><li class=\"ql-indent-1\">so we need 3 pointer </li><li>We need to store our results</li><li>We need to do some comparison</li><li class=\"ql-indent-1\">if a sum is greater than or lesser than or equal to 0</li></ol><p><br></p><p><br></p><blockquote>&nbsp;function threeSumBruteForce(nums) {</blockquote><blockquote>&nbsp;&nbsp;let results = [];</blockquote><blockquote>&nbsp;&nbsp;let n = nums.length;</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;for (let i = 0; i &lt; n - 2; i++) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;for (let j = i + 1; j &lt; n - 1; j++) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (let k = j + 1; k &lt; n; k++) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (nums[i] + nums[j] + nums[k] === 0) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.push([nums[i], nums[j], nums[k]]);</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;// Remove duplicates</blockquote><blockquote>&nbsp;&nbsp;return results.filter((triplet, index) =&gt;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;index === results.findIndex(t =&gt;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t[0] === triplet[0] &amp;&amp; t[1] === triplet[1] &amp;&amp; t[2] === triplet[2]</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;)</blockquote><blockquote>&nbsp;&nbsp;);</blockquote><blockquote>}</blockquote><p><br></p><p>Next:</p><ol><li>Here in order to search properly and optimize the O(N^3)</li><li class=\"ql-indent-1\">can we sort the array first before we do our calculation? YES</li><li class=\"ql-indent-1\">sorting allows us to use the two-pointer technique, which is more efficient than nested loops.</li><li class=\"ql-indent-1\">After sorting, we can fix one number and use two moving pointers to find the other two numbers that sum to the target.</li><li>Skips duplicates to avoid redundant triplets.</li></ol><p><br></p><p><br></p><p>so now we can refactor our algorithm to </p><p><br></p><p><br></p><blockquote><br></blockquote><blockquote>function threeSumSolved(nums){</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;let results = []</blockquote><blockquote>&nbsp;&nbsp;nums = nums.sort((a,b) =&gt; a-b)</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;for(let i = 0; i &lt; nums.length; i++){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let l = i + 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let r = nums.length - 1</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;while(l &lt; r){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let sum = nums[i] + nums[l] + nums[r]</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(sum &lt; 0) l++</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (0 &lt; sum) r--</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.push([nums[i], nums[l], nums[r]])</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// skips duplicate values for the 1st number in the triplet</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(nums[i] === nums[i + 1])i++</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// skips duplicate values for the 2nd number in the triplet</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(nums[l] === nums[l + 1])l++</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//Similarly, this skips duplicate values for the 3rd number in the triplet.</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(nums[r] === nums[r + 1])r--</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//after we've found a valid triplet and skipped any duplicates,&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//we need to move both pointers inward to look for the next potential triplet.</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l++</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r--</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;return results</blockquote><blockquote>}</blockquote><p><img src=\"https://i.ibb.co/Sty9Xzm/Screenshot-2024-07-17-at-8-35-58-AM.png\"></p><p><br></p><p>This is how the problem can be solved.</p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": true,
-        "upVoteCount": 3,
-        "postCommentsCount": 1,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "space",
-            "tag": {
-                "_id": "65b9a6443a51e4d99e7774ac",
-                "name": "data structures and algorithms",
-                "__typename": "Tag"
-            },
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-17T13:57:31.871Z",
-        "_id": "6697cdcb43e229d25a695076",
-        "images": [],
-        "user": {
-            "firstName": "Array",
-            "lastName": "Alchemist",
-            "picture": null,
-            "username": "ArrayAlchemist",
-            "_id": "6538929978741849773d0e1a",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": null,
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": null,
-        "upVoteCount": null,
-        "postCommentsCount": null,
-        "type": "suggestedOrgs",
-        "saved": null,
-        "postType": null,
-        "levelOfStudy": null,
-        "videoURL": null,
-        "postTags": null,
-        "event": null,
-        "date": null,
-        "_id": null,
-        "images": null,
-        "user": null,
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": {
-            "name": "Suggested Orgs",
-            "type": null,
-            "spaces": [
-                {
-                    "_id": "65f23fbaddaa26be963c1b24",
-                    "name": "NSAS-SELU",
-                    "description": "Nepalese Student Association at Southeastern Louisiana University (NSAS) ",
-                    "image": "b704b6ab-36ce-4051-8667-9e8b5c2b4702",
-                    "__typename": "spaceCategory"
-                },
-                {
-                    "_id": "65fe4652ec5f5b5b8b5c0c05",
-                    "name": "Unisala",
-                    "description": "The creator of this space!",
-                    "image": null,
-                    "__typename": "spaceCategory"
-                },
-                {
-                    "_id": "6649169874251402ed91b666",
-                    "name": "NSA at McNeese",
-                    "description": "NSA at mcneese is a non profit organization to support Nepalese students at McNeese and introduce Nepalese culture..",
-                    "image": null,
-                    "__typename": "spaceCategory"
-                },
-                {
-                    "_id": "664a4aefae04741558fef504",
-                    "name": "NSA at ULM",
-                    "description": "Nepalese Student Association is a student organization that puts forward the effort to maintain and promote a cohesive relation among the Nepalese students.",
-                    "image": null,
-                    "__typename": "spaceCategory"
-                }
-            ],
-            "__typename": "SuggestedSpace"
-        },
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3>How to renew driving license in Louisiana as an international students on F1.</h3><p><br></p><p><img src=\"https://i.ibb.co/F0hPWzh/IMG-2890.jpg\"></p><p><br></p><p>It's a simple process.</p><p><br></p><p>You will need documents to show</p><ol><li>Valid I20</li><li>Valid Passport</li><li>SSN</li><li>Proof of address</li><li class=\"ql-indent-1\">This can be your utility bills like</li><li class=\"ql-indent-2\">Water Utility from your city</li><li class=\"ql-indent-2\">Entery</li><li class=\"ql-indent-2\">Credit Card Statements</li><li class=\"ql-indent-2\">Bank Statements :</li><li class=\"ql-indent-3\">This can be done by just updating your bank account and printing the paper.</li></ol><p><br></p><p>These are the documents you need but the most important part is the <strong>Appointment</strong>. I didn't have any appointment so i went around 1 pm and my turn came around 4:30 pm.  Everyone who had appointment got the priority and i was left waiting. They stopped the walk ins around 3:30 and even then i had to wait.</p><p><br></p><p>here's  the link to book appoitments:</p><p><a href=\"https://la.omvappointments.com/customer/booking/start\" rel=\"noopener noreferrer\" target=\"_blank\">https://la.omvappointments.com/customer/booking/start</a></p><p><br></p><p><img src=\"https://i.ibb.co/2qhzp1F/IMG-2891.jpg\"></p><p><br></p><p><br></p><p>If you plan on going <strong>without appointment</strong> try to be there <strong>around 8 am.</strong> Good luck on that! Once the appointment time kicks in it's a waiting. </p><p><br></p><p><br></p><p><br></p><p><img src=\"https://i.ibb.co/kxDFyYb/IMG-2892.jpg\"></p><p><br></p><p><br></p><p>Finally after a long wait, it was my turn @ 4:30 pm. After submitting the requested documents mentioned above i was able to renew my license by paying around <strong>53$</strong></p><p><br></p><p><img src=\"https://i.ibb.co/vB2W4R7/IMG-2895.jpg\"></p><p><br></p><p><br></p><p>Upvote if this is helpful!</p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": true,
-        "upVoteCount": 2,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "uni",
-            "tag": null,
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-17T01:36:34.250Z",
-        "_id": "6697202243e229d25a69500e",
-        "images": [],
-        "user": {
-            "firstName": "Prashant ",
-            "lastName": "Basnet",
-            "picture": null,
-            "username": "prashant.basnet324",
-            "_id": "64dd5983d1aa61cf8887f9fa",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": 160612,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3>#8 <a href=\"https://leetcode.com/problems/search-in-rotated-sorted-array/\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"color: inherit; background-color: rgb(240, 240, 240);\">Search in Rotated Sorted Array</a></h3><p>Blind 75. Array</p><p><br></p><p><img src=\"https://res.cloudinary.com/practicaldev/image/fetch/s--QZxLIW9M--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3a8gak3cni6pe590684x.png\" alt=\"Search in Rotated Sorted Array - DEV Community\"></p><p><br></p><p><a href=\"https://leetcode.com/problems/search-in-rotated-sorted-array/\" rel=\"noopener noreferrer\" target=\"_blank\">Search in Rotated Sorted Array</a></p><p>Solved</p><p><br></p><p>There is an integer array nums sorted in ascending order (with distinct values).</p><p><br></p><p>Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.</p><p><br></p><p>You must write an algorithm with O(log n) runtime complexity.</p><p><br></p><p><strong>Example 1:</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">Input: nums = [4,5,6,7,0,1,2], target = 0\nOutput: 4\n</pre><p><br></p><p><strong>Example 2:</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">Input: nums = [4,5,6,7,0,1,2], target = 3\nOutput: -1\n</pre><p><br></p><p><br></p><p>In #7 Problem sorted array, we discussed in detail the importance of it.</p><p>Here i will quickly mention about it's gist.</p><p><br></p><p>Rotated Sorted Array is sorted array which is disrupted at pivotal point</p><p><br></p><p>RoratedSortedArray = [left Sorted Array , right sorted array]</p><p>where, each element in left sorted array is greater than right sorted array.</p><p><br></p><p>From finding minimum in rotated sorted array which is</p><p><br></p><p><br></p><blockquote>function seven(nums){</blockquote><blockquote>&nbsp;&nbsp;let l = 0; r = nums.length -1</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;while( l &lt;= r){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let mid = Math.floor((l + r)/2 )</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(nums[mid +1 ] &lt; nums[mid]){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return nums[mid + 1]</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(nums[l] &lt;= nums[mid]){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we are left sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//we are at right sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r = mid -1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>}</blockquote><p><br></p><p><br></p><p>we can use this solution to come up with the index position to find a target</p><p><br></p><p><br></p><p><br></p><blockquote><br></blockquote><blockquote>function searchInRotatedSearchArray(nums, target){</blockquote><blockquote>&nbsp;&nbsp;let l = 0, r = nums.length -1</blockquote><blockquote><br></blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;while(l &lt;= r){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let mid = Math.floor((l + r) / 2)</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(nums[mid] === target) return mid</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(nums[l] &lt;= nums[mid]){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we know we are in the left soted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// all the elements in the left sorted array is greater than right sorted array&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// sorted meanns there are heavier number on the left hand side</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// here we we in the left sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we cannot do a normal binary search so we do is,&nbsp;we need to see if the target is within the bound of&nbsp;</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// left sorted&nbsp;array</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (nums[l] &lt;= target &amp;&amp; target &lt; nums[mid]) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r = mid -1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we go search right sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we are on the right sorted array</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// similary we cannot do the normaly binary search,</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// so first check if the target is within the right sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nums[mid] &lt; target &amp;&amp; target &lt;= nums[r]){</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we need to go to left sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r = mid -1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;return -1</blockquote><blockquote>}</blockquote><p><img src=\"https://i.ibb.co/cvq5Wcb/Screenshot-2024-07-14-at-12-37-27-PM.png\"></p><p>this is how we can solve this</p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "space",
-            "tag": {
-                "_id": "65b9a6443a51e4d99e7774ac",
-                "name": "data structures and algorithms",
-                "__typename": "Tag"
-            },
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-14T17:38:27.926Z",
-        "_id": "66940d1343e229d25a694eed",
-        "images": [],
-        "user": {
-            "firstName": "Array",
-            "lastName": "Alchemist",
-            "picture": null,
-            "username": "ArrayAlchemist",
-            "_id": "6538929978741849773d0e1a",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
-    },
-    {
-        "section": null,
-        "postText": "<h3>#7 <a href=\"https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"background-color: rgb(240, 240, 240); color: inherit;\">Find Minimum in Rotated Sorted Array</a></h3><p>Blind 75. Array </p><p><br></p><p><img src=\"https://assets-247moms.sfo2.cdn.digitaloceanspaces.com/2012/03/Menu-Board-art.jpg\" alt=\"10 Great Menu Board Ideas! MomOf6, 51% OFF | injuries.co.za\"></p><p><br></p><p><br></p><p>Suppose an array of length&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">n</code>&nbsp;sorted in ascending order  is&nbsp;<strong>rotated</strong>&nbsp;between&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">1</code>&nbsp;and&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">n</code>&nbsp;times. For example, the array</p><p>&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">nums = [0,1,2,4,5,6,7]</code>&nbsp;might become:</p><ul><li><code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">[4,5,6,7,0,1,2]</code>&nbsp;if it was rotated&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">4</code>&nbsp;times.</li><li><code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">[0,1,2,4,5,6,7]</code>&nbsp;if it was rotated&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">7</code>&nbsp;times.</li></ul><p>Notice that&nbsp;<strong>rotating</strong>&nbsp;an array&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">[a[0], a[1], a[2], ..., a[n-1]]</code>&nbsp;1 time results in the array&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">[a[n-1], a[0], a[1], a[2], ..., a[n-2]]</code>.</p><p>Given the sorted rotated array&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">nums</code>&nbsp;of&nbsp;<strong>unique</strong>&nbsp;elements, return&nbsp;<em>the minimum element of this array</em>.</p><p>You must write an algorithm that runs in&nbsp;<code style=\"color: rgba(38, 38, 38, 0.75); background-color: rgba(0, 10, 32, 0.03);\">O(log n) time.</code></p><p><br></p><p><br></p><p><br></p><p>Before we solve this problem let's understand what is rotated array? </p><p>&nbsp;&nbsp;1. first question, why is rotated array even needed. let's answer this question first:</p><p><br></p><p>Real world application of min rotated sorted array:&nbsp;&nbsp;How is it applied to our day to day life product?</p><p><br></p><p><br></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p>&nbsp;&nbsp;Imaging you're in-charge of the <strong>lunch</strong> menu in school cafeteria.</p><p>&nbsp;&nbsp;You have board with seven slots, one for each day of the week:</p><p><br></p><ol><li>&nbsp;&nbsp;Monday: Pizza,</li><li>&nbsp;&nbsp;Tuesday: Tacos,</li><li>&nbsp;&nbsp;Wednesday: Burgers,</li><li>&nbsp;&nbsp;Thursday: Pasta,</li><li>&nbsp;&nbsp;Friday: Fish,</li><li>&nbsp;&nbsp;Saturday: Chicken,</li><li>&nbsp;&nbsp;Sunday: Vegetarian</li></ol><p><br></p><p><br></p><p>&nbsp;&nbsp;Instead of<strong> erasing and rewriting </strong>menu each day, you have a clever system. The board is circular and can rotate.&nbsp;&nbsp;Each day, you rotate it one slot, so the current day's special is always on the top.</p><p><br></p><p>&nbsp;&nbsp;1. Wednesday, your board might look like this:</p><p>&nbsp;&nbsp;&nbsp;&nbsp;[<strong>Burgers</strong>, Thursday, Friday, Saturday, Sunday, Monday, Tuesday]</p><p>&nbsp;&nbsp;2. By Sunday:</p><p>&nbsp;&nbsp;&nbsp;&nbsp;[<strong>Vegetarian</strong>, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]</p><p><br></p><p><br></p><p><br></p><p>&nbsp;&nbsp;The system has several benefits:</p><ol><li>&nbsp;You don't rewrite the entier menu each day</li><li>&nbsp;&nbsp;Anyone can quickly see today's sepecial it's always at the top and the upcoming specials for the next day.</li><li>&nbsp;If someone ask you what was served earlier in this week, you can easily check by looking at the bottom of the list.</li></ol><p><br></p><p>&nbsp;&nbsp;In computer terms, this rotated array structure allows for:</p><ol><li>Efficient updates (Just rotate, don't rewrite everything)</li><li>Quick access to current and upcoming data</li><li>Easy review of recent and past data.&nbsp;</li></ol><p><br></p><p><strong>&nbsp;&nbsp;The key idea is the information stays in order, but the starting point moves, creating a ROTATED effect</strong>.&nbsp;</p><p><br></p><p>&nbsp;&nbsp;This concept is useful in CS for managing cyclical data or when you need quick access to both recent past and near future information.&nbsp;</p><p><br></p><p>now that i understand what is importance of rated array, now let's focus on&nbsp;this problem min rotated sorted array.</p><p><br></p><p>Let's focus on our leetcode problem now:</p><ol><li>The problem is asking us to find a <strong>minimum number</strong> in the array where the algorithm must ru<strong>n in O(LogN) </strong>,meaning you can not even iterate through the array.&nbsp;</li><li> this is a clear hint, that you should do some sort of <strong>binary search</strong> which also has O(logN) time complexity</li></ol><p><br></p><p><br></p><p>&nbsp;0&nbsp;1&nbsp;2&nbsp;3&nbsp;4</p><p>[3, 4, 5, 1, 2]</p><p><br></p><ol><li> Binary search can only happen if the array is sorted. </li><li>Here the array is sorted, , but the sorted order is disrupted at a pivot point due to rotation.&nbsp;This is the key characteristic of the problem.</li><li>so we can conclude we need some variation of Binary search algo</li></ol><p><br></p><p><br></p><p><strong>Let's see how binary search works to find a value</strong></p><p><br></p><ol><li> leftPointer @ 0, rightPointer @ nums.length</li><li>calculate the midPointer</li><li class=\"ql-indent-1\"> if value at midPointer is equal to the number we are looking for we return index</li><li class=\"ql-indent-1\"> if valueFound @ mid is smaller, than target, we bump up left towards right,where we can find bigger numbers</li></ol><p>&nbsp;&nbsp;</p><p><br></p><p><br></p><blockquote>function BinarySearch(array, target) {</blockquote><blockquote>&nbsp;&nbsp;let l = 0, r = array.length</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;while (l &lt;= r) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let mid = Math.floor((left + right) / 2)</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;let valueFound = array[mid]</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;if(valueFound === target){</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return mid</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}else if (valueFound &gt; target) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// we need smaller value to be found next time</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r = mid - 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}else{</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;}</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>}</blockquote><p><br></p><p><br></p><p><br></p><p>now let's see how we can use this to solve our find min in rotated sorted array.</p><p><br></p><p>At anytime if the array is roated, it is sorted in two ways:</p><p><br></p><p>&nbsp;&nbsp;&nbsp;&nbsp;[4, 5, 6, 7, 0, 1, 2]</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---left---&nbsp;--right--</p><p><br></p><ol><li> Here the challenge is to find the pivotal point, where the elements are not in increasing order</li><li>If the array is rotated, left sorted is always greater than right sorted</li><li> Rotated means we take the larger value and put them in the left</li></ol><p><br></p><p><strong> So how can we know if we are @ left sorted position?</strong></p><p>&nbsp;&nbsp;every value in the right sorted position is smaller than left sorted position.</p><p><br></p><p><br></p><p>&nbsp;&nbsp;if&nbsp;value[left] &lt;= value[mid]</p><p>&nbsp;&nbsp;&nbsp;&nbsp;we know the mid value is also the part of left sorted array.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;in this case to find smaller num we want to search right&nbsp;</p><p>&nbsp;&nbsp;&nbsp;&nbsp;so</p><p>&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1</p><p>&nbsp;&nbsp;else&nbsp;</p><p>&nbsp;&nbsp;&nbsp;&nbsp;r = mid - 1</p><p><br></p><blockquote>var findMin = function(nums) {</blockquote><blockquote>&nbsp;&nbsp;let l = 0</blockquote><blockquote>let  r = nums.length - 1;</blockquote><blockquote><br></blockquote><blockquote>// Already sorted</blockquote><blockquote>if (nums[l] &lt; nums[r]) {</blockquote><blockquote>&nbsp;&nbsp;return nums[l];</blockquote><blockquote>}</blockquote><blockquote><br></blockquote><blockquote>while (l &lt; r) {&nbsp;</blockquote><blockquote>&nbsp;&nbsp;let mid = Math.floor((l + r) / 2);&nbsp;</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;// Check for pivot point</blockquote><blockquote>&nbsp;&nbsp;if (nums[mid] &gt; nums[mid + 1]) {&nbsp;// Fix: Changed condition to check mid &gt; mid+1</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;return nums[mid + 1];</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote><br></blockquote><blockquote>&nbsp;&nbsp;// Decide which half to search</blockquote><blockquote>&nbsp;&nbsp;if (nums[l] &lt;= nums[mid]) {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;// Go for right sorted array</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;l = mid + 1;</blockquote><blockquote>&nbsp;&nbsp;} else {</blockquote><blockquote>&nbsp;&nbsp;&nbsp;&nbsp;r = mid;&nbsp;// Fix: Changed to mid instead of mid - 1</blockquote><blockquote>&nbsp;&nbsp;}</blockquote><blockquote>}</blockquote><blockquote><br></blockquote><blockquote>return nums[l];&nbsp;&nbsp;</blockquote><blockquote>};</blockquote><p><br></p><p>This is how we can solve this.</p><p><img src=\"https://i.ibb.co/r6j2SP3/Screenshot-2024-07-13-at-1-50-30-PM.png\"></p><p><br></p><p>#datastructure #blind75 #computerScience #FANNG</p>",
-        "admissionAndApplicationRating": null,
-        "financialAidAndScholarshipRating": null,
-        "academicProgramsAndDepartmentRating": null,
-        "studentLifeAndServiceRating": null,
-        "careerAndAlumniResourceRating": null,
-        "upVoted": false,
-        "upVoteCount": 0,
-        "postCommentsCount": 0,
-        "type": "post",
-        "saved": null,
-        "postType": "others",
-        "levelOfStudy": "",
-        "videoURL": "",
-        "postTags": {
-            "tagType": "uni",
-            "tag": null,
-            "__typename": "PostTags"
-        },
-        "event": null,
-        "date": "2024-07-13T19:04:53.490Z",
-        "_id": "6692cfd543e229d25a694d48",
-        "images": [],
-        "user": {
-            "firstName": "Prashant ",
-            "lastName": "Basnet",
-            "picture": null,
-            "username": "prashant.basnet324",
-            "_id": "64dd5983d1aa61cf8887f9fa",
-            "__typename": "user"
-        },
-        "elevatorInfo": null,
-        "studentCharges": null,
-        "suggestedOrgs": null,
-        "suggestedSpace": null,
-        "userEvaluation": null,
-        "unitId": null,
-        "applied_level": null,
-        "status": null,
-        "attempt": null,
-        "university": null,
-        "conversation": null,
-        "major": null,
-        "__typename": "PostNewsFeed"
+const getNewsFeed = `
+    query fetchFeedV2($feedQuery: FeedQueryInput) {
+      fetchFeedV2(feedQuery: $feedQuery) {
+        validToken
+        data {
+          section
+          postText
+          upVoted
+          upVoteCount
+          postCommentsCount
+          type
+          date
+          _id
+          images
+          user {
+            firstName
+            lastName
+            picture
+            username
+            _id
+          }
+        }
+      }
     }
-]
+`;
 
-// Mock data for staff picks and topics (replace with actual data when available)
-const staffPicks = [
-  { title: "It happened on Medium: July 2024 roundup", user: { firstName: "Medium Staff", lastName: "", picture: null } },
-  { title: "The Grief and Relief of Having a Hysterectomy in My 30s After Our Surrogate's Stillbirth", user: { firstName: "Kristina Kasparian", lastName: "PhD", picture: null } },
-  { title: "Your guide to 2024's Perseid meteor shower", user: { firstName: "Ethan Siegel", lastName: "", picture: null } },
-];
+const GetTopActiveSpaces = `
+    query getTopActiveSpaces($limit: Int) {
+      getTopActiveSpaces(limit: $limit) {
+        status {
+          success
+          message
+        }
+        spaceCategory {
+          _id
+          name
+        }
+      }
+    }
+`;
 
-const topics = ["Mental Health", "Blockchain", "Coding", "Culture", "Entrepreneurship", "UX"];
+let articles = [];
+let staffPicks = [];
+let topics = [];
+let error = '';
+
+try {
+  // Fetch regular articles
+  const regularResult = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: getNewsFeed,
+      variables: {
+        feedQuery: {
+          page: 0
+        }
+      }
+    })
+  });
+
+  // Fetch staff picks
+  const staffPicksResult = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: getNewsFeed,
+      variables: {
+        feedQuery: {
+          feedType: 'newsfeed',
+          page: 0
+        }
+      }
+    })
+  });
+
+  // Fetch top active spaces for topics
+  const topicsResult = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: GetTopActiveSpaces,
+      variables: {
+        limit: 6
+      }
+    })
+  });
+
+  console.log({topicsResult})
+  if (regularResult.errors || staffPicksResult.errors || topicsResult.errors) {
+    throw new Error('Error fetching data');
+  }
+
+  articles = regularResult.data?.fetchFeedV2?.data || [];
+  staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
+  topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory.map(space => space.name) || [];
+} catch (e) {
+  console.error('Error fetching data:', e);
+  error = e instanceof Error ? e.message : String(e);
+}
 ---
 
 <MainLayout title="Medium-style Feed">
-  <MediumFeed articles={articles} staffPicks={staffPicks} topics={topics} client:load />
+  {error && <div>Error: {error}</div>}
+  {!error && (
+    <MediumFeed
+      client:only="react"
+      articles={articles}
+      staffPicks={staffPicks}
+      topics={topics}
+    />
+  )}
 </MainLayout>

@@ -1,8 +1,10 @@
 import { useAstroQuery } from '@/datasource/apollo-client';
 import { Search } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import type { IPost } from '@/types/post';
 import { formatDate } from '@/utils/date';
 import { extractImageFromPostText } from '@/utils/lib/image';
+import { threadPointer } from '@/utils/lib/utils';
 import { useEffect, useState, type SetStateAction, type Key } from 'react';
 
 
@@ -29,7 +31,6 @@ export const CoreFeed = ({ articles = [] }) => {
 
   const { loading, error, data } = useAstroQuery(Search, {
     variables: { q: debouncedSearchQuery, post: true },
-    fetchPolicy: 'cache-and-network',
     context: { server: USER_SERVICE_GQL },
     skip: debouncedSearchQuery.length < 3,
   });
@@ -43,12 +44,13 @@ export const CoreFeed = ({ articles = [] }) => {
   const [ totalItems, setTotalItems ] = useState(articles.length);
 
   useEffect(() => {
-    if (data) {
-      setQuestions(data.search.posts);
-      setTotalItems(data.search.totalItems);
+    if (data?.search?.posts) {
+      setQuestions(data?.search?.posts);
+      setTotalItems(data?.search?.totalItems);
     }
-  }, [ questions, totalItems ]);
+  }, [ data ]);
 
+  console.log("Questions", questions)
 
   return (
     <>
@@ -69,7 +71,7 @@ export const CoreFeed = ({ articles = [] }) => {
                   type="text"
                   id="simple-search"
                   className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 ps-9 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                  placeholder="Search Questions & Answers"
+                  placeholder="Renew driver's license, apply for a visa, etc."
                   value={searchQuery}
                   onChange={handleSearchChange}
                   required
@@ -85,15 +87,14 @@ export const CoreFeed = ({ articles = [] }) => {
             {error && <p>Error: {error.message}</p>}
             {!loading && !error && (
               <div className="-my-6 divide-y divide-gray-200 dark:divide-gray-800">
-                {questions?.map((question: { title: string; postText: string; }, index: Key | null | undefined) => {
+                {questions?.map((question: IPost, index: Key | null | undefined) => {
                   const imageUrl = extractImageFromPostText({ user: false, postText: question.postText });
-                  console.log('imageUrl', imageUrl);
                   return (
                     <div key={index} className="space-y-4 py-6 md:py-8">
 
                       <div className="grid gap-4">
                         <div>
-                          <span className="inline-block rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300 md:mb-0">
+                          <span className="inline-block ">
                            { imageUrl && <img
                               src={imageUrl}
                               alt="unisala post"
@@ -101,9 +102,9 @@ export const CoreFeed = ({ articles = [] }) => {
                             />}
                           </span>
                         </div>
-                        <a href="#" className="text-xl font-semibold text-gray-900 hover:underline dark:text-white">
+                        <a href={ '/' + threadPointer(question)} className="text-xl font-semibold text-gray-900 hover:underline dark:text-white">
                           {question?.title
-                            ? question.title.replace(/<[^>]*>/g, '').substring(0, 100)
+                            ? question?.title.replace(/<[^>]*>/g, '').substring(0, 100)
                             : question?.postText?.replace(/<[^>]*>/g, '').substring(0, 100)}
                           {(question?.title?.length > 100 || question?.postText?.length > 100) && '...'}
                         </a>

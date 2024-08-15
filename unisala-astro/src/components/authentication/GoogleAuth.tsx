@@ -3,6 +3,9 @@ import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
+import { navigator } from "@/utils/lib/URLupdate";
+import toast from "react-hot-toast";
+import { setUser } from "@/store/userStore";
 
 export const GoogleAuth = memo(() => {
   const googlebuttonref = useRef<any>();
@@ -13,7 +16,26 @@ export const GoogleAuth = memo(() => {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
       if (data.google?.status?.success && data.google && data.google.data) {
-        // history.push("/feed");
+        const user = data?.google?.data;
+
+        setUser({
+          id: user?.id,
+          authenticated: true,
+          email: user?.email,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          accessToken: user?.accessToken,
+          refreshToken: user?.refreshToken,
+          newUser: user?.newUser,
+        });
+
+        if ( data?.google?.data?.newUser) {
+          toast.success("Account created successfully.");
+          navigator('/welcome-form/intro')
+        } else {
+          toast.success("Logged in successfully.");
+          navigator()
+        };
       }
     },
     onError: (error) => {
@@ -37,7 +59,7 @@ export const GoogleAuth = memo(() => {
     // @ts-ignore
     window?.google.accounts.id.initialize({
       client_id:
-        "608310021370-snd65n66i5e9nt1nb15pgfpuuvkqevfq.apps.googleusercontent.com",
+        "1001592245381-rbpoecv2se6v3avlkisbbsfpl09cjfs4.apps.googleusercontent.com",
       callback: onGoogleSignIn,
       auto_select: false,
     });

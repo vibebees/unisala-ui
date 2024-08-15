@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const UpdateAuth = (data: IAuthData) => {
-    let userdata = {
+    const userdata = {
       id: data.id,
       firstName: data.firstName,
       lastName: data.lastName,
@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       refreshToken: data.refreshToken,
       newUser: data.newUser,
       role: data.role,
+      authenticated:true
     };
     setUser(userdata);
     setCache("authData", userdata);

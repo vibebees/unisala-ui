@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import type { MenuItem } from "@/types";
 import { navMenuConfig } from "@/config/nav-menu";
 import { cn } from "@/utils/lib/utils";
-import { PenOutLine } from "./packages/icons/Pen";
+import { PenOutLine } from "../packages/icons/Pen";
 
 const links = navMenuConfig.links;
 const pages = navMenuConfig.pagesNav[0];
@@ -21,17 +21,18 @@ const examples = navMenuConfig.examplesNav[0];
 
 export function MainNavigationMenu() {
   return (
-    <NavigationMenu>
-
+    <NavigationMenu className="">
       <NavigationMenuList>
         <NavigationMenuItem>
-        <NavigationMenuLink href="/new-story" className={navigationMenuTriggerStyle()}>
+          <NavigationMenuLink
+            href="/new-story"
+            className={navigationMenuTriggerStyle()}
+          >
             New Story
-          <PenOutLine/>
-
+            <PenOutLine />
           </NavigationMenuLink>
         </NavigationMenuItem>
-{/*
+        {/*
         <NavigationMenuItem>
           <NavigationMenuTrigger>{pages.title}</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -108,7 +109,7 @@ const ListItem: React.FC<MenuItem> = ({
               SOON
             </Badge>
           ) : null}
-          
+
           {launched ? (
             <Badge
               radius="sm"

@@ -11,7 +11,6 @@ const ThreadImages = ({ images, _id }: { images: string[], _id: string }) => {
   return (
     // <Link to={`/thread/${_id}`} className={clsx('relative')}>
       <div>
-        hey
         {images.length > 0 && <ImageCollage images={images} />}
 
       </div>

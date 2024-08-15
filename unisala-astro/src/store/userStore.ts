@@ -12,7 +12,7 @@ interface User {
   newUser: boolean;
 }
 
-export const userStore = atom<User>({
+export const $user = atom<User>({
   email: "",
   firstName: "",
   lastName: "",
@@ -24,12 +24,14 @@ export const userStore = atom<User>({
 });
 
 export const setUser = (user: User) => {
-  userStore.set(user);
+
+  $user.set(user);
+
   setCache("authData", user);
 };
 
 export const clearUser = () => {
-  userStore.set({
+  $user.set({
     email: "",
     firstName: "",
     lastName: "",

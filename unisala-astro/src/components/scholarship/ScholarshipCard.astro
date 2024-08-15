@@ -153,7 +153,7 @@ const { scholarship } = Astro.props as Props;
             </h4>
             <ul>
               {scholarship?.application_requirements.map((req) => (
-                <li>{req}</li>
+                <li class="dark:text-neutral-200">{req}</li>
               ))}
             </ul>
           </div>
@@ -286,7 +286,7 @@ const { scholarship } = Astro.props as Props;
           (iframeWrappers[index] as HTMLIFrameElement).style.display = "flex";
           (iframes[index] as HTMLIFrameElement).src = scholarshipUrl;
           (externalLinks[index] as HTMLAnchorElement).href = scholarshipUrl;
-          loadingOverlays[index].classList.remove("hidden");
+          loadingOverlays[index].classList.remove("deactive");
           const scholarshipCard = btn.closest(".scholarship-card");
           const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
             .scholarshipId;
@@ -345,7 +345,7 @@ const { scholarship } = Astro.props as Props;
 
     iframes.forEach((iframe, index) => {
       iframe.addEventListener("load", () => {
-        loadingOverlays[index].classList.add("hidden");
+        loadingOverlays[index].classList.add("deactive");
       });
     });
   });

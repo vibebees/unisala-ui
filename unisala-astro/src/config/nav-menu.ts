@@ -6,44 +6,44 @@ export const navMenuConfig: NavMenuConfig = {
       title: "Pages",
       items: [
         {
-          title: "Landing",
-          href: "/landing",
+          title: "New Story",
+          href: "/new-story",
           description: "A landing page template with differents sections.",
           image: "/images/examples/landing.jpg",
         },
-        {
-          title: "Changelog",
-          href: "/releases",
-          description: "A reproduction of Starlog template with Tailwind CSS.",
-          image: "/images/examples/changelog.jpg",
-        },
-        {
-          title: "Waitlist",
-          href: "/waitlist",
-          description:
-            "A waitlist form using Astro DB, React Hook Form & Sonner. Static page.",
-          image: "/images/examples/waitlist.jpg",
-          forceReload: true,
-        },
-        {
-          title: "Pricing",
-          href: "/pricing",
-          description: "Pricing cards, FAQs and more content with price.",
-          image: "/images/examples/pricing.jpg",
-        },
-        {
-          title: "About",
-          href: "/about",
-          description: "A simple page with a masonry gallery and little text.",
-          image: "/images/examples/about.jpg",
-        },
-        {
-          title: "Newsletter",
-          href: "/newsletter",
-          description:
-            "A newsletter form using Astro DB & Simple Stack Form. Counter display!",
-          image: "/images/examples/newsletter.jpg",
-        },
+        // {
+        //   title: "Changelog",
+        //   href: "/releases",
+        //   description: "A reproduction of Starlog template with Tailwind CSS.",
+        //   image: "/images/examples/changelog.jpg",
+        // },
+        // {
+        //   title: "Waitlist",
+        //   href: "/waitlist",
+        //   description:
+        //     "A waitlist form using Astro DB, React Hook Form & Sonner. Static page.",
+        //   image: "/images/examples/waitlist.jpg",
+        //   forceReload: true,
+        // },
+        // {
+        //   title: "Pricing",
+        //   href: "/pricing",
+        //   description: "Pricing cards, FAQs and more content with price.",
+        //   image: "/images/examples/pricing.jpg",
+        // },
+        // {
+        //   title: "About",
+        //   href: "/about",
+        //   description: "A simple page with a masonry gallery and little text.",
+        //   image: "/images/examples/about.jpg",
+        // },
+        // {
+        //   title: "Newsletter",
+        //   href: "/newsletter",
+        //   description:
+        //     "A newsletter form using Astro DB & Simple Stack Form. Counter display!",
+        //   image: "/images/examples/newsletter.jpg",
+        // },
       ],
     },
   ],
@@ -59,12 +59,12 @@ export const navMenuConfig: NavMenuConfig = {
           // image: "/images/examples/auth.jpg",
         },
 
-          {
-          title: "Static Blog",
-          href: "/blog",
-          description: "A Markdown/MDX blog built using Content Collections.",
-          image: "/images/examples/static-blog.jpg",
-        },
+        //   {
+        //   title: "Static Blog",
+        //   href: "/blog",
+        //   description: "A Markdown/MDX blog built using Content Collections.",
+        //   image: "/images/examples/static-blog.jpg",
+        // },
         // {
         //   title: "Docs",
         //   href: "/docs/getting-started",
@@ -99,11 +99,11 @@ export const navMenuConfig: NavMenuConfig = {
     },
   ],
   links: [
-    {
-      title: "Universe",
-      href: "/universe",
-      description: "Example description",
-      image: "/images/examples/image.jpg",
-    },
+    // {
+    //   title: "Universe",
+    //   href: "/universe",
+    //   description: "Example description",
+    //   image: "/images/examples/image.jpg",
+    // },
   ],
 };

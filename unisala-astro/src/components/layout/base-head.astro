@@ -8,6 +8,11 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  bodyClass?: string;
+  ogImage?: string;
+  ogType?: string;
+  author?: string;
+  publishedTime?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, siteConfig.url);
@@ -16,6 +21,9 @@ const {
   title,
   description = siteConfig.description,
   image = siteConfig.ogImage,
+  ogType = "website",
+  author,
+  publishedTime,
 } = Astro.props;
 ---
 
@@ -43,13 +51,19 @@ const {
 <meta name="title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta name="description" content={description} />
 
+
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title ? `${title} | Unisala` : "Unisala"} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={extractImageFromPostText({user: false, postText:description})} />
 <meta property="og:site_name" content={siteConfig.name} />
+{author && <meta property="article:author" content={author} />}
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+
+
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />

@@ -36,6 +36,7 @@ const query = `
       post {
         _id
         postText
+        title
         postCommentsCount
         admissionAndApplicationRating
         financialAidAndScholarshipRating
@@ -109,32 +110,54 @@ try {
   error = e instanceof Error ? e.message : String(e);
 }
 
-function extractHeading(text: string) {
-  const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
-  if (headingMatch) return headingMatch[1].trim();
+function extractHeading(text: string): string {
+  // First, try to extract content from heading tags (h1 to h6)
+  const headingMatch = text.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
+  if (headingMatch) {
+    // Remove any nested HTML tags from the heading content
+    return headingMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
+  }
 
+  // If no heading tags, try to extract the first non-empty paragraph
+  const paragraphMatch = text.match(/<p[^>]*>(.*?)<\/p>/i);
+  if (paragraphMatch) {
+    // Remove any nested HTML tags from the paragraph content
+    const cleanParagraph = paragraphMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
+    if (cleanParagraph) {
+      return cleanParagraph.length > 150 ? cleanParagraph.slice(0, 147) + '...' : cleanParagraph;
+    }
+  }
+
+  // If no suitable heading found, extract text from the entire content
   let cleanText = text
-    .replace(/<[^>]*>/g, '')
+    .replace(/<[^>]+>/g, ' ') // Replace all HTML tags with spaces
     .replace(/&nbsp;/g, ' ')
+    .replace(/&[a-z]+;/g, match => {
+      const entities: { [key: string]: string } = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&apos;': "'"
+      };
+      return entities[match] || match;
+    })
     .replace(/\s+/g, ' ')
     .trim();
 
-  cleanText = cleanText
-    .replace(/(\d{4})([A-Z])/g, '$1\n$2')
-    .replace(/([.:])(\d+)/g, '$1\n$2')
-    .replace(/([a-z])([A-Z])/g, '$1\n$2');
-
-  const lines = cleanText.split('\n');
-  let heading = lines.slice(0, 2).join(' - ');
-
-  if (heading.length > 150) {
-    heading = heading.slice(0, 147) + '...';
-  }
-
-  return heading || 'Thread Details';
+  // Take the first 150 characters as the heading
+  return cleanText.length > 150 ? cleanText.slice(0, 147) + '...' : cleanText;
 }
 
-const heading = post ? extractHeading(post.postText) : 'Loading...';
+
+// heading is post.title if not empty, else extract from postText
+const heading = post
+                ?
+                  post?.title?.length > 0 
+                  ? extractHeading(post.title)
+                  : extractHeading(post.postText)
+                :'Loading...';
+
 const linkifiedText = post ? linkifyHtml(post.postText, {
   defaultProtocol: 'https',
   className: 'custom-link',
@@ -156,7 +179,6 @@ const handleUpvote = async (postId: string) => {
 };
 
 
-console.log('post?.user?._id', post?.user?._id)
 ---
 
 <MainLayout
@@ -166,17 +188,13 @@ console.log('post?.user?._id', post?.user?._id)
 ></MainLayout>
 <Toast client:load />
 {error && <FourOhFour message={error} />}
-  
+
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
       <ThreadHeader heading={linkifyHtml(heading)} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
        <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
-          <div class='md:basis-32 lg:basis-56 shrink-0 grow-0'>
-            {/* User info can be added here nif needed */}
-          </div>
-
           <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
             <SingleThread
             post = {post}
@@ -200,11 +218,11 @@ console.log('post?.user?._id', post?.user?._id)
           client:only 'react'
           upVoted={post?.upVoted}
         />
-          
+
       </ul>
     </section>
   )}
-  
+
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>
@@ -216,6 +234,5 @@ console.log('post?.user?._id', post?.user?._id)
   <SameWriterSuggestions  feedId ={post?.user?._id}  />
   <hr />
   <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
-
 
 </MainLayout>

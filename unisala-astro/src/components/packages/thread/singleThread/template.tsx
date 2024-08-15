@@ -92,16 +92,17 @@ const SingleThread: FC<SingleThreadProps> = ({
           'edit'
         ) : (
           <>
+           {images && images.length > 0 && (
+              // 'image'
+              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
+            )}
             <ThreadExpand
               htmlText={postText!}
               _id={_id}
               tags={tags as any}
               videoURL={videoURL}
             />
-            {images && images.length > 0 && (
-              // 'image'
-              <ThreadImages images={images.filter(image => image !== null) as string[]} _id={_id} />
-            )}
+           
           </>
         )}
       </div>
@@ -110,7 +111,7 @@ const SingleThread: FC<SingleThreadProps> = ({
 
   return (
     <AuthProvider>
-      <div className="max-w-2xl w-full mx-auto mb-5">
+      <div className=" w-full mx-auto mb-5">
         <div className="relative mb-0 pt-4 pb-6 shadow-none BorderCard">
           <div className="ml-6 max-md:ml-2">
           </div>

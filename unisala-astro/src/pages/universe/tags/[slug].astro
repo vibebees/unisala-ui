@@ -1,8 +1,12 @@
 ---
+export const prerender = false;
+
 import MainLayout from '@/layouts/main-layout.astro';
 import MediumFeed from '@/components/feed/feed.tsx';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
+const { slug ="" } = Astro.params;
+
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -59,13 +63,14 @@ try {
       query: getNewsFeed,
       variables: {
         feedQuery: {
-        feedType: 'newsfeed',
-          page: 0
+        feedType: 'specificSpace',
+        feedId: slug,
         }
       }
     })
   });
 
+  console.log({regularFeed: regularFeed.data?.fetchFeedV2?.data})
   // Fetch staff picks
   const staffPicksResult = await fetchApi(userServiceGql, {
     method: 'POST',

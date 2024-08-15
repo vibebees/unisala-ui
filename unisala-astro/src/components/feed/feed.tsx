@@ -90,8 +90,8 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
             <h2 className="text-lg font-bold mb-4">Recommended topics</h2>
             <div className="flex flex-wrap">
               {topics.map((topic, index) => (
-                <a href='/tags'>
-                  <TopicBadge key={index} topic={topic} />
+                <a href={'/universe/tags/' + topic?._id}>
+                  <TopicBadge key={index} topic={topic?.name} />
                 </a>
               ))}
             </div>

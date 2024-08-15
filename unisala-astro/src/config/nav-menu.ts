@@ -51,7 +51,7 @@ export const navMenuConfig: NavMenuConfig = {
     {
       title: "Scholarships",
       items: [
-      
+
         {
           title: "Scholarships Explorer",
           href: "/scholarships",
@@ -99,11 +99,11 @@ export const navMenuConfig: NavMenuConfig = {
     },
   ],
   links: [
-    // {
-    //   title: "Universe",
-    //   href: "/universe",
-    //   description: "Example description",
-    //   image: "/images/examples/image.jpg",
-    // },
+    {
+      title: "Universe",
+      href: "/universe",
+      description: "Example description",
+      image: "/images/examples/image.jpg",
+    },
   ],
 };

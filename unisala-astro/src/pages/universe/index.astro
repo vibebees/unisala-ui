@@ -17,6 +17,7 @@ const getNewsFeed = `
           type
           date
           _id
+          title
           images
           user {
             firstName
@@ -52,12 +53,13 @@ let error = '';
 
 try {
   // Fetch regular articles
-  const regularResult = await fetchApi(userServiceGql, {
+  const regularFeed = await fetchApi(userServiceGql, {
     method: 'POST',
     body: JSON.stringify({
       query: getNewsFeed,
       variables: {
         feedQuery: {
+        feedType: 'newsfeed',
           page: 0
         }
       }
@@ -71,8 +73,9 @@ try {
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: 'newsfeed',
-          page: 0
+          feedType: 'org',
+          page: 0,
+          pageSize: 6,
         }
       }
     })
@@ -84,17 +87,16 @@ try {
     body: JSON.stringify({
       query: GetTopActiveSpaces,
       variables: {
-        limit: 6
+        limit: 9
       }
     })
   });
 
-  console.log({topicsResult})
-  if (regularResult.errors || staffPicksResult.errors || topicsResult.errors) {
+  if (regularFeed.errors || staffPicksResult.errors || topicsResult.errors) {
     throw new Error('Error fetching data');
   }
 
-  articles = regularResult.data?.fetchFeedV2?.data || [];
+  articles = regularFeed.data?.fetchFeedV2?.data || [];
   staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
   topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory.map(space => space.name) || [];
 } catch (e) {

@@ -1,3 +1,4 @@
+import type { IPost } from "@/types/post";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -136,4 +137,8 @@ export function extractHeading(text: string) {
   }
 
   return heading || 'Thread Details';
+}
+
+export const threadPointer = (article:IPost) => {
+  return 'threads/'+ article?._id
 }

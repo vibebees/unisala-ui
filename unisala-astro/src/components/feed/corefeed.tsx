@@ -2,13 +2,14 @@ import { useAstroQuery } from '@/datasource/apollo-client';
 import { Search } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { formatDate } from '@/utils/date';
+import { extractImageFromPostText } from '@/utils/lib/image';
 import { useEffect, useState, type SetStateAction, type Key } from 'react';
 
 
-export const CoreFeed = () => {
+export const CoreFeed = ({ articles = [] }) => {
 
-  function useDebounce(value: unknown, delay: unknown) {
-    const [debouncedValue, setDebouncedValue] = useState(value);
+  function useDebounce(value: string, delay: number) {
+    const [ debouncedValue, setDebouncedValue ] = useState(value);
 
     useEffect(() => {
       const handler = setTimeout(() => {
@@ -18,12 +19,12 @@ export const CoreFeed = () => {
       return () => {
         clearTimeout(handler);
       };
-    }, [value, delay]);
+    }, [ value, delay ]);
 
     return debouncedValue;
   }
-  const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebounce(searchQuery, 300); // 300ms delay
+  const [ searchQuery, setSearchQuery ] = useState('');
+  const debouncedSearchQuery: string = useDebounce(searchQuery, 300); // 300ms delay
 
 
   const { loading, error, data } = useAstroQuery(Search, {
@@ -37,8 +38,17 @@ export const CoreFeed = () => {
     setSearchQuery(e.target.value);
   };
 
-  const questions = data?.search?.posts || [];
-  const totalItems = data?.search?.totalItems || 0;
+
+  const [ questions, setQuestions ] = useState<any>(articles);
+  const [ totalItems, setTotalItems ] = useState(articles.length);
+
+  useEffect(() => {
+    if (data) {
+      setQuestions(data.search.posts);
+      setTotalItems(data.search.totalItems);
+    }
+  }, [ questions, totalItems ]);
+
 
   return (
     <>
@@ -75,33 +85,42 @@ export const CoreFeed = () => {
             {error && <p>Error: {error.message}</p>}
             {!loading && !error && (
               <div className="-my-6 divide-y divide-gray-200 dark:divide-gray-800">
-                {questions.map((question: { title: string; postText: string; }, index: Key | null | undefined) => (
-                  <div key={index} className="space-y-4 py-6 md:py-8">
+                {questions?.map((question: { title: string; postText: string; }, index: Key | null | undefined) => {
+                  const imageUrl = extractImageFromPostText({ user: false, postText: question.postText });
+                  console.log('imageUrl', imageUrl);
+                  return (
+                    <div key={index} className="space-y-4 py-6 md:py-8">
 
-                   <div className="grid gap-4">
-  <div>
-    <span className="inline-block rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300 md:mb-0">
-    </span>
-  </div>
-  <a href="#" className="text-xl font-semibold text-gray-900 hover:underline dark:text-white">
-    {question?.title
-      ? question.title.replace(/<[^>]*>/g, '').substring(0, 100)
-                          : question?.postText?.replace(/<[^>]*>/g, '').substring(0, 100)}
-                        {(question?.title?.length > 100 || question?.postText?.length > 100) && '...'}
-                      </a>
+                      <div className="grid gap-4">
+                        <div>
+                          <span className="inline-block rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300 md:mb-0">
+                           { imageUrl && <img
+                              src={imageUrl}
+                              alt="unisala post"
+                              className="w-full h-48 object-cover mb-4 rounded-lg border border-gray-300 dark:border-gray-600"
+                            />}
+                          </span>
+                        </div>
+                        <a href="#" className="text-xl font-semibold text-gray-900 hover:underline dark:text-white">
+                          {question?.title
+                            ? question.title.replace(/<[^>]*>/g, '').substring(0, 100)
+                            : question?.postText?.replace(/<[^>]*>/g, '').substring(0, 100)}
+                          {(question?.title?.length > 100 || question?.postText?.length > 100) && '...'}
+                        </a>
+                      </div>
+                      <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+                        {question?.postText?.replace(/<[^>]*>/g, '').substring(0, 200)}
+                        {question?.postText?.length > 200 && '...'}
+                      </p>
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        Answered
+                        {question?.date ? ' ' + formatDate(question?.date) : 'No Date'}
+
+                        {/* <a href="#" className="text-gray-900 hover:underline dark:text-white"> User Name</a> */}
+                      </p>
                     </div>
-                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                      {question?.postText?.replace(/<[^>]*>/g, '').substring(0, 200)}
-                      {question?.postText?.length > 200 && '...'}
-                    </p>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                      Answered
-                      {question?.date ?' ' + formatDate(question?.date) : 'No Date'}
-
-                      {/* <a href="#" className="text-gray-900 hover:underline dark:text-white"> User Name</a> */}
-                    </p>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

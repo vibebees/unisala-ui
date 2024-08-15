@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import * as Avatar from '@radix-ui/react-avatar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { CoreFeed } from './corefeed';
+import { extractHeading, threadPointer } from '@/utils/lib/utils';
 const ArticleCard = ({ article }) => (
   <div className="mb-6 p-4 bg-white rounded-lg shadow">
     <div className="flex items-center mb-2">
@@ -58,8 +59,10 @@ const StaffPick = ({ article }) => (
       </Avatar.Fallback>
     </Avatar.Root>
     <div className="ml-3">
-      <h3 className="text-sm font-medium">{article.postText}</h3>
+      <a href={'/'+ threadPointer(article)}>
+      <h3 className="text-sm font-medium">{extractHeading(article?.postText)}</h3>
       <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
+    </a>
     </div>
   </div>
 );
@@ -73,7 +76,8 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-3/4 md:pr-8">
-          <CoreFeed />
+
+          <CoreFeed articles={ articles} />
         </div>
         <div className="md:w-1/4">
           <div className="mb-8">
@@ -86,7 +90,9 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
             <h2 className="text-lg font-bold mb-4">Recommended topics</h2>
             <div className="flex flex-wrap">
               {topics.map((topic, index) => (
-                <TopicBadge key={index} topic={topic} />
+                <a href='/tags'>
+                  <TopicBadge key={index} topic={topic} />
+                </a>
               ))}
             </div>
           </div>

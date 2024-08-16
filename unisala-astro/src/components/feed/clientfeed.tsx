@@ -50,7 +50,7 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
         <div className="">
         <ClientCoreFeed articles={articles} />
         </div>
-        <div className="md:w-1/4">
+        {/* <div className="md:w-1/4">
           <div className="mb-8">
             <h2 className="text-lg font-bold mb-4">Staff Picks</h2>
             {staffPicks.map((pick, index) => (
@@ -69,7 +69,7 @@ const MediumFeed = ({ articles, staffPicks, topics }) => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -61,7 +61,7 @@ const ProfileAvatar = () => {
           <Avatar>
             <AvatarImage
               className="select-none"
-              src="https://github.com/shadcn.png"
+              src={'https://ui-avatars.com/api/?name=' + user.firstName + '+' + user.lastName}  
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
@@ -73,9 +73,9 @@ const ProfileAvatar = () => {
               {user.firstName}
             </span>
           </DropdownMenuLabel>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+          {/* <DropdownMenuGroup>
             <DropdownMenuItem>
               Profile
               <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
@@ -84,7 +84,7 @@ const ProfileAvatar = () => {
               Settings
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
-          </DropdownMenuGroup>
+          </DropdownMenuGroup> */}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>

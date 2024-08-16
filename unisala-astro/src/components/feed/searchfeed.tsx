@@ -5,13 +5,11 @@ const SearchBar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('-------> searchQuery', searchQuery);
     // onSearch(searchQuery);
   };
 
   const handleSearch = (e:any) => {
     setSearchQuery(e.target.value)
-    console.log('-------> searchQuery', searchQuery);
   }
 
   return (

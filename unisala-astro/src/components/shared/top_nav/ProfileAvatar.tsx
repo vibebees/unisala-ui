@@ -15,6 +15,7 @@ import {
 import { authenticated, getCache } from "@/utils/cache";
 import DarkModeToggle from "@/components/ui/theme-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ProfileIcon } from "@/components/packages/icons/profile";
 
 const ProfileAvatar = () => {
   const user = useStore($user);
@@ -33,16 +34,17 @@ const ProfileAvatar = () => {
 
   if (!user.authenticated) {
     return (
-      <div className="flex gap-8">
-        <a
-          className=" block bg-blue-600/70 border border-blue-500 py-1 px-4 rounded-full w-full  text-white"
-          href="/auth"
-        >
-          Sign up / Sign in
-        </a>
+      <div className="flex gap-3 items-center">
+      <div className="relative flex-grow max-w-2xl">
 
-        <ThemeToggle />
+       
       </div>
+
+      <ThemeToggle />
+      {/* <a href="/auth">
+        <ProfileIcon />
+      </a> */}
+    </div>
     );
   }
 

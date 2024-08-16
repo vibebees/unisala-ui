@@ -1,10 +1,16 @@
 ---
+
 import MainLayout from '@/layouts/main-layout.astro';
-import MediumFeed from '@/components/feed/feed.tsx';
+import MediumFeed from '@/components/feed/clientfeed.tsx';
 
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
+export const prerender = false;
+const {slug, query} = Astro.params;
+const searchQuery = Astro.url.searchParams.get('q') || query || '';
 
+console.log('====================================');
+console.log({slug, query, searchQuery});
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
       fetchFeedV2(feedQuery: $feedQuery) {
@@ -111,7 +117,9 @@ try {
   {
     !error && (
       <section class='container max-w-screen-lg space-y-6 pt-12'>
+
         <MediumFeed
+                  client:only="react"
           articles={articles}
           staffPicks={staffPicks}
           topics={topics}

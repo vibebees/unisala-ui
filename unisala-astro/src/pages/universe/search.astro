@@ -1,16 +1,13 @@
 ---
-
 import MainLayout from '@/layouts/main-layout.astro';
 import MediumFeed from '@/components/feed/clientfeed.tsx';
+import SearchCarousel from '@/components/ui/carousel';
 
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
 export const prerender = false;
-const {slug, query} = Astro.params;
+const { slug, query } = Astro.params;
 const searchQuery = Astro.url.searchParams.get('q') || query || '';
-
-
-
 
 let articles: never[] = [];
 let staffPicks: never[] = [];
@@ -19,33 +16,40 @@ let error = '';
 
 try {
   // Fetch regular articles
-
   // Fetch staff picks
-
-
   // Fetch top active spaces for topics
-
-
-
 } catch (e) {
   console.error('Error fetching data:', e);
   error = e instanceof Error ? e.message : String(e);
 }
+
+const carouselItems = [
+  { image: 'https://i.ibb.co/TrcpbhB/Screenshot-2024-08-16-at-4-24-35-PM.png' },
+  { image: 'https://i.ibb.co/dG64Fwg/Screenshot-2024-08-16-at-4-26-01-PM.png' },
+  { image: 'https://i.ibb.co/F5DxGF3/Screenshot-2024-08-16-at-4-26-50-PM.png' },
+  { image: 'https://i.ibb.co/zNy9xps/Screenshot-2024-08-16-at-4-27-24-PM.png' },
+  { image: 'https://i.ibb.co/RCbPYk2/Screenshot-2024-08-16-at-4-27-48-PM.png' },
+  { image: 'https://i.ibb.co/SQ1DwSX/Screenshot-2024-08-16-at-4-28-42-PM.png' }
+];
 ---
 
 <MainLayout title='Medium-style Feed'>
   {error && <div>Error: {error}</div>}
-  {
-    !error && (
-      <section class='container max-w-screen-lg space-y-6 pt-12'>
-
-        <MediumFeed
-                  client:only="react"
-          articles={articles}
-          staffPicks={staffPicks}
-          topics={topics}
-        />
-      </section>
-    )
-  }
+  {!error && (
+    <section class='container max-w-screen-lg space-y-6 '>
+      <SearchCarousel
+        client:load
+        items={carouselItems}
+        autoSlideInterval={15000}
+        className='custom-class'
+        showPropagation={false}
+      />
+      <MediumFeed
+        client:only='react'
+        articles={articles}
+        staffPicks={staffPicks}
+        topics={topics}
+      />
+    </section>
+  )}
 </MainLayout>

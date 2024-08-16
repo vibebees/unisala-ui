@@ -45,10 +45,10 @@ const TopicBadge = ({ topic, id }) => (
 
 const MediumFeed = ({ articles, staffPicks, topics }) => {
   return (
-    <div className="">
-      <div className="flex flex-col md:flex-row">
-        <div className="">
-        <ClientCoreFeed articles={articles} />
+    <div className="w-full max-w-full px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col">
+        <div className="w-full">
+      <ClientCoreFeed articles={articles} />
         </div>
         {/* <div className="md:w-1/4">
           <div className="mb-8">

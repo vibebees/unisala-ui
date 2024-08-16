@@ -6,7 +6,7 @@ import { fetchApi } from "@/utils/api.utility";
 import "../styles/scholarship.css";
 import { universityServiceGql } from "@/datasource/servers";
 import ScholarshipFeedback from "@/components/scholarship/ScholarshipFeedback";
-import ScholarshipStoryCarousel from "@/components/scholarship/scholarshipCarousel";
+import ScholarshipStoryCarousel from "@/components/ui/carousel"
 let data = [];
 
 const query = `query searchScholarshipV2(
@@ -94,6 +94,34 @@ try {
 } catch (error) {
   console.log("something went wrong in astro scholarships", error);
 }
+
+const carouselItems = [
+    {
+      image: "https://cdn.vectorstock.com/i/2000v/19/60/3d-isometric-flat-conceptual-vector-43471960.avif",
+      title: "Discover Scholarships",
+      description: "Begin your journey by discovering scholarships tailored to your profile."
+    },
+    {
+        image: "https://cdn.vectorstock.com/i/2000v/07/48/university-with-students-outdoors-teenagers-vector-34050748.avif",
+        title: "Discover Universities",
+        description: "Begin your journey by discovering best universities that can be home to your future."
+      },
+    {
+      image: "https://cdn.vectorstock.com/i/2000v/10/33/student-campus-flat-vector-46441033.avif",
+      title: "Match Your Profile",
+      description: "Discovering universities offering scholarships that align perfectly with your academic profile."
+    },
+    {
+      image: "https://cdn.vectorstock.com/i/2000v/86/40/masters-and-bachelors-students-graduation-online-vector-37458640.avif",
+      title: "Maximize Your Opportunities",
+      description: "Uncover hidden gems - universities eager to invest in your potential with generous scholarship packages."
+    },
+    {
+      image: "https://cdn.vectorstock.com/i/1000x1000/44/16/university-students-in-campus-word-concept-banner-vector-29244416.webp",
+      title: "Transform Your Future",
+      description: "Take the first step towards a brighter future. Your future university and scholarship await!"
+    }
+  ];
 ---
 
 <MainLayout title="Discover Scholarships">
@@ -102,7 +130,11 @@ try {
       <div class="flex justify-between scholarship-header flex-col">
         <div class="scholarship-title">
         </div>
-        <ScholarshipStoryCarousel client:load />
+        <ScholarshipStoryCarousel client:load 
+        items={carouselItems} 
+        autoSlideInterval={15000} 
+        className="custom-class"  
+        />
 
         <ScholarShip client:only="react" />
 

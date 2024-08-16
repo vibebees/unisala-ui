@@ -55,7 +55,13 @@ const ProfileAvatar = () => {
   }
 
   return (
-    <div>
+    <div className="flex gap-3 items-center">
+       <a
+         href="/universe/search"
+         data-astro-reload
+        >
+          <SearchIcon />
+        </a>
       <DropdownMenu>
         <DropdownMenuTrigger className="cursor-pointer" asChild>
           <Avatar>

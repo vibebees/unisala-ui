@@ -27,6 +27,7 @@ export function MainNavigationMenu() {
           <NavigationMenuLink
             href="/new-story"
             className={navigationMenuTriggerStyle()}
+            data-astro-reload
           >
             New Story
             <PenOutLine />
@@ -62,7 +63,7 @@ export function MainNavigationMenu() {
                 key={link.href}
                 href={link.href}
                 className={navigationMenuTriggerStyle()}
-                {...(link.forceReload ? { "data-astro-reload": true } : {})}
+                data-astro-reload
               >
                 {link.title}
               </a>

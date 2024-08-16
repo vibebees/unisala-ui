@@ -142,3 +142,10 @@ export function extractHeading(text: string) {
 export const threadPointer = (article:IPost) => {
   return 'threads/'+ article?._id
 }
+
+export const calculateReadTime = (text:string) => {
+  const wordsPerMinute = 200; // Average reading speed
+  const wordCount = text.trim().split(/\s+/).length;
+  const readTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
+  return readTimeMinutes === 1 ? '1 min read' : `${readTimeMinutes} min read`;
+};

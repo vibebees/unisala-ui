@@ -1,6 +1,8 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
 import MediumFeed from '@/components/feed/feed.tsx';
+import SearchBar from '@/components/feed/searchfeed.tsx';
+
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
 
@@ -59,7 +61,7 @@ try {
       query: getNewsFeed,
       variables: {
         feedQuery: {
-        feedType: 'newsfeed',
+          feedType: 'newsfeed',
           page: 0
         }
       }
@@ -75,7 +77,7 @@ try {
         feedQuery: {
           feedType: 'org',
           page: 0,
-          pageSize: 6,
+          pageSize: 6
         }
       }
     })
@@ -105,13 +107,19 @@ try {
 }
 ---
 
-<MainLayout title="Medium-style Feed">
+<MainLayout title='Medium-style Feed'>
   {error && <div>Error: {error}</div>}
-  {!error && (
-    <MediumFeed
-      articles={articles}
-      staffPicks={staffPicks}
-      topics={topics}
-    />
-  )}
+  {
+    !error && (
+      <section class='container max-w-screen-lg space-y-6 pt-12'>
+        <SearchBar client:only/>
+
+        <MediumFeed
+          articles={articles}
+          staffPicks={staffPicks}
+          topics={topics}
+        />
+      </section>
+    )
+  }
 </MainLayout>

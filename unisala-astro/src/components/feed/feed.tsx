@@ -10,16 +10,20 @@ import CoreFeed from './corefeed';
 
 const StaffPick = ({ article }) => (
   <div className="flex items-start mb-4">
-    <Avatar.Root className="inline-flex h-6 w-6 rounded-full">
-      <Avatar.Image
+      {/* <Avatar.Image
         className="h-full w-full object-cover rounded-full"
         src={article.user.picture || "/default-avatar.png"}
         alt={article.user.firstName}
-      />
-      <Avatar.Fallback className="flex h-full w-full items-center justify-center bg-gray-300 text-xs font-medium uppercase text-gray-800 rounded-full">
+      /> */}
+       <img
+          className="w-10 h-10 rounded-full mr-2"
+          src={`https://api.multiavatar.com/`+article.user.firstName+`.svg`}
+          alt="Author avatar"
+        />
+
+      {/* <Avatar.Fallback className="flex h-full w-full items-center justify-center bg-gray-300 text-xs font-medium uppercase text-gray-800 rounded-full">
         {article.user.firstName[0]}
-      </Avatar.Fallback>
-    </Avatar.Root>
+      </Avatar.Fallback> */}
     <div className="ml-3">
       <a href={'/' + threadPointer(article)} data-astro-reload>
         <h3 className="text-sm font-medium">{linkifyHtml(extractHeading(article?.title ?? article?.postText))}</h3>
@@ -28,6 +32,7 @@ const StaffPick = ({ article }) => (
     </div>
   </div>
 );
+
 
 const TopicBadge = ({ topic, id }) => (
   <a href={`/universe/tags/${id}`} data-astro-reload

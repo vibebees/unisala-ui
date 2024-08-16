@@ -13,7 +13,6 @@ const ArticleCard = ({ article }) => {
 
   const displayTitle = title || postText.substring(0, 100);
   const displayBody = title ? postText.substring(0, 160) : postText.substring(0, 160);
-
   return (
     <div className="py-8 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center mb-4">
@@ -43,7 +42,7 @@ const ArticleCard = ({ article }) => {
           <div className="flex items-center text-sm text-gray-500">
             <span>{calculateReadTime(article.postText) || 'few min read'}</span>
             <span className="mx-2">·</span>
-            <span>{article.category || 'General'}</span>
+            <span>{article?.postTags?.tagType || 'General'}</span>
           </div>
         </div>
         {imageUrl && (
@@ -65,6 +64,7 @@ const MediumStyleFeed = ({ articles = [] }) => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    console.log('-------> searchQuery', searchQuery);
   };
 
   const filteredArticles = articles.filter((article) =>
@@ -74,7 +74,7 @@ const MediumStyleFeed = ({ articles = [] }) => {
 
   return (
     <div className="max-w-screen-md mx-auto px-4 py-8">
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <input
           type="text"
           placeholder="Search articles..."
@@ -82,7 +82,7 @@ const MediumStyleFeed = ({ articles = [] }) => {
           onChange={handleSearchChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-      </div>
+      </div> */}
       <div className="space-y-8">
         {filteredArticles.map((article, index) => (
           <ArticleCard key={index} article={article} />

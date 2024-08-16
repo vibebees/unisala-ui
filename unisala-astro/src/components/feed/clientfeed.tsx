@@ -45,9 +45,9 @@ const TopicBadge = ({ topic, id }) => (
 
 const MediumFeed = ({ articles, staffPicks, topics }) => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="">
       <div className="flex flex-col md:flex-row">
-        <div className="md:w-3/4 md:pr-8">
+        <div className="">
         <ClientCoreFeed articles={articles} />
         </div>
         <div className="md:w-1/4">

@@ -16,6 +16,7 @@ import { authenticated, getCache } from "@/utils/cache";
 import DarkModeToggle from "@/components/ui/theme-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ProfileIcon } from "@/components/packages/icons/profile";
+import { SearchIcon } from "@/components/packages/icons/search";
 
 const ProfileAvatar = () => {
   const user = useStore($user);
@@ -35,15 +36,20 @@ const ProfileAvatar = () => {
   if (!user.authenticated) {
     return (
       <div className="flex gap-3 items-center">
-      <div className="relative flex-grow max-w-2xl">
-
-       
-      </div>
-
+        <a
+         href="/universe/search"
+         data-astro-reload
+        >
+          <SearchIcon />
+        </a>
+        <a
+         href="/auth"
+          data-astro-reload
+        >
+          <ProfileIcon />
+        </a>
       <ThemeToggle />
-      {/* <a href="/auth">
-        <ProfileIcon />
-      </a> */}
+     
     </div>
     );
   }

@@ -61,7 +61,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] | [] }) => {
   return (
     <div className="max-w-screen-md mx-auto px-4 py-8">
       <div className="mb-8 relative">
-        <form onSubmit={handleSearch} className="flex">
+        {/* <form onSubmit={handleSearch} className="flex">
           <input
             type="text"
             placeholder="Search articles..."
@@ -75,7 +75,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] | [] }) => {
           >
             Search
           </button>
-        </form>
+        </form> */}
         {showSuggestions && suggestions.length > 0 && (
           <div ref={suggestionsRef} className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
             {suggestions.map((article, index) => (

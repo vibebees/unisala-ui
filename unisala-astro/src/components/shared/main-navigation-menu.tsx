@@ -71,7 +71,6 @@ export function MainNavigationMenu() {
           </NavigationMenuItem>
         ) : null}
       </NavigationMenuList>
-      
     </NavigationMenu>
   );
 }

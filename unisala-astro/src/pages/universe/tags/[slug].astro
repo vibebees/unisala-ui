@@ -70,7 +70,6 @@ try {
     })
   });
 
-  console.log({regularFeed: regularFeed.data?.fetchFeedV2?.data})
   // Fetch staff picks
   const staffPicksResult = await fetchApi(userServiceGql, {
     method: 'POST',

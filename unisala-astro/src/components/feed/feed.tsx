@@ -4,6 +4,7 @@ import * as Avatar from '@radix-ui/react-avatar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { CoreFeed } from './corefeed';
 import { extractHeading, threadPointer } from '@/utils/lib/utils';
+import linkifyHtml from 'linkify-html';
 const ArticleCard = ({ article }) => (
   <div className="mb-6 p-4 bg-white rounded-lg shadow">
     <div className="flex items-center mb-2">
@@ -60,7 +61,7 @@ const StaffPick = ({ article }) => (
     </Avatar.Root>
     <div className="ml-3">
       <a href={'/'+ threadPointer(article)}>
-      <h3 className="text-sm font-medium">{extractHeading(article?.title?? article?.postText)}</h3>
+      <h3 className="text-sm font-medium">{linkifyHtml(extractHeading(article?.title?? article?.postText))}</h3>
       <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
     </a>
     </div>
@@ -72,7 +73,6 @@ const TopicBadge = ({ topic }) => (
 );
 
 const MediumFeed = ({ articles, staffPicks, topics }) => {
-  console.log({staffPicks})
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row">

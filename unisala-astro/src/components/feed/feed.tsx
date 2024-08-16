@@ -60,7 +60,7 @@ const StaffPick = ({ article }) => (
     </Avatar.Root>
     <div className="ml-3">
       <a href={'/'+ threadPointer(article)}>
-      <h3 className="text-sm font-medium">{extractHeading(article?.postText)}</h3>
+      <h3 className="text-sm font-medium">{extractHeading(article?.title?? article?.postText)}</h3>
       <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
     </a>
     </div>
@@ -72,6 +72,7 @@ const TopicBadge = ({ topic }) => (
 );
 
 const MediumFeed = ({ articles, staffPicks, topics }) => {
+  console.log({staffPicks})
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row">

@@ -50,7 +50,6 @@ export const CoreFeed = ({ articles = [] }) => {
     }
   }, [ data ]);
 
-  console.log("Questions", questions)
 
   return (
     <>
@@ -89,6 +88,14 @@ export const CoreFeed = ({ articles = [] }) => {
               <div className="-my-6 divide-y divide-gray-200 dark:divide-gray-800">
                 {questions?.map((question: IPost, index: Key | null | undefined) => {
                   const imageUrl = extractImageFromPostText({ user: false, postText: question.postText });
+                  const stripHtml = (html) => html.replace(/<[^>]*>/g, '');
+
+                  const title = question?.title ? stripHtml(question.title) : '';
+                  const postText = stripHtml(question?.postText || '');
+
+                  const displayTitle = title || postText.substring(0, 150);
+                  const displayBody = title ? postText.substring(150, 300) : postText.substring(200, 500);
+
                   return (
                     <div key={index} className="space-y-4 py-6 md:py-8">
 
@@ -102,17 +109,20 @@ export const CoreFeed = ({ articles = [] }) => {
                             />}
                           </span>
                         </div>
-                        <a href={ '/' + threadPointer(question)} className="text-xl font-semibold text-gray-900 hover:underline dark:text-white">
-                          {question?.title
-                            ? question?.title.replace(/<[^>]*>/g, '').substring(0, 100)
-                            : question?.postText?.replace(/<[^>]*>/g, '').substring(0, 100)}
-                          {(question?.title?.length > 100 || question?.postText?.length > 100) && '...'}
+                        <a
+                          href={'/' + threadPointer(question)}
+                          className="text-xl font-semibold text-gray-900 hover:underline dark:text-white"
+                        >
+                          {displayTitle}
+                          {displayTitle.length === 200 && '...'}
                         </a>
                       </div>
-                      <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                        {question?.postText?.replace(/<[^>]*>/g, '').substring(0, 200)}
-                        {question?.postText?.length > 200 && '...'}
-                      </p>
+                      {displayBody && (
+                        <p className="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">
+                          {displayBody}
+                          {(title ? postText.length > 300 : postText.length > 500) && '...'}
+                        </p>
+                      )}
                       <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Answered
                         {question?.date ? ' ' + formatDate(question?.date) : 'No Date'}

@@ -6,9 +6,10 @@ import { extractHeading, threadPointer } from '@/utils/lib/utils';
 import linkifyHtml from 'linkify-html';
 import { Button } from '../ui/button';
 import ClientCoreFeed from './clientcorefeed';
+import type { IPost } from '@/types/post';
 
 
-const StaffPick = ({ article }) => (
+const StaffPick = ({ article }:{article:IPost}) => (
   <div className="flex items-start mb-4">
       {/* <Avatar.Image
         className="h-full w-full object-cover rounded-full"
@@ -34,7 +35,7 @@ const StaffPick = ({ article }) => (
 );
 
 
-const TopicBadge = ({ topic, id }) => (
+const TopicBadge = ({ topic, id }:{topic:string, id:string}) => (
   <a href={`/universe/tags/${id}`} data-astro-reload
   className="inline-block mr-2 mb-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition duration-300 ease-in-out"
 
@@ -43,33 +44,19 @@ const TopicBadge = ({ topic, id }) => (
     </a>
 );
 
-const MediumFeed = ({ articles, staffPicks, topics }) => {
+interface MediumFeedProps {
+  articles: IPost[];
+  staffPicks?: IPost[];
+  topics?: any;
+}
+
+const MediumFeed = ({ articles, staffPicks, topics }:MediumFeedProps) => {
   return (
     <div className="w-full max-w-full px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col">
         <div className="w-full">
       <ClientCoreFeed articles={articles} />
         </div>
-        {/* <div className="md:w-1/4">
-          <div className="mb-8">
-            <h2 className="text-lg font-bold mb-4">Staff Picks</h2>
-            {staffPicks.map((pick, index) => (
-              <StaffPick key={index} article={pick} />
-            ))}
-          </div>
-          <div>
-            <h2 className="text-lg font-bold mb-4">Recommended topics</h2>
-            <div className="flex flex-wrap">
-              {topics.map((topic, index) => (
-                <TopicBadge
-                  key={index}
-                  topic={topic?.name}
-                  id={topic?._id}
-                />
-              ))}
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

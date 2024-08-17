@@ -40,7 +40,7 @@ const MediumFeed = ({ articles, staffPicks, topics }: { articles: IPost[], staff
         <div className="md:w-1/4">
           <div className="mb-8">
             <h2 className="text-lg font-bold mb-4">Staff Picks</h2>
-            {staffPicks.map((pick: IPost, index: React.Key | null | undefined) => (
+            {staffPicks?.map((pick: IPost, index: React.Key | null | undefined) => (
               <StaffPick key={index} article={pick} />
             ))}
           </div>

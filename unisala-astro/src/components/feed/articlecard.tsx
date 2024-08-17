@@ -1,10 +1,12 @@
+import React from 'react';
+import type { IPost } from "@/types/post";
 import { formatDate } from "@/utils/date";
 import { extractImageFromPostText } from "@/utils/lib/image";
 import { calculateReadTime, threadPointer } from "@/utils/lib/utils";
 
-export const ArticleCard = ({ article }) => {
+export const ArticleCard = ({ article }: {article:IPost}) => {
   const imageUrl = extractImageFromPostText({ user: false, postText: article.postText });
-  const stripHtml = (html) => html.replace(/<[^>]*>/g, '');
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '');
 
   const title = article?.title ? stripHtml(article.title) : '';
   const postText = stripHtml(article?.postText || '');
@@ -31,7 +33,7 @@ export const ArticleCard = ({ article }) => {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row w-full">
-        <div className="w-full sm:w-2/3 sm:pr-4">
+        <div className={`w-full ${imageUrl ? 'sm:w-2/3 sm:pr-4' : ''}`}>
           <a
             href={'/' + threadPointer(article)}
             className="text-lg font-bold text-gray-900 hover:underline dark:text-white mb-2 block"

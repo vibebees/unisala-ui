@@ -7,6 +7,7 @@ export interface PostDraft {
 }
 
 export interface IPost {
+  [x: string]: any;
   __typename: string;
   section: string;
   postText: string;

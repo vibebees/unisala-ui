@@ -9,7 +9,7 @@ import { useEffect, useState, type SetStateAction } from 'react';
 import { ArticleCard } from './articlecard';
 import { navigator } from '@/utils/lib/URLupdate';
 
-const CoreFeed = ({ articles = [] }) => {
+const CoreFeed = ({ articles }:{articles:IPost[]}) => {
   function useDebounce(value: string, delay: number) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -26,7 +26,10 @@ const CoreFeed = ({ articles = [] }) => {
     return debouncedValue;
   }
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('q') || '';
+  });
   const debouncedSearchQuery: string = useDebounce(searchQuery, 300);
 
   const { loading, error, data } = useAstroQuery(Search, {
@@ -127,7 +130,7 @@ const CoreFeed = ({ articles = [] }) => {
           {error && <p>Error: {error.message}</p>}
           {!loading && !error && questions && questions.length > 0 && (
             <div className="-my-6 divide-y divide-gray-200 dark:divide-gray-800">
-              {questions.map((article, index) => (
+              {questions.map((article :IPost, index:number) => (
                 <ArticleCard key={index} article={article} />
               ))}
             </div>

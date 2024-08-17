@@ -2,43 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArticleCard } from './articlecard';
 import type { IPost } from '@/types/post';
 
-const MediumStyleFeed = ({ articles }: { articles: IPost[] | [] }) => {
+const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: { target: Node | null; }) => {
-      if (suggestionsRef.current && (suggestionsRef.current as HTMLElement).contains(event.target)) {
-        setShowSuggestions(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    
-    if (value.length > 0) {
-      const filteredSuggestions = articles
-        .filter(article => 
-          article.title.toLowerCase().includes(value.toLowerCase()) ||
-          article.postText.toLowerCase().includes(value.toLowerCase())
-        )
-        .slice(0, 5);  // Limit to 5 suggestions
-      setSuggestions(filteredSuggestions);
-      setShowSuggestions(true);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  };
 
   const handleSuggestionClick = (article: IPost) => {
     setSearchQuery(article.title);
@@ -47,7 +16,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] | [] }) => {
     console.log('Selected article:', article);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e:any) => {
     e.preventDefault();
     // In Astro, we'll use a regular form submission to navigate
     window.location.href = `/universe/search?search=${encodeURIComponent(searchQuery)}`;
@@ -78,7 +47,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] | [] }) => {
         </form> */}
         {showSuggestions && suggestions.length > 0 && (
           <div ref={suggestionsRef} className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-            {suggestions.map((article, index) => (
+            {suggestions.map((article:IPost, index) => (
               <div
                 key={index}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"

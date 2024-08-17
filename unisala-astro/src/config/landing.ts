@@ -2,38 +2,39 @@ import type { InfoLdg } from "@/types";
 
 export const infos: InfoLdg[] = [
   {
-    title: "Discover Paths: Weekly Graduate Webinars",
-    description: "Join our weekly webinars at Unisala, where we bring guest speakers from the U.S. who are currently pursuing their major. Each session explores a different major, offering insights into the curriculum, scope, and opportunities in the USA.",
-    image: "/images/webinar-unisala-study-in-usa.webp",
+    title: "Unisala Universe: Explore the World of Knowledge",
+    description: "Discover a diverse array of stories, insights, and resources shared by a global community. Whether you're seeking academic advice, career guidance, or practical tips for living abroad, Unisala's Universe has it all.",
+    image: "/images/universe.webp",
     list: [
       {
-        "title": "Alumni Stories",
-        "description": "Hear graduates stories, experiences, challenges, and successes.",
-        "icon": "lucide:user-check"
+        title: "Academic Journeys",
+        description: "Dive into personal stories and experiences from students and alumni across various fields and countries.",
+        icon: "lucide:book-open"
       },
       {
-        title: "Q&A Sessions",
-        description: "Participate in live Q&A sessions with current students and alumni.",
-        icon: "lucide:help-circle",
+        title: "Career Insights",
+        description: "Gain professional advice and explore career paths shared by graduates and industry experts.",
+        icon: "lucide:briefcase"
       },
       {
-        title: "Discover Majors",
-        "description": "Explore the unique aspects and demands of various fields of study.",
-        icon: "lucide:book-open",
+        title: "Life in the USA",
+        description: "Find practical guides and tips on living as an international student in the USA, from visa processes to daily life hacks.",
+        icon: "lucide:home"
       },
       {
-        "title": "Academic Paths",
-        "description": "Discover coursework, research, and outcomes at different U.S. universities.",
-        "icon": "lucide:map-pin"
+        title: "Technical Guides",
+        description: "Explore tutorials and problem-solving guides on topics like data structures, algorithms, and more.",
+        icon: "lucide:code"
       },
       {
-        "title": "Career Prospects",
-        "description": "Explore career opportunities, job market trends, and potential paths.",
-        "icon": "lucide:briefcase"
+        title: "Engagement and Interaction",
+        description: "Join the conversation by commenting, liking, and sharing posts. Connect with a community that shares your interests.",
+        icon: "lucide:message-circle"
       }
     ]
   }
-];
+]
+
 export const features = [
   {
     title: " University Suggestions",

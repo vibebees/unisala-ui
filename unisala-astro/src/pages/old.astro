@@ -5,8 +5,6 @@ import BentoGrid from "@/components/sections/bentogrid.astro"
 import InfoLanding from "@/components/sections/info-landing.astro"
 import { infos } from "@/config/landing";
 import Features from '@/components/sections/features-new.astro';
-import FeaturesSearch from '@/components/sections/features-search-new.astro';
-
 import Testimonials from '@/components/sections/testimonials.astro';
 import Organization from '@/components/sections/organization.astro';
 import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
@@ -15,15 +13,10 @@ import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
   <HeroLanding/>
   <!-- <BentoGrid /> -->
   <InfoLanding data={infos[0]} reverse={true} />
-  <GoToUnisalaPortal title="Checkout Universe" href="/universe" />
-
+  <GoToUnisalaPortal title="Go to Unisala App" href="/login" />
   <Features data={infos[0]} reverse={false} />
-  <GoToUnisalaPortal href='/new-story' title='Share my journey' />
-
-  <InfoLanding data={infos[0]} reverse={true} />
-
+  <GoToUnisalaPortal title="Go to Unisala App" href="/login" />
   <Testimonials />
-
   <GoToUnisalaPortal title="Go to Unisala App" href="/login" />
   <iframe src="/home" style="display:none;"></iframe>
   <iframe src="/login" style="display:none;"></iframe>

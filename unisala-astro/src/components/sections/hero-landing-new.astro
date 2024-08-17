@@ -8,27 +8,26 @@ import { Image } from 'astro:assets';
 <section class='space-y-6 py-12 sm:py-20 lg:py-20'>
   <div class='container flex max-w-5xl flex-col items-center gap-5 text-center'>
 
-      <span class='mr-3'>🎉</span> Bridging Continents, Creating Scholars{' '}
+      <span class='mr-3'>🎉</span> Built on real stories 
 
     <h1
       class='text-balance font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[66px]'
     >
-      Learn, Connect, Succeed – {' '}
-      <span class='text-gradient_indigo-purple font-extrabold'> Together </span>
+      Every Joruney – {' '}
+      <span class='text-gradient_indigo-purple font-extrabold'> Has A Story </span>
     </h1>
 
     <p
       class='max-w-2xl text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8'
     >
-      Unisala is designed for international students, alumni, and student
-      organizations. It offers resources and networking opportunities for each
-      stage of the educational journey.
+    "Unisala is where your story finds a home. Share your college adventures, career milestones, or life lessons – because someone out there might just need to hear what you have to say."
+
     </p>
 
     <div class='mx-auto max-w-lg'>
       <Image
         class='w-full h-auto object-cover object-center'
-        src={'/images/unisala-app-portal.webp'}
+        src={'/images/story.webp'}
         alt={'data.title'}
         width={500}
         height={200}
@@ -38,6 +37,6 @@ import { Image } from 'astro:assets';
 
 
 
-    <GoToUnisalaPortal title="Go to Unisala App" href="/login" />
+    <GoToUnisalaPortal href='/new-story' title='Write my story' />
   </div>
 </section>

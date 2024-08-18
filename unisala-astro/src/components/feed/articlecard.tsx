@@ -1,21 +1,26 @@
-import React from 'react';
+import React from "react";
 import type { IPost } from "@/types/post";
 import { formatDate } from "@/utils/date";
 import { extractImageFromPostText } from "@/utils/lib/image";
 import { calculateReadTime, threadPointer } from "@/utils/lib/utils";
 
-export const ArticleCard = ({ article }: {article:IPost}) => {
-  const imageUrl = extractImageFromPostText({ user: false, postText: article.postText });
-  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '');
+export const ArticleCard = ({ article }: { article: IPost }) => {
+  const imageUrl = extractImageFromPostText({
+    user: false,
+    postText: article.postText,
+  });
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "");
 
-  const title = article?.title ? stripHtml(article.title) : '';
-  const postText = stripHtml(article?.postText || '');
+  const title = article?.title ? stripHtml(article.title) : "";
+  const postText = stripHtml(article?.postText || "");
 
   const displayTitle = title || postText.substring(0, 100);
-  const displayBody = title ? postText.substring(0, 160) : postText.substring(0, 160);
+  const displayBody = title
+    ? postText.substring(0, 160)
+    : postText.substring(0, 160);
 
   return (
-    <div className="w-full py-6 border-b border-gray-200 dark:border-gray-700">
+    <div className="w-full py-10 hover:bg-neutral-100/70 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center mb-3">
         <img
           className="w-8 h-8 rounded-full mr-2"
@@ -28,14 +33,14 @@ export const ArticleCard = ({ article }: {article:IPost}) => {
           </span>
           <span className="hidden xs:inline mx-2 text-gray-500">·</span>
           <span className="text-xs text-gray-500">
-            {article?.date ? formatDate(article.date) : 'No Date'}
+            {article?.date ? formatDate(article.date) : "No Date"}
           </span>
         </div>
       </div>
       <div className="flex flex-col sm:flex-row w-full">
-        <div className={`w-full ${imageUrl ? 'sm:w-2/3 sm:pr-4' : ''}`}>
+        <div className={`w-full ${imageUrl ? "sm:w-2/3 sm:pr-4" : ""}`}>
           <a
-            href={'/' + threadPointer(article)}
+            href={"/" + threadPointer(article)}
             className="text-lg font-bold text-gray-900 hover:underline dark:text-white mb-2 block"
             data-astro-reload
           >
@@ -46,10 +51,10 @@ export const ArticleCard = ({ article }: {article:IPost}) => {
               {displayBody}
             </p>
           )}
-          <div className="flex items-center text-xs text-gray-500">
-            <span>{calculateReadTime(article.postText) || 'few min read'}</span>
+          <div className="flex items-center text-xs mt-3 text-gray-500">
+            <span>{calculateReadTime(article.postText) || "few min read"}</span>
             <span className="mx-2">·</span>
-            <span>{article?.postTags?.tagType || 'General'}</span>
+            <span>{article?.postTags?.tagType || "General"}</span>
           </div>
         </div>
         {imageUrl && (

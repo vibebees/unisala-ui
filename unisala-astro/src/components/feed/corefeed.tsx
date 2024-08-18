@@ -1,30 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ArticleCard } from './articlecard';
-import type { IPost } from '@/types/post';
+import React, { useState, useEffect, useRef } from "react";
+import { ArticleCard } from "./articlecard";
+import type { IPost } from "@/types/post";
 
 const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef(null);
-
 
   const handleSuggestionClick = (article: IPost) => {
     setSearchQuery(article.title);
     setShowSuggestions(false);
     // Navigate to the article or update the feed as needed
-    console.log('Selected article:', article);
+    console.log("Selected article:", article);
   };
 
-  const handleSearch = (e:any) => {
+  const handleSearch = (e: any) => {
     e.preventDefault();
     // In Astro, we'll use a regular form submission to navigate
-    window.location.href = `/universe/search?search=${encodeURIComponent(searchQuery)}`;
+    window.location.href = `/universe/search?search=${encodeURIComponent(
+      searchQuery
+    )}`;
   };
 
-  const filteredArticles = articles.filter((article) =>
-    article?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article?.postText?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredArticles = articles.filter(
+    (article) =>
+      article?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article?.postText?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -45,9 +47,15 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
             Search
           </button>
         </form> */}
+        <h1 className="font-bold text-xl lg:text-2xl text-neutral">
+          Recommended articles
+        </h1>
         {showSuggestions && suggestions.length > 0 && (
-          <div ref={suggestionsRef} className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-            {suggestions.map((article:IPost, index) => (
+          <div
+            ref={suggestionsRef}
+            className="absolute z-10   w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg"
+          >
+            {suggestions.map((article: IPost, index) => (
               <div
                 key={index}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -59,7 +67,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
           </div>
         )}
       </div>
-      <div className="space-y-8">
+      <div className="">
         {filteredArticles.map((article, index) => (
           <ArticleCard key={index} article={article} />
         ))}

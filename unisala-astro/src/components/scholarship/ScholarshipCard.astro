@@ -55,6 +55,9 @@ const { scholarship } = Astro.props as Props;
           {scholarship.university_name}
         </p>
       </div>
+      <button title="Share sharebtn scholarship" class="favorite-btn">
+        <i class="fas fa-share"></i>
+      </button>
       <!-- <button class="favorite-btn">
         <i class="fas fa-star"></i> Favorite
       </button> -->
@@ -253,6 +256,8 @@ const { scholarship } = Astro.props as Props;
   document.addEventListener("DOMContentLoaded", () => {
     const expandBtns = document.querySelectorAll(".expand-btn");
     const applyBtns = document.querySelectorAll(".apply-btn");
+    const ShareBtns = document.querySelectorAll(".sharebtn");
+
     const iframeWrappers = document.querySelectorAll(".iframe-wrapper");
     const iframeCloseBtns = document.querySelectorAll(".iframe-close-btn");
     const iframes = document.querySelectorAll(".iframe");
@@ -263,7 +268,18 @@ const { scholarship } = Astro.props as Props;
       btn.addEventListener("click", () => {
         const expanded = btn.getAttribute("aria-expanded") === "true" || false;
         btn.setAttribute("aria-expanded", String(!expanded));
+
         const scholarshipCard = btn.closest(".scholarship-card");
+        const expandedContent = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".expanded-content") as HTMLDivElement;
+
+        if (expanded) {
+          expandedContent.style.opacity = "0";
+        } else {
+          expandedContent.style.opacity = "1";
+        }
+
         const scholarshipName = (
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
@@ -275,6 +291,22 @@ const { scholarship } = Astro.props as Props;
           label: scholarshipName || "",
           scholarshipId: scholarshipId || "",
           value: expanded ? 0 : 1,
+        });
+      });
+    });
+    ShareBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const scholarshipCard = btn.closest(".scholarship-card");
+        const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
+          .scholarshipId;
+        const scholarshipName = (
+          scholarshipCard as HTMLDivElement
+        ).querySelector(".title")?.textContent;
+        sendGAEvent("scholarship_favorite_click", {
+          category: "Scholarship",
+          label: scholarshipName || "",
+          scholarshipId: scholarshipId || "",
+          value: parseInt(scholarshipId || "0"),
         });
       });
     });

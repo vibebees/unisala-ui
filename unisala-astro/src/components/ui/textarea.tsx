@@ -3,12 +3,12 @@ import React, { useRef, useEffect } from "react";
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   maxHeight?: string;
-  storageKey?: string;
+  draftKey?: string;
 }
 
 const TextareaAutoGrow: React.FC<TextareaProps> = ({ 
   maxHeight = '70vh', 
-  storageKey = 'new.story.title', 
+  draftKey = 'new.story.postTitle', 
   name,
   className,
   ...props 
@@ -16,7 +16,7 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    const savedContent = localStorage.getItem(storageKey);
+    const savedContent = localStorage.getItem(draftKey);
     if (savedContent && textareaRef.current) {
       textareaRef.current.value = savedContent;
     }
@@ -33,10 +33,10 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
     resizeTextarea();
     window.addEventListener('resize', resizeTextarea);
     return () => window.removeEventListener('resize', resizeTextarea);
-  }, [storageKey, maxHeight]);
+  }, [draftKey, maxHeight]);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    localStorage.setItem(storageKey, event.target.value);
+    localStorage.setItem(draftKey, event.target.value);
     if (textareaRef.current) {
       textareaRef.current.style.height = "inherit";
       const scrollHeight = textareaRef.current.scrollHeight;
@@ -46,10 +46,10 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
   };
 
   return (
-    <textarea
+   <textarea
       {...props}
       ref={textareaRef}
-      id={storageKey}
+      id={draftKey}
       name={name}
       rows={1}
       style={{

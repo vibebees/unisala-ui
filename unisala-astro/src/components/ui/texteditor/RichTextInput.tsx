@@ -5,7 +5,7 @@ import './RichTextInput.css'
 
 interface RichTextInputProps {
   initialValue: string;
-  key?: string;
+  draftKey?: string;
   placeholder?: string;
   theme?: 'light' | 'dark';
 }
@@ -13,7 +13,7 @@ interface RichTextInputProps {
 const RichTextInput: React.FC<RichTextInputProps> = ({
   initialValue,
   placeholder = "Write something...",
-  key = "new.story.postText",
+  draftKey = "new.story.postText",
   theme = 'light'
 }) => {
   const [content, setContent] = useState<string>(initialValue);
@@ -48,19 +48,19 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   ];
 
   useEffect(() => {
-    const savedContent = localStorage.getItem(key);
+    const savedContent = localStorage.getItem(draftKey);
     if (savedContent) {
       setContent(savedContent);
     } else {
       setContent(initialValue);
     }
-  }, [key, initialValue]);
+  }, [draftKey, initialValue]);
 
   useEffect(() => {
     if (content !== undefined) {
-      localStorage.setItem(key, content);
+      localStorage.setItem(draftKey, content);
     }
-  }, [key, content]);
+  }, [draftKey, content]);
 
   const handleChange = (newContent: string) => {
     setContent(newContent);

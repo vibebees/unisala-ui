@@ -125,6 +125,11 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+
+  .debug {
+    @apply outline outline-blue-600
+  }
+
   /* Documentation part */
   .docs-grid-cols-2 {
     @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4;
@@ -253,8 +258,13 @@ input[type="number"] {
   html {
     font-family: 'Playfair Display', system-ui, sans-serif;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Poppins', sans-serif;
   }
 }

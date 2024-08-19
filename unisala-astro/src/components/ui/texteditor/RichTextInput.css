@@ -204,3 +204,13 @@
 .dark .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
   stroke: #fff;
 }
+
+.ql-editor ol,
+.ql-editor ul {
+  padding-left: 1.5em;
+}
+
+.ql-editor li > ol,
+.ql-editor li > ul {
+  padding-left: 1.5em;
+}

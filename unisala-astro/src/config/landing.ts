@@ -2,34 +2,29 @@ import type { InfoLdg } from "@/types";
 
 export const infos: InfoLdg[] = [
   {
-    title: "Unisala Universe: Explore the World of Knowledge",
-    description: "Discover a diverse array of stories, insights, and resources shared by a global community. Whether you're seeking academic advice, career guidance, or practical tips for living abroad, Unisala's Universe has it all.",
+    title: "Unisala: Your Global Learning Community",
+    description: "Share experiences, gain insights, and connect with students worldwide.",
     image: "/images/universe.webp",
     list: [
       {
-        title: "Academic Journeys",
-        description: "Dive into personal stories and experiences from students and alumni across various fields and countries.",
+        title: "Stories",
+        description: "Read about academic and career journeys.",
         icon: "lucide:book-open"
       },
       {
-        title: "Career Insights",
-        description: "Gain professional advice and explore career paths shared by graduates and industry experts.",
-        icon: "lucide:briefcase"
+        title: "Advice",
+        description: "Get tips on studying and living abroad.",
+        icon: "lucide:help-circle"
       },
       {
-        title: "Life in the USA",
-        description: "Find practical guides and tips on living as an international student in the USA, from visa processes to daily life hacks.",
-        icon: "lucide:home"
+        title: "Resources",
+        description: "Access guides on various topics and fields.",
+        icon: "lucide:file-text"
       },
       {
-        title: "Technical Guides",
-        description: "Explore tutorials and problem-solving guides on topics like data structures, algorithms, and more.",
-        icon: "lucide:code"
-      },
-      {
-        title: "Engagement and Interaction",
-        description: "Join the conversation by commenting, liking, and sharing posts. Connect with a community that shares your interests.",
-        icon: "lucide:message-circle"
+        title: "Community",
+        description: "Interact and share your own experiences.",
+        icon: "lucide:users"
       }
     ]
   }
@@ -178,3 +173,26 @@ export const testimonials = [
   }
 
 ];
+
+
+
+export const search: InfoLdg[] = [
+  {
+    title: "Unisala Search ",
+    description: "Our new search feature helps you navigate life and career in the USA.",
+    image: "/images/search.webp",
+    list: [
+      {
+        title: "Practical Guides",
+        description: "Search 'Driving license renewal for international students'",
+        icon: "lucide:car"
+      },
+      {
+        title: "Career Opportunities",
+        description: "Explore 'Software developer jobs for international graduates in USA'",
+        icon: "lucide:briefcase"
+      },
+
+    ]
+  }
+]

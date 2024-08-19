@@ -3,7 +3,8 @@ import MainLayout from '@/layouts/main-layout.astro';
 import HeroLanding from "@/components/sections/hero-landing-new.astro"
 import BentoGrid from "@/components/sections/bentogrid.astro"
 import InfoLanding from "@/components/sections/info-landing.astro"
-import { infos } from "@/config/landing";
+import { infos, search } from "@/config/landing";
+
 import Features from '@/components/sections/features-new.astro';
 import FeaturesSearch from '@/components/sections/features-search-new.astro';
 
@@ -20,11 +21,12 @@ import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
   <Features data={infos[0]} reverse={false} />
   <GoToUnisalaPortal href='/new-story' title='Share my journey' />
 
-  <InfoLanding data={infos[0]} reverse={true} />
+  <InfoLanding data={search[0]} reverse={true} />
+  <GoToUnisalaPortal href='/universe/search?q=nsas' title='checkout search' />
 
   <Testimonials />
 
-  <GoToUnisalaPortal title="Go to Unisala App" href="/login" />
+  <GoToUnisalaPortal title="Go to old app" href="/login" />
   <iframe src="/home" style="display:none;"></iframe>
   <iframe src="/login" style="display:none;"></iframe>
 

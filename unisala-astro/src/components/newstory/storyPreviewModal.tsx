@@ -81,12 +81,12 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ postDraft, onClose, onPubli
               >
                 Publish now
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 className="rounded-full px-6 py-3 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition duration-150 ease-in-out"
               >
                 Schedule for later
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

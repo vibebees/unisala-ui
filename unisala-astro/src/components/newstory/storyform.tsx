@@ -30,7 +30,6 @@ const PostForm: React.FC<PostFormProps> = () => {
 
     const checkForDrafts = () => {
         const draftKeys = Object.keys(localStorage).filter(key => key.includes('.postText') );
-        console.log(draftKeys)
         return draftKeys.length > 1;
     };
 
@@ -64,14 +63,15 @@ const PostForm: React.FC<PostFormProps> = () => {
     }, [userData]);
 
     const handlePublish = async (e: any): Promise<void> => {
-        e.preventDefault();
-        const payloadTopics = topics.map((topic) => ({
-            name: topic?.name,
-            _id: topic?._id,
-            unitId: topic?.unitId,
-            universityCount: topic?.universityCount,
-            entityType: topic?.entityType,
-        }));
+        const payloadTopics = topics.map((topic) => {
+            return {
+                name: topic?.name,
+                _id: topic?._id,
+                unitId: topic?.unitId,
+                universityCount: topic?.universityCount,
+                entityType: topic?.entityType,
+            }
+        })
 
         const postDraft = {
             title: localStorage.getItem(draftKeyTitle) || '',

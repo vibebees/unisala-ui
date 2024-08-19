@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --border-color: #cccccc;
+  --highlight-color: #e6f2ff;
+  --highlight-text-color: #0066cc;
+  --code-background: #f4f4f4;
+  --code-color: #333;
+  --code-border: #e0e0e0;
+  --link-color: #007bff;
+}
+
+.dark {
+  --background-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --border-color: #4a4a4a;
+  --highlight-color: #2c4d66;
+  --highlight-text-color: #4da3ff;
+  --code-background: #2d2d2d;
+  --code-color: #e0e0e0;
+  --code-border: #4a4a4a;
+  --link-color: #4da3ff;
+}
+
+.thread-expand-container {
+  font-family: 'Playfair Display', serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.thread-expand-content .ql-editor {
+  padding: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.thread-expand-content .ql-editor > * {
+  margin-bottom: 1em;
+}
+
+.thread-expand-content .ql-editor h1,
+.thread-expand-content .ql-editor h2,
+.thread-expand-content .ql-editor h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.thread-expand-content .ql-editor h1 {
+  font-size: 32px;
+}
+
+.thread-expand-content .ql-editor h2 {
+  font-size: 28px;
+}
+
+.thread-expand-content .ql-editor h3 {
+  font-size: 24px;
+}
+
+.thread-expand-content .ql-editor p {
+  margin-bottom: 1em;
+  color: var(--text-color);
+}
+
+.thread-expand-content .ql-editor ol,
+.thread-expand-content .ql-editor ul {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+  color: var(--text-color);
+}
+
+.thread-expand-content .ql-editor li {
+  margin-bottom: 0.5em;
+}
+
+.thread-expand-content .ql-editor li > ol,
+.thread-expand-content .ql-editor li > ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.thread-expand-content .ql-editor blockquote {
+  border-left: 4px solid var(--border-color);
+  padding-left: 16px;
+  margin: 0 0 1em;
+  color: var(--text-color);
+  font-style: italic;
+}
+
+.thread-expand-content .ql-editor pre {
+  background-color: var(--code-background);
+  color: var(--code-color);
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 1em;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-x: auto;
+}
+
+.thread-expand-content .ql-editor code {
+  background-color: var(--code-background);
+  color: var(--code-color);
+  border: 1px solid var(--code-border);
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+}
+
+.thread-expand-content .highlighted-text {
+  background-color: var(--highlight-color);
+  color: var(--highlight-text-color);
+  font-style: normal;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.thread-expand-content .custom-link {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+.thread-expand-content .custom-link:hover {
+  text-decoration: none;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Additional spacing adjustments */
+.thread-expand-content .ql-editor > *:first-child {
+  margin-top: 0;
+}
+
+.thread-expand-content .ql-editor > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure proper spacing between list items */
+.thread-expand-content .ql-editor li + li {
+  margin-top: 0.5em;
+}
+
+/* Add some extra space after images */
+.thread-expand-content .ql-editor img {
+  margin-bottom: 1em;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure text is visible and properly spaced in dark mode */
+.dark .thread-expand-container,
+.dark .thread-expand-content .ql-editor,
+.dark .thread-expand-content .ql-editor p,
+.dark .thread-expand-content .ql-editor h1,
+.dark .thread-expand-content .ql-editor h2,
+.dark .thread-expand-content .ql-editor h3,
+.dark .thread-expand-content .ql-editor ol,
+.dark .thread-expand-content .ql-editor ul,
+.dark .thread-expand-content .ql-editor li,
+.dark .thread-expand-content .ql-editor blockquote {
+  color: var(--text-color);
+}

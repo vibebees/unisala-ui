@@ -1,4 +1,5 @@
 import linkifyHtml from "linkify-html";
+import "react-quill/dist/quill.snow.css";
 
 interface ThreadExpandProps {
   htmlText: string;

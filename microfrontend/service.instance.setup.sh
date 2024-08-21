@@ -21,12 +21,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-log_message "Installing git..."
-yum install -y git 2>&1 | tee -a "$LOG_FILE"
-if [ $? -ne 0 ]; then
-    log_message "Failed to install git."
-    exit 1
-fi
 
 log_message "Installing Node.js 20 and npm..."
 curl -sL https://rpm.nodesource.com/setup_20.x | bash - 2>&1 | tee -a "$LOG_FILE"
@@ -57,15 +51,7 @@ fi
 pm2_version=$(pm2 -v 2>&1 | tee -a "$LOG_FILE")
 log_message "PM2 version: $pm2_version"
 
-log_message "Installing http-server..."
-npm install -g http-server 2>&1 | tee -a "$LOG_FILE"
-if [ $? -ne 0 ]; then
-    log_message "Failed to install http-server."
-    exit 1
-fi
 
-http_server_version=$(http-server -v 2>&1 | tee -a "$LOG_FILE")
-log_message "http-server version: $http_server_version"
 
 log_message "Installing Nginx..."
 yum install -y nginx 2>&1 | tee -a "$LOG_FILE"
@@ -77,99 +63,147 @@ fi
 log_message "Configuring Nginx..."
 cat <<EOL > /etc/nginx/conf.d/unisala.conf
 server {
-  listen 80;
-  server_name test.unisala.com;  # Ensure this matches your domain
+    listen 80;
+    server_name unisala.com www.unisala.com;
 
-  root /var/www/html;
-  index index.html;
+    root /var/www/html;
+    index index.html;
 
-  # Proxy requests to the Astro app running on port 3001
-  location = / {
-      proxy_pass http://localhost:3001;
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto \$scheme;
-  }
+    # Proxy requests to the Astro app running on port 3001
+    location = / {
+        proxy_pass http://localhost:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 
-  # Serve static files for the Astro application
-  location ~ ^/_astro/ {
-      proxy_pass http://localhost:3001;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection 'upgrade';
-      proxy_set_header Host \$host;
-      proxy_cache_bypass \$http_upgrade;
-  }
+    location /threads/ {
+        proxy_pass http://localhost:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 
-  # Proxy requests for assets to the Ionic app
-  location ^~ /assets/ {
-      proxy_pass http://localhost:3000;  # Adjust the port based on your setup if your assets are hosted there
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection 'upgrade';
-      proxy_set_header Host \$host;
-      proxy_cache_bypass \$http_upgrade;
+    location /new-story/ {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
 
-      # Optional: Security and caching headers
-      add_header X-Frame-Options "SAMEORIGIN";
-      add_header X-XSS-Protection "1; mode=block";
-      expires 7d;  # Adjust caching time as necessary
-  }
+    location /universe {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
 
-  # Proxy static files for the Astro application
-  location ~ ^/images/ {
-      proxy_pass http://localhost:3001;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection 'upgrade';
-      proxy_set_header Host \$host;
-      proxy_cache_bypass \$http_upgrade;
-  }
+    location /universe/search {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
 
-  # Serve Ionic app as default
-  location / {
-      proxy_pass http://localhost:3000;
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto \$scheme;
-  }
+    location /discover/ {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
 
-  # Serve specific paths for user, uni, and msg services
-  location /user/ {
-      proxy_pass http://localhost:4444/;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_cache_bypass \$http_upgrade;
-  }
+    location /scholarships {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
 
-  location /uni/ {
-      proxy_pass http://localhost:9999/;
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto \$scheme;
-  }
+    location /auth {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
+    location ~ ^/welcome-form {
+        proxy_pass http://localhost:3001;  # Adjust the port if needed
+        # Add any necessary proxy headers here
+    }
+    location ~ ^/releases {
+        proxy_pass http://localhost:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 
-  location /msg/ {
-      proxy_pass http://localhost:2222/;
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto \$scheme;
-  }
+    # Serve static files for the Astro application
+    location ~ ^/_astro/ {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
 
-  location /msg/socket/ {
-      proxy_pass http://localhost:2224/;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_cache_bypass \$http_upgrade;
-  }
+    # Proxy requests for assets to the Ionic app
+    location ^~ /assets/ {
+        proxy_pass http://localhost:3000;  # Adjust the port based on your setup if your assets are hosted there
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        # Optional: Security and caching headers
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-XSS-Protection "1; mode=block";
+        expires 7d;  # Adjust caching time as necessary
+    }
+
+    # Proxy static files for the Astro application
+    location ~ ^/images/ {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Serve Ionic app as default
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Serve specific paths for user, uni, and msg services
+    location /user/ {
+        proxy_pass http://localhost:4444/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /uni/ {
+        proxy_pass http://localhost:9999/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /msg/ {
+        proxy_pass http://localhost:2222/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /msg/socket/ {
+        proxy_pass http://localhost:2224/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
 }
 EOL
 

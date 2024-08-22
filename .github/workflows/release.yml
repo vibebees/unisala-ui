@@ -40,7 +40,7 @@ jobs:
       - name: Clear deployment directory
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "54.198.1.99"
+          host: "52.5.105.211"
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
           port: 22
@@ -56,7 +56,7 @@ jobs:
       - name: Deploy Ionic build artifacts
         uses: appleboy/scp-action@master
         with:
-          host: "54.198.1.99"
+          host: "52.5.105.211"
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
           port: 22
@@ -67,7 +67,7 @@ jobs:
       - name: Deploy Astro build artifacts
         uses: appleboy/scp-action@master
         with:
-          host: "54.198.1.99"
+          host: "52.5.105.211"
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
           port: 22
@@ -79,7 +79,7 @@ jobs:
       - name: Install Astro production dependenciesls
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "54.198.1.99"
+          host: "52.5.105.211"
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
           port: 22
@@ -91,7 +91,7 @@ jobs:
       - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: "54.198.1.99"
+          host: "52.5.105.211"
           username: "ec2-user"
           key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
           port: 22

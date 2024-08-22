@@ -26,6 +26,7 @@ const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
 
 <BaseLayout title={title} description={description}>
   <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+  
   ></script>
   <script define:vars={{ gaId }}>
     window.dataLayer = window.dataLayer || [];
@@ -62,7 +63,7 @@ const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
     /> -->
 
     <!-- if use Navigation Menu on desktop -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <MainNavigationMenu slot="left-header" client:load />
     <SheetMobileNav
       mainNavItems={[...navMenuConfig.links]}

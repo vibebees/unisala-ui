@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
 
-const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
+const MediumStyleFeed = ({ articles, title = " Recommended articles" }: { articles: IPost[], title:string }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -48,7 +48,7 @@ const MediumStyleFeed = ({ articles }: { articles: IPost[] }) => {
           </button>
         </form> */}
         <h1 className="font-bold text-xl lg:text-2xl text-neutral">
-          Recommended articles
+         {title}
         </h1>
         {showSuggestions && suggestions.length > 0 && (
           <div

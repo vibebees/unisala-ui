@@ -5,22 +5,6 @@ import CoreFeed from './corefeed';
 import type { IPost } from '@/types/post';
 
 
-const StaffPick = ({ article }: { article: IPost }) => (
-  <div className="flex items-start mb-4">
-    <img
-      className="w-10 h-10 rounded-full mr-2"
-      src={`https://api.multiavatar.com/` + article.user.firstName + `.svg`}
-      alt="Author avatar"
-    />
-    <div className="ml-3">
-      <a href={'/' + threadPointer(article)} data-astro-reload>
-        <h3 className="text-sm font-medium">{linkifyHtml(extractHeading(article?.title ?? article?.postText))}</h3>
-        <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
-      </a>
-    </div>
-  </div>
-);
-
 
 const TopicBadge = ({ topic, id }: { topic: string, id: string }) => (
   <a href={`/universe/tags/${id}`} data-astro-reload
@@ -38,12 +22,7 @@ const MediumFeed = ({ articles, staffPicks, topics, title = "" }: { articles: IP
           <CoreFeed articles={articles} title={title}/>
         </div>
         <div className="md:w-1/4">
-          <div className="mb-8">
-            <h2 className="text-lg font-bold mb-4">Staff Picks</h2>
-            {staffPicks?.map((pick: IPost, index: React.Key | null | undefined) => (
-              <StaffPick key={index} article={pick} />
-            ))}
-          </div>
+     
           <div>
             <h2 className="text-lg font-bold mb-4">Recommended topics</h2>
             <div className="flex flex-wrap">

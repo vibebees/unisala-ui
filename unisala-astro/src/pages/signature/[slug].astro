@@ -2,12 +2,13 @@
 export const prerender = false;
 
 import MainLayout from "@/layouts/main-layout.astro";
-import MediumFeed from "@/components/feed/feed.tsx";
+import MediumFeed from "@/components/feed/feed copy";
 import Introudction from "@/components/profile/intro.astro";
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";
 
-const getNewsFeed = `
+const { slug ="" } = Astro.params;
+ const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
       fetchFeedV2(feedQuery: $feedQuery) {
         validToken
@@ -62,8 +63,9 @@ try {
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: "newsfeed",
+          feedType: "user",
           page: 0,
+          feedId: "64886e0066a911b4081d0166",
         },
       },
     }),
@@ -118,6 +120,7 @@ try {
           articles={articles}
           staffPicks={staffPicks}
           topics={topics}
+          title={"Articles "}
         />
       </section>
     )

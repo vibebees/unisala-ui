@@ -42,7 +42,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
               data: [newComment, ...existingData.commentList.data],
             },
           };
-          console.log('Updated data:', updatedData);
 
           cache.writeQuery({
             query: GetCommentList,

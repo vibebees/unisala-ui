@@ -7,6 +7,7 @@ import MediumFeed from '@/components/feed/tagsfeed.tsx';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
 const { slug = '' } = Astro.params;
+import Newsletter from "@/components/newsletter/index";
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -78,7 +79,6 @@ try {
   };
   const { name: tag, id: tagId } = extractNameAndId(slug);
 
-  console.log('Tag:', tag, 'ID:', tagId);
   // Fetch regular articles
   const regularFeed = await fetchApi(userServiceGql, {
     method: 'POST',
@@ -126,10 +126,8 @@ try {
   articles = regularFeed.data?.fetchFeedV2?.data || [];
   staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
   topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory || [];
-  console.log({staffPicks})
   tagName = tag;
   id = tagId;
-  console.log({ id, tagId });
 } catch (e) {
   console.error('Error fetching data:', e);
   error = e instanceof Error ? e.message : String(e);
@@ -148,6 +146,19 @@ try {
           title={tagName}
           id={id}
         />
+       <Newsletter  authorName ={'Prashant' + ' ' + 'Basnet'} 
+                        config={{
+                          title: "Follow tha tag!",
+                          description: "Subscribe to more post on this tag.",
+                          emailPlaceholder: "Enter your email",
+                          submitButtonText: "Subscribe",
+                          subscribedButtonText: "Subscribed",
+                          errorMessage: "Error occurred while subscribing.",
+                          successMessage: "Successfully subscribed!",
+                          registrationEndpoint: "/api/subscribe",
+                        }}
+            />
+
       </section>
     )
   }

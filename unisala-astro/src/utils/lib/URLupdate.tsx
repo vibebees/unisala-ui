@@ -117,7 +117,6 @@ export const navigator = ( url:string = '') => {
         } else {
           // If a URL is provided, attach the current redirect to it
           const newUrl = new URL(url, window.location.origin);
-          console.log({newUrl})
           if (redirectUrl) {
             newUrl.searchParams.set('redirect', redirectUrl);
           }

@@ -1,97 +1,112 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Icon } from 'lucide-react';
-import { z } from 'zod';
-import toast from "react-hot-toast";
+import { Bell } from 'lucide-react';
 
-const formSchema = z.object({ email: z.string().email() });
+interface AuthorSubscriptionProps {
+  config?: {
+    title: string;
+    description: string;
+    emailPlaceholder: string;
+    submitButtonText: string;
+    subscribedButtonText: string;
+    errorMessage: string;
+    successMessage: string;
+    registrationEndpoint: string;
+  };
+  authorName?: string;
+}
 
-const defaultConfig = {
-  title: "Join the Author's Circle",
-  iconName: 'Bell',
-  iconSize: 24,
-  description: 'Get fresh ideas from {authorName} straight to your inbox!',
-  emailLabel: 'Your Email',
-  emailPlaceholder: 'you@example.com',
-  submitButtonText: 'Get Exclusive Updates',
-  errorMessage: 'Oops! Something went wrong. Please try again.',
-  successMessage: "Welcome aboard! You're now part of an exclusive community.",
-  cookieName: 'author-subscribed',
-  registrationEndpoint: '/api/author/subscribe'
-};
-
-const AuthorSubscription = ({ config = defaultConfig, subscriberCount, authorName }) => {
+const AuthorSubscription: React.FC<AuthorSubscriptionProps> = ({
+  config = {
+    title: "Join the Author's Circle",
+    description: 'Get more ideas from {authorName} straight to your inbox!',
+    emailPlaceholder: 'you@example.com',
+    submitButtonText: 'Subscribe',
+    subscribedButtonText: "Subscribed",
+    errorMessage: 'Oops! Something went wrong. Please try again.',
+    successMessage: "You're now part of our exclusive community. Stay tuned for updates!",
+    registrationEndpoint: '/api/author/subscribe'
+  },
+  authorName = 'the author'
+}) => {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError(false);
+  const interpolatedDescription = config.description.replace('{authorName}', authorName);
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    setError('');
 
     try {
-      formSchema.parse({ email });
-      toast.success("Email address is available. Please enter your name.");
-      // Uncomment the following lines when you're ready to implement the actual API call
-      // const response = await fetch(config.registrationEndpoint, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email })
-      // });
-      // const data = await response.json();
-      // if (data.message === 'success') {
-      //   // Handle success (e.g., show success message, clear form)
-      // } else {
-      //   throw new Error('Subscription failed');
-      // }
-    } catch (err) {
-      setError(true);
-      console.error(err);
-      toast.error(config.errorMessage);
+      // Simulating a successful subscription
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network request
+      setIsSubscribed(true);
+      console.log("Subscription successful, isSubscribed:", true);
+    } catch (error) {
+      console.error('Error:', error);
+      setError(config.errorMessage);
     }
   };
 
   return (
-    <div className='container flex justify-center items-center'>
-      <div className='flex flex-col gap-y-5 w-full max-w-lg mx-auto px-4 py-5 sm:p-6 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-md'>
-        <div className='flex items-center gap-x-2'>
-          <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
-            {config.title}
-          </h1>
-          <Icon
-            name={config.iconName}
-            size={config.iconSize}
-            className='text-blue-600 dark:text-blue-400'
-          />
-        </div>
+    <div className="w-full max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <div className="flex items-center gap-x-2 mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {config.title}
+        </h2>
+        <Bell className="text-blue-600 dark:text-blue-400" size={24} />
+      </div>
 
-        <p className='text-gray-700 dark:text-gray-300'>
-          {config.description.replace('{authorName}', authorName)}
-        </p>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-y-4'>
+      <p className="text-gray-700 dark:text-gray-300 mb-6">
+        {isSubscribed ? config.successMessage : interpolatedDescription}
+      </p>
+
+      {!isSubscribed && (
+        <div className="space-y-4">
           <Input
-            id='email'
-            name='email'
-            type='email'
-            autoComplete='email'
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
             placeholder={config.emailPlaceholder}
-            className='bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
+            className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {error && <p className='text-red-500 dark:text-red-400'>{config.errorMessage}</p>}
+
           <Button
-            type='submit'
-            className='mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600'
+            type="button"
+            className={`w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200`}
+            onClick={handleSubscribe}
           >
             {config.submitButtonText}
           </Button>
-        </form>
-        <p className='text-sm text-gray-600 dark:text-gray-400'>
-          Join {subscriberCount || 'thousands of'} engaged readers who value {authorName}'s unique perspective.
-        </p>
-      </div>
+        </div>
+      )}
+
+      {isSubscribed && (
+        <Button
+          type="button"
+          className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
+          disabled
+        >
+          {config.subscribedButtonText}
+        </Button>
+      )}
+
+      {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+
+      <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
+        Join thousands of engaged readers who value {authorName}'s unique perspective.
+      </p>
     </div>
   );
 };

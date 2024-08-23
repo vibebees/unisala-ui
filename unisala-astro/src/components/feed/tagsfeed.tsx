@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { transformToUrlFriendly } from "@/utils/lib/URLupdate";
 import { extractHeading, threadPointer } from "@/utils/lib/utils";
 import linkifyHtml from "linkify-html";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 
 
@@ -33,21 +34,26 @@ const TopicBadge = ({ topic, id }: { topic: string; id: string }) => (
     </a>
   );
   
-  const StaffPick = ({ article }: { article: IPost }) => (
-    <div className="flex items-start mb-4">
-      <img
-        className="w-10 h-10 rounded-full mr-2"
-        src={`https://api.multiavatar.com/` + article.user.firstName + `.svg`}
-        alt="Author avatar"
-      />
-      <div className="ml-3">
-        <a href={'/' + threadPointer(article)} data-astro-reload>
-          <h3 className="text-sm font-medium">{linkifyHtml(extractHeading(article?.title ?? article?.postText))}</h3>
-          <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
-        </a>
+  const StaffPick = ({ article }: { article: IPost }) => {
+    const title = article?.title && article?.title.length > 2 ? article?.title : article?.postText;
+    return (
+      <div className="flex items-start mb-4">
+        <img
+          className="w-10 h-10 rounded-full mr-2"
+          src={`https://api.multiavatar.com/` + article.user.firstName + `.svg`}
+          alt="Author avatar"
+        />
+        <div className="ml-3">
+          <a href={'/' + threadPointer(article)} data-astro-reload>
+            <h3 className="text-sm font-medium">
+              {linkifyHtml(extractHeading(title))}
+              </h3>
+            <p className="text-xs text-gray-500">{article.user.firstName} {article.user.lastName}</p>
+          </a>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
   
   
   const CoreFeed = ({ articles, title, id }: { articles: IPost[]; title: string; id: string }) => {
@@ -82,7 +88,10 @@ const TopicBadge = ({ topic, id }: { topic: string; id: string }) => (
         <div className="flex flex-col md:flex-row">
           <div className="w-full lg:w-3/4 lg:pr-8">
             <CoreFeed articles={articles} title={title} id={id} />
+            
+
           </div>
+
           <div className="md:w-1/4">
             <div className="mb-8">
               <h2 className="text-lg font-bold mb-4">Staff Picks</h2>

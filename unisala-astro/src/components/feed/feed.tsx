@@ -3,6 +3,7 @@ import { extractHeading, threadPointer } from '@/utils/lib/utils';
 import linkifyHtml from 'linkify-html';
 import CoreFeed from './corefeed';
 import type { IPost } from '@/types/post';
+import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
 
 
 const StaffPick = ({ article }: { article: IPost }) => (
@@ -23,19 +24,19 @@ const StaffPick = ({ article }: { article: IPost }) => (
 
 
 const TopicBadge = ({ topic, id }: { topic: string, id: string }) => (
-  <a href={`/universe/tags/${id}`} data-astro-reload
+  <a href={`/universe/tags/${transformToUrlFriendly(topic, id)}`} data-astro-reload
     className="inline-block mr-2 mb-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition duration-300 ease-in-out"
   >
     <span className="font-medium">#</span>{topic}
   </a>
 );
 
-const MediumFeed = ({ articles, staffPicks, topics, title = "" }: { articles: IPost[], staffPicks: IPost, topics: any, title:string }) => {
+const MediumFeed = ({ articles, staffPicks, topics, title = "", id }: { articles: IPost[], staffPicks: IPost, topics: any, title:string, id:string }) => {
   return (
     <div className=" ">
       <div className="flex flex-col md:flex-row">
         <div className="w-full lg:w-3/4 lg:pr-8">
-          <CoreFeed articles={articles} title={title}/>
+          <CoreFeed articles={articles} title={title} id={id}/>
         </div>
         <div className="md:w-1/4">
           <div className="mb-8">

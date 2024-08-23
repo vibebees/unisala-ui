@@ -19,7 +19,7 @@ const MediumFeed = ({ articles, staffPicks, topics, title = "" }: { articles: IP
     <div className=" ">
       <div className="flex flex-col md:flex-row">
         <div className="w-full lg:w-3/4 lg:pr-8">
-          <CoreFeed articles={articles} title={title}/>
+          <CoreFeed articles={articles} title={title} id={''}/>
         </div>
         <div className="md:w-1/4">
      

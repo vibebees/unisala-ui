@@ -37,7 +37,17 @@ const PostForm: React.FC<PostFormProps> = () => {
         if (id) {
             setHasDrafts(checkForDrafts());
         } else {
-            navigator('/new-story?id=' + new Date().getTime());
+            const searchParams = new URLSearchParams(location.search);
+      
+            // Generate new ID
+            const newId = new Date().getTime();
+            
+            // Set the new ID in the search params
+            searchParams.set('id', newId.toString());
+            
+            // Construct new URL with all existing params plus the new ID
+            const newUrl = `/new-story?${searchParams.toString()}`;
+            navigator(newUrl);
         }
     }, [id]);
 
@@ -58,7 +68,11 @@ const PostForm: React.FC<PostFormProps> = () => {
 
     useEffect(() => {
         if (!userData) {
-            navigator('/auth?redirect=new-story');
+       
+            const redirectUrl = `${location.pathname}${location.search}`;
+            // Encode the entire redirectUrl
+            const encodedRedirect = encodeURIComponent(redirectUrl);
+            navigator(`/auth?redirect=${encodedRedirect}`);
         }
     }, [userData]);
 

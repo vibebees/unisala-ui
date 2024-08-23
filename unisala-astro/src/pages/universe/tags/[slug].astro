@@ -2,11 +2,11 @@
 export const prerender = false;
 
 import MainLayout from '@/layouts/main-layout.astro';
-import MediumFeed from '@/components/feed/feed.tsx';
+import MediumFeed from '@/components/feed/tagsfeed.tsx';
+
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
-const { slug ="" } = Astro.params;
-
+const { slug = '' } = Astro.params;
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -54,8 +54,31 @@ let articles = [];
 let staffPicks = [];
 let topics = [];
 let error = '';
-
+let tagName = 'Space';
+let id = '';
 try {
+  const extractNameAndId = (url: string) => {
+    // Match the ID at the end of the url (assuming it's a 24-character hexadecimal string)
+    const match = url.match(/^(.+)-([a-f0-9]{24})$/);
+
+    if (!match) {
+      throw new Error('Invalid url format: expected name-[24 character ID]');
+    }
+
+    // Extract the name and ID
+    let [, name, id] = match;
+
+    // Replace hyphens with spaces in the name
+    name = name.replace(/-/g, ' ');
+
+    // Capitalize the first letter of each word in the name
+    const capitalizedName = name.replace(/\b\w/g, (char) => char.toUpperCase());
+
+    return { name: capitalizedName, id };
+  };
+  const { name: tag, id: tagId } = extractNameAndId(slug);
+
+  console.log('Tag:', tag, 'ID:', tagId);
   // Fetch regular articles
   const regularFeed = await fetchApi(userServiceGql, {
     method: 'POST',
@@ -63,8 +86,8 @@ try {
       query: getNewsFeed,
       variables: {
         feedQuery: {
-        feedType: 'specificSpace',
-        feedId: slug,
+          feedType: 'specificSpace',
+          feedId: tagId
         }
       }
     })
@@ -72,17 +95,17 @@ try {
 
   // Fetch staff picks
   const staffPicksResult = await fetchApi(userServiceGql, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: 'org',
+          feedType: "org",
           page: 0,
           pageSize: 6,
-        }
-      }
-    })
+        },
+      },
+    }),
   });
 
   // Fetch top active spaces for topics
@@ -103,20 +126,29 @@ try {
   articles = regularFeed.data?.fetchFeedV2?.data || [];
   staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
   topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory || [];
+  console.log({staffPicks})
+  tagName = tag;
+  id = tagId;
+  console.log({ id, tagId });
 } catch (e) {
   console.error('Error fetching data:', e);
   error = e instanceof Error ? e.message : String(e);
 }
 ---
 
-<MainLayout title="Unisala Feed">
+<MainLayout title={tagName}>
   {error && <div>Error: {error}</div>}
-  {!error && (
-    <MediumFeed
-      client:only="react"
-      articles={articles}
-      staffPicks={staffPicks}
-      topics={topics}
-    />
-  )}
+  {
+    !error && (
+      <section class='container  max-w-screen-lg pt-12'>
+        <MediumFeed
+          articles={articles}
+          staffPicks={staffPicks}
+          topics={topics}
+          title={tagName}
+          id={id}
+        />
+      </section>
+    )
+  }
 </MainLayout>

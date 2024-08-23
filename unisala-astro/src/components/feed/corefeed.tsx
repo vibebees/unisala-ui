@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
+import { EmptySpacePrompt } from "../ui/nocontent";
 
-const MediumStyleFeed = ({ articles, title = " Recommended articles" }: { articles: IPost[], title:string }) => {
+const MediumStyleFeed = ({ articles, title = " Recommended articles" , id}: { articles: IPost[], title:string, id:string }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -29,6 +30,16 @@ const MediumStyleFeed = ({ articles, title = " Recommended articles" }: { articl
       article?.postText?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if(articles.length === 0) {
+    return(
+      <div className="max-w-screen-md mx-auto px-4 py-8">
+        <EmptySpacePrompt
+          spaceName={title}
+          id={id}
+        />
+      </div>
+    )
+  }
   return (
     <div className="max-w-screen-md mx-auto px-4 py-8">
       <div className="mb-8 relative">

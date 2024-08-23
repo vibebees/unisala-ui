@@ -127,3 +127,43 @@ export const navigator = ( url:string = '') => {
 }
 
  
+/**
+ * Transforms a topic and ID into a URL-friendly string.
+ * @param {string} topic - The topic to be included in the URL.
+ * @param {string|number} id - The ID to be appended to the URL.
+ * @param {string} [separator='-'] - The character used to replace spaces and separate elements (default is hyphen).
+ * @returns {string} The transformed URL-friendly string.
+ */
+export const transformToUrlFriendly = (topic :string, id:string, separator = '-') => {
+  // Ensure the topic is a string and trim any leading/trailing whitespace
+  const cleanTopic = String(topic).trim();
+  
+  // Replace spaces and any non-alphanumeric characters (except underscores) with the separator
+  const urlFriendlyTopic = cleanTopic.replace(/[^a-z0-9_]+/gi, separator).toLowerCase();
+  
+  // Remove any leading or trailing separators
+  const trimmedTopic = urlFriendlyTopic.replace(new RegExp(`^${separator}+|${separator}+$`, 'g'), '');
+  
+  // Combine the transformed topic with the ID
+  return `${trimmedTopic}${separator}${id}`;
+}
+
+export const extractNameAndId = (url:string)=> {
+  // Match the ID at the end of the url (assuming it's a 24-character hexadecimal string)
+  const match = url.match(/^(.+)-([a-f0-9]{24})$/);
+  
+  if (!match) {
+    throw new Error('Invalid url format: expected name-[24 character ID]');
+  }
+  
+  // Extract the name and ID
+  let [, name, id] = match;
+  
+  // Replace hyphens with spaces in the name
+  name = name.replace(/-/g, ' ');
+  
+  // Capitalize the first letter of each word in the name
+  const capitalizedName = name.replace(/\b\w/g, char => char.toUpperCase());
+  
+  return { name: capitalizedName, id };
+}

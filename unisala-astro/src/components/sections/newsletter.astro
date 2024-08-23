@@ -3,91 +3,111 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Icon } from 'astro-icon/components';
-import z from 'zod';
+import { z } from 'astro:content';
 
-let error: boolean = false;
-let registered = Astro.cookies.get('webinar-registered')?.boolean() || false;
 const formSchema = z.object({ email: z.string().email() });
-let count = 5; // Initialize count, to be updated from API
 
-// Fetch the initial count of registered attendees
-async function fetchAttendeeCount() {
-  try {
-    const response = await fetch(
-      `${Astro.url.origin}/api/webinar/attendees/count`
-    );
-    const data = await response.json();
-    count = data.count;
-  } catch (err) {
-    console.error('Failed to fetch attendee count', err);
-  }
-}
+const {
+  config = {
+    title: "Join the Author's Circle",
+    iconName: 'lucide:bell',
+    iconSize: 24,
+    description: 'Get more ideas from {authorName} straight to your inbox!',
+    emailLabel: 'Your Email',
+    emailPlaceholder: 'you@example.com',
+    submitButtonText: 'Subscribe',
+    subscribedButtonText: "Joined the Circle",
+    errorMessage: 'Oops! Something went wrong. Please try again.',
+    successMessage: "Welcome aboard! You're now part of an exclusive community.",
+    cookieName: 'author-subscribed',
+    registrationEndpoint: '/api/author/subscribe'
+  },
+  authorName = 'the author'
 
-// Form submission handler for webinar registration
-async function handleFormSubmit(event: Event) {
-  event.preventDefault();
-  const formData = new FormData(event.target as HTMLFormElement);
-  const email = formData.get('email');
+} = Astro.props;
 
-  // Validate email and register for the webinar
-  try {
-    formSchema.parse({ email });
-    const response = await fetch(`${Astro.url.origin}/api/webinar/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
-    const data = await response.json();
+const interpolatedDescription = config.description.replace('{authorName}', authorName);
 
-    if (data.message === 'success') {
-      Astro.cookies.set('webinar-registered', 'true', { path: '/' });
-      registered = true;
-      error = false;
-    } else {
-      throw new Error('Registration failed');
-    }
-  } catch (err) {
-    error = true;
-    console.error(err);
-  }
-}
-
-// Call to fetch attendee count on component initialization
-fetchAttendeeCount();
 ---
 
-<div class="container flex justify-center items-center ">
-    <div class='flex flex-col gap-y-5 w-full max-w-lg mx-auto px-4 py-5 sm:p-6 bg-white border rounded-xl shadow-md'>
-        <div class='flex items-center gap-x-2'> <!-- Ensures items are on the same line and aligns them vertically in the center -->
-            <h1 class='text-2xl font-bold'>Join Our Webinar Series</h1>
-            <Icon name='lucide:video' size={parseInt('32')} />
+<div class='container flex justify-center items-center'>
+  <div
+    class='flex flex-col gap-y-5 w-full max-w-lg mx-auto px-4 py-5 sm:p-6 bg-white dark:bg-gray-800 '
+  >
+    <div class='flex items-center gap-x-2'>
+      <h1 class='text-2xl font-bold text-gray-900 dark:text-white'>
+        {config.title}
+      </h1>
+      <Icon
+        name={config.iconName}
+        size={config.iconSize}
+        class='text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900 rounded-full p-1'
+        id="subscriptionIcon"
+      />
+    </div>
 
-          </div>
-
-    <p>
-      <strong>{count} attendees</strong> have already registered! Don’t miss out
-      on expert insights about studying in the USA. Perfect for Nepali students looking
-      to navigate the U.S. education system.
+    <p class='text-gray-700 dark:text-gray-300' id="subscriptionDescription">
+      {interpolatedDescription}
     </p>
-    <form onsubmit='handleFormSubmit' class='flex flex-col gap-y-4'>
-      <label for='email' class='text-sm font-medium'>Your Email</label>
+    <form id="subscriptionForm" class='flex flex-col gap-y-4'>
       <Input
         id='email'
         name='email'
+        type='email'
         autoComplete='email'
-        placeholder='yourname@example.com'
+        placeholder={config.emailPlaceholder}
+        className='bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
+        required
       />
-      {
-        error && (
-          <p class='text-red-500'>Please try again, something went wrong.</p>
-        )
-      }
-      {
-        registered && (
-          <p class='text-blue-500'>You are now registered for the webinar!</p>
-        )
-      }
-      <Button type='submit' className='mt-4 w-full'>Reserve a seat!</Button>
+      <Button
+        type='submit'
+        id="subscriptionButton"
+        className='mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600'
+      >{config.submitButtonText}</Button>
     </form>
+    <p class='text-sm text-gray-600 dark:text-gray-400'>
+      Join {Astro.props.subscriberCount || 'thousands of'} engaged readers who value
+      {authorName}'s unique perspective.
+    </p>
   </div>
 </div>
+
+<script>
+  const form = document.querySelector('#subscriptionForm') as HTMLFormElement;
+  const emailInput = document.querySelector('#email') as HTMLInputElement;
+  const subscriptionButton = document.querySelector('#subscriptionButton') as HTMLButtonElement;
+  const subscriptionIcon = document.querySelector('#subscriptionIcon') as HTMLElement;
+  const subscriptionDescription = document.querySelector('#subscriptionDescription') as HTMLElement;
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = emailInput.value;
+
+    try {
+      // Here you would typically send a request to your server
+      // For now, we'll simulate a successful subscription
+      // const response = await fetch('/api/subscribe', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email })
+      // });
+      // if (!response.ok) throw new Error('Subscription failed');
+
+      // Simulating a successful subscription
+      
+      // Update UI
+      emailInput.style.display = 'none';
+      subscriptionButton.textContent = "Subscribed";
+      subscriptionButton.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
+      subscriptionButton.classList.add('bg-green-600', 'hover:bg-green-700', 'dark:bg-green-500', 'dark:hover:bg-green-600');
+      subscriptionIcon.setAttribute('name', 'lucide:bell-ring-2');
+      subscriptionDescription.textContent = "You're now part of our exclusive community. Stay tuned for updates!";
+      
+      // Disable the form to prevent multiple submissions
+      form.removeEventListener('submit', arguments.callee);
+      subscriptionButton.disabled = true;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+</script>

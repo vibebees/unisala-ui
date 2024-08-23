@@ -20,8 +20,9 @@ import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
 import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
 import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
+import NewsLetter from "@/components/sections/newsletter.astro";
 
-import { ThreadAuthor } from '@/components/thread/organisms/thread.author';
+import ThreadAuthor from '@/components/thread/organisms/thread.author.astro';
 
 let post = null;
 let error: string = '';
@@ -225,13 +226,20 @@ const handleUpvote = async (postId: string) => {
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>
+
   <ThreadAuthor
       author ={post?.user?.firstName + ' ' + post?.user?.lastName}
-      authorDescription=''
+      authorDescription="Senior Software Developer at Unisala, specializing in full-stack web development and cloud architecture. With over 5 years of experience, Prashant leads innovative projects and mentors junior developers in agile methodologies."
+
   />
+  <hr class="my-4" />
+
+<NewsLetter  authorName ={post?.user?.firstName + ' ' + post?.user?.lastName} />
+<hr class="my-4" />
 
   <SameWriterSuggestions  feedId ={post?.user?._id}  />
-  <hr />
+  <hr class="my-4" />
+
   <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
 
 </MainLayout>

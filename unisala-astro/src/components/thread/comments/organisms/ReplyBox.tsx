@@ -4,6 +4,7 @@ import { AddComment, GetCommentList, EditComment } from "@/datasource/graphql/us
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import { sendGAEvent } from "@/utils/analytics/events";
 import { getCache } from "@/utils/cache";
+import { stripHtmlAndTrim } from "@/utils/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { toast } from 'react-hot-toast';
 import ReactQuill from 'react-quill';
@@ -175,11 +176,14 @@ export const ReplyBox: React.FC<{
       return;
     }
 
+    const trimmedComment = stripHtmlAndTrim(replyText).trim();
+
+
     if (isEditing) {
       const result = await updateComment({
         variables: {
           commentId,
-          commentText: replyText,
+          commentText: trimmedComment,
         }
       });
       sendGAEvent('thread_action', {
@@ -192,7 +196,7 @@ export const ReplyBox: React.FC<{
         variables: {
           postId,
           parentId: parentId || undefined,
-          commentText: replyText,
+          commentText: trimmedComment,
         }
       });
       sendGAEvent('thread_action', {

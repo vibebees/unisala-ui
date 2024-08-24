@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { CtaLogin } from '@/components/ui/ctaLogin';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddComment, GetCommentList } from '@/datasource/graphql/user';
@@ -66,14 +66,28 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
     },
   });
 
+  // Helper function to strip HTML tags and trim whitespace
+  const stripHtmlAndTrim = (html: string) => {
+    const tmp = document.createElement('DIV');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedComment = stripHtmlAndTrim(commentText).trim();
+    
+    if (!trimmedComment) {
+      toast.error('Please enter a non-empty comment.');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     const variables = {
       postId,
-      commentText,
+      commentText: trimmedComment,
       parentId,
       replyTo,
     };

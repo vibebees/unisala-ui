@@ -149,3 +149,10 @@ export const calculateReadTime = (text:string) => {
   const readTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
   return readTimeMinutes === 1 ? '1 min read' : `${readTimeMinutes} min read`;
 };
+
+
+export const stripHtmlAndTrim = (html: string) => {
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};

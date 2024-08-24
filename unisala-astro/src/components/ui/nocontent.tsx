@@ -24,7 +24,7 @@ export const EmptySpacePrompt = ({ spaceName , id}: {spaceName:string, id:string
         <div className="">
             <div className="w-full max-w-4xl mx-auto mb-8">
             <img
-              src={carouselItems[1].image}
+              src={carouselItems[0].image}
               className="w-full h-full object-contain"
             />
             </div>

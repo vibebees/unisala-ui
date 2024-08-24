@@ -20,7 +20,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
     : postText.substring(0, 160);
 
   return (
-    <div className="w-full py-10 hover:bg-neutral-100/70 border-b border-gray-200 dark:border-gray-700">
+    <div className="w-full py-10 hover:bg-neutral-100/70 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out">
       <div className="flex items-center mb-3">
         <img
           className="w-8 h-8 rounded-full mr-2"
@@ -28,7 +28,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
           alt="Author avatar"
         />
         <div className="flex flex-col xs:flex-row xs:items-center">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
             {article?.user?.firstName} {article?.user?.lastName}
           </span>
           <span className="hidden xs:inline mx-2 text-gray-500">·</span>
@@ -41,7 +41,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
         <div className={`w-full ${imageUrl ? "sm:w-2/3 sm:pr-4" : ""}`}>
           <a
             href={"/" + threadPointer(article)}
-            className="text-lg font-bold text-gray-900 hover:underline dark:text-white mb-2 block"
+            className="text-lg font-bold text-gray-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400 mb-2 block transition duration-300"
             data-astro-reload
           >
             {displayTitle}
@@ -60,7 +60,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
         {imageUrl && (
           <div className="w-full sm:w-1/3 mt-3 sm:mt-0">
             <img
-              className="w-full h-48 sm:h-32 object-cover rounded"
+              className="w-full h-48 sm:h-32 object-cover rounded transition duration-300 hover:opacity-80"
               src={imageUrl}
               alt="Article cover"
             />

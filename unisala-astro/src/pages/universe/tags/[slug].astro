@@ -7,7 +7,6 @@ import MediumFeed from '@/components/feed/tagsfeed.tsx';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
 const { slug = '' } = Astro.params;
-import Newsletter from "@/components/newsletter/index";
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -95,17 +94,17 @@ try {
 
   // Fetch staff picks
   const staffPicksResult = await fetchApi(userServiceGql, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: "org",
+          feedType: 'org',
           page: 0,
-          pageSize: 6,
-        },
-      },
-    }),
+          pageSize: 6
+        }
+      }
+    })
   });
 
   // Fetch top active spaces for topics
@@ -132,33 +131,37 @@ try {
   console.error('Error fetching data:', e);
   error = e instanceof Error ? e.message : String(e);
 }
+const images = [
+  'https://i.ibb.co/Rz2S3kg/Screenshot-2024-08-23-at-3-46-20-PM.png',
+  'https://i.ibb.co/cNBfq71/Screenshot-2024-08-23-at-3-46-28-PM.png',
+  'https://i.ibb.co/3pSYmTj/Screenshot-2024-08-23-at-3-46-35-PM.png',
+  'https://i.ibb.co/nD4cbmV/Screenshot-2024-08-23-at-3-46-45-PM.png',
+  'https://i.ibb.co/HKmKqFn/Screenshot-2024-08-23-at-3-46-54-PM.png',
+  'https://i.ibb.co/vXFT8Jt/Screenshot-2024-08-23-at-3-47-10-PM.png',
+  'https://i.ibb.co/wSv5VWJ/Screenshot-2024-08-23-at-3-47-03-PM.png',
+  'https://i.ibb.co/5cYkYK7/Screenshot-2024-08-23-at-3-47-18-PM.png',
+  'https://i.ibb.co/8Ptrjc3/Screenshot-2024-08-23-at-3-47-24-PM.png',
+  'https://i.ibb.co/S0ZJKSx/Screenshot-2024-08-23-at-3-47-30-PM.png',
+  'https://i.ibb.co/4g6YvD5/Screenshot-2024-08-23-at-3-47-38-PM.png'
+];
 ---
 
 <MainLayout title={tagName}>
   {error && <div>Error: {error}</div>}
   {
     !error && (
-      <section class='container  max-w-screen-lg pt-12'>
+      <section class="container  max-w-screen-lg pt-12">
         <MediumFeed
           articles={articles}
           staffPicks={staffPicks}
           topics={topics}
           title={tagName}
           id={id}
+          showStaffPicks={true}
+          showTopics={true}
+          showImage={true}
+          images={images}
         />
-       <Newsletter  authorName ={'Prashant' + ' ' + 'Basnet'} 
-                        config={{
-                          title: "Follow tha tag!",
-                          description: "Subscribe to more post on this tag.",
-                          emailPlaceholder: "Enter your email",
-                          submitButtonText: "Subscribe",
-                          subscribedButtonText: "Subscribed",
-                          errorMessage: "Error occurred while subscribing.",
-                          successMessage: "Successfully subscribed!",
-                          registrationEndpoint: "/api/subscribe",
-                        }}
-            />
-
       </section>
     )
   }

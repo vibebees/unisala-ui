@@ -104,7 +104,7 @@ const interpolatedDescription = config.description.replace('{authorName}', autho
       subscriptionDescription.textContent = "You're now part of our exclusive community. Stay tuned for updates!";
       
       // Disable the form to prevent multiple submissions
-      form.removeEventListener('submit', arguments.callee);
+      // form.removeEventListener('submit', arguments.callee);
       subscriptionButton.disabled = true;
     } catch (error) {
       console.error('Error:', error);

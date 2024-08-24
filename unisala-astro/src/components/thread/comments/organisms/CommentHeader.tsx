@@ -15,7 +15,7 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
         <p className='inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold'>
           <img
             className='mr-2 w-6 h-6 rounded-full'
-            src={`https://api.multiavatar.com/${comment.user.firstName}.svg`}
+            src={`https://api.multiavatar.com/${comment?.user?.firstName}.svg`}
             alt={comment?.user?.firstName}
           />
           {comment?.user?.firstName} {comment?.user?.lastName}

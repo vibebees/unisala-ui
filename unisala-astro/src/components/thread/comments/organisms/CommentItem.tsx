@@ -108,7 +108,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
   };
 
   return (
-    <article className='p-6 mb-3 text-base bg-white rounded-lg border border-gray-200 dark:bg-gray-900 dark:border-gray-700 w-full'>
+    <article className='p-3 mb-1 text-base bg-white rounded-lg border border-gray-200 dark:bg-gray-900 dark:border-gray-700 w-full'>
       <CommentHeader comment={comment} onEdit={handleEdit} onDelete={handleDelete} />
       {isEditing && userData !==null ? (
         <ReplyBox
@@ -166,7 +166,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
         />
       )}
       {(comment?.repliesCount ?? 0) > 0 && (
-        <div className='pl-6 mt-4'>
+        <div className='pl-6 mt-2'>
           {!showReplies ? (
             <button
               onClick={handleViewReplies}

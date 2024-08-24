@@ -1,6 +1,6 @@
 ---
 import MainLayout from "@/layouts/main-layout.astro";
-import MediumFeed from "@/components/feed/feed.tsx";
+import MediumFeed from "@/components/feed/tagsfeed";
 
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";
@@ -116,6 +116,7 @@ try {
           articles={articles}
           staffPicks={staffPicks}
           topics={topics}
+          images={["https://images.unsplash.com/photo-1632210136824-4b3b3b3b3b3b"]}
           title="Unisala universe"
         />
       </section>

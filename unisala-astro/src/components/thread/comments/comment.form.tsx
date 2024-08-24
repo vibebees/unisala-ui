@@ -8,6 +8,7 @@ import { getCache } from '@/utils/cache';
 import { toast } from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import './quill.css';
 
 interface CommentFormProps {
   postId: string;
@@ -132,7 +133,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
 
   return (
     <form onSubmit={submitComment} className="prose dark:prose-invert max-w-none">
-      <div className='py-2 px-4 mb-4 rounded-lg rounded-t-lg dark:border-gray-700'>
+      <div 
+      className='py-2 px-4 mb-4 rounded-lg rounded-t-lg dark:border-gray-700'
+      >
         <ReactQuill
           ref={quillRef}
           theme="snow"

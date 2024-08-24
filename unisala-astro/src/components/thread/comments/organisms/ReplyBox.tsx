@@ -228,7 +228,7 @@ export const ReplyBox: React.FC<{
   }
 
   return (
-    <div className="mt-4">
+      <div className='bg-white dark:bg-gray-900 py-8 lg:py-6 antialiased'>
       <ReactQuill
         ref={quillRef}
         theme="snow"

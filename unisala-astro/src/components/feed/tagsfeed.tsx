@@ -100,7 +100,6 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
   }
 
   const randomImage = images[Math.floor(Math.random() * images.length)]
-  console.log({randomImage})
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-8">
       <h1 className="font-signature text-center italic text-xl lg:text-3xl text-black dark:text-white tracking-wide border-b-2 border-indigo-300 dark:border-gray-600 pb-2 mb-4 shadow-sm">

@@ -1,6 +1,8 @@
+import "react-quill/dist/quill.snow.css";
+
 export const CommentBody: React.FC<{ commentText: string }> = ({ commentText }) => (
     <div
-      className='text-gray-500 dark:text-gray-400'
-      dangerouslySetInnerHTML={{ __html: commentText }}
+    className="ql-editor"
+          dangerouslySetInnerHTML={{ __html: commentText }}
     />
   );

@@ -1,11 +1,13 @@
+import React, { useState, useRef, useCallback } from 'react';
 import { CtaLogin } from '@/components/ui/ctaLogin';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddComment, GetCommentList } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import { sendGAEvent } from '@/utils/analytics/events';
 import { getCache } from '@/utils/cache';
-import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface CommentFormProps {
   postId: string;
@@ -13,15 +15,13 @@ interface CommentFormProps {
   replyTo?: string;
 }
 
-
 const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyTo }) => {
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const userData = getCache('authData');
-
-
+  const quillRef = useRef<ReactQuill>(null);
 
   const [addComment, { loading }] = useAstroMutation(AddComment, {
     context: { server: USER_SERVICE_GQL },
@@ -55,7 +55,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
       if (data?.addComment?.status?.success) {
         setCommentText('');
         toast.success('Comment posted successfully!');
-
       } else {
         toast.error(data?.addComment?.status?.message || 'Failed to post comment. Please try again.');
       }
@@ -66,7 +65,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
     },
   });
 
-  const submitComment = async (e: any) => {
+  const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
@@ -84,15 +83,13 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
         category: 'threads',
         label: 'add_comment',
         postId,
-      })
+      });
       if (result?.data?.addComment?.status?.success) {
         setCommentText('');
         toast.success('Comment posted successfully!');
-
       } else {
         setError(result?.data?.addComment?.status?.message);
         toast.error('Failed to post comment. Please try again.');
-
       }
     } catch (error) {
       console.error('Error submitting comment:', error);
@@ -101,12 +98,27 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
       setIsSubmitting(false);
     }
   };
- 
-  function adjustHeight(element: HTMLElement) {
-    element.style.height = 'auto';
-    element.style.height = (element.scrollHeight) + 'px';
-  }
 
+  const handleChange = (content: string) => {
+    setCommentText(content);
+    if (!hasStartedTyping) {
+      setHasStartedTyping(true);
+      sendGAEvent('thread_action', {
+        category: 'threads',
+        label: 'typing_comment',
+        postId,
+      });
+    }
+  };
+
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
+  };
 
   if (userData === null) {
     return (
@@ -114,40 +126,28 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
         <div className='max-w-4xl mx-auto px-4 flex items-center'>
           <CtaLogin message='I want to comment' />
         </div>
-    </section>
-    )
+      </section>
+    );
   }
 
   return (
-    <form onSubmit={submitComment} className='className="prose dark:prose-invert max-w-none"'>
-<div className='py-2 px-4 mb-4 rounded-lg rounded-t-lg border border-gray-200 dark:border-gray-700'>        <textarea
-          id='comment'
-          rows={4}
-          className='px-0 w-full text-sm sm:text-base text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800'
-          placeholder='Write a comment...'
-          required
+    <form onSubmit={submitComment} className="prose dark:prose-invert max-w-none">
+      <div className='py-2 px-4 mb-4 rounded-lg rounded-t-lg dark:border-gray-700'>
+        <ReactQuill
+          ref={quillRef}
+          theme="snow"
           value={commentText}
-          onChange={(e) => {
-            
-            setCommentText(e.target.value);
-            adjustHeight(e.target);
-            if (!hasStartedTyping) {
-              setHasStartedTyping(true);
-              sendGAEvent('thread_action', {
-                category: 'threads',
-                label: 'typing_comment',
-                postId,
-              });
-            }
-          }}
-          disabled={isSubmitting}
-          style={{ minHeight: '24px', resize: 'none', overflow: 'hidden' }}
-        ></textarea>
+          onChange={handleChange}
+          modules={modules}
+          placeholder="Write a comment..."
+          className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+        />
       </div>
       {error && <p className="text-red-500 mb-2">{error}</p>}
       <button
         type='submit'
-        className='inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-700 dark:bg-gray-600 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 hover:bg-gray-800 dark:hover:bg-gray-500 disabled:opacity-50 transition-colors duration-200'        disabled={isSubmitting}
+        className='inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-700 dark:bg-gray-600 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 hover:bg-gray-800 dark:hover:bg-gray-500 disabled:opacity-50 transition-colors duration-200'
+        disabled={isSubmitting || loading}
       >
         {loading ? 'Posting...' : 'Post comment'}
       </button>

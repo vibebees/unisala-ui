@@ -1,4 +1,4 @@
 const config = {
-  NODE_ENV: "TEST",
+  NODE_ENV: "PRODUCTION",
 };
 export default config;

@@ -71,6 +71,7 @@ const query = `
           firstName
           lastName
           picture
+          oneLinerBio
         }
         comments {
           _id
@@ -226,15 +227,15 @@ const handleUpvote = async (postId: string) => {
   <!-- //pass postId from slug -->
 
   <Comments client:only ='react'  postId = {slug}/>
-
+  <!-- Senior Software Developer at Unisala, specializing in full-stack web development and cloud architecture. With over 5 years of experience, Prashant leads innovative projects and mentors junior developers in agile methodologies. -->
   <ThreadAuthor
       author ={post?.user?.firstName + ' ' + post?.user?.lastName}
-      authorDescription="Senior Software Developer at Unisala, specializing in full-stack web development and cloud architecture. With over 5 years of experience, Prashant leads innovative projects and mentors junior developers in agile methodologies."
+      authorDescription= {post?.user?.oneLinerBio}
 
   />
-  <hr class="my-4" />
+   <hr class="my-4" />
 
-<!-- <NewsLetter  authorName ={post?.user?.firstName + ' ' + post?.user?.lastName} /> -->
+<NewsLetter  authorName ={post?.user?.firstName + ' ' + post?.user?.lastName} />
 <hr class="my-4" />
 
   <SameWriterSuggestions  feedId ={post?.user?._id}  />

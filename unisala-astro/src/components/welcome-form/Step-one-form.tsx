@@ -4,6 +4,12 @@ import {
   Search,
   FileArchive,
   GraduationCap,
+  Book,
+  Compass,
+  Share2,
+  Star,
+  TrendingUp,
+  Users,
 } from "lucide-react";
 import Button from "./atoms/Button";
 import Option from "./atoms/Option";
@@ -21,19 +27,21 @@ const StepTwoForm = () => {
   };
 
   const options = [
-    { value: "researching", Icon: Search, label: "Researching options" },
-    { value: "applying", Icon: FileArchive, label: "Applying to programs" },
-    { value: "enrolled", Icon: UniversityIcon, label: "Currently enrolled" },
-    { value: "graduated", Icon: GraduationCap, label: "Graduated" },
+    { value: "learn", Icon: Book, label: "Learn & Explore" },
+    { value: "share", Icon: Share2, label: "Share Experiences" },
+    { value: "connect", Icon: Users, label: "Connect with Others" },
+    { value: "grow", Icon: TrendingUp, label: "Personal Growth" },
+    { value: "inspire", Icon: Star, label: "Find Inspiration" },
+    { value: "explore", Icon: Compass, label: "Discover Stories" }
   ];
 
   return (
     <div className="welcome-form-container animate-fadeIn">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">
-        What's your current status for studying in the USA?
+      Pick your purpose:
       </h2>
       <p className="text-lg text-gray-600 mb-8">
-        Please select the option that best describes your situation:
+       Select your best fit
       </p>
 
       <div className="space-y-4 mb-8">

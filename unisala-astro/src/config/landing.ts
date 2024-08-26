@@ -2,8 +2,8 @@ import type { InfoLdg } from "@/types";
 
 export const infos: InfoLdg[] = [
   {
-    title: "Unisala: Your Global Learning Community",
-    description: "Share experiences, gain insights, and connect with students worldwide.",
+    title: "Unisala: A Learners Community",
+    description: "Unisala is for everyone who wants to share or gain knowledge, regardless of their field, level of expertise, or stage in life",
     image: "/images/universe.webp",
     list: [
       {
@@ -30,56 +30,33 @@ export const infos: InfoLdg[] = [
   }
 ]
 
+
 export const features = [
   {
-    title: " University Suggestions",
-    description: "Recommend universities based on your academic profile and preferences.",
-    link: "/suggest-university",
+    title: "Share Your Journey",
+    description: "Document and share your professional experiences, from graduate stories to career transitions and global work adventures. Your unique path can inspire and guide others.",
+    link: "/new-story",
     icon: "lucide:star",
     image:"/images/unisala-suggest-university.webp"
   },
   {
-    title: "Ask Question About University",
-    description: "Get answers from community to your inquiries and seek guidance about universities.",
-    link: "/ask-question-university",
+    title: "Learn, Grow, & Innovate Together",
+    description: "Accelerate your professional growth through peer-led learning, and collaborative problem-solving. Stay at the forefront of your field and drive innovation.",
+    link: "/universe",
     icon: "lucide:circle-help",
     image:"/images/ask-university-question-to-community-unisala.webp"
   },
   {
-    title: "Discover Your Space",
-    description: "Find and join a community of like-minded individuals. Share your field of study and grow together.",
-    link: "/networking",
+    title: "Connect in Focused Communities",
+    description: "Find your spaces tailored to your experiences, industry, or goals. Engage in meaningful discussions, collaborations, and skill exchanges with like-minded professionals.",
+    link: "/universe",
     icon: "lucide:users",
     image:"/images/like-minded-peope-space.webp"
   },
 
 ];
 
-export const featuresSecond = [
-
-  {
-    "title": "NSA Events",
-    "description": "Stay connected with your NSA community, no matter where you are. Find and join alumni and student events across states, keeping the spirit of home alive.",
-    "link": "/post-events",
-    "icon": "lucide:calendar",
-    image:"/images/nsas_events_unisala.webp"
-  },
-  {
-    title: "Student-Alumini Networking",
-    "description": "Connect with alumni and classmates to explore career opportunities and gain industry insights.",
-    link: "/career-portal",
-    icon: "lucide:briefcase",
-    image:"/images/alumini-stories.webp"
-  },
-  {
-    title: "Rate your University",
-    description: "Rate your university and share your journey to guide future students.",
-    link: "/review-university",
-    icon: "lucide:circle-help",
-    image:"/images/university-ratings-unisala.webp"
-  },
-];
-
+ 
 export const testimonials = [
   {
     name: "Graduate Student",

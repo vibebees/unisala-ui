@@ -1,6 +1,6 @@
 ---
 import { Button } from '@/components/ui/button';
-import { features, featuresSecond } from '@/config/landing';
+import { features } from '@/config/landing';
 import { Icon } from 'astro-icon/components';
 import HeaderSection from './header-section.astro';
 import { cn } from '@/utils/lib/utils';
@@ -14,13 +14,14 @@ import GoToUnisalaPortal from './goToUnisalaPortal.astro';
       <HeaderSection
         label='Features'
         title='Discover all features.'
-        subtitle='for students applying for study abroad.'
+        subtitle=''
         />
 
       <div class='mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {
           features.map((feature) => (
-            <div class='group relative overflow-hidden rounded-2xl border bg-background p-5 md:p-8'>
+          <a href={feature.link} class='group' >
+              <div class='group relative overflow-hidden rounded-2xl border bg-background p-5 md:p-8'>
               <div
                 aria-hidden='true'
                 class='absolute inset-0 aspect-video -translate-y-1/2 rounded-full border bg-gradient-to-b from-purple-500/80 to-white opacity-25 blur-2xl duration-300 group-hover:-translate-y-1/4 dark:from-white dark:to-white dark:opacity-5 dark:group-hover:opacity-10'
@@ -38,24 +39,29 @@ import GoToUnisalaPortal from './goToUnisalaPortal.astro';
 
                 <!-- Adding the image below the feature title -->
                 <div class="mt-4">
-  <Image
-    class="size-full object-center rounded-lg"
-    src={feature.image}
-    alt={feature.title}
-    width={100}
-    height={500}
-    loading="eager"
-    onerror="this.style.display='none'"
-  />
-</div>
+                <Image
+                  class="size-full object-center rounded-lg"
+                  src={feature.image}
+                  alt={feature.title}
+                  width={100}
+                  height={500}
+                  loading="eager"
+                  onerror="this.style.display='none'"
+                />
+              </div>
 
 
                 <p class='mt-6 pb-6 text-muted-foreground'>
                   {feature.description}
                 </p>
 
+<p>
+
+</p>
               </div>
+
             </div>
+          </a>
           ))
         }
       </div>
@@ -67,45 +73,11 @@ import GoToUnisalaPortal from './goToUnisalaPortal.astro';
     <div class='container max-w-6xl'>
       <HeaderSection
         title=''
-        subtitle='for current students and graduates in USA'
+        subtitle=''
       />
 
       <div class='mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
-        {
-          featuresSecond.map((feature) => (
-            <div class='group relative overflow-hidden rounded-2xl border bg-background p-5 md:p-8'>
-              <div
-                aria-hidden='true'
-                class='absolute inset-0 aspect-video -translate-y-1/2 rounded-full border bg-gradient-to-b from-red-500/80 to-white opacity-25 blur-2xl duration-300 group-hover:-translate-y-1/4 dark:from-white dark:to-white dark:opacity-5 dark:group-hover:opacity-10'
-              />
-              <div class='relative'>
-                <dt class="font-semibold pl-8">
-                  <h4>
-                  {feature.title}
-                  </h4>
-                </dt>
-
-                <!-- Adding the image below the feature title -->
-                <div class="mt-4">
-                  <Image
-                    class="size-full object-center rounded-lg"
-                    src={feature.image}
-                    alt={feature.title}
-                    width={100}
-                    height={500}
-                    loading="eager"
-                    onerror="this.style.display='none'"
-                  />
-                </div>
-
-                <p class='mt-6 pb-6 text-muted-foreground'>
-                  {feature.description}
-                </p>
-
-              </div>
-            </div>
-          ))
-        }
+    
       </div>
     </div>
   </div>

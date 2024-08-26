@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, BookOpen, FlaskConical, Atom } from 'lucide-react';
+import { GraduationCap, Briefcase, Rocket, Microscope, School, User } from 'lucide-react';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { EditProfile } from '@/datasource/graphql/user';
 import Button from './atoms/Button';
@@ -12,42 +12,46 @@ import { Toast } from '@/components/ui/toast';
 import toast from 'react-hot-toast';
 
 const StepThreeForm = () => {
-  const [selectedStatus, setSelectedStatus] = useState(
+  const [selectedBackground, setSelectedBackground] = useState(
     localStorage.getItem('studyLevel') || ''
   );
   const [editProfile, { loading }] = useAstroMutation(EditProfile, {
     context: { server: USER_SERVICE_GQL },
     onCompleted: (data) => {
-      toast.success("Profile is setup successfully!");
+      toast.success("Profile setup successfully!");
       navigator();
-  },
-  onError: (error) => {
-  },
+    },
+    onError: (error) => {
+      toast.error("Error setting up profile. Please try again.");
+    },
   });
 
-  const handleStatusChange = (event: any) => {
+  const handleBackgroundChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('studyLevel', event.target.value);
-    setSelectedStatus(event.target.value);
+    setSelectedBackground(event.target.value);
   };
+
   const userData = getCache('authData');
-  const options = [
-    { value: 'bachelor', Icon: BookOpen, label: 'Bachelor' },
-    { value: 'masters', Icon: FlaskConical, label: 'Masters' },
-    { value: 'phd', Icon: Atom, label: 'PHD' }
+  const backgroundOptions = [
+    { value: "student", Icon: GraduationCap, label: "Student" },
+    { value: "professional", Icon: Briefcase, label: "Professional" },
+    { value: "entrepreneur", Icon: Rocket, label: "Entrepreneur" },
+    { value: "researcher", Icon: Microscope, label: "Researcher" },
+    { value: "educator", Icon: School, label: "Educator" },
+    { value: "other", Icon: User, label: "Other" }
   ];
 
   const handleSubmit = () => {
     const userStatus = localStorage.getItem('userStatus');
     const interestedSubjects = localStorage.getItem('interestedSubjects');
     const studyLevel = localStorage.getItem('studyLevel');
-  
-    // Get the current URL and extract the redirect parameter
+
     const currentUrl = new URL(window.location.href);
     const redirect = currentUrl.searchParams.get('redirect');
-    
+
     if (!userStatus || !interestedSubjects || !studyLevel) {
       let redirectPath = '';
-  
+
       if (!userStatus) {
         redirectPath = 'step-one';
       } else if (!interestedSubjects) {
@@ -55,16 +59,15 @@ const StepThreeForm = () => {
       } else if (!studyLevel) {
         redirectPath = 'step-three';
       }
-  
+
       if (redirectPath) {
-        // Append the redirect parameter if it exists
         const finalRedirectPath = redirect 
           ? `${redirectPath}?redirect=${encodeURIComponent(redirect)}`
           : redirectPath;
-        
+
         window.location.href = finalRedirectPath;
       }
-  
+
       shakeWebsite();
     } else {
       const data = {
@@ -78,44 +81,46 @@ const StepThreeForm = () => {
         }
       }).then(() => {
         // After successful profile edit, redirect if the parameter exists
-       
+        if (redirect) {
+          window.location.href = decodeURIComponent(redirect);
+        }
       });
     }
   };
 
   return (
     <div className="welcome-form-container animate-fadeIn">
-           <Toast />
+      <Toast />
 
       <h2 className="text-3xl font-bold text-gray-800 mb-2 animate-slideDown flex items-center">
-        <GraduationCap className="mr-2" size={32} />
-        What degree are you pursuing?
+        <User className="mr-2" size={32} />
+        What best describes your current status?
       </h2>
       <p className="text-lg text-gray-600 mb-6 animate-slideDown animation-delay-150">
-        Please select your intended level of study
+        Select the option that most closely matches your background
       </p>
 
       <div className="grid grid-cols-1 gap-4 mb-8 animate-fadeIn animation-delay-300">
-        {options.map((option) => (
+        {backgroundOptions.map((option) => (
           <Option
             key={option.value}
             {...option}
-            handleStatusChange={handleStatusChange}
+            handleStatusChange={handleBackgroundChange}
             option={option}
-            selectedStatus={selectedStatus}
+            selectedStatus={selectedBackground}
           />
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col ">
+      <div className="mt-8 flex flex-col">
         <Button
           url={null}
-          lable="submit"
+          lable="Complete Profile"
           className={`${
-            selectedStatus ? 'bg-blue-500 text-white' : 'bg-neutral-300'
+            selectedBackground ? 'bg-blue-500 text-white' : 'bg-neutral-300'
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
           onclick={() => {
-            if (!selectedStatus) {
+            if (!selectedBackground) {
               shakeWebsite();
             } else {
               handleSubmit();

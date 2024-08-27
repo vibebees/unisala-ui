@@ -3,7 +3,7 @@ import "react-quill/dist/quill.snow.css";
 
 export const CommentBody: React.FC<{ commentText: string }> = ({ commentText }) => (
   <div className="comment-body-wrapper">
-    <style jsx>{`
+    <style >{`
       .comment-body-wrapper :global(.ql-editor) {
         padding: 0;
       }

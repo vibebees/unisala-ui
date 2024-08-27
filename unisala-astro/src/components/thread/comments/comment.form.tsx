@@ -66,16 +66,25 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
     },
   });
 
-  // Helper function to strip HTML tags and trim whitespace
-  const stripHtmlAndTrim = (html: string) => {
-    const tmp = document.createElement('DIV');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
+
+  const trimHtmlEnd = (html: string): string => {
+    // Regular expression to match trailing <p><br></p> or just <br> tags
+    const trailingBrRegex = /(<p><br><\/p>|<br>)+$/;
+    
+    // Remove trailing <br> tags
+    let trimmedHtml = html.replace(trailingBrRegex, '');
+    
+    // Remove any remaining whitespace at the end
+    trimmedHtml = trimmedHtml.replace(/\s+$/, '');
+    
+    return trimmedHtml;
   };
 
+
   const submitComment = async (e: React.FormEvent) => {
+
     e.preventDefault();
-    const trimmedComment = stripHtmlAndTrim(commentText).trim();
+    const trimmedComment = trimHtmlEnd(commentText);
     
     if (!trimmedComment) {
       toast.error('Please enter a non-empty comment.');

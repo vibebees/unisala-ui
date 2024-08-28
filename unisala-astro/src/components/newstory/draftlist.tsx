@@ -1,42 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useDraftManager } from '@/hooks/useDraftManager';
+import { Button } from '@/components/ui/button';
 
 interface Draft {
-    id: string;
-    title: string;
-    lastUpdated: number;
+    postTitle: string;
+    postText: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 const DraftsList: React.FC = () => {
-    const [drafts, setDrafts] = useState<Draft[]>([]);
+    const { drafts, deleteDraft } = useDraftManager();
 
-    useEffect(() => {
-        const storedDrafts = Object.entries(localStorage)
-            .filter(([key]) => key.includes('.postTitle'))
-            .map(([key, value]) => {
-                const [timestamp, field] = key.split('.');
-                return {
-                    id: timestamp,
-                    title: value || 'Untitled',
-                    lastUpdated: parseInt(timestamp)
-                };
-            })
-            .sort((a, b) => b.lastUpdated - a.lastUpdated);
-
-        setDrafts(storedDrafts);
-    }, []);
+    const handleDeleteDraft = (id: string) => {
+        if (window.confirm('Are you sure you want to delete this draft?')) {
+            deleteDraft(id);
+        }
+    };
 
     return (
-        <ul className="space-y-4">
-            {drafts.map((draft) => (
-                <li key={draft.id} className="bg-white shadow rounded-lg p-4">
-                    <a href={`/new-story?id=${draft.id}`} className="text-xl font-semibold hover:text-blue-600">
-                        {draft.title}
-                    </a>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Created: {new Date(parseInt(draft.id)).toLocaleString()}
+        <ul className="space-y-4 p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
+            {Object.entries(drafts).map(([id, draft]: [string, Draft]) => (
+                <li key={id} className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 transition-colors duration-200">
+                    <div className="flex justify-between items-center">
+                        <a 
+                            href={`/new-story?id=${id}`} 
+                            className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                        >
+                            {draft.postTitle || 'Untitled Draft'}
+                        </a>
+                        <Button
+                            onClick={() => handleDeleteDraft(id)}
+                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-full text-sm transition duration-300 ease-in-out"
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        Created: {draft.createdAt}
                     </p>
-                    <p className="text-sm text-gray-500">
-                        Last updated: {new Date(draft.lastUpdated).toLocaleString()}
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                        Last updated: {draft.updatedAt}
                     </p>
                 </li>
             ))}

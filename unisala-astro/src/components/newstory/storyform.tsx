@@ -8,57 +8,52 @@ import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
 import PreviewModal from './storyPreviewModal';
 import { getCache } from '@/utils/cache';
+import { useDraftManager } from '@/hooks/useDraftManager'; // Import the custom hook
 
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
 
 interface PostFormProps {
-    initialPostDraft: PostDraft;
+    initialPostDraft?: PostDraft;
 }
 
-const PostForm: React.FC<PostFormProps> = () => {
+const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     const [showPreview, setShowPreview] = useState(false);
     const [topics, setTopics] = useState<TopicOptions[]>([]);
-    const [hasDrafts, setHasDrafts] = useState(false);
+    const {
+        drafts,
+        hasDrafts,
+        draftId,
+        draftTitle,
+        draftContent,
+        saveDraft,
+        deleteDraft,
+        loadDraft,
+        createNewDraft
+    } = useDraftManager();
 
-    // get q value from URL
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id') || '';
-    const draftKeyTitle = id + '.postTitle';
-    const draftKeyPostText = id + '.postText';
     const userData = getCache('authData');
-
-    const checkForDrafts = () => {
-        const draftKeys = Object.keys(localStorage).filter(key => key.includes('.postText') );
-        return draftKeys.length > 1;
-    };
 
     useEffect(() => {
         if (id) {
-            setHasDrafts(checkForDrafts());
+            loadDraft(id);
         } else {
+            const newId = createNewDraft();
             const searchParams = new URLSearchParams(location.search);
-      
-            // Generate new ID
-            const newId = new Date().getTime();
-            
-            // Set the new ID in the search params
-            searchParams.set('id', newId.toString());
-            
-            // Construct new URL with all existing params plus the new ID
+            searchParams.set('id', newId);
             const newUrl = `/new-story?${searchParams.toString()}`;
             navigator(newUrl);
         }
-    }, [id]);
+    }, [id, loadDraft, createNewDraft]);
 
     const [addPost] = useAstroMutation(AddPost, {
         context: { server: USER_SERVICE_GQL },
         onCompleted: (data) => {
-            localStorage.removeItem(draftKeyTitle);
-            localStorage.removeItem(draftKeyPostText);
+            deleteDraft(draftId);
             toast.success("Your Story is Published!");
             navigator('/threads/' + data?.addPost?.post?._id);
-            setHasDrafts(checkForDrafts());
         },
         onError: (error) => {
             console.error('Error publishing post:', error);
@@ -68,42 +63,42 @@ const PostForm: React.FC<PostFormProps> = () => {
 
     useEffect(() => {
         if (!userData) {
-       
             const redirectUrl = `${location.pathname}${location.search}`;
-            // Encode the entire redirectUrl
             const encodedRedirect = encodeURIComponent(redirectUrl);
             navigator(`/auth?redirect=${encodedRedirect}`);
         }
     }, [userData]);
 
     const handlePublish = async (e: any): Promise<void> => {
-        const payloadTopics = topics.map((topic) => {
-            return {
-                name: topic?.name,
-                _id: topic?._id,
-                unitId: topic?.unitId,
-                universityCount: topic?.universityCount,
-                entityType: topic?.entityType,
-            }
-        })
-
-        const postDraft = {
-            title: localStorage.getItem(draftKeyTitle) || '',
-            postText: localStorage.getItem(draftKeyPostText) || '',
-            id: 'others',
-            tags: payloadTopics
-        };
+        const payloadTopics = topics.map((topic) => ({
+            name: topic?.name,
+            _id: topic?._id,
+            unitId: topic?.unitId,
+            universityCount: topic?.universityCount,
+            entityType: topic?.entityType,
+        }));
 
         try {
             await addPost({
                 variables: {
-                    ...postDraft,
+                    title: draftTitle,
+                    postText: draftContent,
+                    id: 'others',
+                    tags: payloadTopics
                 },
             });
         } catch (error) {
             console.error('Error publishing post:', error);
             toast.error('Failed to publish post. Please try again.');
         }
+    };
+
+    const handleTitleChange = (newTitle: string) => {
+        saveDraft(draftId, newTitle, draftContent);
+    };
+
+    const handlePostTextChange = (newPostText: string) => {
+        // saveDraft(draftId, draftTitle, newPostText);
     };
 
     return (
@@ -115,13 +110,17 @@ const PostForm: React.FC<PostFormProps> = () => {
                         className='min-h-[100px]'
                         maxHeight='50vh'
                         name='title'
-                        draftKey={draftKeyTitle}
+                        value={draftTitle}
+                        draftId={draftId}
+                        onContentChange={handleTitleChange}
                     />
                 </div>
                 <div>
                     <TextareaEditor
                         placeholder='Tell your story...'
-                        draftKey={draftKeyPostText}
+                        draftKey={id}
+                        initialValue={draftContent}
+                        onContentChange={handlePostTextChange}
                     />
                 </div>
                 <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 transition-colors duration-200 ease-in-out'>
@@ -142,10 +141,7 @@ const PostForm: React.FC<PostFormProps> = () => {
             </form>
             {showPreview && (
                 <PreviewModal
-                    postDraft={{
-                        title: localStorage.getItem(draftKeyTitle) || '',
-                        postText: localStorage.getItem(draftKeyPostText) || '',
-                    }}
+                    postDraft={{ title: draftTitle, postText: draftContent }}
                     onClose={() => setShowPreview(false)}
                     onPublish={handlePublish}
                     topics={topics}

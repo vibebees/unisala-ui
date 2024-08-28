@@ -2,25 +2,28 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import './RichTextInput.css'
-
+import { useDraftManager } from "@/hooks/useDraftManager";
 interface RichTextInputProps {
   initialValue: string;
   draftKey?: string;
   placeholder?: string;
   theme?: 'light' | 'dark';
+  onContentChange: (content: string) => void;
 }
 
 const RichTextInput: React.FC<RichTextInputProps> = ({
   initialValue,
   placeholder = "Write something...",
   draftKey = "new.story.postText",
-  theme = 'light'
+  theme = 'light',
+  onContentChange
 }) => {
   const [content, setContent] = useState<string>(initialValue);
   const quillRef = useRef<ReactQuill>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isInteractingWithToolbar, setIsInteractingWithToolbar] = useState(false);
 
+// const {savePostText} = useDraftManager();
   const modules = {
     toolbar: {
       container: "#floating-toolbar",
@@ -48,7 +51,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   ];
 
   useEffect(() => {
-    const savedContent = localStorage.getItem(draftKey);
+    const savedContent = initialValue
     if (savedContent) {
       setContent(savedContent);
     } else {
@@ -58,9 +61,10 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
 
   useEffect(() => {
     if (content !== undefined) {
-      localStorage.setItem(draftKey, content);
+      // savePostText(draftKey, content);
     }
   }, [draftKey, content]);
+
 
   const handleChange = (newContent: string) => {
     setContent(newContent);

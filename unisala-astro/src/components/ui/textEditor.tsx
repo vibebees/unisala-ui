@@ -4,19 +4,24 @@ import RichTextInput from "./texteditor/RichTextInput";
 export interface TextareaEditorProps {
   placeholder?: string;
   draftKey: string;
+  initialValue: string;
+  onContentChange: (content: string) => void;
 }
 
 const TextareaEditor: FC<TextareaEditorProps> = ({ 
   placeholder,
-  draftKey
+  draftKey,
+  initialValue,
+  onContentChange
+
 }) => {
 
-console.log()
   return (
     draftKey !=='.postText' && <RichTextInput
       draftKey={draftKey}
       placeholder={placeholder}
-      initialValue={""}
+      initialValue={initialValue}
+      onContentChange={onContentChange}
     />
   );
 };

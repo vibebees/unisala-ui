@@ -103,26 +103,31 @@ export const navigator = ( url:string = '') => {
   */
 
         const urlParams = new URLSearchParams(window.location.search);
-        const redirectUrl = urlParams.get('redirect');
+        let redirectUrl = urlParams.get('redirect');
       
         if (url === '') {
           // If no URL is provided, serve the redirect or go to default
-          const currentUrl = new URL(window.location.origin);
-          const redirectPath = redirectUrl ? decodeURIComponent(redirectUrl) : '/new-story';
-          
-          // Ensure the redirectPath starts with a '/'
-          currentUrl.pathname = redirectPath.startsWith('/') ? redirectPath : `/${redirectPath}`;
-          
-          window.location.href = currentUrl.toString();
+          if (redirectUrl) {
+            // Preserve the structure of the redirect URL
+            const [path, query] = redirectUrl.split('?');
+            const redirectUrlObj = new URL(path, window.location.origin);
+            if (query) {
+              redirectUrlObj.search = query;
+            }
+            window.location.href = redirectUrlObj.toString();
+          } else {
+            // Default to /new-story if no redirect is provided
+            window.location.href = new URL('/new-story', window.location.origin).toString();
+          }
         } else {
           // If a URL is provided, attach the current redirect to it
           const newUrl = new URL(url, window.location.origin);
           if (redirectUrl) {
+            // Preserve the structure of the redirect URL
             newUrl.searchParams.set('redirect', redirectUrl);
           }
           window.location.href = newUrl.toString();
         }
-
 }
 
  

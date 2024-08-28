@@ -65,8 +65,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     useEffect(() => {
         if (!userData) {
             const redirectUrl = `${location.pathname}${location.search}`;
-            const encodedRedirect = encodeURIComponent(redirectUrl);
-            navigator(`/auth?redirect=${encodedRedirect}`);
+            const decodedRedirect = decodeURIComponent(redirectUrl);
+            navigator(`/auth?redirect=${decodedRedirect}`);
         }
     }, [userData]);
 

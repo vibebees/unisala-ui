@@ -23,7 +23,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isInteractingWithToolbar, setIsInteractingWithToolbar] = useState(false);
 
-// const {savePostText} = useDraftManager();
+const {saveDraftPostText} = useDraftManager();
   const modules = {
     toolbar: {
       container: "#floating-toolbar",
@@ -61,7 +61,8 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
 
   useEffect(() => {
     if (content !== undefined) {
-      // savePostText(draftKey, content);
+      onContentChange(content);
+      // saveDraftPostText(draftKey, content);
     }
   }, [draftKey, content]);
 

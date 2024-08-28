@@ -69,41 +69,126 @@ export const useDraftManager = () => {
     useEffect(() => {
         loadDrafts();
     }, [loadDrafts]);
-
-    const saveDraft = useCallback((id: string, postTitle: string, postText: string) => {
-        if (!postTitle.trim() && !postText.trim()) {
-            console.warn("Cannot save empty draft");
-            return;
-        }
-
+    
+    const saveDraft = useCallback((id: string, postTitle?: string, postText?: string) => {
         const timestamp = Date.now();
         const updatedAt = new Date(timestamp).toLocaleString();
         const updatedDrafts = { ...drafts };
         
-        if (id in updatedDrafts) {
+        if (id && id in updatedDrafts) {
+            console.log("Updating draft", id);
+            console.log({
+                postTitle,
+                postText,
+                updatedAt
+            });
+            // Update existing draft
             updatedDrafts[id] = {
                 ...updatedDrafts[id],
+                postTitle: postTitle !== undefined ? postTitle : updatedDrafts[id].postTitle,
+                postText: postText !== undefined ? postText : updatedDrafts[id].postText,
+                updatedAt
+            };
+        } else {
+            // Create new draft
+            id = id || timestamp.toString(); // Use provided id or create new one
+            updatedDrafts[id] = {
+                postTitle: postTitle || '',
+                postText: postText || '',
+                createdAt: updatedAt,
+                updatedAt
+            };
+        }
+    
+        // Only save if there's content
+        if (updatedDrafts[id].postTitle.trim() || updatedDrafts[id].postText.trim()) {
+            localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
+            setDrafts(updatedDrafts);
+            setDraftId(id);
+            setDraftTitle(updatedDrafts[id].postTitle);
+            setDraftContent(updatedDrafts[id].postText);
+            setHasDrafts(true);
+        } else {
+            console.warn("Cannot save empty draft");
+        }
+    
+        return id;
+    }, [drafts]);
+
+ 
+
+    const saveDraftPostTitle = useCallback((id: string, postTitle: string) => {
+        const timestamp = Date.now();
+        const updatedAt = new Date(timestamp).toLocaleString();
+        const updatedDrafts = { ...drafts };
+        
+        if (id && id in updatedDrafts) {
+            console.log("Updating draft title", id);
+            updatedDrafts[id].postTitle = postTitle;
+            updatedDrafts[id].updatedAt = updatedAt;
+        } else {
+            // Create new draft if it doesn't exist
+            id = id || timestamp.toString();
+            updatedDrafts[id] = {
                 postTitle,
+                postText: '',
+                createdAt: updatedAt,
+                updatedAt
+            };
+        }
+
+        if (postTitle.trim()) {
+            localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
+            setDrafts(updatedDrafts);
+            setDraftId(id);
+            setDraftTitle(postTitle);
+            setHasDrafts(true);
+        }
+
+        return id;
+    }, [drafts]);
+
+    const saveDraftPostText = useCallback((id: string, postText: string) => {
+        const timestamp = Date.now();
+        const updatedAt = new Date(timestamp).toLocaleString();
+        console.log("current drafts", drafts);
+        const updatedDrafts = { ...drafts };
+
+
+
+        
+        if (id && id in updatedDrafts) {
+            console.log("Updating draft text", id);
+            updatedDrafts[id] = {
+                ...updatedDrafts[id],  // Preserve existing fields
                 postText,
                 updatedAt
             };
         } else {
-            updatedDrafts[timestamp.toString()] = {
-                postTitle,
+            console.log('else ----->')
+            // Create new draft if it doesn't exist
+            id = id || timestamp.toString();
+            updatedDrafts[id] = {
+                postTitle: '',
                 postText,
                 createdAt: updatedAt,
                 updatedAt
             };
-            id = timestamp.toString();
         }
 
-        localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
-        setDrafts(updatedDrafts);
-        setDraftId(id);
-        setDraftTitle(postTitle);
-        setDraftContent(postText);
-        setHasDrafts(true);
+        if (postText.trim()) {
+            localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
+            setDrafts(updatedDrafts);
+            setDraftId(id);
+            setDraftContent(postText);
+            setHasDrafts(true);
+        }
+
+        return id;
     }, [drafts]);
+
+
+
 
     const loadDraft = useCallback((id: string) => {
         const draft = drafts[id];
@@ -143,6 +228,8 @@ export const useDraftManager = () => {
         deleteDraft,
         loadDraft,
         loadDrafts,
-        createNewDraft
+        createNewDraft,
+        saveDraftPostText,
+        saveDraftPostTitle
     };
 };

@@ -29,7 +29,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         saveDraft,
         deleteDraft,
         loadDraft,
-        createNewDraft
+        createNewDraft,
+        saveDraftPostTitle
     } = useDraftManager();
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -94,11 +95,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     };
 
     const handleTitleChange = (newTitle: string) => {
-        saveDraft(draftId, newTitle, draftContent);
+        saveDraftPostTitle(draftId, newTitle);
     };
 
     const handlePostTextChange = (newPostText: string) => {
-        // saveDraft(draftId, draftTitle, newPostText);
+        saveDraft(draftId, draftTitle, newPostText);
     };
 
     return (

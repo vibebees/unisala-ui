@@ -18,6 +18,11 @@ const DraftsList: React.FC = () => {
         }
     };
 
+    const handleDraftClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+        e.preventDefault();
+        window.location.href = `/new-story?id=${id}`;
+    };
+
     return (
         <ul className="space-y-4 p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
             {Object.entries(drafts).map(([id, draft]: [string, Draft]) => (
@@ -25,6 +30,7 @@ const DraftsList: React.FC = () => {
                     <div className="flex justify-between items-center">
                         <a 
                             href={`/new-story?id=${id}`} 
+                            onClick={(e) => handleDraftClick(e, id)}
                             className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                         >
                             {draft.postTitle || 'Untitled Draft'}

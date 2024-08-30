@@ -61,7 +61,7 @@ export function removeCache(key: string): void {
  */
 export function clearCache(): void {
   try {
-    localStorage.clear();
+    localStorage.removeItem("authData");
   } catch (error) {
     console.error(`Error clearing local storage: ${error}`);
   }

@@ -155,7 +155,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     const quill = quillRef.current?.getEditor();
     const cursorPosition = getCurrentCursorPosition();
     const bounds = quill?.getBounds(cursorPosition);
-    const plusButton = document.querySelector(".plus-button");
+    const plusButton = document.querySelector(".plus-button") as HTMLElement;
     if (bounds && plusButton) {
       plusButton.style.top = `${bounds.top + 10}px`;
     }

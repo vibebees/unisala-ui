@@ -54,7 +54,7 @@ export const SimilarThread: React.FC<SimilarThreadProps> = ({ articles, title, t
                                         }}
                                         data-astro-reload
                                     >
-                                        {similarThreadHeading(article?.postText)}
+                                        {similarThreadHeading(article?.title ?? article?.postText)}
                                     </a>
                                 </h4>
                                 <p className="mb-5 font-light text-gray-500 dark:text-gray-400">

@@ -40,7 +40,7 @@ const TopicBadge: React.FC<{ topic: string; id: string }> = ({ topic, id }) => (
     data-astro-reload
     className="inline-block mr-2 mb-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition duration-300 ease-in-out"
   >
-    <span className="font-medium">#</span>{topic}  - {id}
+    <span className="font-medium">#</span>{topic} 
   </a>
 );
 

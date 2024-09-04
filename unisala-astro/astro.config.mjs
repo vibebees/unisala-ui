@@ -8,7 +8,7 @@ import node from '@astrojs/node'; // Import the node adapter
 
 export default defineConfig({
   server: {
-    port: 3001
+    port: 3000
   },
   renderers: [react()],
   integrations: [

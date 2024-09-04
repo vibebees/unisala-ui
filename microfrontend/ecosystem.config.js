@@ -19,3 +19,20 @@ module.exports = {
   ]
 };
 
+/*
+
+
+module.exports = {
+  apps: [
+    {
+      name: 'unisala-astro',
+      script: './astro-server.mjs',
+      env: {
+        NODE_ENV: 'production',
+        PORT: 3001
+      }
+    }
+  ]
+};
+*/
+

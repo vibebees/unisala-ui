@@ -189,7 +189,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
 
   return (
     <div className={`rich-text-editor-container ${theme}`}>
-      <FloatingToolbar />
+       <FloatingToolbar quillRef={quillRef} />
       <div
         id="floating-toolbar"
         ref={toolbarRef}

@@ -31,3 +31,4 @@ yarn-error.log*
 node_modules
 
 unisala-ionic/dist/
+unisala-astro/stats.html

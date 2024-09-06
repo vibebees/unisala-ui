@@ -139,6 +139,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
     toolbar: [
       ['bold', 'italic', 'underline'],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
       ['link'],
       ['clean']
     ],

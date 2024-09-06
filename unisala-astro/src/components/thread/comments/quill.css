@@ -214,3 +214,18 @@
 .ql-editor li > ul {
   padding-left: 1.5em;
 }
+.ql-editor pre.ql-syntax,
+.ql-editor code {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.ql-editor blockquote {
+  border-left: 4px solid #ccc;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 16px;
+}

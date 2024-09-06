@@ -18,7 +18,6 @@ const TextareaAutoGrow: React.FC<TextareaProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  console.log({draftId, test:"textarea"})
   useEffect(() => {
     const resizeTextarea = () => {
       if (textareaRef.current) {

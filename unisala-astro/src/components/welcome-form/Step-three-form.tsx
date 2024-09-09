@@ -115,7 +115,7 @@ const StepThreeForm = () => {
       <div className="mt-8 flex flex-col">
         <Button
           url={null}
-          lable="Complete Profile"
+          label="Complete Profile"
           className={`${
             selectedBackground ? 'bg-blue-500 text-white' : 'bg-neutral-300'
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
@@ -129,7 +129,7 @@ const StepThreeForm = () => {
         />
         <Button
           url="step-two"
-          lable="Back"
+          label="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
           onclick={() => {navigator('/welcome-form/step-two')}}
         />

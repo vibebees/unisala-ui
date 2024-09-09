@@ -4,14 +4,14 @@ import React, { type FC } from "react";
 
 interface ButtonProps {
   url?: any;
-  lable?: string;
+  label?: string;
   className?: string;
   onclick?: any;
 }
 
 const Button: FC<ButtonProps> = ({
   url,
-  lable = "Next",
+  label = "Next",
   className,
   onclick,
 }) => {
@@ -25,7 +25,7 @@ const Button: FC<ButtonProps> = ({
           className
         )}
       >
-        {lable}
+        {label}
       </button>
     </a>
   );

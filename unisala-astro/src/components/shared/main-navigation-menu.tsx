@@ -17,7 +17,7 @@ import { PenOutLine } from "../packages/icons/Pen";
 
 const links = navMenuConfig.links;
 const pages = navMenuConfig.pagesNav[0];
-const examples = navMenuConfig.examplesNav[0];
+// const examples = navMenuConfig.examplesNav[0];
 
 export function MainNavigationMenu() {
   return (
@@ -43,7 +43,7 @@ export function MainNavigationMenu() {
               ))}
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem> */}
+        </NavigationMenuItem> 
 
         <NavigationMenuItem>
           <NavigationMenuTrigger>{examples.title}</NavigationMenuTrigger>
@@ -55,6 +55,7 @@ export function MainNavigationMenu() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+        */}
 
         {links ? (
           <NavigationMenuItem>

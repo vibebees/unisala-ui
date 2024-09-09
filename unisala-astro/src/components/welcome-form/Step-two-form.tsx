@@ -97,7 +97,7 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
 
       <div className="mt-8 flex flex-col">
         <Button
-          lable="Next"
+          label="Next"
           className={`${
             selectedFields.length ? "bg-blue-500 text-white" : "bg-neutral-300"
           } font-medium border border-transparent select-none hover:bg-primary-600 mt-5`}
@@ -111,7 +111,7 @@ const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
           }}
         />
         <Button
-          lable="Back"
+          label="Back"
           className="bg-transparent font-medium border-neutral-300 border text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 mt-5"
           onclick={() => navigator("/welcome-form/step-one")}
         />

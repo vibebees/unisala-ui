@@ -2,28 +2,18 @@ import type { InfoLdg } from "@/types";
 
 export const infos: InfoLdg[] = [
   {
-    title: "Unisala: A Learners Community",
-    description: "Unisala is for everyone who wants to share or gain knowledge, regardless of their field, level of expertise, or stage in life",
-    image: "/images/universe.webp",
+    title: "Unisala: Grow Through Notes",
+    description: "Draft, refine, and share your knowledge. Learn together, evolve your ideas, and help others succeed.",
+    image: "https://d2wpk2fhu8mz8q.cloudfront.net/0aad0e0c-da1b-493f-9679-a005159e8ca2",
     list: [
       {
-        title: "Stories",
-        description: "Read about academic and career journeys.",
+        title: "Personal Growth",
+        description: "Create and study your notes, refining your understanding.",
         icon: "lucide:book-open"
       },
       {
-        title: "Advice",
-        description: "Get tips on studying and living abroad.",
-        icon: "lucide:help-circle"
-      },
-      {
-        title: "Resources",
-        description: "Access guides on various topics and fields.",
-        icon: "lucide:file-text"
-      },
-      {
-        title: "Community",
-        description: "Interact and share your own experiences.",
+        title: "Collaborative Sharing",
+        description: "Share your notes, gather feedback, and learn from others.",
         icon: "lucide:users"
       }
     ]
@@ -33,22 +23,22 @@ export const infos: InfoLdg[] = [
 
 export const features = [
   {
-    title: "Share Your Journey",
-    description: "Document and share your professional experiences, from graduate stories to career transitions and global work adventures. Your unique path can inspire and guide others.",
+    title: "Publish Your Notes",
+    description: "Share your knowledge easily. Publish notes on any topic, from class lectures to personal research. Your insights can help others learn and grow.",
     link: "/new-story",
     icon: "lucide:star",
     image:"/images/unisala-suggest-university.webp"
   },
   {
-    title: "Learn, Grow, & Innovate Together",
-    description: "Accelerate your professional growth through peer-led learning, and collaborative problem-solving. Stay at the forefront of your field and drive innovation.",
+    title: "Organize with Tags",
+    description: "Keep your notes structured and easily accessible. Tag your notes (e.g., 'cmps-598') to categorize them and find them quickly later.",
     link: "/universe",
     icon: "lucide:circle-help",
     image:"/images/ask-university-question-to-community-unisala.webp"
   },
   {
-    title: "Connect in Focused Communities",
-    description: "Find your spaces tailored to your experiences, industry, or goals. Engage in meaningful discussions, collaborations, and skill exchanges with like-minded professionals.",
+    title: "Discover & Learn",
+    description: "Explore a world of knowledge. Browse notes by tags, subjects, or authors. Find exactly what you need to support your learning or research.",
     link: "/universe",
     icon: "lucide:users",
     image:"/images/like-minded-peope-space.webp"

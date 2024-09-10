@@ -1,66 +1,97 @@
 ---
-import { Button } from '@/components/ui/button';
-import { features } from '@/config/landing';
 import { Icon } from 'astro-icon/components';
-import HeaderSection from './header-section.astro';
-import { cn } from '@/utils/lib/utils';
-import { Image } from 'astro:assets';
-import GoToUnisalaPortal from './goToUnisalaPortal.astro';
 ---
 
-<section>
-  <div class='pb-6 pt-28'>
-    <div class='container max-w-6xl'>
-      <HeaderSection
-        label='Features'
-        title='Discover all features.'
-        subtitle='for students applying for study abroad.'
-        />
-
-      <div class='mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
-        {
-          features.map((feature) => (
-            <div class='group relative overflow-hidden rounded-2xl border bg-background p-5 md:p-8'>
-              <div
-                aria-hidden='true'
-                class='absolute inset-0 aspect-video -translate-y-1/2 rounded-full border bg-gradient-to-b from-purple-500/80 to-white opacity-25 blur-2xl duration-300 group-hover:-translate-y-1/4 dark:from-white dark:to-white dark:opacity-5 dark:group-hover:opacity-10'
-              />
-              <div class='relative'>
-                <dt class="font-semibold pl-8">
-                  <Icon
-                    name={feature.icon}
-                    class="absolute left-0 top-1 size-5 stroke-purple-700"
-                  />
-                  <h4>
-                  {feature.title}
-                  </h4>
-                </dt>
-
-                <!-- Adding the image below the feature title -->
-                <div class="mt-4">
-  <Image
-    class="size-full object-center rounded-lg"
-    src={feature.image}
-    alt={feature.title}
-    width={100}
-    height={500}
-    loading="eager"
-    onerror="this.style.display='none'"
-  />
+<div class="w-full max-w-4xl mx-auto my-8 relative space-y-6 py-12 sm:py-20 lg:py-20" id="video-container">
+  <div class="skeleton w-full aspect-video rounded-lg"></div>
 </div>
 
+<script>
+  const videoContainer = document.getElementById('video-container');
+  const skeleton = videoContainer?.querySelector('.skeleton');
 
-                <p class='mt-6 pb-6 text-muted-foreground'>
-                  {feature.description}
-                </p>
-
-              </div>
-            </div>
-          ))
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadVideo();
+          observer.unobserve(entry.target);
         }
-      </div>
-    </div>
-  </div>
+      });
+    },
+    { threshold: 0.1 }
+  );
 
+  if (videoContainer) {
+    observer.observe(videoContainer);
+  }
 
-</section>
+  function loadVideo() {
+    const video = document.createElement('video');
+    video.className = 'w-full rounded-lg hidden';
+    video.controls = true;
+    video.preload = 'auto';
+    video.muted = true;
+    video.autoplay = true;
+    video.loop = true;
+
+    const source = document.createElement('source');
+    source.src = 'https://d2wpk2fhu8mz8q.cloudfront.net/unisala-story.mp4';
+    source.type = 'video/mp4';
+
+    video.appendChild(source);
+
+    video.addEventListener('loadeddata', () => {
+      if (skeleton) {
+        skeleton.remove();
+      }
+      video.classList.remove('hidden');
+      addMuteToggle(video);
+    });
+
+    videoContainer?.appendChild(video);
+  }
+
+  function addMuteToggle(video: HTMLVideoElement) {
+    const muteButton = document.createElement('button');
+    muteButton.className = 'absolute bottom-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full';
+    muteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+    </svg>`;
+
+    muteButton.addEventListener('click', () => {
+      video.muted = !video.muted;
+      updateMuteButtonIcon(muteButton, video.muted);
+    });
+
+    videoContainer?.appendChild(muteButton);
+  }
+
+  function updateMuteButtonIcon(button: HTMLButtonElement, isMuted: any) {
+    button.innerHTML = isMuted
+      ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+        </svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>`;
+  }
+</script>
+
+<style>
+  .skeleton {
+    background-color: #e2e8f0;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
+</style>

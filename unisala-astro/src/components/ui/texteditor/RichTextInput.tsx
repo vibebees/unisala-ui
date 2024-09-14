@@ -55,7 +55,6 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     "color",
     "background",
     "link",
-    "image",
     "video",
   ];
 
@@ -211,7 +210,6 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
         <button className="ql-underline"></button>
         <button className="ql-blockquote"></button>
         <button className="ql-link"></button>
-        <button className="ql-image"></button>
         <button className="ql-code-block"></button>
         <button className="ql-list" value="ordered"></button>
         <button className="ql-list" value="bullet"></button>

@@ -71,17 +71,17 @@ const FloatingToolbar: React.FC<FloatingToolbarProps> = ({ quillRef }) => {
 
 const Options = ({ onImageUpload, isUploading }: { onImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>, isUploading: boolean }) => {
   return (
-    <section className="flex bg-white bg-opacity-80 top-0 translate-y-0 left-11 absolute gap-3 z-50 items-center justify-start w-fit">
-      <Option title="Add Image" Icon={Image} isLoading={isUploading}>
-        <input
-          type="file"
-          accept="image/*"
-          className="absolute inset-0 opacity-0 cursor-pointer"
-          onChange={onImageUpload}
-          disabled={isUploading}
-        />
-      </Option>
-    </section>
+    <section className="flex bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 top-0 translate-y-0 left-11 absolute gap-3 z-50 items-center justify-start w-fit p-2 rounded-lg shadow-md">
+    <Option title="Add Image" Icon={Image} isLoading={isUploading}>
+      <input
+        type="file"
+        accept="image/*"
+        className="absolute inset-0 opacity-0 cursor-pointer"
+        onChange={onImageUpload}
+        disabled={isUploading}
+      />
+    </Option>
+  </section>
   );
 };
 

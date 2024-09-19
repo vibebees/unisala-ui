@@ -105,7 +105,7 @@ const CoreFeed = ({ articles }: { articles: IPost[] }) => {
               <input
                 type="search"
                 id="large-search"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 md:p-4 ps-12 text-base text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2  md:p-4 md:pl-10 ps-12 text-base text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                 placeholder="Renew driver's license, apply for a visa, etc."
                 value={searchQuery}
                 onChange={handleSearchChange}

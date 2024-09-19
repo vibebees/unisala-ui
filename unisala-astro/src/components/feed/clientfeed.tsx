@@ -16,7 +16,7 @@ const StaffPick = ({ article }: { article: IPost }) => (
         alt={article.user.firstName}
       /> */}
     <img
-      className="w-10 h-10 rounded-full mr-2"
+      className="w-10 h-auto rounded-full mr-2"
       src={`https://api.multiavatar.com/` + article.user.firstName + `.svg`}
       alt="Author avatar"
     />

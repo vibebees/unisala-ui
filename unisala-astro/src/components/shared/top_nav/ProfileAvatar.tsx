@@ -36,32 +36,22 @@ const ProfileAvatar = () => {
   if (!user.authenticated) {
     return (
       <div className="flex gap-3 items-center">
-        <a
-         href="/universe/search"
-         data-astro-reload
-        >
+        <a href="/universe/search" data-astro-reload>
           <SearchIcon />
         </a>
-        <a
-         href="/auth"
-          data-astro-reload
-        >
+        <a href="/auth" data-astro-reload>
           <ProfileIcon />
         </a>
-      <ThemeToggle />
-     
-    </div>
+        <ThemeToggle />
+      </div>
     );
   }
 
   return (
     <div className="flex gap-3 items-center">
-       <a
-         href="/universe/search"
-         data-astro-reload
-        >
-          <SearchIcon />
-        </a>
+      <a href="/universe/search" data-astro-reload>
+        <SearchIcon />
+      </a>
       <DropdownMenu>
         <DropdownMenuTrigger className="cursor-pointer" asChild>
           <Avatar>
@@ -79,18 +69,15 @@ const ProfileAvatar = () => {
               {user.firstName}
             </span>
           </DropdownMenuLabel>
-          {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
           <DropdownMenuSeparator />
-          {/* <DropdownMenuGroup>
+          <DropdownMenuGroup>
             <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+              <a href={`/signature/${user?.firstName?.trim()}-${user?.lastName?.trim()}-${user.id}`} data-astro-reload className="w-full">
+                Profile
+              </a>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </DropdownMenuGroup> */}
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>

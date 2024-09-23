@@ -117,8 +117,10 @@ try {
   console.error('Error fetching data:', e);
   error = e instanceof Error ? e.message : String(e);
 }
-authorName = `${articles[0].user?.firstName} ${articles[0].user?.lastName}`;
-oneLinerBio = `${articles[0].user?.oneLinerBio}`;
+authorName = `${articles[0]?.user?.firstName ?? ''} ${articles[0]?.user?.lastName ?? ''}`.trim() || '';
+oneLinerBio = articles[0]?.user?.oneLinerBio ?? '';
+
+console.log({oneLinerBio, abc: articles[0]?.user})
 ---
 
 <MainLayout title='Unisala universe'>

@@ -64,21 +64,6 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
     );
   }
 
-  const CoverImageTest = (image:any) =>{
-    return (
-      <div className="max-w-screen-md mx-auto px-4 py-8">
-        <div className="">
-            <div className="w-full max-w-4xl mx-auto mb-8">
-            <img
-              src={image}
-              className="w-full h-full object-contain"
-            />
-            </div>
-        </div>
-      </div>
-    );
-  }
-
    const CoverImage = ({articles, showImage, randomImage}: {articles:IPost[], showImage: boolean, randomImage:string}) => {
     return (
       articles.length > 0 && showImage && randomImage && (

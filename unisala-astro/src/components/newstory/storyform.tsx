@@ -62,13 +62,13 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         },
     });
 
-    useEffect(() => {
-        if (!userData) {
-            const redirectUrl = `${location.pathname}${location.search}`;
-            const decodedRedirect = decodeURIComponent(redirectUrl);
-            navigator(`/auth?redirect=${decodedRedirect}`);
-        }
-    }, [userData]);
+    // useEffect(() => {
+    //     if (!userData) {
+    //         const redirectUrl = `${location.pathname}${location.search}`;
+    //         const decodedRedirect = decodeURIComponent(redirectUrl);
+    //         navigator(`/auth?redirect=${decodedRedirect}`);
+    //     }
+    // }, [userData]);
 
     const handlePublish = async (e: any): Promise<void> => {
         const payloadTopics = topics.map((topic) => ({

@@ -9,6 +9,7 @@ import { navigator } from '@/utils/lib/URLupdate';
 import PreviewModal from './storyPreviewModal';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager'; // Import the custom hook
+import { parse } from 'date-fns';
 
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
@@ -151,8 +152,10 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     onClose={() => setShowPreview(false)}
                     onPublish={handlePublish}
                     topics={topics}
-                    setTopics={setTopics}
-                />
+                    draftId={parseInt(draftId)}
+                    setTopics={setTopics} onSave={function (topics: TopicOptions[], imageUrl: string | null): void {
+                        throw new Error('Function not implemented.');
+                    } }                />
             )}
 
             {hasDrafts && (

@@ -98,13 +98,13 @@ const authData: { accessToken?: string } | null = getCache('authData') || {} as 
 const accessToken = authData?.accessToken;
 
 const httpLink = split(
-  (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
+  (operation: { getContext: () => { (): any; new(): any; server: string; }; }) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
   universityServerGql,
   split(
-    (operation) => operation.getContext().server === MESSAGE_SERVICE_GQL,
+    (operation: { getContext: () => { (): any; new(): any; server: string; }; }) => operation.getContext().server === MESSAGE_SERVICE_GQL,
     messageServerGql,
     split(
-      (operation) => operation.getContext().server === USER_SERVICE_GQL,
+      (operation: { getContext: () => { (): any; new(): any; server: string; }; }) => operation.getContext().server === USER_SERVICE_GQL,
       userServerGql
     )
   )

@@ -2031,6 +2031,16 @@ export const checkEmail = gql`
             }
             }
         }`,
+ADD_NOTES = gql`
+ mutation AddNotes($notes: String!) {
+    addNotes(notes: $notes) {
+      status {
+        success
+        message
+      }
+    }
+  }
+`,
   GET_METADATA_TAGS = gql`
     fragment AddAPostDetails on AddAPostQuery {
       suggestMeUniversity {

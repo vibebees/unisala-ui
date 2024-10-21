@@ -55,6 +55,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     "color",
     "background",
     "link",
+    "image",
     "video",
   ];
 

@@ -32,12 +32,14 @@ const FloatingToolbar: React.FC<FloatingToolbarProps> = ({ quillRef }) => {
         if (result.success && result.imageKeys && result.imageKeys.length > 0 && result.presignedUrl) {
           const imageKey = result.imageKeys[0];
           const imageUrl = `${result.presignedUrl}${imageKey}`;
-          
           // Insert the image into the Quill editor
           const quill = quillRef.current?.getEditor();
           if (quill) {
             const range = quill.getSelection(true);
-            quill.insertEmbed(range.index, 'image', imageUrl);
+            quill.updateContents([
+              { retain: range.index },
+              { insert: { image: imageUrl } },
+            ]);
           }
         } else {
           console.error('Image upload response is missing required data');

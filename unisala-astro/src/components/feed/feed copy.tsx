@@ -6,7 +6,7 @@ import type { IPost } from '@/types/post';
 
 
 
-const TopicBadge = ({ topic, id }: { topic: string, id: string }) => (
+const TopicBadge = ({ topic, id }: { topic: string, id: string}) => (
   <a href={`/universe/tags/${id}`} data-astro-reload
     className="inline-block mr-2 mb-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition duration-300 ease-in-out"
   >
@@ -14,19 +14,21 @@ const TopicBadge = ({ topic, id }: { topic: string, id: string }) => (
   </a>
 );
 
-const MediumFeed = ({ articles, staffPicks, topics, title = "" }: { articles: IPost[], staffPicks: IPost, topics: any, title:string }) => {
+const MediumFeed = ({
+   articles, staffPicks, topics, title = "", showTags = true ,
+  }: { articles: IPost[], staffPicks: IPost, topics: any, title:string, showTags:Boolean  }) => {
   return (
     <div className=" ">
       <div className="flex flex-col md:flex-row">
-        <div className="w-full lg:w-3/4 lg:pr-8">
-          <CoreFeed articles={articles} title={title} id={''}/>
+        <div className="w-full lg:pr-8">
+          <CoreFeed articles={articles} title={title} id={''} />
         </div>
-        <div className="md:w-1/4">
-     
+        {showTags && <div className="md:w-1/4">
+
           <div>
             <h2 className="text-lg font-bold mb-4">Recommended topics</h2>
             <div className="flex flex-wrap">
-              {topics.map((topic: { name: any; _id: any; }, index: React.Key | null | undefined) => (
+              { topics.map((topic: { name: any; _id: any; }, index: React.Key | null | undefined) => (
                 <TopicBadge
                   key={index}
                   topic={topic?.name}
@@ -35,7 +37,7 @@ const MediumFeed = ({ articles, staffPicks, topics, title = "" }: { articles: IP
               ))}
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

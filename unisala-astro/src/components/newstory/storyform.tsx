@@ -7,7 +7,7 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
 import PreviewModal from './storyPreviewModal';
-import { getCache } from '@/utils/cache';
+import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager'; // Import the custom hook
 
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
@@ -51,12 +51,17 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
     const [addPost] = useAstroMutation(AddPost, {
         context: { server: USER_SERVICE_GQL },
-        onCompleted: (data) => {
+        onCompleted: (data: { addPost: { post: { _id: string; }; }; }) => {
             deleteDraft(draftId);
             toast.success("Your Story is Published!");
+
+            const notesPublished: { [key: string]: { postTitle: string; postText: string , createdAt: string} } = getCache('notesPublished') || {};
+            notesPublished[data?.addPost?.post?._id] = { postTitle: draftTitle, postText: draftContent, createdAt: new Date().toLocaleString() };
+            setCache('notesPublished', notesPublished);
+            
             navigator('/threads/' + data?.addPost?.post?._id);
         },
-        onError: (error) => {
+        onError: (error: any) => {
             console.error('Error publishing post:', error);
             toast.error("Failed to publish your story. Please try again.");
         },

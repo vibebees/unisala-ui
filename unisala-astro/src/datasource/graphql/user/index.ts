@@ -2041,6 +2041,28 @@ ADD_NOTES = gql`
     }
   }
 `,
+proxyImage = gql`
+ query proxyImages($url: String!) {
+    proxyImages(url: $url) {
+    success
+      data {
+        contentType
+        base64Data
+        size
+        originalUrl
+      }
+    }
+  }
+`,
+
+getSearchImages = gql`
+query searchImages($q: String) {
+  searchImages( q: $q  ){
+     images{
+     link
+    }
+  } 
+}`,
   GET_METADATA_TAGS = gql`
     fragment AddAPostDetails on AddAPostQuery {
       suggestMeUniversity {

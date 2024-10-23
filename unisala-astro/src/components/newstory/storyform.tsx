@@ -9,7 +9,7 @@ import { navigator } from '@/utils/lib/URLupdate';
 import PreviewModal from './storyPreviewModal';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager'; // Import the custom hook
-import { parse } from 'date-fns';
+import VisualAidPanel from './visualAidPanel';
 
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
@@ -109,6 +109,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     };
 
     return (
+       <>
         <div className='container max-w-screen-md mx-auto pt-12 pb-32'>
             <form id='postForm' onSubmit={(e) => e.preventDefault()}>
                 <div>
@@ -152,7 +153,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     onClose={() => setShowPreview(false)}
                     onPublish={handlePublish}
                     topics={topics}
-                    draftId={parseInt(draftId)}
+                    draftId={draftId}
                     setTopics={setTopics} onSave={function (topics: TopicOptions[], imageUrl: string | null): void {
                         throw new Error('Function not implemented.');
                     } }                />
@@ -161,7 +162,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
             {hasDrafts && (
                 <a href="/new-story/drafts" className="block text-center mt-40 text-blue-500">View Drafts</a>
             )}
+           
+            
         </div>
+        <VisualAidPanel />
+        </>
     );
 };
 

@@ -13,12 +13,15 @@ interface UppyImageEditorProps {
   width?: string;
   height?: string;
   onFileUpload?: (result: any) => void;
+  className?: string;
+
 }
 
 const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
   width = '100%',
   height = '450px',
-  onFileUpload
+  onFileUpload,
+  className = '',
 }) => {
   const uppyInstance = useRef<Uppy | null>(null);
   const dashboardElement = useRef<HTMLDivElement>(null);
@@ -137,7 +140,13 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       })
       .use(ImageEditor, {
         target: Dashboard,
-        quality: 0.8
+        quality: 0.8,
+        cropperOptions: {
+          viewMode: 1,
+          background: false,
+          autoCropArea: 1,
+          responsive: true
+        }
       });
 
     uppyInstance.current.on('complete', (result) => {
@@ -166,8 +175,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         const jsonStr = e.dataTransfer?.getData('application/json');
         const imageUrl = e.dataTransfer?.getData('text/uri-list');
         
-        console.log('JSON data:', jsonStr);
-        console.log('Image URL:', imageUrl);
+
         setUrlToProxy(imageUrl || null);
         
         if (jsonStr) {
@@ -258,8 +266,21 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
   return (
     <div 
       ref={dropZoneRef}
-      style={{ width, height }}
-      className="relative rounded-lg overflow-hidden border-2 border-dashed border-gray-200 dark:border-gray-700"
+      style={{ width }} // Remove fixed height from inline styles
+      className={`
+        relative 
+        rounded-lg 
+        overflow-hidden 
+        border-2 
+        border-dashed 
+        border-gray-200 
+        dark:border-gray-700
+        min-h-[300px] 
+        h-full
+        flex 
+        flex-col
+        ${className}
+      `}
       onDrop={(e) => {
         console.log('React onDrop event triggered');
         // Let the event listener handle it
@@ -269,16 +290,23 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         e.preventDefault();
       }}
     >
-      <div ref={dashboardElement} className="h-full" />
+      <div 
+        ref={dashboardElement} 
+        className="h-full w-full flex-grow"
+        style={{ minHeight: '300px' }} // Ensure minimum height for usability
+      />
+      
       {(isDragging || isLoading) && (
-        <div className="absolute inset-0 bg-blue-500 bg-opacity-10 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <p className="text-blue-500 font-medium">
+        <div className="absolute inset-0 bg-blue-500 bg-opacity-10 flex items-center justify-center z-10">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+            <p className="text-blue-500 dark:text-blue-400 font-medium text-center">
               {isLoading ? 'Processing image...' : 'Drop image to edit'}
             </p>
           </div>
         </div>
       )}
+
+     
     </div>
   );
 };

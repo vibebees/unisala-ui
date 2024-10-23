@@ -10,6 +10,7 @@ import PreviewModal from './storyPreviewModal';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager'; // Import the custom hook
 import VisualAidPanel from './visualAidPanel';
+import UppyImageEditor from './imageEditor';
 
 const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
 const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
@@ -165,6 +166,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
            
             
         </div>
+      
         <VisualAidPanel />
         </>
     );

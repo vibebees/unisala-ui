@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useAstroQuery } from '@/datasource/apollo-client';
 import { gql } from '@apollo/client';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import UppyImageEditor from './imageEditor';
 
 const getSearchImages = gql`
   query searchImages($q: String!) {
@@ -101,6 +102,9 @@ const VisualAidPanel = () => {
   return (
     <div className="fixed top-0 right-0 h-full w-[400px] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-10">
       <div className="h-full flex flex-col">
+      <div className="h-[600px]"> {/* or any other height constraint */}
+  <UppyImageEditor className="h-full" />
+</div>
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <form onSubmit={handleSearch} className="flex gap-2">
             <Input

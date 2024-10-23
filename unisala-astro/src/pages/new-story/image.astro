@@ -19,11 +19,9 @@ const initialPostDraft: PostDraft = {
 ---
 
 <MainLayout title='Create Post'>
-    <Toast client:load />
     <div class="flex">
-        <div class="flex-1">
             <ImageEditor client:only />
-        </div>
-        <VisualAidPanel client:only />
+            <VisualAidPanel client:only />
+       
     </div>
 </MainLayout>

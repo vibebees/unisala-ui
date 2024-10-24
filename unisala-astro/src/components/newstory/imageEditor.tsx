@@ -136,10 +136,10 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         proudlyDisplayPoweredByUppy: false,
         disableStatusBar: true,
         // Disable Uppy's default drop handling
-        disableDropzone: true
+        // disableDropzone: true
       })
       .use(ImageEditor, {
-        target: Dashboard,
+        target: dashboardElement.current || undefined,
         quality: 0.8,
         cropperOptions: {
           viewMode: 1,
@@ -175,6 +175,8 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         const jsonStr = e.dataTransfer?.getData('application/json');
         const imageUrl = e.dataTransfer?.getData('text/uri-list');
         
+        const fileIDs = uppyInstance.current?.getFiles().map(file => file.id) || [];
+        uppyInstance.current?.removeFiles(fileIDs);
 
         setUrlToProxy(imageUrl || null);
         
@@ -252,7 +254,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     return () => {
       console.log('Cleaning up event listeners');
       if (uppyInstance.current) {
-        uppyInstance.current.close();
+        uppyInstance.current.cancelAll();
       }
       if (dropZone) {
         dropZone.removeEventListener('drop', handleDrop);

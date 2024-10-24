@@ -2056,13 +2056,18 @@ proxyImage = gql`
 `,
 
 getSearchImages = gql`
-query searchImages($q: String) {
-  searchImages( q: $q  ){
-     images{
-     link
+  query searchImages($q: String!) {
+    searchImages(q: $q) {
+      images {
+        link
+        title
+        thumbnail
+        width
+        height
+      }
     }
-  } 
-}`,
+  }
+`,
   GET_METADATA_TAGS = gql`
     fragment AddAPostDetails on AddAPostQuery {
       suggestMeUniversity {

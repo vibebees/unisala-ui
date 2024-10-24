@@ -155,6 +155,42 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       }
     });
 
+     // Handle image after editing is complete and saved
+     uppyInstance.current.on('file-editor:complete', (file) => {
+      try {
+        const blobUrl = URL.createObjectURL(file.data);
+        const quill = document.querySelector('.ql-editor');
+        
+        if (quill) {
+          const img = document.createElement('img');
+          img.src = blobUrl;
+          img.style.maxWidth = '100%';
+          
+          const selection = window.getSelection();
+          if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.insertNode(img);
+            range.collapse(false);
+          } else {
+            quill.appendChild(img);
+          }
+          
+          // Trigger change event
+          const event = new Event('input', { bubbles: true });
+          quill.dispatchEvent(event);
+          
+          // Clear Uppy after successful insertion
+          if (file.id) {
+            uppyInstance.current?.removeFile(file.id);
+          }
+        }
+      } catch (error) {
+        console.error('Error inserting image:', error);
+        uppyInstance.current?.info('Failed to insert image', 'error', 3000);
+      }
+    });
+
+
     const handleDrop = async (e: DragEvent) => {
       console.log('Drop event triggered', {
         dataTransfer: e.dataTransfer,

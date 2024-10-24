@@ -204,15 +204,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                 </div>
 
                 {/* Layout Toggle Button */}
-                <button
-                    onClick={togglePanelLayout}
-                    className="absolute top-4 left-6 z-30 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                    {panelLayout === 'right' ? 
-                        <ArrowLeftCircle className="h-6 w-6" /> : 
-                        <ArrowRightCircle className="h-6 w-6" />
-                    }
-                </button>
+  
 
                 <VisualAidPanel />
             </div>

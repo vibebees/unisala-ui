@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Uppy from '@uppy/core';
 import Dashboard from '@uppy/dashboard';
 import ImageEditor from '@uppy/image-editor';
@@ -14,7 +14,6 @@ interface UppyImageEditorProps {
   height?: string;
   onFileUpload?: (result: any) => void;
   className?: string;
-
 }
 
 const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
@@ -28,16 +27,62 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [urlToProxy, setUrlToProxy] = useState<string | null>(null);
 
-  // Move the query back to component level with a dummy URL
+  // Move proxyImage query setup outside of render cycles
   const { refetch: proxyImageRefetch } = useAstroQuery(proxyImage, {
     context: { server: USER_SERVICE_GQL },
-    variables: { url: urlToProxy },
+    variables: { url: '' },
     skip: true,
   });
 
-  const addImageToUppy = async (file: File, meta = {}) => {
+  // Memoize handlers to prevent recreating on each render
+  const fetchAndProcessImage = useCallback(async (imageUrl: string, title: string) => {
+    if (!imageUrl) {
+      console.error('Image URL is empty. Aborting request.');
+      uppyInstance.current?.info('No image URL provided', 'error', 3000);
+      throw new Error('Image URL cannot be empty');
+    }
+
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error('Direct fetch failed');
+      
+      const blob = await response.blob();
+      return new File(
+        [blob],
+        `${title || 'image'}.jpg`,
+        { type: response.headers.get('content-type') || 'image/jpeg' }
+      );
+    } catch (directFetchError) {
+      console.log('Direct fetch failed, trying proxy:', directFetchError);
+      
+      const { data } = await proxyImageRefetch({
+        variables: { url: imageUrl }
+      });
+
+      if (!data?.proxyImages?.success) {
+        throw new Error(data?.proxyImages?.error || 'Failed to proxy image');
+      }
+
+      const binaryString = atob(data.proxyImages.data.base64Data);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      const proxyBlob = new Blob([bytes], { 
+        type: data.proxyImages.data.contentType || 'image/jpeg' 
+      });
+
+      return new File(
+        [proxyBlob],
+        `${title || 'image'}.jpg`,
+        { type: data.proxyImages.data.contentType || 'image/jpeg' }
+      );
+    }
+  }, [proxyImageRefetch]);
+
+  const addImageToUppy = useCallback(async (file: File, meta = {}) => {
     if (uppyInstance.current) {
       try {
         await uppyInstance.current.addFile({
@@ -55,191 +100,115 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         uppyInstance.current.info('Failed to add image', 'error', 3000);
       }
     }
-  };
+  }, []);
 
-  const fetchAndProcessImage = async (imageUrl: string, title: string) => {
-    if (!imageUrl) {
-      console.error('Image URL is empty. Aborting request.');
-      uppyInstance.current?.info('No image URL provided', 'error', 3000);
-      throw new Error('Image URL cannot be empty');
-    }
-  
-    try {
-      console.log('Attempting to fetch image:', imageUrl);
-      // Try direct fetch first
-      const response = await fetch(imageUrl);
-      if (!response.ok) throw new Error('Direct fetch failed');
-      
-      const blob = await response.blob();
-      const file = new File(
-        [blob],
-        `${title || 'image'}.jpg`,
-        { type: response.headers.get('content-type') || 'image/jpeg' }
-      );
-      
-      return file;
-    } catch (directFetchError) {
-      console.log('Direct fetch failed, trying proxy:', directFetchError);
-      
-      try {
-        // Use the proxyImageRefetch function that was defined at the component level
-        console.log('Making proxy request for URL:', imageUrl);
-        const { data } = await proxyImageRefetch({
-          variables: { url: imageUrl }
-        });
-
-        console.log('Proxy response:', data);
-
-        if (!data?.proxyImages?.success) {
-          throw new Error(data?.proxyImages?.error || 'Failed to proxy image');
-        }
-
-        const binaryString = atob(data.proxyImages.data.base64Data);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        
-        const blob = new Blob([bytes], { 
-          type: data.proxyImages.data.contentType || 'image/jpeg' 
-        });
-
-        return new File(
-          [blob],
-          `${title || 'image'}.jpg`,
-          { type: data.proxyImages.data.contentType || 'image/jpeg' }
-        );
-      } catch (proxyError) {
-        console.error('Proxy fetch failed:', proxyError);
-        throw new Error('Failed to fetch image through proxy');
-      }
-    }
-  };
-
+  // Initialize Uppy only once
   useEffect(() => {
-    console.log('Setting up Uppy and event listeners');
-    
-    uppyInstance.current = new Uppy({
-      restrictions: {
-        maxNumberOfFiles: 10,
-        allowedFileTypes: ['image/*']
-      },
-      autoProceed: false,
-    });
-
-    uppyInstance.current
-      .use(Dashboard, {
-        inline: true,
-        target: dashboardElement.current || undefined,
-        width: '100%',
-        height: height,
-        proudlyDisplayPoweredByUppy: false,
-        disableStatusBar: true,
-        // Disable Uppy's default drop handling
-        disableDropzone: true
-      })
-      .use(ImageEditor, {
-        target: Dashboard,
-        quality: 0.8,
-        cropperOptions: {
-          viewMode: 1,
-          background: false,
-          autoCropArea: 1,
-          responsive: true
-        }
+    if (!uppyInstance.current) {
+      uppyInstance.current = new Uppy({
+        restrictions: {
+          maxNumberOfFiles: 10,
+          allowedFileTypes: ['image/*']
+        },
+        autoProceed: false,
       });
 
-    uppyInstance.current.on('complete', (result) => {
-      if (onFileUpload) {
-        onFileUpload(result);
-      }
-    });
+      // Configure Uppy plugins
+      uppyInstance.current
+        .use(Dashboard, {
+          inline: true,
+          target: dashboardElement.current || undefined,
+          width: '100%',
+          height: height,
+          proudlyDisplayPoweredByUppy: false,
+          disableStatusBar: true,
+          disableDropzone: true
+        })
+        .use(ImageEditor, {
+          target: Dashboard,
+          quality: 0.8,
+          cropperOptions: {
+            viewMode: 1,
+            background: false,
+            autoCropArea: 1,
+            responsive: true
+          }
+        });
 
-     // Handle image after editing is complete and saved
-     uppyInstance.current.on('file-editor:complete', (file) => {
-      try {
-        const blobUrl = URL.createObjectURL(file.data);
-        const quill = document.querySelector('.ql-editor');
-        
-        if (quill) {
-          const img = document.createElement('img');
-          img.src = blobUrl;
-          img.style.maxWidth = '100%';
+      // Set up Uppy event listeners
+      uppyInstance.current.on('complete', onFileUpload);
+
+      uppyInstance.current.on('file-editor:complete', (file) => {
+        try {
+          const blobUrl = URL.createObjectURL(file.data);
+          const quill = document.querySelector('.ql-editor');
           
-          const selection = window.getSelection();
-          if (selection && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            range.insertNode(img);
-            range.collapse(false);
-          } else {
-            quill.appendChild(img);
+          if (quill) {
+            const img = document.createElement('img');
+            img.src = blobUrl;
+            img.style.maxWidth = '100%';
+            
+            const selection = window.getSelection();
+            if (selection?.rangeCount > 0) {
+              const range = selection.getRangeAt(0);
+              range.insertNode(img);
+              range.collapse(false);
+            } else {
+              quill.appendChild(img);
+            }
+            
+            quill.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            if (file.id) {
+              uppyInstance.current?.removeFile(file.id);
+            }
           }
-          
-          // Trigger change event
-          const event = new Event('input', { bubbles: true });
-          quill.dispatchEvent(event);
-          
-          // Clear Uppy after successful insertion
-          if (file.id) {
-            uppyInstance.current?.removeFile(file.id);
-          }
+        } catch (error) {
+          console.error('Error inserting image:', error);
+          uppyInstance.current?.info('Failed to insert image', 'error', 3000);
         }
-      } catch (error) {
-        console.error('Error inserting image:', error);
-        uppyInstance.current?.info('Failed to insert image', 'error', 3000);
+      });
+    }
+
+    return () => {
+      if (uppyInstance.current) {
+        uppyInstance.current.cancelAll();
+        uppyInstance.current = null;
       }
-    });
+    };
+  }, [height, onFileUpload]);
 
-
+  // Separate effect for drop zone event listeners
+  useEffect(() => {
     const handleDrop = async (e: DragEvent) => {
-      console.log('Drop event triggered', {
-        dataTransfer: e.dataTransfer,
-        types: e.dataTransfer?.types,
-        files: e.dataTransfer?.files
-      });
-
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(false);
       setIsLoading(true);
-      
-      try {
-        if (e.dataTransfer?.types) {
-          console.log('Available data types:', Array.from(e.dataTransfer.types));
-        }
 
+      try {
         const jsonStr = e.dataTransfer?.getData('application/json');
         const imageUrl = e.dataTransfer?.getData('text/uri-list');
-        
 
-        setUrlToProxy(imageUrl || null);
-        
         if (jsonStr) {
           const jsonData = JSON.parse(jsonStr);
-          console.log('Parsed JSON data:', jsonData);
-          
           if (jsonData.type === 'visual-aid-image') {
             const url = jsonData.url || jsonData.link;
-            console.log('Processing visual aid image with URL:', url);
             uppyInstance.current?.info('Loading image...', 'info', 3000);
             const file = await fetchAndProcessImage(url, jsonData.title);
             await addImageToUppy(file, jsonData);
           }
         } else if (imageUrl) {
-          console.log('Processing dropped URL:', imageUrl);
           uppyInstance.current?.info('Loading image...', 'info', 3000);
           const file = await fetchAndProcessImage(imageUrl, 'Dropped Image');
           await addImageToUppy(file);
         } else if (e.dataTransfer?.files.length) {
-          console.log('Processing dropped files:', e.dataTransfer.files);
           const file = e.dataTransfer.files[0];
           if (file.type.startsWith('image/')) {
             await addImageToUppy(file);
           } else {
             uppyInstance.current?.info('Please drop an image file', 'error', 3000);
           }
-        } else {
-          console.log('No recognizable data found in drop event');
         }
       } catch (error) {
         console.error('Error handling drop:', error);
@@ -250,7 +219,6 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     };
 
     const handleDragOver = (e: DragEvent) => {
-      console.log('Drag over event');
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(true);
@@ -260,49 +228,31 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     };
 
     const handleDragLeave = (e: DragEvent) => {
-      console.log('Drag leave event');
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(false);
     };
 
-    const handleDragEnter = (e: DragEvent) => {
-      console.log('Drag enter event');
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(true);
-    };
-
-    // Add drop zone event listeners
     const dropZone = dropZoneRef.current;
     if (dropZone) {
-      console.log('Adding event listeners to drop zone');
       dropZone.addEventListener('drop', handleDrop);
       dropZone.addEventListener('dragover', handleDragOver);
       dropZone.addEventListener('dragleave', handleDragLeave);
-      dropZone.addEventListener('dragenter', handleDragEnter);
-    } else {
-      console.warn('Drop zone ref is null');
-    }
+      dropZone.addEventListener('dragenter', handleDragOver);
 
-    return () => {
-      console.log('Cleaning up event listeners');
-      if (uppyInstance.current) {
-        uppyInstance.current.close();
-      }
-      if (dropZone) {
+      return () => {
         dropZone.removeEventListener('drop', handleDrop);
         dropZone.removeEventListener('dragover', handleDragOver);
         dropZone.removeEventListener('dragleave', handleDragLeave);
-        dropZone.removeEventListener('dragenter', handleDragEnter);
-      }
-    };
-  }, [height, onFileUpload, proxyImageRefetch]);
+        dropZone.removeEventListener('dragenter', handleDragOver);
+      };
+    }
+  }, [addImageToUppy, fetchAndProcessImage]);
 
   return (
     <div 
       ref={dropZoneRef}
-      style={{ width }} // Remove fixed height from inline styles
+      style={{ width }}
       className={`
         relative 
         rounded-lg 
@@ -317,19 +267,11 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         flex-col
         ${className}
       `}
-      onDrop={(e) => {
-        console.log('React onDrop event triggered');
-        // Let the event listener handle it
-      }}
-      onDragOver={(e) => {
-        console.log('React onDragOver event triggered');
-        e.preventDefault();
-      }}
     >
       <div 
         ref={dashboardElement} 
         className="h-full w-full flex-grow"
-        style={{ minHeight: '300px' }} // Ensure minimum height for usability
+        style={{ minHeight: '300px' }}
       />
       
       {(isDragging || isLoading) && (
@@ -341,8 +283,6 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
           </div>
         </div>
       )}
-
-     
     </div>
   );
 };

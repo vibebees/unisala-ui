@@ -1,25 +1,31 @@
-// PostForm.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
+import { Button } from '@/components/ui/button';
+import type { PostDraft, TopicOptions } from '@/types/post';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { AddPost } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import toast from 'react-hot-toast';
 import { navigator } from '@/utils/lib/URLupdate';
+import PreviewModal from './storyPreviewModal';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager';
-import PreviewModal from './storyPreviewModal';
 import VisualAidPanel from './visualAidPanel';
-import { ResizeHandle } from './molecules/resizeHandler';
-import { EditorPanel } from './molecules/editorPanel';
-import { BottomBar } from './molecules/bottomBar';
-import  VisualPanel  from './visualAidPanel';
-import type { PostFormProps } from './molecules/types';
-import type { TopicOptions } from '@/types/post';
+import { ArrowLeftCircle, ArrowRightCircle, GripHorizontal } from 'lucide-react';
+
+const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
+const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
+
+interface PostFormProps {
+    initialPostDraft?: PostDraft;
+}
 
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
-    // States
+    // Existing states
     const [showPreview, setShowPreview] = useState(false);
     const [topics, setTopics] = useState<TopicOptions[]>([]);
+
+    // Layout states
+    const [isPanelExpanded, setIsPanelExpanded] = useState(false);
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
     const [panelLayout, setPanelLayout] = useState<'right' | 'split'>('right');
@@ -38,20 +44,21 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         saveDraftPostTitle
     } = useDraftManager();
 
-    // Initialize draft and handle URL
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id') || '';
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id') || '';
 
+    // Handle URL and draft loading
+    useEffect(() => {
         if (id) {
             loadDraft(id);
         } else {
             const newId = createNewDraft();
             const searchParams = new URLSearchParams(location.search);
             searchParams.set('id', newId);
-            navigator(`/new-story?${searchParams.toString()}`);
+            const newUrl = `/new-story?${searchParams.toString()}`;
+            navigator(newUrl);
         }
-    }, [loadDraft, createNewDraft]);
+    }, [id, loadDraft, createNewDraft]);
 
     // Load saved layout preferences
     useEffect(() => {
@@ -86,35 +93,6 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     });
 
     // Handlers
-    const handlePublish = async (): Promise<void> => {
-        if (!draftTitle.trim() || !draftContent.trim()) {
-            toast.error("Please add both title and content before publishing.");
-            return;
-        }
-
-        try {
-            const payloadTopics = topics.map((topic) => ({
-                name: topic?.name,
-                _id: topic?._id,
-                unitId: topic?.unitId,
-                universityCount: topic?.universityCount,
-                entityType: topic?.entityType,
-            }));
-
-            await addPost({
-                variables: {
-                    title: draftTitle,
-                    postText: draftContent,
-                    id: 'others',
-                    tags: payloadTopics
-                },
-            });
-        } catch (error) {
-            console.error('Error publishing post:', error);
-            toast.error('Failed to publish post. Please try again.');
-        }
-    };
-
     const handleHorizontalResizeStart = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsResizingHorizontal(true);
@@ -137,6 +115,36 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         document.addEventListener('mouseup', handleMouseUp);
     };
 
+    const togglePanelLayout = () => {
+        const newLayout = panelLayout === 'right' ? 'split' : 'right';
+        setPanelLayout(newLayout);
+        localStorage.setItem('postFormLayout', newLayout);
+    };
+
+    const handlePublish = async (e: any): Promise<void> => {
+        const payloadTopics = topics.map((topic) => ({
+            name: topic?.name,
+            _id: topic?._id,
+            unitId: topic?.unitId,
+            universityCount: topic?.universityCount,
+            entityType: topic?.entityType,
+        }));
+
+        try {
+            await addPost({
+                variables: {
+                    title: draftTitle,
+                    postText: draftContent,
+                    id: 'others',
+                    tags: payloadTopics
+                },
+            });
+        } catch (error) {
+            console.error('Error publishing post:', error);
+            toast.error('Failed to publish post. Please try again.');
+        }
+    };
+
     const handleTitleChange = (newTitle: string) => {
         saveDraftPostTitle(draftId, newTitle);
     };
@@ -145,37 +153,63 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         saveDraft(draftId, draftTitle, newPostText);
     };
 
-    const handlePanelLayoutToggle = () => {
-        const newLayout = panelLayout === 'right' ? 'split' : 'right';
-        setPanelLayout(newLayout);
-        localStorage.setItem('postFormLayout', newLayout);
-    };
-
     return (
         <div className="relative h-screen flex overflow-hidden">
-            <EditorPanel
-                draftTitle={draftTitle}
-                draftId={draftId}
-                draftContent={draftContent}
-                panelLayout={panelLayout}
-                panelWidth={panelWidth}
-                onTitleChange={handleTitleChange}
-                onContentChange={handlePostTextChange}
-            />
-
-            <VisualPanel
-                width={panelWidth}
-                isResizing={isResizingHorizontal}
-                panelLayout={panelLayout}
-                onPanelClick={() => setActivePanel('visual')}
+            {/* Main Editor Section */}
+            <div 
+                className={`transition-all duration-200 ease-in-out flex-grow ${
+                    panelLayout === 'split' ? `w-[calc(100%-${panelWidth}px)]` : 'w-full'
+                }`}
             >
-                <ResizeHandle 
-                    isResizing={isResizingHorizontal} 
-                    onResizeStart={handleHorizontalResizeStart} 
-                />
-                <VisualAidPanel />
-            </VisualPanel>
+                <div className={`h-full ${panelLayout === 'split' ? 'pr-4' : 'container max-w-screen-md mx-auto'}`}>
+                    <form id='postForm' onSubmit={(e) => e.preventDefault()} className="pt-12 pb-32">
+                        <div>
+                            <TextareaAutoGrow
+                                placeholder='Title of your story!'
+                                className='min-h-[100px]'
+                                maxHeight='50vh'
+                                name='title'
+                                value={draftTitle}
+                                draftId={draftId}
+                                onContentChange={handleTitleChange}
+                            />
+                        </div>
+                        <div>
+                            <TextareaEditor
+                                placeholder='Tell your story...'
+                                draftKey={id}
+                                initialValue={draftContent}
+                                onContentChange={handlePostTextChange}
+                            />
+                        </div>
+                    </form>
+                </div>
+            </div>
 
+            {/* Visual Aid Panel */}
+            <div 
+                style={{ width: panelWidth }}
+                className={`h-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-200 ease-in-out ${
+                    panelLayout === 'right' ? 'fixed right-0' : 'relative'
+                } ${isResizingHorizontal ? 'select-none' : ''}`}
+            >
+                {/* Resize Handle */}
+                <div
+                    className={`absolute left-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transform -translate-x-1/2 z-20 ${
+                        isResizingHorizontal ? 'bg-gray-200 dark:bg-gray-600' : ''
+                    }`}
+                    onMouseDown={handleHorizontalResizeStart}
+                >
+                    <GripHorizontal className="h-6 w-6 text-gray-400" />
+                </div>
+
+                {/* Layout Toggle Button */}
+  
+
+                <VisualAidPanel />
+            </div>
+
+            {/* Preview Modal */}
             {showPreview && (
                 <PreviewModal
                     postDraft={{ title: draftTitle, postText: draftContent }}
@@ -184,21 +218,33 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     topics={topics}
                     draftId={draftId}
                     setTopics={setTopics}
-                    onSave={(topics: TopicOptions[], imageUrl: string | null) => {
-                        // Implement save functionality if needed
-                        setTopics(topics);
+                    onSave={function (topics: TopicOptions[], imageUrl: string | null): void {
+                        throw new Error('Function not implemented.');
                     }}
                 />
             )}
 
-            <BottomBar
-                hasDrafts={hasDrafts}
-                showPreview={showPreview}
-                setShowPreview={setShowPreview}
-                panelLayout={panelLayout}
-                panelWidth={panelWidth}
-                activePanel={activePanel}
-            />
+            {/* Bottom Bar */}
+            <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 z-20'>
+                <div className={`${panelLayout === 'split' ? `w-[calc(100%-${panelWidth}px)]` : 'container max-w-screen-md'} mx-auto`}>
+                    <div className='flex items-center justify-between'>
+                        {hasDrafts && (
+                            <a href="/new-story/drafts" className="text-blue-500 hover:text-blue-600">
+                                View Drafts
+                            </a>
+                        )}
+                        <Button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setShowPreview(true);
+                            }}
+                            className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'
+                        >
+                            Preview & Publish
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

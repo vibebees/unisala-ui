@@ -28,18 +28,34 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Move proxyImage query setup outside of render cycles
   const { refetch: proxyImageRefetch } = useAstroQuery(proxyImage, {
     context: { server: USER_SERVICE_GQL },
     variables: { url: '' },
     skip: true,
   });
 
-  // Memoize handlers to prevent recreating on each render
+  const addImageToUppy = useCallback(async (file: File, meta = {}) => {
+    if (!uppyInstance.current) return;
+    
+    try {
+      await uppyInstance.current.addFile({
+        name: file.name,
+        type: file.type,
+        data: file,
+        meta: {
+          ...meta,
+          source: 'Visual Aid Panel'
+        }
+      });
+      uppyInstance.current.info('Image added successfully', 'success', 3000);
+    } catch (error) {
+      console.error('Error adding file to Uppy:', error);
+      uppyInstance.current.info('Failed to add image', 'error', 3000);
+    }
+  }, []);
+
   const fetchAndProcessImage = useCallback(async (imageUrl: string, title: string) => {
     if (!imageUrl) {
-      console.error('Image URL is empty. Aborting request.');
-      uppyInstance.current?.info('No image URL provided', 'error', 3000);
       throw new Error('Image URL cannot be empty');
     }
 
@@ -54,8 +70,6 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         { type: response.headers.get('content-type') || 'image/jpeg' }
       );
     } catch (directFetchError) {
-      console.log('Direct fetch failed, trying proxy:', directFetchError);
-      
       const { data } = await proxyImageRefetch({
         variables: { url: imageUrl }
       });
@@ -82,103 +96,87 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   }, [proxyImageRefetch]);
 
-  const addImageToUppy = useCallback(async (file: File, meta = {}) => {
-    if (uppyInstance.current) {
-      try {
-        await uppyInstance.current.addFile({
-          name: file.name,
-          type: file.type,
-          data: file,
-          meta: {
-            ...meta,
-            source: 'Visual Aid Panel'
-          }
-        });
-        uppyInstance.current.info('Image added successfully', 'success', 3000);
-      } catch (error) {
-        console.error('Error adding file to Uppy:', error);
-        uppyInstance.current.info('Failed to add image', 'error', 3000);
-      }
-    }
-  }, []);
-
-  // Initialize Uppy only once
+  // Initialize Uppy and set up event listeners
   useEffect(() => {
-    if (!uppyInstance.current) {
-      uppyInstance.current = new Uppy({
-        restrictions: {
-          maxNumberOfFiles: 10,
-          allowedFileTypes: ['image/*']
-        },
-        autoProceed: false,
-      });
+    // Create new Uppy instance
+    uppyInstance.current = new Uppy({
+      restrictions: {
+        maxNumberOfFiles: 10,
+        allowedFileTypes: ['image/*']
+      },
+      autoProceed: false,
+    })
+    .use(Dashboard, {
+      inline: true,
+      target: dashboardElement.current || undefined,
+      width: '100%',
+      height: height,
+      proudlyDisplayPoweredByUppy: false,
+      disableStatusBar: true,
+      disableDropzone: true
+    })
+    .use(ImageEditor, {
+      target: Dashboard,
+      quality: 0.8,
+      cropperOptions: {
+        viewMode: 1,
+        background: false,
+        autoCropArea: 1,
+        responsive: true
+      }
+    });
 
-      // Configure Uppy plugins
-      uppyInstance.current
-        .use(Dashboard, {
-          inline: true,
-          target: dashboardElement.current || undefined,
-          width: '100%',
-          height: height,
-          proudlyDisplayPoweredByUppy: false,
-          disableStatusBar: true,
-          disableDropzone: true
-        })
-        .use(ImageEditor, {
-          target: Dashboard,
-          quality: 0.8,
-          cropperOptions: {
-            viewMode: 1,
-            background: false,
-            autoCropArea: 1,
-            responsive: true
-          }
-        });
+    // Handle file upload complete
+    uppyInstance.current.on('complete', (result) => {
+      if (onFileUpload) {
+        onFileUpload(result);
+      }
+    });
 
-      // Set up Uppy event listeners
-      uppyInstance.current.on('complete', onFileUpload);
-
-      uppyInstance.current.on('file-editor:complete', (file) => {
-        try {
-          const blobUrl = URL.createObjectURL(file.data);
-          const quill = document.querySelector('.ql-editor');
+    // Handle image editor save
+    uppyInstance.current.on('file-editor:complete', (file) => {
+      try {
+        const blobUrl = URL.createObjectURL(file.data);
+        const quill = document.querySelector('.ql-editor');
+        
+        if (quill) {
+          const img = document.createElement('img');
+          img.src = blobUrl;
+          img.style.maxWidth = '100%';
           
-          if (quill) {
-            const img = document.createElement('img');
-            img.src = blobUrl;
-            img.style.maxWidth = '100%';
-            
-            const selection = window.getSelection();
-            if (selection?.rangeCount > 0) {
-              const range = selection.getRangeAt(0);
-              range.insertNode(img);
-              range.collapse(false);
-            } else {
-              quill.appendChild(img);
-            }
-            
-            quill.dispatchEvent(new Event('input', { bubbles: true }));
-            
-            if (file.id) {
-              uppyInstance.current?.removeFile(file.id);
-            }
+          const selection = window.getSelection();
+          if (selection?.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.insertNode(img);
+            range.collapse(false);
+          } else {
+            quill.appendChild(img);
           }
-        } catch (error) {
-          console.error('Error inserting image:', error);
-          uppyInstance.current?.info('Failed to insert image', 'error', 3000);
+          
+          // Trigger change event
+          quill.dispatchEvent(new Event('input', { bubbles: true }));
+          
+          // Clean up the current file
+          if (file.id) {
+            uppyInstance.current?.clear();
+          }
         }
-      });
-    }
+      } catch (error) {
+        console.error('Error inserting image:', error);
+        uppyInstance.current?.info('Failed to insert image', 'error', 3000);
+      }
+    });
 
+    // Cleanup function
     return () => {
       if (uppyInstance.current) {
-        uppyInstance.current.cancelAll();
+        uppyInstance.current.destroy();
         uppyInstance.current = null;
       }
     };
   }, [height, onFileUpload]);
 
-  // Separate effect for drop zone event listeners
+  // Handle drag and drop
   useEffect(() => {
     const handleDrop = async (e: DragEvent) => {
       e.preventDefault();
@@ -189,21 +187,23 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       try {
         const jsonStr = e.dataTransfer?.getData('application/json');
         const imageUrl = e.dataTransfer?.getData('text/uri-list');
+        const files = e.dataTransfer?.files;
+
+        // Clear any existing files first
+        uppyInstance.current?.clear();
 
         if (jsonStr) {
           const jsonData = JSON.parse(jsonStr);
           if (jsonData.type === 'visual-aid-image') {
             const url = jsonData.url || jsonData.link;
-            uppyInstance.current?.info('Loading image...', 'info', 3000);
             const file = await fetchAndProcessImage(url, jsonData.title);
             await addImageToUppy(file, jsonData);
           }
         } else if (imageUrl) {
-          uppyInstance.current?.info('Loading image...', 'info', 3000);
           const file = await fetchAndProcessImage(imageUrl, 'Dropped Image');
           await addImageToUppy(file);
-        } else if (e.dataTransfer?.files.length) {
-          const file = e.dataTransfer.files[0];
+        } else if (files?.length) {
+          const file = files[0];
           if (file.type.startsWith('image/')) {
             await addImageToUppy(file);
           } else {

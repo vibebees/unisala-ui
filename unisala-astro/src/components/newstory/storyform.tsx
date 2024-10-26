@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy } from 'react';
+import React, { useState, useEffect, lazy, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import type { PostDraft, TopicOptions } from '@/types/post';
 import { useAstroMutation } from '@/datasource/apollo-client';
@@ -12,25 +12,33 @@ import { useDraftManager } from '@/hooks/useDraftManager';
 import VisualAidPanel from './visualAidPanel';
 import { ArrowLeftCircle, ArrowRightCircle, GripHorizontal } from 'lucide-react';
 
-const TextareaEditor = lazy(() => import('@/components/ui/textEditor').then(module => ({ default: module.TextareaEditor })));
-const TextareaAutoGrow = lazy(() => import('@/components/ui/textarea').then(module => ({ default: module.TextareaAutoGrow })));
+// Lazy load heavy components
+const TextareaEditor = lazy(() => 
+  import('@/components/ui/textEditor').then(module => ({ 
+    default: module.TextareaEditor 
+  }))
+);
+const TextareaAutoGrow = lazy(() => 
+  import('@/components/ui/textarea').then(module => ({ 
+    default: module.TextareaAutoGrow 
+  }))
+);
 
 interface PostFormProps {
     initialPostDraft?: PostDraft;
 }
 
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
-    // Existing states
+    // UI State
     const [showPreview, setShowPreview] = useState(false);
     const [topics, setTopics] = useState<TopicOptions[]>([]);
-
-    // Layout states
     const [isPanelExpanded, setIsPanelExpanded] = useState(false);
     const [panelWidth, setPanelWidth] = useState(400);
     const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
     const [panelLayout, setPanelLayout] = useState<'right' | 'split'>('right');
     const [activePanel, setActivePanel] = useState<'editor' | 'visual'>('editor');
 
+    // Draft Management
     const {
         drafts,
         hasDrafts,
@@ -44,20 +52,25 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         saveDraftPostTitle
     } = useDraftManager();
 
+    // URL Management
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id') || '';
 
-    // Handle URL and draft loading
+    // Initialize draft from URL
     useEffect(() => {
-        if (id) {
-            loadDraft(id);
-        } else {
-            const newId = createNewDraft();
-            const searchParams = new URLSearchParams(location.search);
-            searchParams.set('id', newId);
-            const newUrl = `/new-story?${searchParams.toString()}`;
-            navigator(newUrl);
-        }
+        const initializeDraft = async () => {
+            if (id) {
+                await loadDraft(id);
+            } else {
+                const newId = createNewDraft();
+                const searchParams = new URLSearchParams(location.search);
+                searchParams.set('id', newId);
+                const newUrl = `/new-story?${searchParams.toString()}`;
+                navigator(newUrl);
+            }
+        };
+
+        initializeDraft();
     }, [id, loadDraft, createNewDraft]);
 
     // Load saved layout preferences
@@ -69,7 +82,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         if (savedWidth) setPanelWidth(parseInt(savedWidth));
     }, []);
 
-    // Mutation setup
+    // Add Post Mutation
     const [addPost] = useAstroMutation(AddPost, {
         context: { server: USER_SERVICE_GQL },
         onCompleted: (data: { addPost: { post: { _id: string; }; }; }) => {
@@ -92,8 +105,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         },
     });
 
-    // Handlers
-    const handleHorizontalResizeStart = (e: React.MouseEvent) => {
+    // Panel Resize Handler
+    const handleHorizontalResizeStart = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         setIsResizingHorizontal(true);
 
@@ -113,15 +126,17 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
-    };
+    }, []);
 
-    const togglePanelLayout = () => {
+    // Layout Toggle Handler
+    const togglePanelLayout = useCallback(() => {
         const newLayout = panelLayout === 'right' ? 'split' : 'right';
         setPanelLayout(newLayout);
         localStorage.setItem('postFormLayout', newLayout);
-    };
+    }, [panelLayout]);
 
-    const handlePublish = async (e: any): Promise<void> => {
+    // Publish Handler
+    const handlePublish = async (topics: TopicOptions[], imageUrl: string | null, isPublic: boolean): Promise<void> => {
         const payloadTopics = topics.map((topic) => ({
             name: topic?.name,
             _id: topic?._id,
@@ -129,7 +144,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
             universityCount: topic?.universityCount,
             entityType: topic?.entityType,
         }));
-
+    
         try {
             await addPost({
                 variables: {
@@ -145,13 +160,14 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         }
     };
 
-    const handleTitleChange = (newTitle: string) => {
+    // Content Change Handlers
+    const handleTitleChange = useCallback((newTitle: string) => {
         saveDraftPostTitle(draftId, newTitle);
-    };
+    }, [draftId, saveDraftPostTitle]);
 
-    const handlePostTextChange = (newPostText: string) => {
+    const handlePostTextChange = useCallback((newPostText: string) => {
         saveDraft(draftId, draftTitle, newPostText);
-    };
+    }, [draftId, draftTitle, saveDraft]);
 
     return (
         <div className="relative h-screen flex overflow-hidden">
@@ -161,50 +177,67 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     panelLayout === 'split' ? `w-[calc(100%-${panelWidth}px)]` : 'w-full'
                 }`}
             >
-                <div className={`h-full ${panelLayout === 'split' ? 'pr-4' : 'container max-w-screen-md mx-auto'}`}>
-                    <form id='postForm' onSubmit={(e) => e.preventDefault()} className="pt-12 pb-32">
-                        <div>
-                            <TextareaAutoGrow
-                                placeholder='Title of your story!'
-                                className='min-h-[100px]'
-                                maxHeight='50vh'
-                                name='title'
-                                value={draftTitle}
-                                draftId={draftId}
-                                onContentChange={handleTitleChange}
-                            />
-                        </div>
-                        <div>
-                            <TextareaEditor
-                                placeholder='Tell your story...'
-                                draftKey={id}
-                                initialValue={draftContent}
-                                onContentChange={handlePostTextChange}
-                            />
-                        </div>
-                    </form>
+                <div className="h-full overflow-y-auto">
+                    <div className={`${panelLayout === 'split' ? 'pr-4' : 'container max-w-screen-md mx-auto'}`}>
+                        <form id='postForm' className="pt-12 pb-32">
+                            {/* Title Section */}
+                            <div className="mb-8">
+                                <TextareaAutoGrow
+                                    placeholder='Title of your story!'
+                                    className='min-h-[100px] w-full p-4 text-2xl font-bold'
+                                    maxHeight='50vh'
+                                    name='title'
+                                    value={draftTitle}
+                                    draftId={draftId}
+                                    onContentChange={handleTitleChange}
+                                />
+                            </div>
+                            
+                            {/* Editor Section */}
+                            <div className="relative min-h-[calc(100vh-300px)]">
+                                <TextareaEditor
+                                    placeholder='Tell your story...'
+                                    className="h-full"
+                                    draftKey={id}
+                                    initialValue={draftContent}
+                                    onContentChange={handlePostTextChange}
+                                />
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
             {/* Visual Aid Panel */}
             <div 
                 style={{ width: panelWidth }}
-                className={`h-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-200 ease-in-out ${
-                    panelLayout === 'right' ? 'fixed right-0' : 'relative'
-                } ${isResizingHorizontal ? 'select-none' : ''}`}
+                className={`h-full bg-white dark:bg-gray-800 border-l border-gray-200 
+                    dark:border-gray-700 transition-all duration-200 ease-in-out overflow-y-auto
+                    ${panelLayout === 'right' ? 'fixed right-0' : 'relative'}
+                    ${isResizingHorizontal ? 'select-none' : ''}`}
             >
                 {/* Resize Handle */}
                 <div
-                    className={`absolute left-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transform -translate-x-1/2 z-20 ${
-                        isResizingHorizontal ? 'bg-gray-200 dark:bg-gray-600' : ''
-                    }`}
+                    className={`absolute left-0 top-0 bottom-0 w-4 cursor-col-resize 
+                        flex items-center justify-center hover:bg-gray-100 
+                        dark:hover:bg-gray-700 transform -translate-x-1/2 z-20
+                        ${isResizingHorizontal ? 'bg-gray-200 dark:bg-gray-600' : ''}`}
                     onMouseDown={handleHorizontalResizeStart}
                 >
                     <GripHorizontal className="h-6 w-6 text-gray-400" />
                 </div>
 
-                {/* Layout Toggle Button */}
-  
+                {/* Layout Toggle */}
+                <button
+                    onClick={togglePanelLayout}
+                    className="absolute left-6 top-4 p-2 rounded-full hover:bg-gray-100 
+                        dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                    {panelLayout === 'right' ? 
+                        <ArrowLeftCircle className="h-6 w-6" /> : 
+                        <ArrowRightCircle className="h-6 w-6" />
+                    }
+                </button>
 
                 <VisualAidPanel />
             </div>
@@ -216,29 +249,31 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     onClose={() => setShowPreview(false)}
                     onPublish={handlePublish}
                     topics={topics}
-                    draftId={draftId}
                     setTopics={setTopics}
-                    onSave={function (topics: TopicOptions[], imageUrl: string | null): void {
-                        throw new Error('Function not implemented.');
-                    }}
-                />
+                    onSave={(topics: TopicOptions[], imageUrl: string | null) => {
+                        // Handle save
+                    } } draftId={''}                />
             )}
 
             {/* Bottom Bar */}
-            <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 z-20'>
-                <div className={`${panelLayout === 'split' ? `w-[calc(100%-${panelWidth}px)]` : 'container max-w-screen-md'} mx-auto`}>
-                    <div className='flex items-center justify-between'>
+            <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 
+                border-t border-gray-200 dark:border-gray-700 py-4 z-20'>
+                <div className={`${panelLayout === 'split' ? 
+                    `w-[calc(100%-${panelWidth}px)]` : 'container max-w-screen-md'} mx-auto`}>
+                    <div className='flex items-center justify-between px-4'>
                         {hasDrafts && (
-                            <a href="/new-story/drafts" className="text-blue-500 hover:text-blue-600">
+                            <a href="/new-story/drafts" 
+                                className="text-blue-500 hover:text-blue-600 transition-colors">
                                 View Drafts
                             </a>
                         )}
                         <Button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setShowPreview(true);
-                            }}
-                            className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'
+                            onClick={() => setShowPreview(true)}
+                            className='bg-green-500 hover:bg-green-600 text-white font-bold 
+                                py-2 px-6 rounded-full shadow-lg transition duration-300 
+                                ease-in-out transform hover:-translate-y-1 hover:scale-105 
+                                focus:outline-none focus:ring-2 focus:ring-green-500 
+                                focus:ring-opacity-50'
                         >
                             Preview & Publish
                         </Button>

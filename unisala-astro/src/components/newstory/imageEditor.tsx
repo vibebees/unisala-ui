@@ -8,6 +8,7 @@ import '@uppy/image-editor/dist/style.min.css';
 import { useAstroQuery } from '@/datasource/apollo-client';
 import { proxyImage } from '@/datasource/graphql/user';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { getServiceConfig } from "@/datasource/servers/index";
 
 interface UppyImageEditorProps {
   width?: string;
@@ -27,12 +28,44 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { uploadFileApi } = getServiceConfig();
 
   const { refetch: proxyImageRefetch } = useAstroQuery(proxyImage, {
     context: { server: USER_SERVICE_GQL },
     variables: { url: '' },
     skip: true,
   });
+
+  const uploadImageToServer = async (file: File) => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    const { uploadFileApi } = getServiceConfig();
+
+
+    try {
+      const response = await fetch(uploadFileApi, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      
+      if (result.success && result.imageKeys?.length > 0 && result.presignedUrl) {
+        const imageUrl = `${result.presignedUrl}${result.imageKeys[0]}`;
+        return imageUrl;
+      } else {
+        throw new Error('Invalid upload response');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const addImageToUppy = useCallback(async (file: File, meta = {}) => {
     if (!uppyInstance.current) return;
@@ -96,6 +129,47 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   }, [proxyImageRefetch]);
 
+  const insertImageUrl = (imageUrl:string) => {
+    try {
+      const quill = document.querySelector('.ql-editor');
+      
+      if (quill) {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.style.maxWidth = '100%';
+        
+        // Add loading state
+        img.classList.add('loading');
+        
+        // Handle image load
+        img.onload = () => {
+          img.classList.remove('loading');
+        };
+        
+        // Handle image error
+        img.onerror = () => {
+          console.error('Failed to load image:', imageUrl);
+          img.remove();
+        };
+        
+        // Insert at cursor position if available, otherwise append
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          range.insertNode(img);
+          range.collapse(false);
+        } else {
+          quill.appendChild(img);
+        }
+        
+        // Trigger change event
+        quill.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    } catch (error) {
+      console.error('Error inserting image:', error);
+    }
+  };
+
   // Initialize Uppy and set up event listeners
   useEffect(() => {
     // Create new Uppy instance
@@ -133,7 +207,9 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       }
     });
 
+
     // Handle image editor save
+    /*
     uppyInstance.current.on('file-editor:complete', (file) => {
       try {
         const blobUrl = URL.createObjectURL(file.data);
@@ -145,7 +221,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
           img.style.maxWidth = '100%';
           
           const selection = window.getSelection();
-          if (selection?.rangeCount > 0) {
+          if (selection && selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
             range.insertNode(img);
             range.collapse(false);
@@ -164,6 +240,27 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       } catch (error) {
         console.error('Error inserting image:', error);
         uppyInstance.current?.info('Failed to insert image', 'error', 3000);
+      }
+    });
+    */
+
+    uppyInstance.current.on('file-editor:complete', async (file) => {
+      try {
+        const editedFile = new File(
+          [file.data],
+          file.name || 'edited-image.jpg',
+          { type: file.type || 'image/jpeg' }
+        );
+        
+        const imageUrl = await uploadImageToServer(editedFile);
+        insertImageUrl(imageUrl);
+        
+        if (file.id) {
+          uppyInstance.current?.clear();
+        }
+      } catch (error) {
+        console.error('Error processing edited image:', error);
+        uppyInstance.current?.info('Failed to process image', 'error', 3000);
       }
     });
 

@@ -10,6 +10,7 @@ import PreviewModal from './storyPreviewModal';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager';
 import VisualAidPanel from './visualAidPanel';
+import Text2ImagePanel from './imageGeneration';
 import { ArrowLeftCircle, ArrowRightCircle, GripHorizontal } from 'lucide-react';
 
 // Lazy load heavy components
@@ -34,7 +35,9 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     const [topics, setTopics] = useState<TopicOptions[]>([]);
     const [isPanelExpanded, setIsPanelExpanded] = useState(false);
     const [panelWidth, setPanelWidth] = useState(400);
+    const [leftPanelWidth, setLeftPanelWidth] = useState(400);
     const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
+    const [isLeftPanelResizing, setIsLeftPanelResizing] = useState(false);
     const [panelLayout, setPanelLayout] = useState<'right' | 'split'>('right');
     const [activePanel, setActivePanel] = useState<'editor' | 'visual'>('editor');
 
@@ -77,9 +80,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     useEffect(() => {
         const savedLayout = localStorage.getItem('postFormLayout');
         const savedWidth = localStorage.getItem('postFormPanelWidth');
+        const savedLeftWidth = localStorage.getItem('leftPanelWidth');
         
         if (savedLayout) setPanelLayout(savedLayout as 'right' | 'split');
         if (savedWidth) setPanelWidth(parseInt(savedWidth));
+        if (savedLeftWidth) setLeftPanelWidth(parseInt(savedLeftWidth));
     }, []);
 
     // Add Post Mutation
@@ -89,8 +94,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
             deleteDraft(draftId);
             toast.success("Your Story is Published!");
 
-            const notesPublished = getCache('notesPublished') || {};
-            notesPublished[data?.addPost?.post?._id] = {
+            const notesPublished: { [key: string]: any } = getCache('notesPublished') || {};
+            notesPublished[data.addPost.post._id] = {
                 postTitle: draftTitle,
                 postText: draftContent,
                 createdAt: new Date().toLocaleString()
@@ -105,7 +110,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         },
     });
 
-    // Panel Resize Handler
+    // Panel Resize Handlers
     const handleHorizontalResizeStart = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         setIsResizingHorizontal(true);
@@ -120,6 +125,27 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
         const handleMouseUp = () => {
             setIsResizingHorizontal(false);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    }, []);
+
+    const handleLeftPanelResizeStart = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsLeftPanelResizing(true);
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const newWidth = moveEvent.clientX;
+            const constrainedWidth = Math.min(Math.max(newWidth, 300), window.innerWidth * 0.3);
+            setLeftPanelWidth(constrainedWidth);
+            localStorage.setItem('leftPanelWidth', constrainedWidth.toString());
+        };
+
+        const handleMouseUp = () => {
+            setIsLeftPanelResizing(false);
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
@@ -171,11 +197,33 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
     return (
         <div className="relative h-screen flex overflow-hidden">
+            {/* Left Panel - Text to Image */}
+            <div 
+                style={{ width: leftPanelWidth }}
+                className={`h-full bg-white dark:bg-gray-800 border-r border-gray-200 
+                    dark:border-gray-700 transition-all duration-200 ease-in-out overflow-y-auto
+                    relative ${isLeftPanelResizing ? 'select-none' : ''}`}
+            >
+                {/* Resize Handle */}
+                <div
+                    className={`absolute right-0 top-0 bottom-0 w-4 cursor-col-resize 
+                        flex items-center justify-center hover:bg-gray-100 
+                        dark:hover:bg-gray-700 transform translate-x-1/2 z-20
+                        ${isLeftPanelResizing ? 'bg-gray-200 dark:bg-gray-600' : ''}`}
+                    onMouseDown={handleLeftPanelResizeStart}
+                >
+                    <GripHorizontal className="h-6 w-6 text-gray-400" />
+                </div>
+
+                <Text2ImagePanel />
+            </div>
+
             {/* Main Editor Section */}
             <div 
-                className={`transition-all duration-200 ease-in-out flex-grow ${
-                    panelLayout === 'split' ? `w-[calc(100%-${panelWidth}px)]` : 'w-full'
-                }`}
+                className={`transition-all duration-200 ease-in-out flex-grow 
+                    ${panelLayout === 'split' 
+                        ? `w-[calc(100%-${panelWidth + leftPanelWidth}px)]` 
+                        : `w-[calc(100%-${leftPanelWidth}px)]`}`}
             >
                 <div className="h-full overflow-y-auto">
                     <div className={`${panelLayout === 'split' ? 'pr-4' : 'container max-w-screen-md mx-auto'}`}>
@@ -197,7 +245,6 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                             <div className="relative min-h-[calc(100vh-300px)]">
                                 <TextareaEditor
                                     placeholder='Tell your story...'
-                                    className="h-full"
                                     draftKey={id}
                                     initialValue={draftContent}
                                     onContentChange={handlePostTextChange}
@@ -252,14 +299,16 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     setTopics={setTopics}
                     onSave={(topics: TopicOptions[], imageUrl: string | null) => {
                         // Handle save
-                    } } draftId={''}                />
+                    }}
+                    draftId={draftId}
+                />
             )}
 
             {/* Bottom Bar */}
             <div className='fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 
                 border-t border-gray-200 dark:border-gray-700 py-4 z-20'>
                 <div className={`${panelLayout === 'split' ? 
-                    `w-[calc(100%-${panelWidth}px)]` : 'container max-w-screen-md'} mx-auto`}>
+                    `w-[calc(100%-${panelWidth + leftPanelWidth}px)]` : 'container max-w-screen-md'} mx-auto`}>
                     <div className='flex items-center justify-between px-4'>
                         {hasDrafts && (
                             <a href="/new-story/drafts" 

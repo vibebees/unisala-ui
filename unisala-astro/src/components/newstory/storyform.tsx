@@ -190,39 +190,38 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     <div className="relative h-screen flex overflow-hidden">
       {/* Left Panel */}
       <SidePanel
-        width={leftPanelWidth}
-        isResizing={isLeftPanelResizing}
-        position="left"
-        onResizeStart={handleLeftPanelResizeStart}
-      >
-        <Text2ImagePanel />
-      </SidePanel>
+      width={leftPanelWidth}
+      isResizing={isLeftPanelResizing}
+      position="left"
+      onResizeStart={handleLeftPanelResizeStart}
+    >
+      <Text2ImagePanel />
+    </SidePanel>
 
-      {/* Main Editor */}
-      <MainEditor
-        draftId={draftId}
-        draftTitle={draftTitle}
-        draftContent={draftContent}
-        onTitleChange={handleTitleChange}
-        onContentChange={handlePostTextChange}
-        panelLayout={panelLayout}
+    {/* Main Editor */}
+    <MainEditor
+      draftId={draftId}
+      draftTitle={draftTitle}
+      draftContent={draftContent}
+      onTitleChange={handleTitleChange}
+      onContentChange={handlePostTextChange}
+      panelLayout={panelLayout}
+    />
+
+    {/* Right Panel */}
+    <SidePanel
+      width={panelWidth}
+      isResizing={isResizingHorizontal}
+      position="right"
+      panelLayout={panelLayout}
+      onResizeStart={handleHorizontalResizeStart}
+    >
+      <LayoutToggle
+        layout={panelLayout}
+        onToggle={togglePanelLayout}
       />
-
-      {/* Right Panel */}
-      <SidePanel
-        width={panelWidth}
-        isResizing={isResizingHorizontal}
-        position="right"
-        panelLayout={panelLayout}
-        onResizeStart={handleHorizontalResizeStart}
-      >
-        <LayoutToggle
-          layout={panelLayout}
-          onToggle={togglePanelLayout}
-        />
-        <VisualAidPanel />
-      </SidePanel>
-
+      <VisualAidPanel />
+    </SidePanel>
       {/* Preview Modal */}
       {showPreview && (
         <PreviewModal

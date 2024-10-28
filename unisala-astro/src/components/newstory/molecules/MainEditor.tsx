@@ -1,3 +1,5 @@
+// components/PostForm/Editor/MainEditor.tsx
+import React from 'react';
 import { TextareaAutoGrow } from '@/components/ui/textarea';
 import { TextareaEditor } from '@/components/ui/textEditor';
 
@@ -16,10 +18,10 @@ export const MainEditor: React.FC<MainEditorProps> = ({
   draftContent,
   onTitleChange,
   onContentChange,
-  panelLayout
+  panelLayout,
 }) => (
-  <div className="h-full overflow-y-auto">
-    <div className={`${panelLayout === 'split' ? 'pr-4' : 'container max-w-screen-md mx-auto'}`}>
+  <div className="flex-1 min-w-0 h-full overflow-y-auto">
+    <div className={`h-full ${panelLayout === 'split' ? 'px-4' : 'container max-w-screen-md mx-auto'}`}>
       <form id='postForm' className="pt-12 pb-32">
         <div className="mb-8">
           <TextareaAutoGrow

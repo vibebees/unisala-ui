@@ -72,13 +72,6 @@ const Text2ImagePanel = () => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <ImageIcon className="w-5 h-5" />
-          Text to Image
-        </h2>
-      </div>
 
       {/* Prompt Input */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">

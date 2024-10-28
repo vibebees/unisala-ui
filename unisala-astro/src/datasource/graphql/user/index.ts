@@ -2068,6 +2068,20 @@ getSearchImages = gql`
     }
   }
 `,
+getGenerateImage = gql`
+  query generateImage($prompt: String!) {
+    generateImage(prompt: $prompt) {
+     status{
+      success
+      message
+      }
+      data {
+        imageUrl
+      }
+    }
+  }
+`,
+
   GET_METADATA_TAGS = gql`
     fragment AddAPostDetails on AddAPostQuery {
       suggestMeUniversity {

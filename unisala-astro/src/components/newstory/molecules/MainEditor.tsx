@@ -21,7 +21,7 @@ export const MainEditor: React.FC<MainEditorProps> = ({
   panelLayout,
 }) => (
   <div className="flex-1 min-w-0 h-full overflow-y-auto">
-    <div className={`h-full ${panelLayout === 'split' ? 'px-4' : 'container max-w-screen-md mx-auto'}`}>
+    <div className={`h-full container max-w-screen-md mx-auto'}`}>
       <form id='postForm' className="pt-12 pb-32">
         <div className="mb-8">
           <TextareaAutoGrow
@@ -42,7 +42,10 @@ export const MainEditor: React.FC<MainEditorProps> = ({
             onContentChange={onContentChange}
           />
         </div>
+        
       </form>
+      
+      
     </div>
   </div>
 );

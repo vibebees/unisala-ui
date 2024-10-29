@@ -14,7 +14,7 @@ interface PreviewModalProps {
     postText: string;
   };
   onClose: () => void;
-  onPublish: (topics: TopicOptions[], imageUrl: string | null, isPublic: boolean) => void;
+  onPublish: (topics: TopicOptions[], imageUrl: string | null, isPublic: boolean) => Promise<boolean>;
   onSave: (topics: TopicOptions[], imageUrl: string | null) => void;
   topics: TopicOptions[];
   setTopics: (topics: TopicOptions[]) => void;
@@ -32,18 +32,52 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isPublic, setIsPublic] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
 
   useEffect(() => {
     const extractedImage = extractImageFromPostText({ user: false, postText: postDraft.postText });
     setImageUrl(extractedImage);
   }, [postDraft.postText]);
 
+  // Clean up function to prevent state updates after unmounting
+  useEffect(() => {
+    return () => {
+      setIsSubmitting(false);
+      setIsPublished(false);
+    };
+  }, []);
+
+  const handlePublish = async () => {
+    if (isSubmitting || isPublished) return;
+    
+    setIsSubmitting(true);
+    try {
+      const success = await onPublish(topics, imageUrl, isPublic);
+      if (success) {
+        setIsPublished(true);
+      }
+    } catch (error) {
+      console.error('Publishing failed:', error);
+    }
+    // Don't reset isSubmitting here to keep button disabled during redirect
+  };
+
+  const isButtonDisabled = isSubmitting || isPublished;
+  const buttonText = isPublished ? 'Published!' : (isSubmitting ? 'Publishing...' : 'Share it');
+
   return (
     <div className="fixed inset-0 bg-white dark:bg-gray-900 text-black dark:text-white z-50 overflow-y-auto flex items-center justify-center">
       <div className="container mx-auto p-4 sm:p-8 max-w-5xl">
         <div className="flex justify-between items-center mb-8">
           <p className="text-xl font-semibold">Story Preview</p>
-          <button onClick={onClose} className="text-3xl text-gray-500 hover:text-gray-700">&times;</button>
+          <button 
+            onClick={onClose} 
+            className="text-3xl text-gray-500 hover:text-gray-700"
+            disabled={isSubmitting || isPublished}
+          >
+            &times;
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -79,39 +113,26 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
               topics={topics}
               setTopics={setTopics}
               placeholder="Enter a topic"
+              disabled={isButtonDisabled}
               apiEndpoint={`${userServer}/tags`}
             />
 
-            <div className="flex items-center justify-between mt-6 mb-4">
-              {/* <span className="text-sm font-medium">Make post public</span>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  className="sr-only peer" 
-                  checked={isPublic}
-                  onChange={() => setIsPublic(!isPublic)}
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label> */}
-            </div>
-
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mt-6">
               <Button
-                onClick={() => onPublish(topics, imageUrl, isPublic)}
-                className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 py-3"
+                onClick={handlePublish}
+                disabled={isButtonDisabled}
+                className={`bg-green-600 hover:bg-green-700 text-white rounded-full px-6 py-3 transition-all duration-200 ${
+                  isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                } ${isPublished ? 'bg-green-700' : ''}`}
               >
-                Share it
+                {buttonText}
               </Button>
-              {/* <Button
-                onClick={() => navigator(`/auth?redirect=/new-story/drafts`)}
-                variant="outline"
-                className="rounded-full px-6 py-3 border-2 border-gray-300 hover:border-gray-400"
-              >
-                Save on my profile
-              </Button> */}
-              <SaveNotesButton draftId = {draftId} onClose = {onClose}/>
+              <SaveNotesButton 
+                draftId={draftId} 
+                onClose={onClose}
+                disabled={isButtonDisabled}
+              />
             </div>
-
           </div>
         </div>
       </div>

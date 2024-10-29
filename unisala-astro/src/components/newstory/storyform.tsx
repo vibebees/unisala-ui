@@ -29,7 +29,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
   // Draft Management
   const {
-    drafts,
+    hasDrafts,
     draftId,
     draftTitle,
     draftContent,
@@ -75,7 +75,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
       deleteDraft(draftId);
       toast.success("Your Story is Published!");
 
-      const notesPublished = getCache('notesPublished') || {};
+      const notesPublished: { [key: string]: { postTitle: string; postText: string; createdAt: string } } = getCache('notesPublished') || {};
       notesPublished[data.addPost.post._id] = {
         postTitle: draftTitle,
         postText: draftContent,
@@ -101,27 +101,29 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
   }, [draftId, draftTitle, debouncedSaveDraft]);
 
   // Publish Handler
-  const handlePublish = async (topics: TopicOptions[], imageUrl: string | null, isPublic: boolean) => {
-    try {
-      await addPost({
-        variables: {
-          title: draftTitle,
-          postText: draftContent,
-          id: 'others',
-          tags: topics.map(topic => ({
-            name: topic?.name,
-            _id: topic?._id,
-            unitId: topic?.unitId,
-            universityCount: topic?.universityCount,
-            entityType: topic?.entityType,
-          }))
-        },
-      });
-    } catch (error) {
-      console.error('Error publishing post:', error);
-      toast.error('Failed to publish post. Please try again.');
-    }
-  };
+  const handlePublish = async (topics: TopicOptions[], imageUrl: string | null, isPublic: boolean): Promise<boolean> => {
+      try {
+        await addPost({
+          variables: {
+            title: draftTitle,
+            postText: draftContent,
+            id: 'others',
+            tags: topics.map(topic => ({
+              name: topic?.name,
+              _id: topic?._id,
+              unitId: topic?.unitId,
+              universityCount: topic?.universityCount,
+              entityType: topic?.entityType,
+            }))
+          },
+        });
+        return true;
+      } catch (error) {
+        console.error('Error publishing post:', error);
+        toast.error('Failed to publish post. Please try again.');
+        return false;
+      }
+    };
 
   return (
     <div className="relative min-h-screen bg-white">
@@ -129,44 +131,52 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-10">
         <div className="max-w-screen-lg mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  setActiveTab('editor');
-                  setShowImagePanel(false);
-                }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-                  activeTab === 'editor' 
-                    ? 'bg-gray-100 text-gray-900' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                <PenTool className="w-4 h-4" />
-                Editor
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab('visual');
-                  setShowImagePanel(!showImagePanel);
-                }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-                  activeTab === 'visual' 
-                    ? 'bg-gray-100 text-gray-900' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                <Wand2 className="w-4 h-4" />
-                Visual Aids
-              </button>
-              {drafts && drafts.length > 0 && (
-                <a href="/new-story/drafts" className="text-blue-500 text-sm hover:underline">
-                  View Drafts
-                </a>
+            <div className="flex items-center">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setActiveTab('editor');
+                    setShowImagePanel(false);
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'editor'
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                >
+                  <PenTool className="w-4 h-4" />
+                  Editor
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('visual');
+                    setShowImagePanel(!showImagePanel);
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'visual'
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                >
+                  <Wand2 className="w-4 h-4" />
+                  Visual Aids
+                </button>
+              </div>
+
+              {hasDrafts && (
+                <>
+                  <div className="mx-4 h-6 border-l border-gray-200" />
+                  <a
+                    href="/new-story/drafts"
+                    className="text-blue-500 text-sm hover:underline flex items-center"
+                  >
+                    View Drafts
+                  </a>
+                </>
               )}
             </div>
+
             <button
               onClick={() => setShowPreview(true)}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full"
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full transition-colors"
             >
               Preview & Publish
             </button>
@@ -184,8 +194,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
               draftTitle={draftTitle}
               draftContent={draftContent}
               onTitleChange={handleTitleChange}
-              onContentChange={handlePostTextChange}
-            />
+              onContentChange={handlePostTextChange} panelLayout={'split'}            />
           </div>
         </div>
 

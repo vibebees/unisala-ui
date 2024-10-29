@@ -129,41 +129,54 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   }, [proxyImageRefetch]);
 
-  const insertImageUrl = (imageUrl:string) => {
+  const insertImageUrl = (imageUrl: string) => {
     try {
-      const quill = document.querySelector('.ql-editor');
+      // Get the Quill instance and editor element
+      const quillEditor = document.querySelector('.ql-editor');
+      const quill = (window as any).quill; // Access the Quill instance if available
       
-      if (quill) {
+      if (quill && quillEditor) {
+        // Use Quill's API to insert the image
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', imageUrl);
+        quill.setSelection(range.index + 1);
+      } else if (quillEditor) {
+        // Fallback to DOM manipulation if Quill instance is not available
         const img = document.createElement('img');
         img.src = imageUrl;
         img.style.maxWidth = '100%';
-        
-        // Add loading state
         img.classList.add('loading');
         
-        // Handle image load
         img.onload = () => {
           img.classList.remove('loading');
         };
         
-        // Handle image error
         img.onerror = () => {
           console.error('Failed to load image:', imageUrl);
           img.remove();
         };
         
-        // Insert at cursor position if available, otherwise append
+        // Ensure the editor is focused
+        quillEditor.focus();
+        
+        // Get the current selection or create a new range
         const selection = window.getSelection();
+        const range = selection?.getRangeAt(0) || document.createRange();
+        
+        // Insert the image at the current cursor position or at the end
         if (selection && selection.rangeCount > 0) {
-          const range = selection.getRangeAt(0);
           range.insertNode(img);
           range.collapse(false);
+          
+          // Update the selection
+          selection.removeAllRanges();
+          selection.addRange(range);
         } else {
-          quill.appendChild(img);
+          quillEditor.appendChild(img);
         }
         
-        // Trigger change event
-        quill.dispatchEvent(new Event('input', { bubbles: true }));
+        // Dispatch input event to trigger any listeners
+        quillEditor.dispatchEvent(new Event('input', { bubbles: true }));
       }
     } catch (error) {
       console.error('Error inserting image:', error);

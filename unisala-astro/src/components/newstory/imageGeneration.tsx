@@ -130,7 +130,7 @@ const ImageCard = ({ image, isLoading, onUseInEditor }) => {
 };
 
 const Text2ImageModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);

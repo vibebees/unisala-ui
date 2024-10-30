@@ -55,7 +55,7 @@ const insertImageUrl = (imageUrl: string) => {
       const event = new Event('input', { bubbles: true });
       editor.dispatchEvent(event);
       
-      return true;
+      return;
     }
 
     // If we have the Quill instance, use it properly
@@ -193,7 +193,7 @@ const Text2ImageModal = () => {
     }
   };
 
-  const handleUseInEditor = async (imageUrl: string) => {
+  const handleUseInEditor = async (imageUrl: string): Promise<void> => {
     try {
       const success = insertImageUrl(imageUrl);
       if (success) {

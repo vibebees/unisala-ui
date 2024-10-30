@@ -127,8 +127,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
   return (
     <div className=" dark: text-black dark:text-white relative min-h-screen ">
-      {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0  dark: text-black dark:text-white  border-t shadow-lg z-10">
+  {/* Bottom Navigation Bar */}
+  <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-10">
         <div className="max-w-screen-lg mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -138,10 +138,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     setActiveTab('editor');
                     setShowImagePanel(false);
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'editor'
-                      ? ' text-gray-900'
-                      : 'text-gray-600 hover:'
-                    }`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                    activeTab === 'editor'
+                      ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
                 >
                   <PenTool className="w-4 h-4" />
                   Editor
@@ -151,10 +152,11 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     setActiveTab('visual');
                     setShowImagePanel(!showImagePanel);
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'visual'
-                      ? ' text-gray-900'
-                      : 'text-gray-600 hover:'
-                    }`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                    activeTab === 'visual'
+                      ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
                 >
                   <Wand2 className="w-4 h-4" />
                   Visual Aids
@@ -163,10 +165,10 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
               {hasDrafts && (
                 <>
-                  <div className="mx-4 h-6 border-l border-gray-200" />
+                  <div className="mx-4 h-6 border-l border-gray-200 dark:border-gray-700" />
                   <a
                     href="/new-story/drafts"
-                    className="text-blue-500 text-sm hover:underline flex items-center"
+                    className="text-blue-500 dark:text-blue-400 text-sm hover:underline flex items-center"
                   >
                     View Drafts
                   </a>
@@ -176,7 +178,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
             <button
               onClick={() => setShowPreview(true)}
-              className=" hover: text-white px-6 py-2 rounded-full transition-colors"
+              className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white px-6 py-2 rounded-full transition-colors"
             >
               Preview & Publish
             </button>

@@ -126,9 +126,9 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     };
 
   return (
-    <div className="relative min-h-screen bg-white">
+    <div className=" dark: text-black dark:text-white relative min-h-screen ">
       {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-10">
+      <div className="fixed bottom-0 left-0 right-0  dark: text-black dark:text-white  border-t shadow-lg z-10">
         <div className="max-w-screen-lg mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -139,8 +139,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     setShowImagePanel(false);
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'editor'
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? ' text-gray-900'
+                      : 'text-gray-600 hover:'
                     }`}
                 >
                   <PenTool className="w-4 h-4" />
@@ -152,8 +152,8 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     setShowImagePanel(!showImagePanel);
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'visual'
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? ' text-gray-900'
+                      : 'text-gray-600 hover:'
                     }`}
                 >
                   <Wand2 className="w-4 h-4" />
@@ -176,7 +176,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
             <button
               onClick={() => setShowPreview(true)}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full transition-colors"
+              className=" hover: text-white px-6 py-2 rounded-full transition-colors"
             >
               Preview & Publish
             </button>
@@ -200,7 +200,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
 
         {/* Visual Aid Panel - Sliding from right */}
         <div 
-          className={`fixed right-0 top-0 w-[400px] h-[calc(100vh-64px)] bg-white shadow-lg border-l border-gray-200 transform transition-transform duration-300 ${
+          className={`fixed right-0 top-0 w-[400px] h-[calc(100vh-64px)]  shadow-lg border-l border-gray-200 transform transition-transform duration-300 ${
             showImagePanel ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
@@ -212,7 +212,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                   setShowImagePanel(false);
                   setActiveTab('editor');
                 }}
-                className="p-1 hover:bg-gray-100 rounded-full"
+                className="p-1 hover: rounded-full"
               >
                 <X className="w-5 h-5" />
               </button>

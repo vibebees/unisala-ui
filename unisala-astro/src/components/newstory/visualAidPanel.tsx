@@ -100,7 +100,7 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
   const gridCols = Math.max(2, Math.floor(containerWidth / 200));
 
   return (
-    <div id="visualAidPanel" className="h-full w-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700">
+    <div id="visualAidPanel" className="h-full w-full  border-l border-gray-200 dark:border-gray-700">
       <div className="h-full flex flex-col">
         <div style={{ height: editorHeight }} className="relative">
           <UppyImageEditor 

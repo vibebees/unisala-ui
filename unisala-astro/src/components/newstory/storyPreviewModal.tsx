@@ -130,7 +130,6 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
               <SaveNotesButton 
                 draftId={draftId} 
                 onClose={onClose}
-                disabled={isButtonDisabled}
               />
             </div>
           </div>

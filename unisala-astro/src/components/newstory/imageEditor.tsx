@@ -157,7 +157,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         };
         
         // Ensure the editor is focused
-        quillEditor.focus();
+        (quillEditor as HTMLElement).focus();
         
         // Get the current selection or create a new range
         const selection = window.getSelection();
@@ -200,10 +200,9 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       height: height,
       proudlyDisplayPoweredByUppy: false,
       disableStatusBar: true,
-      disableDropzone: true
     })
     .use(ImageEditor, {
-      target: Dashboard,
+      target: dashboardElement.current || undefined,
       quality: 0.8,
       cropperOptions: {
         viewMode: 1,
@@ -381,7 +380,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       <div 
         ref={dashboardElement} 
         className="h-full w-full flex-grow"
-        style={{ minHeight: '300px' }}
+        style={{ minHeight: '400px' }}
       />
       
       {(isDragging || isLoading) && (

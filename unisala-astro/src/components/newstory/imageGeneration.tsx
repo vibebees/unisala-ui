@@ -70,7 +70,13 @@ const insertImageUrl = (imageUrl: string) => {
   }
 };
 
-const ImageCard = ({ image, isLoading, onUseInEditor }) => {
+interface ImageCardProps {
+  image: Image;
+  isLoading: boolean;
+  onUseInEditor: (url: string) => Promise<void>;
+}
+
+const ImageCard: React.FC<ImageCardProps> = ({ image, isLoading, onUseInEditor }) => {
   const [isInserting, setIsInserting] = useState(false);
 
   const handleUseInEditor = async () => {

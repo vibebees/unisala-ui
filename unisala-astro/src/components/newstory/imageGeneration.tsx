@@ -198,7 +198,6 @@ const Text2ImageModal = () => {
       const success = insertImageUrl(imageUrl);
       if (success) {
         setIsOpen(false);
-        return true;
       } else {
         throw new Error('Failed to insert image');
       }

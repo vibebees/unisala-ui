@@ -8,7 +8,6 @@ import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager';
 import type { PostDraft, TopicOptions } from '@/types/post';
 import { X, Image, Wand2, PenTool, Eye } from 'lucide-react';
-import { debounce } from 'lodash';
 
 // Import existing components
 import { MainEditor } from './molecules/MainEditor';
@@ -19,6 +18,20 @@ import VisualAidPanel from './visualAidPanel';
 interface PostFormProps {
   initialPostDraft?: PostDraft;
 }
+
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null;
+
+  return function (...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
+
 
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
   // Essential state

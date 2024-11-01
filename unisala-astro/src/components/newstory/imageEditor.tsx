@@ -171,15 +171,19 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   }, [proxyImageRefetch]);
 
+
   useEffect(() => {
+    // Create the Uppy instance first
     uppyInstance.current = new Uppy({
       restrictions: {
         maxNumberOfFiles: 10,
         allowedFileTypes: ['image/*']
       },
       autoProceed: false,
-    })
-    .use(Dashboard, {
+    });
+
+    // Add the Dashboard plugin
+    const dashboard = uppyInstance.current.use(Dashboard, {
       inline: true,
       target: dashboardElement.current || undefined,
       width: '100%',
@@ -187,9 +191,11 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       proudlyDisplayPoweredByUppy: false,
       showSelectedFiles: true,
       disableStatusBar: false,
-    })
-    .use(ImageEditor, {
-      target: Dashboard,
+    });
+
+    // Now use the ImageEditor plugin with the correct target
+    uppyInstance.current.use(ImageEditor, {
+      target: dashboard.getPlugin('Dashboard'),  // Pass the dashboard plugin instance instead of the class
       quality: 0.8,
       cropperOptions: {
         viewMode: 1,
@@ -210,6 +216,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       }
     });
 
+    // Set up event listeners
     uppyInstance.current.on('complete', (result) => {
       if (onFileUpload) {
         onFileUpload(result);
@@ -246,6 +253,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       }
     };
   }, [height, onFileUpload]);
+
 
   useEffect(() => {
     const handleDrop = async (e: DragEvent) => {

@@ -30,7 +30,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "@types/react-dom": "^18.3.0",
     "@uppy/core": "^4.2.2",
-    "@uppy/dashboard": "^4.1.1",
+    "@uppy/dashboard": "^4.1.2",
     "@uppy/drag-drop": "^4.0.3",
     "@uppy/image-editor": "^3.1.0",
     "@uppy/react": "^4.0.2",

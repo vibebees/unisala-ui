@@ -40,8 +40,6 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     setIsLoading(true);
     const formData = new FormData();
     formData.append('image', file);
-    const { uploadFileApi } = getServiceConfig();
-
 
     try {
       const response = await fetch(uploadFileApi, {
@@ -66,6 +64,50 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   };
 
+  const insertImageUrl = (imageUrl: string) => {
+    try {
+      const quillEditor = document.querySelector('.ql-editor');
+      const quill = (window as any).quill;
+      
+      if (quill && quillEditor) {
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', imageUrl);
+        quill.setSelection(range.index + 1);
+      } else if (quillEditor) {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.style.maxWidth = '100%';
+        img.classList.add('loading');
+        
+        img.onload = () => {
+          img.classList.remove('loading');
+        };
+        
+        img.onerror = () => {
+          console.error('Failed to load image:', imageUrl);
+          img.remove();
+        };
+        
+        (quillEditor as HTMLElement).focus();
+        
+        const selection = window.getSelection();
+        const range = selection?.getRangeAt(0) || document.createRange();
+        
+        if (selection && selection.rangeCount > 0) {
+          range.insertNode(img);
+          range.collapse(false);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        } else {
+          quillEditor.appendChild(img);
+        }
+        
+        quillEditor.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    } catch (error) {
+      console.error('Error inserting image:', error);
+    }
+  };
 
   const addImageToUppy = useCallback(async (file: File, meta = {}) => {
     if (!uppyInstance.current) return;
@@ -129,63 +171,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     }
   }, [proxyImageRefetch]);
 
-  const insertImageUrl = (imageUrl: string) => {
-    try {
-      // Get the Quill instance and editor element
-      const quillEditor = document.querySelector('.ql-editor');
-      const quill = (window as any).quill; // Access the Quill instance if available
-      
-      if (quill && quillEditor) {
-        // Use Quill's API to insert the image
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', imageUrl);
-        quill.setSelection(range.index + 1);
-      } else if (quillEditor) {
-        // Fallback to DOM manipulation if Quill instance is not available
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.style.maxWidth = '100%';
-        img.classList.add('loading');
-        
-        img.onload = () => {
-          img.classList.remove('loading');
-        };
-        
-        img.onerror = () => {
-          console.error('Failed to load image:', imageUrl);
-          img.remove();
-        };
-        
-        // Ensure the editor is focused
-        (quillEditor as HTMLElement).focus();
-        
-        // Get the current selection or create a new range
-        const selection = window.getSelection();
-        const range = selection?.getRangeAt(0) || document.createRange();
-        
-        // Insert the image at the current cursor position or at the end
-        if (selection && selection.rangeCount > 0) {
-          range.insertNode(img);
-          range.collapse(false);
-          
-          // Update the selection
-          selection.removeAllRanges();
-          selection.addRange(range);
-        } else {
-          quillEditor.appendChild(img);
-        }
-        
-        // Dispatch input event to trigger any listeners
-        quillEditor.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    } catch (error) {
-      console.error('Error inserting image:', error);
-    }
-  };
-
-  // Initialize Uppy and set up event listeners
   useEffect(() => {
-    // Create new Uppy instance
     uppyInstance.current = new Uppy({
       restrictions: {
         maxNumberOfFiles: 10,
@@ -199,62 +185,36 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       width: '100%',
       height: height,
       proudlyDisplayPoweredByUppy: false,
-      disableStatusBar: true,
+      showSelectedFiles: true,
+      disableStatusBar: false,
     })
     .use(ImageEditor, {
-      target: dashboardElement.current || undefined,
+      target: Dashboard,
       quality: 0.8,
       cropperOptions: {
         viewMode: 1,
         background: false,
         autoCropArea: 1,
         responsive: true
+      },
+      actions: {
+        revert: true,
+        rotate: true,
+        granularRotate: true,
+        flip: true,
+        zoomIn: true,
+        zoomOut: true,
+        cropSquare: true,
+        cropWidescreen: true,
+        cropWidescreenVertical: true
       }
     });
 
-    // Handle file upload complete
     uppyInstance.current.on('complete', (result) => {
       if (onFileUpload) {
         onFileUpload(result);
       }
     });
-
-
-    // Handle image editor save
-    /*
-    uppyInstance.current.on('file-editor:complete', (file) => {
-      try {
-        const blobUrl = URL.createObjectURL(file.data);
-        const quill = document.querySelector('.ql-editor');
-        
-        if (quill) {
-          const img = document.createElement('img');
-          img.src = blobUrl;
-          img.style.maxWidth = '100%';
-          
-          const selection = window.getSelection();
-          if (selection && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            range.insertNode(img);
-            range.collapse(false);
-          } else {
-            quill.appendChild(img);
-          }
-          
-          // Trigger change event
-          quill.dispatchEvent(new Event('input', { bubbles: true }));
-          
-          // Clean up the current file
-          if (file.id) {
-            uppyInstance.current?.clear();
-          }
-        }
-      } catch (error) {
-        console.error('Error inserting image:', error);
-        uppyInstance.current?.info('Failed to insert image', 'error', 3000);
-      }
-    });
-    */
 
     uppyInstance.current.on('file-editor:complete', async (file) => {
       try {
@@ -265,7 +225,10 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         );
         
         const imageUrl = await uploadImageToServer(editedFile);
-        insertImageUrl(imageUrl);
+        if (imageUrl) {
+          insertImageUrl(imageUrl);
+          uppyInstance.current?.info('Image uploaded successfully', 'success', 3000);
+        }
         
         if (file.id) {
           uppyInstance.current?.clear();
@@ -276,16 +239,14 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
       }
     });
 
-    // Cleanup function
     return () => {
       if (uppyInstance.current) {
-        uppyInstance.current.destroy();
+        uppyInstance.current.cancelAll();
         uppyInstance.current = null;
       }
     };
   }, [height, onFileUpload]);
 
-  // Handle drag and drop
   useEffect(() => {
     const handleDrop = async (e: DragEvent) => {
       e.preventDefault();
@@ -298,7 +259,6 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         const imageUrl = e.dataTransfer?.getData('text/uri-list');
         const files = e.dataTransfer?.files;
 
-        // Clear any existing files first
         uppyInstance.current?.clear();
 
         if (jsonStr) {

@@ -55,7 +55,7 @@ const insertImageUrl = (imageUrl: string) => {
       const event = new Event('input', { bubbles: true });
       editor.dispatchEvent(event);
       
-      return;
+      return true;
     }
 
     // If we have the Quill instance, use it properly

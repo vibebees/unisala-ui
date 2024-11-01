@@ -12,10 +12,29 @@ interface VisualAidPanelProps {
   containerWidth?: number;
 }
 
-const Card = ({ children, className = "", draggable, onDragStart, onDragEnd, onTouchStart, onTouchEnd, ...props }: { children: ReactNode, className?: string, draggable?: boolean, onDragStart?: (e: any) => void, onDragEnd?: (e: any) => void, onTouchStart?: () => void, onTouchEnd?: () => void }) => {
+interface Image {
+  link: string;
+  title: string;
+  width: number;
+  height: number;
+  thumbnail: string;
+}
+
+const Card = ({ children, className = "", draggable, onDragStart, onDragEnd, onTouchStart, onTouchEnd, ...props }: { 
+  children: ReactNode, 
+  className?: string, 
+  draggable?: boolean, 
+  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void, 
+  onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void, 
+  onTouchStart?: () => void, 
+  onTouchEnd?: () => void 
+}) => {
   return (
     <div 
       className={`bg-white dark:bg-gray-800 rounded-lg shadow ${className}`}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       {...props}
@@ -28,6 +47,7 @@ const Card = ({ children, className = "", draggable, onDragStart, onDragEnd, onT
 const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 }) => {
   const [activeMode, setActiveMode] = useState<'search' | 'generate'>('search');
   const [searchQuery, setSearchQuery] = useState("neural network architecture");
+  const [currentSearchTerm, setCurrentSearchTerm] = useState("neural network architecture");
   const [loading, setLoading] = useState(false);
   const [draggedImage, setDraggedImage] = useState<Image | null>(null);
   const [editorHeight, setEditorHeight] = useState(350);
@@ -36,7 +56,8 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
   const { data, loading: imageLoading, error, refetch } = useAstroQuery(getSearchImages, {
     context: { server: USER_SERVICE_GQL },
     fetchPolicy: "cache-and-network",
-    variables: { q: searchQuery },
+    variables: { q: currentSearchTerm },
+    skip: !currentSearchTerm,
   });
 
   const handleResizeStart = (e: React.MouseEvent) => {
@@ -60,7 +81,10 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
   };
 
   const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    
     setLoading(true);
+    setCurrentSearchTerm(searchQuery);
     try {
       await refetch({ q: searchQuery });
     } catch (error) {
@@ -69,22 +93,17 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
       setLoading(false);
     }
   };
-
-  interface Image {
-    link: string;
-    title: string;
-    width: number;
-    height: number;
-    thumbnail: string;
-  }
   
-  const handleDragStart = (e: { dataTransfer: { setDragImage: (arg0: HTMLImageElement, arg1: number, arg2: number) => void; effectAllowed: string; setData: (arg0: string, arg1: string) => void; }; target: { classList: { add: (arg0: string) => void; }; }; }, image: Image) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, image: Image) => {
+    e.stopPropagation();
     setDraggedImage(image);
+    
+    // Create and set drag preview
     const dragPreview = new Image();
-    if (image) {
-      dragPreview.src = image.thumbnail;
-    }
+    dragPreview.src = image.thumbnail;
     e.dataTransfer.setDragImage(dragPreview, 10, 10);
+    
+    // Set drag effect and data
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', image.link);
     e.dataTransfer.setData('text/uri-list', image.link);
@@ -98,13 +117,29 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
       type: 'visual-aid-image'
     };
     
-    e.dataTransfer.setData('application/json', JSON.stringify(imageData));
-    e.target.classList.add('opacity-50');
+    try {
+      e.dataTransfer.setData('application/json', JSON.stringify(imageData));
+    } catch (error) {
+      console.error('Error setting drag data:', error);
+    }
+
+    // Add visual feedback
+    const target = e.currentTarget as HTMLElement;
+    target.classList.add('opacity-50');
   };
 
-  const handleDragEnd = (e: { target: { classList: { remove: (arg0: string) => void; }; }; }) => {
-    e.target.classList.remove('opacity-50');
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const target = e.currentTarget as HTMLElement;
+    target.classList.remove('opacity-50');
     setDraggedImage(null);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
   };
 
   const isLoading = loading || imageLoading;
@@ -164,13 +199,9 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="Search images..."
                     className="flex-1"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
                   />
                   <Button 
                     variant="ghost" 
@@ -214,7 +245,7 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
                         src={image.thumbnail}
                         alt={image.title}
                         className="w-full h-32 object-cover rounded-t select-none"
-                        draggable="false"
+                        draggable={false}
                       />
                       <div className="p-2">
                         <p className="text-xs text-gray-600 dark:text-gray-300 truncate select-none">

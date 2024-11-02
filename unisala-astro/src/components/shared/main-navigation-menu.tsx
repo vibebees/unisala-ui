@@ -29,7 +29,7 @@ export function MainNavigationMenu() {
             className={navigationMenuTriggerStyle()}
             data-astro-reload
           >
-            New Story
+            New Note
             <PenOutLine />
           </NavigationMenuLink>
         </NavigationMenuItem>

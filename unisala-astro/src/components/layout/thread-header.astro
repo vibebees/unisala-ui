@@ -2,6 +2,7 @@
 import { formatCommentDate } from "@/utils/date";
 import { cn } from "@/utils/lib/utils";
 import type { HTMLAttributes } from "astro/types";
+import { EyeIconOutline } from "../packages/icons/eye";
 // import ThreadAction from "@/components/thread/thread.action.astro";
 
 interface Props extends HTMLAttributes<"div"> {
@@ -13,8 +14,9 @@ interface Props extends HTMLAttributes<"div"> {
   className?: string;
   firstName?: string;
   lastName?: string;
+  queryCount?: number;
 }
-const { heading, username, date, claps, comments, firstName, lastName, className, ...attrs } = Astro.props;
+const { heading, username, date, claps, comments, firstName, lastName, className, queryCount, ...attrs } = Astro.props;
 ---
 
 <div class={cn("space-y-4", className)} {...attrs}>
@@ -24,13 +26,17 @@ const { heading, username, date, claps, comments, firstName, lastName, className
   <div class="flex items-center space-x-4 text-sm mb-6">
     <span class="font-larget">{firstName} {lastName}</span>
     <!-- <span class="font-medium">@{firstName} {lastName}</span> -->
-
     <!-- <span class="text-green-600 hover:text-green-700 font-large">Follow</span> -->
   </div>
-  <div class="text-gray-500 text-sm">
-    {formatCommentDate(date)}
+  <div class="flex items-center text-gray-500 text-sm">
+    <div>
+      {formatCommentDate(date)}
+    </div>
+    <div class="flex items-center gap-1 ml-8"> {/* Changed from ml-4 to ml-8 for more space */}
+      <EyeIconOutline /> 
+      <span>{queryCount} views</span>
+    </div>
   </div>
-
 
   <!-- <ThreadAction
     heading={heading}

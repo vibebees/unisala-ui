@@ -137,13 +137,13 @@ export const useDraftManager = () => {
             };
         }
 
-        if (postTitle.trim()) {
-            localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
-            setDrafts(updatedDrafts);
-            setDraftId(id);
-            setDraftTitle(postTitle);
-            setHasDrafts(true);
-        }
+        // update this to trim at least have 1 white space in the beginning
+        
+        localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
+        setDrafts(updatedDrafts);
+        setDraftId(id);
+        setDraftTitle(postTitle);
+        setHasDrafts(true);
 
         return id;
     }, [drafts]);
@@ -165,7 +165,6 @@ export const useDraftManager = () => {
                 updatedAt
             };
         } else {
-            console.log('else ----->')
             // Create new draft if it doesn't exist
             id = id || timestamp.toString();
             updatedDrafts[id] = {

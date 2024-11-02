@@ -13,20 +13,23 @@ import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
-const { slug ="" } = Astro.params;
-const loadingToastId = toast.loading('Loading...');
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
 import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
 import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
 import NewsLetter from "@/components/sections/newsletter.astro";
-
+import { createSlug, extractIdFromSlug } from '@/utils/slug.utility';
 import ThreadAuthor from '@/components/thread/organisms/thread.author.astro';
+
+// Get slug from URL parameters
+const { slug = "" } = Astro.params;
+const postId = extractIdFromSlug(slug);
+const loadingToastId = toast.loading('Loading...');
 
 let post = null;
 let error: string = '';
-// Remove the assignment to prerender
+
 const query = `
   query getPostById($id: String!, $user: String) {
     getPostById(id: $id, user: $user) {
@@ -86,16 +89,18 @@ const query = `
             username
           }
         }
+          queryCount
       }
     }
   }
 `;
+
 try {
   const result = await fetchApi(userServiceGql, {
     method: 'POST',
     body: JSON.stringify({
       query,
-      variables: { id: slug, user: null },
+      variables: { id: postId, user: null }, // Use extracted postId
     }),
   });
 
@@ -105,6 +110,13 @@ try {
 
   post = result.data?.getPostById?.post;
 
+  // Check if the current URL matches the expected slug format
+  if (post && post.title) {
+    const correctSlug = createSlug(post.title, post._id);
+    if (slug !== correctSlug) {
+      return Astro.redirect(`/threads/${correctSlug}`, 301);
+    }
+  }
 
 } catch (e) {
   console.error("Error fetching post:", e);
@@ -112,17 +124,17 @@ try {
 }
 
 function extractHeading(text: string): string {
+  if (!text) return '';
+  
   // First, try to extract content from heading tags (h1 to h6)
   const headingMatch = text.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
   if (headingMatch) {
-    // Remove any nested HTML tags from the heading content
     return headingMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
   }
 
   // If no heading tags, try to extract the first non-empty paragraph
   const paragraphMatch = text.match(/<p[^>]*>(.*?)<\/p>/i);
   if (paragraphMatch) {
-    // Remove any nested HTML tags from the paragraph content
     const cleanParagraph = paragraphMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
     if (cleanParagraph) {
       return cleanParagraph.length > 150 ? cleanParagraph.slice(0, 147) + '...' : cleanParagraph;
@@ -131,7 +143,7 @@ function extractHeading(text: string): string {
 
   // If no suitable heading found, extract text from the entire content
   let cleanText = text
-    .replace(/<[^>]+>/g, ' ') // Replace all HTML tags with spaces
+    .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/g, ' ')
     .replace(/&[a-z]+;/g, match => {
       const entities: { [key: string]: string } = {
@@ -146,18 +158,15 @@ function extractHeading(text: string): string {
     .replace(/\s+/g, ' ')
     .trim();
 
-  // Take the first 150 characters as the heading
   return cleanText.length > 150 ? cleanText.slice(0, 147) + '...' : cleanText;
 }
 
-
 // heading is post.title if not empty, else extract from postText
 const heading = post
-                ?
-                  post?.title?.length > 0 
-                  ? extractHeading(post.title)
-                  : extractHeading(post.postText)
-                :'Loading...';
+  ? post?.title?.length > 0 
+    ? extractHeading(post.title)
+    : extractHeading(post.postText)
+  : 'Loading...';
 
 const linkifiedText = post ? linkifyHtml(post.postText, {
   defaultProtocol: 'https',
@@ -166,81 +175,60 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
     url: '_blank'
   }
 }) : '';
-
-
-const handleUpvote = async (postId: string) => {
-  try {
-    // Call the upvote mutation or API endpoint here
-    // await upvoteMutation(postId);
-    alert('Upvoted');
-  } catch (error) {
-    // Handle the error
-    console.error(error);
-  }
-};
-
-
 ---
 
 <MainLayout
- title={post ? `${heading}` : 'Thread'}
+  title={post ? `${heading}` : 'Thread'}
   description={post ? linkifiedText : 'Loading...'}
   publishedTime={post?.date}
-></MainLayout>
-<Toast client:load />
-{error && <FourOhFour message={error} />}
+>
+  <Toast client:load />
+  {error && <FourOhFour message={error} />}
 
   {!post && !error && <ThreadSkeleton />}
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
-      <ThreadHeader heading={linkifyHtml(heading)} username={post?.user?.username}  firstName={post?.user?.firstName}  lastName={post?.user?.lastName}  date={post?.date} claps={post?.upVoteCount} comments={post?.postCommentsCount} />
-       <ul class='pt-6'>
+      <ThreadHeader 
+        heading={linkifyHtml(heading)} 
+        username={post?.user?.username}  
+        firstName={post?.user?.firstName}  
+        lastName={post?.user?.lastName}  
+        date={post?.date} 
+        claps={post?.upVoteCount} 
+        comments={post?.postCommentsCount} 
+        queryCount={post?.queryCount}
+      />
+      <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
           <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
-            <SingleThread
-            post = {post}
-            />
+            <SingleThread post={post} />
           </div>
         </li>
-        {/* <ThreadAction
-          heading={heading}
-          username={post?.user.username}
-          date={formatDate(post.date)}
-          claps={post.upVoteCount}
-          comments={post.postCommentsCount}
-        /> */}
         <ThreadActionTsx
           heading={heading}
           username={post?.user?.username}
           date={post?.date}
           comments={post?.postCommentsCount}
-          postId={slug}
+          postId={postId}
           initialClaps={post?.upVoteCount}
-          client:only 'react'
+          client:only="react"
           upVoted={post?.upVoted}
         />
-
       </ul>
     </section>
   )}
 
-  <!-- //pass postId from slug -->
-
-  <Comments client:only ='react'  postId = {slug}/>
-  <!-- Senior Software Developer at Unisala, specializing in full-stack web development and cloud architecture. With over 5 years of experience, Prashant leads innovative projects and mentors junior developers in agile methodologies. -->
+  <Comments client:only="react" postId={postId} />
+  
   <ThreadAuthor
-      author ={post?.user?.firstName + ' ' + post?.user?.lastName}
-      authorDescription= {post?.user?.oneLinerBio}
-
+    author={post?.user?.firstName + ' ' + post?.user?.lastName}
+    authorDescription={post?.user?.oneLinerBio}
   />
-   <hr class="my-4" />
-<!-- 
-<NewsLetter  authorName ={post?.user?.firstName + ' ' + post?.user?.lastName} />
-<hr class="my-4" /> -->
-
-  <SameWriterSuggestions  feedId ={post?.user?._id}  />
+  
   <hr class="my-4" />
-
-  <ThreadSuggestions  feedId ={post?.postTags?.tag?._id}  />
-
+  
+  <SameWriterSuggestions feedId={post?.user?._id} />
+  <hr class="my-4" />
+  
+  <ThreadSuggestions feedId={post?.postTags?.tag?._id} />
 </MainLayout>

@@ -2031,6 +2031,57 @@ export const checkEmail = gql`
             }
             }
         }`,
+ADD_NOTES = gql`
+ mutation AddNotes($notes: String!) {
+    addNotes(notes: $notes) {
+      status {
+        success
+        message
+      }
+    }
+  }
+`,
+proxyImage = gql`
+ query proxyImages($url: String!) {
+    proxyImages(url: $url) {
+    success
+      data {
+        contentType
+        base64Data
+        size
+        originalUrl
+      }
+    }
+  }
+`,
+
+getSearchImages = gql`
+  query searchImages($q: String!) {
+    searchImages(q: $q) {
+      images {
+        link
+        title
+        thumbnail
+        width
+        height
+      }
+    }
+  }
+`,
+getGenerateImage = gql`
+  query generateImage($prompt: String!) {
+    generateImage(prompt: $prompt) {
+     status{
+      success
+      message
+      }
+      data {
+        imageUrl
+      }
+    }
+  }
+`,
+
   GET_METADATA_TAGS = gql`
     fragment AddAPostDetails on AddAPostQuery {
       suggestMeUniversity {

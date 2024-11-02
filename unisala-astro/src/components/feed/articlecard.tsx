@@ -20,7 +20,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
     : postText.substring(0, 160);
 
   return (
-    <div className="w-full py-10 hover:bg-neutral-100/70 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out">
+    <div className="w-full py-10 pl-3 md:pl-5 pr-3 md:pr-8 overflow-hidden hover:bg-neutral-100/70 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out">
       <div className="flex items-center mb-3">
         <img
           className="w-8 h-8 rounded-full mr-2"
@@ -47,7 +47,7 @@ export const ArticleCard = ({ article }: { article: IPost }) => {
             {displayTitle}
           </a>
           {displayBody && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 overflow-hidden  break-words line-clamp-2">
               {displayBody}
             </p>
           )}

@@ -25,7 +25,7 @@ export const MainEditor: React.FC<MainEditorProps> = ({
       <form id='postForm' className="pt-12 pb-32">
         <div className="mb-8">
           <TextareaAutoGrow
-            placeholder='Title of your story!'
+            placeholder='Title of your article!'
             className='min-h-[100px] w-full p-4 text-2xl font-bold'
             maxHeight='50vh'
             name='title'
@@ -36,7 +36,7 @@ export const MainEditor: React.FC<MainEditorProps> = ({
         </div>
         <div className="relative min-h-[calc(100vh-300px)]">
           <TextareaEditor
-            placeholder='Tell your story...'
+            placeholder='Share your article...'
             draftKey={draftId}
             initialValue={draftContent}
             onContentChange={onContentChange}

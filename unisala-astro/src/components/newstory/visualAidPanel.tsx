@@ -47,8 +47,8 @@ const Card = ({ children, className = "", draggable, onDragStart, onDragEnd, onT
 
 const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 }) => {
   const [activeMode, setActiveMode] = useState<'search' | 'generate'>('search');
-  const [searchQuery, setSearchQuery] = useState("neural network architecture");
-  const [currentSearchTerm, setCurrentSearchTerm] = useState("neural network architecture");
+  const [searchQuery, setSearchQuery] = useState("nepali students learning");
+  const [currentSearchTerm, setCurrentSearchTerm] = useState("nepali students learning");
   const [loading, setLoading] = useState(false);
   const [draggedImage, setDraggedImage] = useState<Image | null>(null);
   const [editorHeight, setEditorHeight] = useState(350);

@@ -107,11 +107,5 @@ export const navMenuConfig: NavMenuConfig = {
       description: "Example description",
       image: "/images/examples/image.jpg",
     },
-    {
-      title: "Published",
-      href: "/published",
-      description: "Published article",
-      image: "/images/examples/image.jpg",
-    },
   ],
 };

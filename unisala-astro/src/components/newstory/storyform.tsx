@@ -14,6 +14,8 @@ import { MainEditor } from './molecules/MainEditor';
 import PreviewModal from './storyPreviewModal';
 import Text2ImagePanel from './imageGeneration';
 import VisualAidPanel from './visualAidPanel';
+import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
+import { AuthProvider } from '@/context/AuthContext';
 
 interface PostFormProps {
   initialPostDraft?: PostDraft;
@@ -39,6 +41,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
   const [topics, setTopics] = useState<TopicOptions[]>([]);
   const [showImagePanel, setShowImagePanel] = useState(false);
   const [activeTab, setActiveTab] = useState<'editor' | 'visual'>('editor');
+  const { hasPosts } = usePublishedPostManager();
 
   // Draft Management
   const {
@@ -139,6 +142,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
     };
 
   return (
+    <AuthProvider>
     <div className=" dark: text-black dark:text-white relative min-h-screen ">
   {/* Bottom Navigation Bar */}
   <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-10">
@@ -184,6 +188,18 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
                     className="text-blue-500 dark:text-blue-400 text-sm hover:underline flex items-center"
                   >
                     View Drafts
+                  </a>
+                </>
+              )}
+
+              {hasPosts && (
+                <>
+                  <div className="mx-4 h-6 border-l border-gray-200 dark:border-gray-700" />
+                  <a
+                    href="/published"
+                    className="text-green-500 dark:text-green-400 text-sm hover:underline flex items-center"
+                  >
+                    Published
                   </a>
                 </>
               )}
@@ -254,6 +270,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         />
       )}
     </div>
+    </AuthProvider>
   );
 };
 

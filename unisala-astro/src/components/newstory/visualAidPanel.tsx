@@ -7,6 +7,7 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import UppyImageEditor from './imageEditor';
 import Text2ImagePanel from './imageGeneration';
 import { getSearchImages } from '@/datasource/graphql/user';
+import { useAuth } from '@/context/AuthContext';
 
 interface VisualAidPanelProps {
   containerWidth?: number;
@@ -52,7 +53,9 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
   const [draggedImage, setDraggedImage] = useState<Image | null>(null);
   const [editorHeight, setEditorHeight] = useState(350);
   const [isDragging, setIsDragging] = useState(false);
+  const { authenticated } = useAuth();
 
+  console.log({authenticated})
   const { data, loading: imageLoading, error, refetch } = useAstroQuery(getSearchImages, {
     context: { server: USER_SERVICE_GQL },
     fetchPolicy: "cache-and-network",

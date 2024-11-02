@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 import { ADD_NOTES } from '@/datasource/graphql/user';
 import { getCache } from '@/utils/cache';
-import { useAuth } from '@/context/AuthContext';
 import { navigator } from '@/utils/lib/URLupdate';
 
 // Types

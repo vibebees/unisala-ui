@@ -12,11 +12,11 @@ import { X, Image, Wand2, PenTool, Eye } from 'lucide-react';
 // Import existing components
 import { MainEditor } from './molecules/MainEditor';
 import PreviewModal from './storyPreviewModal';
-import Text2ImagePanel from './imageGeneration';
 import VisualAidPanel from './visualAidPanel';
 import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
 import { AuthProvider } from '@/context/AuthContext';
-import { debounce } from '@/utils/analytics/events';
+import { debounce } from 'lodash';
+
 
 interface PostFormProps {
   initialPostDraft?: PostDraft;

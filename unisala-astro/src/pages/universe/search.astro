@@ -1,7 +1,8 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
-import MediumFeed from '@/components/feed/clientfeed.tsx';
+// import SearchResult from '@/components/feed/clientfeed.tsx';
 import SearchCarousel from '@/components/ui/carousel';
+import SearchResult from '@/components/search/index';
 
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
@@ -32,17 +33,17 @@ const carouselItems = [
   {error && <div>Error: {error}</div>}
   {!error && (
     <section class='container max-w-screen-lg space-y-6 '>
-      <SearchCarousel
+      {/* <SearchCarousel
         client:load
         items={carouselItems}
         autoSlideInterval={15000}
         className='custom-class'
         showPropagation={false}
-      />
-      <MediumFeed
+      /> */}
+      <SearchResult
         client:only='react'
-        articles={articles}
-        staffPicks={staffPicks}
+        // articles={articles}
+        // staffPicks={staffPicks}
        
       />
     </section>

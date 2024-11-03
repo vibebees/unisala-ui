@@ -1847,6 +1847,7 @@ export const checkEmail = gql`
         spaces {
           name
           description
+          _id
         }
         users {
           firstName
@@ -1856,6 +1857,7 @@ export const checkEmail = gql`
           picture
           name
           coverPicture
+          _id
         }
         orgs {
           name

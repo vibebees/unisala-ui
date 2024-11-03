@@ -1,43 +1,52 @@
- 
-// src/components/search/templates/SearchTemplate.tsx
 import { useCallback, useEffect, useState } from 'react';
 import { useAstroQuery } from "@/datasource/apollo-client";
 import { Search } from "@/datasource/graphql/user";
 import { USER_SERVICE_GQL } from "@/datasource/servers/types";
-import { debounce } from '@/utils/analytics/events';
 import { SearchInput } from '../atoms/searchInput';
 import { SearchTabs } from '../organisms/searchTabs';
 
+// Strict debounce function
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export const SearchTemplate = ({ initialQuery = '' }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const debouncedSearchQuery = useDebounce(searchQuery, 1000); // 1 second debounce
 
-  const performSearch = useCallback(async (query: string) => {
-    // Update the URL
+  // Update URL when debounced query changes
+  useEffect(() => {
     const url = new URL(window.location.href);
-    if (query) {
-      url.searchParams.set('q', query);
+    if (debouncedSearchQuery) {
+      url.searchParams.set('q', debouncedSearchQuery);
     } else {
       url.searchParams.delete('q');
     }
     window.history.replaceState({}, '', url);
-  }, []);
+  }, [debouncedSearchQuery]);
 
-  // Create a debounced version of the search function
-  const debouncedSearch = useCallback(
-    debounce(performSearch, 300),
-    []
-  );
-
+  // Only make API call with debounced value
   const { loading, error, data } = useAstroQuery(Search, {
-    variables: { q: searchQuery, post: true },
+    variables: { q: debouncedSearchQuery, post: true },
     context: { server: USER_SERVICE_GQL },
-    skip: searchQuery.length < 3,
+    skip: debouncedSearchQuery.length < 3,
   });
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-    debouncedSearch(query);
-  }, [debouncedSearch]);
+  }, []);
 
   return (
     <div className="w-full max-w-screen-xl mx-auto px-4">
@@ -55,10 +64,10 @@ export const SearchTemplate = ({ initialQuery = '' }) => {
       </div>
 
       {/* Results Header */}
-      {searchQuery && (
+      {debouncedSearchQuery && (
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Results for <span className="text-primary-600 dark:text-primary-400">{searchQuery}</span>
+            Results for <span className="text-primary-600 dark:text-primary-400">{debouncedSearchQuery}</span>
           </h2>
         </div>
       )}
@@ -68,7 +77,7 @@ export const SearchTemplate = ({ initialQuery = '' }) => {
         loading={loading}
         posts={data?.search?.posts || []}
         users={data?.search?.users || []}
-        topics={data?.search?.topics || []}
+        spaces={data?.search?.spaces || []}
       />
 
       {error && (

@@ -1,4 +1,4 @@
-import type { Topic } from '../cards/topicCard';
+import type { Topic } from '../cards/spaceCard';
 
 interface SidebarTopicsProps {
   topics: Topic[];

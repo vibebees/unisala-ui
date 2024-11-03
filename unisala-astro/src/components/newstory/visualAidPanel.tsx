@@ -55,7 +55,6 @@ const VisualAidPanel: React.FC<VisualAidPanelProps> = ({ containerWidth = 400 })
   const [isDragging, setIsDragging] = useState(false);
   const { authenticated } = useAuth();
 
-  console.log({authenticated})
   const { data, loading: imageLoading, error, refetch } = useAstroQuery(getSearchImages, {
     context: { server: USER_SERVICE_GQL },
     fetchPolicy: "cache-and-network",

@@ -76,12 +76,6 @@ export const useDraftManager = () => {
         const updatedDrafts = { ...drafts };
         
         if (id && id in updatedDrafts) {
-            console.log("Updating draft", id);
-            console.log({
-                postTitle,
-                postText,
-                updatedAt
-            });
             // Update existing draft
             updatedDrafts[id] = {
                 ...updatedDrafts[id],

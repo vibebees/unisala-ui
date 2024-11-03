@@ -16,23 +16,13 @@ import Text2ImagePanel from './imageGeneration';
 import VisualAidPanel from './visualAidPanel';
 import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
 import { AuthProvider } from '@/context/AuthContext';
+import { debounce } from '@/utils/analytics/events';
 
 interface PostFormProps {
   initialPostDraft?: PostDraft;
 }
 
-function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
-  let timeoutId: ReturnType<typeof setTimeout> | null;
-
-  return function (...args: Parameters<T>) {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-}
+ 
 
 
 const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {

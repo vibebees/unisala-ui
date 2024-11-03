@@ -12,56 +12,81 @@ interface Image {
   prompt: string;
 }
 
-const insertImageUrl = (imageUrl: string) => {
+const insertImageUrl = (imageUrl: string, savedRange: Range | null) => {
   try {
-    // Find the editor element
     const editor = document.querySelector('.ql-editor');
     if (!editor) {
       console.error('No editor found');
       return false;
     }
 
-    // Walk up the DOM tree to find the Quill container
+    // Get Quill instance
+    let quill = null;
     const container = editor.closest('.quill');
-    if (!container) {
-      console.error('No Quill container found');
-      return false;
+    if (container) {
+      quill = (container as any).__reactProps$?.children?.props?.quill;
     }
 
-    // Access Quill instance from the container's ReactQuill component
-    const quill = (container as any).__reactProps$?.children?.props?.quill;
-    
     if (!quill) {
-      console.error('No Quill instance found');
-      // Fallback to DOM manipulation if Quill instance is not found
+      quill = (window as any).quill;
+    }
+
+    if (quill) {
+      // If we have saved range, convert it to Quill index
+      if (savedRange) {
+        const rangeIndex = quill.getLength() - 1; // Default to end
+        try {
+          // Temporarily restore the range to get its position
+          const selection = window.getSelection();
+          if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(savedRange);
+            const newRange = quill.getSelection();
+            if (newRange) {
+              quill.insertEmbed(newRange.index, 'image', imageUrl);
+              quill.setSelection(newRange.index + 1, 0);
+              return true;
+            }
+          }
+        } catch (e) {
+          console.error('Error restoring range:', e);
+        }
+      }
+      
+      // Fallback: Insert at current selection or end
+      const range = quill.getSelection(true) || { index: quill.getLength() - 1, length: 0 };
+      quill.insertEmbed(range.index, 'image', imageUrl);
+      quill.setSelection(range.index + 1, 0);
+    } else {
+      // DOM Fallback with saved range
       const img = document.createElement('img');
       img.src = imageUrl;
       img.style.maxWidth = '100%';
+      img.classList.add('loading');
       
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        if (editor.contains(range.commonAncestorContainer)) {
-          range.insertNode(img);
-          range.collapse(false);
-        } else {
-          editor.appendChild(img);
+      img.onload = () => {
+        img.classList.remove('loading');
+      };
+      
+      img.onerror = () => {
+        console.error('Failed to load image:', imageUrl);
+        img.remove();
+      };
+      
+      if (savedRange && editor.contains(savedRange.commonAncestorContainer)) {
+        const selection = window.getSelection();
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(savedRange);
+          savedRange.insertNode(img);
+          savedRange.collapse(false);
         }
       } else {
         editor.appendChild(img);
       }
-
-      // Trigger change event
-      const event = new Event('input', { bubbles: true });
-      editor.dispatchEvent(event);
       
-      return true;
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
     }
-
-    // If we have the Quill instance, use it properly
-    const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
-    quill.insertEmbed(range.index, 'image', imageUrl);
-    quill.setSelection(range.index + 1);
 
     return true;
   } catch (error) {
@@ -136,11 +161,12 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, isLoading, onUseInEditor }
 };
 
 const Text2ImageModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generatedImages, setGeneratedImages] = useState<Image[]>([]);
+  const [savedRange, setSavedRange] = useState<Range | null>(null);
   
   const { loading: queryLoading, refetch } = useAstroQuery(getGenerateImage, {
     context: { server: USER_SERVICE_GQL },
@@ -153,6 +179,14 @@ const Text2ImageModal = () => {
       setIsGenerating(false);
     }
   });
+
+  const handleOpenModal = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      setSavedRange(selection.getRangeAt(0).cloneRange());
+    }
+    setIsOpen(true);
+  };
 
   const handleGenerateImage = async () => {
     if (!prompt.trim()) {
@@ -195,9 +229,10 @@ const Text2ImageModal = () => {
 
   const handleUseInEditor = async (imageUrl: string): Promise<void> => {
     try {
-      const success = insertImageUrl(imageUrl);
+      const success = insertImageUrl(imageUrl, savedRange);
       if (success) {
         setIsOpen(false);
+        setSavedRange(null);  // Clear saved range after successful insertion
       } else {
         throw new Error('Failed to insert image');
       }
@@ -224,7 +259,7 @@ const Text2ImageModal = () => {
   return (
     <>
       <Button
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpenModal}
         className="w-full flex items-center gap-2 text-gray-500 dark:text-gray-400"
         variant="outline"
       >

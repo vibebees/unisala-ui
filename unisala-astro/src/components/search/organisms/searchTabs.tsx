@@ -82,7 +82,7 @@ export const SearchTabs = ({ loading, posts, users, spaces }: SearchTabsProps) =
         <Tabs.Content value="spaces">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6">
             {spaces.map(topic => (
-              <SpaceCard key={topic.id} topic={topic} />
+              <SpaceCard key={topic._id} topic={topic} />
             ))}
           </div>
           {spaces.length === 0 && (

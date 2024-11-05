@@ -18,11 +18,11 @@ export const UserCard = ({ user }: UserCardProps) => {
   const fullName = user.name || `${user.firstName} ${user.lastName}`;
   const profileUrl = `/signature/${fullName.replace(/\s+/g, '-')}-${user._id}`;
 
-  console.log({user})
   return (
     <a 
       href={profileUrl}
       className="block no-underline"
+      data-astro-reload
     >
       <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
         <Avatar.Root>

@@ -53,8 +53,8 @@ export const SearchTabs = ({ loading, posts, users, spaces }: SearchTabsProps) =
       </Tabs.List>
   
       <div className="px-4 md:px-6">
-        <Tabs.Content value="stories" className="space-y-4">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-6">
+      <Tabs.Content value="stories" className="space-y-4">
+          <div className="flex flex-col space-y-4">
             {posts.map(post => (
               <PostCard key={post.id} post={post} />
             ))}
@@ -67,7 +67,7 @@ export const SearchTabs = ({ loading, posts, users, spaces }: SearchTabsProps) =
         </Tabs.Content>
   
         <Tabs.Content value="people" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {users.map(user => (
               <UserCard key={user._id} user={user} />
             ))}
@@ -80,7 +80,7 @@ export const SearchTabs = ({ loading, posts, users, spaces }: SearchTabsProps) =
         </Tabs.Content>
   
         <Tabs.Content value="spaces">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {spaces.map(topic => (
               <SpaceCard key={topic._id} topic={topic} />
             ))}

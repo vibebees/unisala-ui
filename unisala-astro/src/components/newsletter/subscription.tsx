@@ -61,12 +61,12 @@ const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
     // Check if already subscribed
     const followingCache = getCache('following') as FollowingCache || {};
     if (followingCache[spaceId]) {
-      toast.info('You are already following this space');
+      toast.success('You are already following this space');
       return;
     }
 
     // Check if user is authenticated
-    const authData = getCache('authData');
+    const authData = getCache('authData') as { authenticated?: boolean };
     if (!authData?.authenticated) {
       const currentUrl = `${window.location.pathname.trim()}${window.location.search.trim()}`;
       navigator(`/auth?redirect=${encodeURIComponent(currentUrl)}`);

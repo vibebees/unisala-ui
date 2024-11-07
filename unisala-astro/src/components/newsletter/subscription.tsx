@@ -3,8 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Bell } from 'lucide-react';
 import { authenticated } from '@/utils/cache';
+import { useAstroMutation } from '@/datasource/apollo-client';
+import { Subscribe } from '@/datasource/graphql/user'; // You'll need to create this
+import toast from 'react-hot-toast';
 
-interface SubsciptionProps {
+interface SubscriptionProps {
   config?: {
     title: string;
     description: string;
@@ -13,49 +16,66 @@ interface SubsciptionProps {
     subscribedButtonText: string;
     errorMessage: string;
     successMessage: string;
-    registrationEndpoint: string;
     bottomText: string;
   };
   authorName?: string;
+  spaceId?: string;
+  type: 'space' | 'org';
 }
 
-const Subsciption: React.FC<SubsciptionProps> = ({
+const Subscription: React.FC<SubscriptionProps> = ({
   config = {
     title: "Join the Author's Circle",
     description: 'Get more ideas from {authorName} straight to your inbox!',
     emailPlaceholder: 'you@example.com',
     submitButtonText: 'Subscribe',
-    subscribedButtonText: "Subscribed",
+    subscribedButtonText: 'Subscribed',
     errorMessage: 'Oops! Something went wrong. Please try again.',
     successMessage: "You're now part of our exclusive community. Stay tuned for updates!",
-    registrationEndpoint: '/api/author/subscribe',
     bottomText: 'Join other engaged readers who value {authorName}'
   },
-  authorName = 'the author'
+  authorName = 'the author',
+  spaceId,
+  type
 }) => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [error, setError] = useState('');
+
+  const [subscribe, { loading }] = useAstroMutation(Subscribe, {
+    variables: {
+      id: spaceId,
+      type: type
+    },
+    onCompleted: (data) => {
+        console.log("onCompleted:", true);
+
+      setIsSubscribed(true);
+      toast.success(config.successMessage);
+    },
+    onError: (error) => {
+        console.log("Error:", error);
+      toast.error(error?.message || config.errorMessage);
+    }
+  });
 
   const interpolatedDescription = config.description.replace('{authorName}', authorName);
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Subscribing...", authenticated, email, spaceId);
+    
+    // only if not authenticated , email is required
     if (!authenticated && !email) {
-      setError('Please enter a valid email address.');
+      toast.error('Please enter a valid email address.');
       return;
     }
 
-    setError('');
-
-    try {
-      // Simulating a successful subscription for both authenticated and non-authenticated users
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setIsSubscribed(true);
-      console.log("Subscription successful, isSubscribed:", true);
-    } catch (error) {
-      console.error('Error:', error);
-      setError(config.errorMessage);
+    if (!spaceId) {
+      toast.error('Invalid subscription target');
+      return;
     }
+
+    subscribe();
   };
 
   return (
@@ -72,7 +92,7 @@ const Subsciption: React.FC<SubsciptionProps> = ({
       </p>
 
       {!isSubscribed && (
-        <div className="space-y-4">
+        <form onSubmit={handleSubscribe} className="space-y-4">
           {!authenticated && (
             <Input
               id="email"
@@ -87,13 +107,13 @@ const Subsciption: React.FC<SubsciptionProps> = ({
             />
           )}
           <Button
-            type="button"
+            type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
-            onClick={handleSubscribe}
+            disabled={loading}
           >
-            {config.submitButtonText}
+            {loading ? 'Subscribing...' : config.submitButtonText}
           </Button>
-        </div>
+        </form>
       )}
 
       {isSubscribed && (
@@ -106,8 +126,6 @@ const Subsciption: React.FC<SubsciptionProps> = ({
         </Button>
       )}
 
-      {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
-
       <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
         {config.bottomText.replace('{authorName}', authorName)}
       </p>
@@ -115,4 +133,4 @@ const Subsciption: React.FC<SubsciptionProps> = ({
   );
 };
 
-export default Subsciption;
+export default Subscription;

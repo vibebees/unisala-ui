@@ -5,7 +5,6 @@ import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
 import { EmptySpacePrompt } from "../ui/nocontent";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
-
 interface FeedProps {
   articles: IPost[];
   staffPicks?: IPost[];
@@ -90,6 +89,7 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
       <h1 className="font-signature text-center italic text-xl lg:text-3xl text-black dark:text-white tracking-wide border-b-2 border-indigo-300 dark:border-gray-600 pb-2 mb-4 shadow-sm">
         #{title}
       </h1>
+
       <div className="flex flex-col md:flex-row">
         <div className={`w-full ${(showStaffPicks || showTopics) ? 'lg:w-3/4 lg:pr-8' : ''}`}>
           {articles.length === 0 && <NoArticleCard />}
@@ -99,6 +99,7 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
           {articles.length > 0 && articles.map((article, index) => (
             <ArticleCard key={index} article={article} />
           ))}
+           
         </div>
         {(showStaffPicks || showTopics) && (
           <div className="md:w-1/4">

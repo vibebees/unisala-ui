@@ -67,6 +67,10 @@ export function clearCache(): void {
   }
 }
 
-export const authenticated = getCache("accessToken") ? true : false;
+interface AuthData {
+  authenticated: boolean;
+}
+
+export const authenticated = (getCache<AuthData>("authData")?.authenticated) || false;
 export const userInfo = getCache<{ username?: string }>("userInfo") || {};
 export const userName = userInfo?.username || undefined;

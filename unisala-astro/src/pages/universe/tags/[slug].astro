@@ -7,6 +7,8 @@ import MediumFeed from '@/components/feed/tagsfeed.tsx';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
 const { slug = '' } = Astro.params;
+import Subscription from '@/components/newsletter/subscription';
+import AuthorSubscription from '@/components/newsletter';
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -163,6 +165,23 @@ const images = [
           showImage={true}
           images={images}
         />
+        
+
+         <Subscription client:only 
+         config = {{
+            title: "Follow #" + tagName,
+            description: "",
+            emailPlaceholder: "your email",
+            submitButtonText: "Subscribe",
+            subscribedButtonText: "Subscribed",
+            errorMessage: "Something went wrong. Please try again.",
+            successMessage: "Thank you for subscribing!",
+            registrationEndpoint: "/api/subscribe",
+            bottomText: "",
+          }}
+          spaceId ={ id}
+
+          /> 
       </section>
     )
   }

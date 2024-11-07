@@ -1,77 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Bell } from 'lucide-react';
-import { authenticated } from '@/utils/cache';
 import { useAstroMutation } from '@/datasource/apollo-client';
-import { Subscribe } from '@/datasource/graphql/user'; // You'll need to create this
+import { Subscribe } from '@/datasource/graphql/user';
 import toast from 'react-hot-toast';
+import { getCache, setCache } from '@/utils/cache';
+import { navigator } from '@/utils/lib/URLupdate';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
+import { Check } from 'lucide-react';
 
 interface SubscriptionProps {
-  config?: {
-    title: string;
-    description: string;
-    emailPlaceholder: string;
-    submitButtonText: string;
-    subscribedButtonText: string;
-    errorMessage: string;
-    successMessage: string;
-    bottomText: string;
-  };
-  authorName?: string;
   spaceId?: string;
-  type: 'space' | 'org';
+  title?: string;
 }
 
-const Subscription: React.FC<SubscriptionProps> = ({
-  config = {
-    title: "Join the Author's Circle",
-    description: 'Get more ideas from {authorName} straight to your inbox!',
-    emailPlaceholder: 'you@example.com',
-    submitButtonText: 'Subscribe',
-    subscribedButtonText: 'Subscribed',
-    errorMessage: 'Oops! Something went wrong. Please try again.',
-    successMessage: "You're now part of our exclusive community. Stay tuned for updates!",
-    bottomText: 'Join other engaged readers who value {authorName}'
-  },
-  authorName = 'the author',
-  spaceId,
-  type
-}) => {
-  const [email, setEmail] = useState('');
+interface FollowingCache {
+  [key: string]: boolean;
+}
+
+const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
+  // Check if already following on component mount
+  useEffect(() => {
+    if (spaceId) {
+      const followingCache = getCache('following') as FollowingCache || {};
+      setIsSubscribed(!!followingCache[spaceId]);
+    }
+  }, [spaceId]);
+
   const [subscribe, { loading }] = useAstroMutation(Subscribe, {
+    context: { server: USER_SERVICE_GQL },
     variables: {
       id: spaceId,
-      type: type
+      type: 'space'
     },
     onCompleted: (data) => {
-        console.log("onCompleted:", true);
-
-      setIsSubscribed(true);
-      toast.success(config.successMessage);
+      if (data.subscribe.status.success) {
+        // Update following cache
+        const followingCache = getCache('following') as FollowingCache || {};
+        followingCache[spaceId as string] = true;
+        setCache('following', followingCache);
+        
+        setIsSubscribed(true);
+        toast.success(data.subscribe.status.message || "You're now subscribed!");
+      }
     },
     onError: (error) => {
-        console.log("Error:", error);
-      toast.error(error?.message || config.errorMessage);
+      toast.error(error?.message || 'Something went wrong. Please try again.');
     }
   });
 
-  const interpolatedDescription = config.description.replace('{authorName}', authorName);
-
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Subscribing...", authenticated, email, spaceId);
     
-    // only if not authenticated , email is required
-    if (!authenticated && !email) {
-      toast.error('Please enter a valid email address.');
+    if (!spaceId) {
+      toast.error('Invalid subscription target');
       return;
     }
 
-    if (!spaceId) {
-      toast.error('Invalid subscription target');
+    // Check if already subscribed
+    const followingCache = getCache('following') as FollowingCache || {};
+    if (followingCache[spaceId]) {
+      toast.info('You are already following this space');
+      return;
+    }
+
+    // Check if user is authenticated
+    const authData = getCache('authData');
+    if (!authData?.authenticated) {
+      const currentUrl = `${window.location.pathname.trim()}${window.location.search.trim()}`;
+      navigator(`/auth?redirect=${encodeURIComponent(currentUrl)}`);
       return;
     }
 
@@ -79,56 +77,39 @@ const Subscription: React.FC<SubscriptionProps> = ({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <div className="flex items-center gap-x-2 mb-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {config.title}
-        </h2>
-        <Bell className="text-blue-600 dark:text-blue-400" size={24} />
-      </div>
-
-      <p className="text-gray-700 dark:text-gray-300 mb-6">
-        {isSubscribed ? config.successMessage : interpolatedDescription}
-      </p>
-
-      {!isSubscribed && (
-        <form onSubmit={handleSubscribe} className="space-y-4">
-          {!authenticated && (
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              placeholder={config.emailPlaceholder}
-              className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          )}
+    <div className="flex justify-center items-center w-full">
+      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
+        {!isSubscribed ? (
           <Button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
+            onClick={handleSubscribe}
+            className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
             disabled={loading}
           >
-            {loading ? 'Subscribing...' : config.submitButtonText}
+            {loading ? 'Following...' : 'Follow'}
           </Button>
-        </form>
-      )}
+        ) : (
+          <Button
+            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200 flex items-center justify-center gap-2"
+            disabled
+          >
+            <Check className="w-4 h-4" />
+            <span>Following </span>
+          </Button>
+        )}
 
-      {isSubscribed && (
-        <Button
-          type="button"
-          className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
-          disabled
-        >
-          {config.subscribedButtonText}
-        </Button>
-      )}
-
-      <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
-        {config.bottomText.replace('{authorName}', authorName)}
-      </p>
+        <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
+          <svg 
+            className="w-4 h-4"
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span>Never miss new notes and insights{title ? ` in #${title}` : ''} 📚✨</span>
+        </div>
+      </div>
     </div>
   );
 };

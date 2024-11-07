@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, Briefcase, Rocket, Microscope, School, User } from 'lucide-react';
+import { GraduationCap, Briefcase, Rocket, Microscope, School, User, Book, Star } from 'lucide-react';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { EditProfile } from '@/datasource/graphql/user';
 import Button from './atoms/Button';
@@ -32,14 +32,13 @@ const StepThreeForm = () => {
   };
 
   const userData = getCache('authData');
-  const backgroundOptions = [
-    { value: "student", Icon: GraduationCap, label: "Student" },
-    { value: "professional", Icon: Briefcase, label: "Professional" },
-    { value: "entrepreneur", Icon: Rocket, label: "Entrepreneur" },
-    { value: "researcher", Icon: Microscope, label: "Researcher" },
-    { value: "educator", Icon: School, label: "Educator" },
-    { value: "other", Icon: User, label: "Other" }
-  ];
+const backgroundOptions = [
+  { value: "undergraduate", Icon: GraduationCap, label: "Undergraduate 🎓" },
+  { value: "graduate", Icon: Book, label: "Graduate Student 📚" },
+  { value: "phd", Icon: Star, label: "PhD Student 🔬" },
+  { value: "faculty", Icon: School, label: "Faculty 👨‍🏫" },
+  { value: "other", Icon: User, label: "Other 👋" }
+];
 
   const handleSubmit = () => {
     const userStatus = localStorage.getItem('userStatus');

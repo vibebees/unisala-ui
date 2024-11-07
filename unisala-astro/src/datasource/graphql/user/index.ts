@@ -2170,11 +2170,13 @@ getGenerateImage = gql`
       }
     }
   `,
-Subscribe = gql`
+  Subscribe = gql`
   mutation subscribe($id: ID!, $type: SubscribeType!) {
     subscribe(id: $id, type: $type) {
-      success
-      message
+      status {
+        success
+        message
+      }
     }
   }
 `;

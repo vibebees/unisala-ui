@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import {
   Book,
+  BookOpen,
+  Code,
   Compass,
+  MessageSquare,
   Share2,
   Star,
   TrendingUp,
@@ -23,13 +26,44 @@ const StepTwoForm = () => {
   };
 
   const options = [
-    { value: "learn", Icon: Book, label: "Learn & Explore" },
-    { value: "share", Icon: Share2, label: "Share Experiences" },
-    { value: "connect", Icon: Users, label: "Connect with Others" },
-    { value: "grow", Icon: TrendingUp, label: "Personal Growth" },
-    { value: "inspire", Icon: Star, label: "Find Inspiration" },
-    { value: "explore", Icon: Compass, label: "Discover spaces" }
-  ];
+    { 
+      value: "reader", 
+      Icon: Book, 
+      label: "Here to Learn 📚",
+      description: "Access study materials and explanations"
+    },
+    {
+      value: "share-notes",
+      Icon: BookOpen,
+      label: "Share Course Notes 📝",
+      description: "Want to contribute study materials for future students"
+    },
+    {
+      value: "study-buddy",
+      Icon: Users,
+      label: "Find Me Study Buddy 🤝",
+      description: "Let's tackle deep learning challenges together!"
+    },
+    {
+      value: "research",
+      Icon: Star,
+      label: "Research  Collab ⭐",
+      description: "Interested in collaborating on deep learning research projects"
+    },
+  
+    {
+      value: "projects", 
+      Icon: Code,
+      label: "Find Project Buddy 👥",
+      description: "Find partners for assignments and projects"
+  },
+    // {
+    //   value: "feedback",
+    //   Icon: MessageSquare,
+    //   label: "Early User Feedback 💭",
+    //   description: "Happy to provide feedback as an early user"
+    // }
+   ];
 
   return (
     <div className="welcome-form-container animate-fadeIn flex flex-col min-h-screen">

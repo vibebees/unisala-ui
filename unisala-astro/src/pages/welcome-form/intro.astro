@@ -3,25 +3,24 @@ import WelcomeFormLayout from "@/components/layout/Welcome-form-Layout.astro";
 ---
 
 <WelcomeFormLayout
-  ImageAlt="first-step image"
-  title="Welcomeform"
+  ImageAlt="student aha moment"
+  title="Welcome to Unisala"
   ImageSrc={"https://d2wpk2fhu8mz8q.cloudfront.net/uni-student-bg.webp"}
   className="w-[48%] px-7 pointer-events-none"
   step={1}
 >
   <div class="text-neutral-900 h-full grid place-content-center">
     <div class="mb-8">
-      <h1 class="text-center font-bold text-4xl">Welcome to Unisala 🌟</h1>
-      <p></p>
+      <h1 class="text-center font-bold text-4xl">Unisala ✨</h1>
       <p class="form-info">
-        <p class="" data-text="Where your journey becomes a beacon for countless others...">
-        A place where your journey becomes a beacon for countless others.
-        Where connections spark revolutions in thought and action.
-        </p>
-         
-        <p class="form-info font-bold mt-4">This is Unisala. Your stage. Your audience. Your impact.</p>
+        <span class="block">One 'Aha!' moment at a time.</span>
       </p>
-      <a  id="getStartedLink" href="step-one" class="block">
+      
+      <p class="form-info second-info">
+        A place where knowledge clicks.
+      </p>
+      
+      <a id="getStartedLink" href="step-one" class="block">
         <button class="btn">Get Started</button>
       </a>
     </div>
@@ -42,31 +41,38 @@ import WelcomeFormLayout from "@/components/layout/Welcome-form-Layout.astro";
       link.href = `${link?.href}?redirect=${encodeURIComponent(redirect)}`;
     }
   </script>
-
 </WelcomeFormLayout>
 
 <style>
   .form-info {
     font-size: 1.2rem;
     line-height: 1.6;
-    margin-top: 3rem;
+    margin-top: 2rem;
     max-width: 800px;
     width: 100%;
     text-align: center;
   }
 
+  .second-info {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    color: #4a5568;
+  }
+
   .btn {
     background-color: #4e89ff;
-    color: #ffff;
+    color: #ffffff;
     padding: 0.5rem 1rem;
     border-radius: 0.3rem;
-    font-size: 1.2rem;
-    margin-top: 3rem;
-    cursor: pointer;
     font-size: 17px;
     width: 9rem;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 3rem auto 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
     display: block;
+  }
+
+  .btn:hover {
+    background-color: #3d70d9;
   }
 </style>

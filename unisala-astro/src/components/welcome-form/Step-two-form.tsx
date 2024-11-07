@@ -11,7 +11,7 @@ interface FieldOfStudyProps {
 }
 
 const FieldOfStudy: React.FC<FieldOfStudyProps> = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("computer science");
   const [selectedFields, setSelectedFields] = useState<string[]>(
     JSON.parse(localStorage.getItem("interestedSubjects") || "[]")
   );

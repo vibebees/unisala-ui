@@ -2,7 +2,6 @@ import React from 'react';
 import { extractHeading, threadPointer } from '@/utils/lib/utils';
 import linkifyHtml from 'linkify-html';
 import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
-import { EmptySpacePrompt } from "../ui/nocontent";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
 

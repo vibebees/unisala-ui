@@ -2,13 +2,13 @@
 export const prerender = false;
 
 import MainLayout from "@/layouts/main-layout.astro";
-import { ArticleCard } from "@/components/feed/articlecard";
-import { StaffPick, TopicBadge, CoverImage, NoArticleCard } from "@/components/feed/newtagsfeed";
-import SubscriptionPopup from "@/components/newsletter/subscriptionPopUp";
+import MediumFeed from "@/components/feed/tagsfeed.tsx";
+
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";
-import type { IPost } from "@/types/post";
 const { slug = "" } = Astro.params;
+import Subscription from "@/components/newsletter/subscription";
+import AuthorSubscription from "@/components/newsletter";
 
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
@@ -58,22 +58,26 @@ let topics = [];
 let error = "";
 let tagName = "Space";
 let id = "";
-let showStaffPicks = true;
-let showTopics = true;
-let showImage = true;
-
 try {
   const extractNameAndId = (url: string) => {
+    // Match the ID at the end of the url (assuming it's a 24-character hexadecimal string)
     const match = url.match(/^(.+)-([a-f0-9]{24})$/);
+
     if (!match) {
       throw new Error("Invalid url format: expected name-[24 character ID]");
     }
+
+    // Extract the name and ID
     let [, name, id] = match;
+
+    // Replace hyphens with spaces in the name
     name = name.replace(/-/g, " ");
+
+    // Capitalize the first letter of each word in the name
     const capitalizedName = name.replace(/\b\w/g, (char) => char.toUpperCase());
+
     return { name: capitalizedName, id };
   };
-  
   const { name: tag, id: tagId } = extractNameAndId(slug);
 
   // Fetch regular articles
@@ -130,7 +134,6 @@ try {
   console.error("Error fetching data:", e);
   error = e instanceof Error ? e.message : String(e);
 }
-
 const images = [
   "https://i.ibb.co/Rz2S3kg/Screenshot-2024-08-23-at-3-46-20-PM.png",
   "https://i.ibb.co/cNBfq71/Screenshot-2024-08-23-at-3-46-28-PM.png",
@@ -144,70 +147,30 @@ const images = [
   "https://i.ibb.co/S0ZJKSx/Screenshot-2024-08-23-at-3-47-30-PM.png",
   "https://i.ibb.co/4g6YvD5/Screenshot-2024-08-23-at-3-47-38-PM.png",
 ];
-
-const randomImage = images[Math.floor(Math.random() * images.length)];
 ---
 
 <MainLayout title={tagName}>
   {error && <div>Error: {error}</div>}
   {
     !error && (
-      <section class="container max-w-screen-lg pt-12">
-        <div class="max-w-screen-xl mx-auto px-4 py-8">
-          <h1 class="font-signature text-center italic text-xl lg:text-3xl text-black dark:text-white tracking-wide border-b-2 border-indigo-300 dark:border-gray-600 pb-2 mb-4 shadow-sm">
-            #{tagName}
-          </h1>
+      <section class="container  max-w-screen-lg pt-12">
+        <MediumFeed
+          articles={articles}
+          staffPicks={staffPicks}
+          topics={topics}
+          title={tagName}
+          id={id}
+          showStaffPicks={true}
+          showTopics={true}
+          showImage={true}
+          images={images}
+        />
 
-          <div class="flex flex-col md:flex-row">
-            <div class={`w-full ${showStaffPicks || showTopics ? 'lg:w-3/4 lg:pr-8' : ''}`}>
-              {articles.length === 0 ? (
-                <NoArticleCard client:load title={tagName} id={id} />
-              ) : (
-                <>
-                  <CoverImage
-                    client:load
-                    articles={articles}
-                    showImage={showImage}
-                    randomImage={randomImage}
-                    title={tagName}
-                  />
-                  {articles.map((article: IPost) => (
-                    <ArticleCard client:load article={article} />
-                  ))}
-                </>
-              )}
-            </div>
-
-            {(showStaffPicks || showTopics) && (
-              <div class="md:w-1/4">
-                {showStaffPicks && staffPicks.length > 0 && (
-                  <div class="mb-8">
-                    <h2 class="text-lg font-bold mb-4">Staff Picks</h2>
-                    {staffPicks.map((pick: IPost) => (
-                      <StaffPick client:load article={pick} />
-                    ))}
-                  </div>
-                )}
-
-                {showTopics && topics.length > 0 && (
-                  <div>
-                    <h2 class="text-lg font-bold mb-4">Recommended topics</h2>
-                    <div class="flex flex-wrap">
-                      {topics.map((topic: { name: string; _id: string; }) => (
-                        <TopicBadge 
-                          client:load 
-                          topic={topic.name} 
-                          id={topic._id} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
+        <Subscription
+          client:only
+          title={ tagName}
+          spaceId={id}
+        />
       </section>
     )
   }

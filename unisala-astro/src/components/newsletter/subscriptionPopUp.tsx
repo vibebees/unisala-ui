@@ -1,57 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Check } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { Subscribe } from '@/datasource/graphql/user';
+import toast from 'react-hot-toast';
 import { getCache, setCache } from '@/utils/cache';
 import { navigator } from '@/utils/lib/URLupdate';
 import { USER_SERVICE_GQL } from '@/datasource/servers/types';
-import toast from 'react-hot-toast';
+import { Check } from 'lucide-react';
 
-type ColorScheme = 'blue' | 'red' | 'green';
-
-interface SubscriptionPopupProps {
-  courseName?: string;
+interface SubscriptionProps {
   spaceId?: string;
-  colorScheme?: ColorScheme;
+  title?: string;
 }
 
-const getColorClasses = (color: ColorScheme, isSubscribed: boolean) => ({
-  button: {
-    background: isSubscribed ? 'bg-emerald-600' : `bg-emerald-500/90`,
-    hover: isSubscribed ? '' : `hover:bg-emerald-600/90`,
-    focus: `focus:ring-emerald-500`,
-    glow: isSubscribed ? 'bg-emerald-500/30' : `bg-emerald-400/20`,
-    hoverGlow: isSubscribed ? '' : `group-hover:bg-emerald-400/30`,
-  },
-  input: {
-    focus: `focus:ring-${color}-500 focus:border-${color}-500`,
-  },
-  submit: {
-    background: `bg-${color}-600`,
-    hover: `hover:bg-${color}-700`,
-    focus: `focus:ring-${color}-500`,
-  }
-});
+interface FollowingCache {
+  [key: string]: boolean;
+}
 
-const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({ 
-  courseName = '', 
-  spaceId = '', 
-  colorScheme = 'green' 
-}) => {
-  const [cNumber, setCNumber] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
+const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  // Check if already following on mount
+  // Check if already following on component mount
   useEffect(() => {
     if (spaceId) {
-      const followingCache = getCache('following') as { [key: string]: boolean } || {};
+      const followingCache = getCache('following') as FollowingCache || {};
       setIsSubscribed(!!followingCache[spaceId]);
     }
   }, [spaceId]);
-
-  const colors = getColorClasses(colorScheme, isSubscribed);
 
   const [subscribe, { loading }] = useAstroMutation(Subscribe, {
     context: { server: USER_SERVICE_GQL },
@@ -62,119 +37,81 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
     onCompleted: (data) => {
       if (data.subscribe.status.success) {
         // Update following cache
-        const followingCache = getCache('following') as { [key: string]: boolean } || {};
+        const followingCache = getCache('following') as FollowingCache || {};
         followingCache[spaceId as string] = true;
         setCache('following', followingCache);
         
         setIsSubscribed(true);
-        setMessage('Successfully joined the network! Check your ULL email.');
         toast.success(data.subscribe.status.message || "You're now subscribed!");
-        
-        setTimeout(() => {
-          setIsOpen(false);
-          setCNumber('');
-          setMessage('');
-        }, 2000);
       }
     },
     onError: (error) => {
       toast.error(error?.message || 'Something went wrong. Please try again.');
-      setMessage('Something went wrong. Please try again.');
     }
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!/^C00\d{6}$/i.test(cNumber)) {
-      setMessage('Please enter a valid CLID (e.g., C00577123)');
+    if (!spaceId) {
+      toast.error('Invalid subscription target');
+      return;
+    }
+
+    // Check if already subscribed
+    const followingCache = getCache('following') as FollowingCache || {};
+    if (followingCache[spaceId]) {
+      toast.success('You are already following this space');
       return;
     }
 
     // Check if user is authenticated
-   
+    const authData = getCache('authData') as { authenticated?: boolean };
+    if (!authData?.authenticated) {
+      const currentUrl = `${window.location.pathname.trim()}${window.location.search.trim()}`;
+      navigator(`/auth?redirect=${encodeURIComponent(currentUrl)}`);
+      return;
+    }
+
     subscribe();
   };
 
-  const buttonContent = isSubscribed ? (
-    <>
-      <Check className="w-4 h-4" />
-      <span className="font-semibold">Joined</span>
-    </>
-  ) : (
-    <>
-      <Bell className="w-4 h-4" />
-      <span className="font-semibold">Join study group</span>
-    </>
-  );
-
   return (
-    <div className="flex flex-col items-center gap-4">
-      <button
-        onClick={() => !isSubscribed && setIsOpen(!isOpen)}
-        disabled={isSubscribed}
-        className={`group relative flex items-center gap-2 px-6 py-3 text-sm font-medium text-white ${colors.button.background} backdrop-blur-sm border border-white/20 rounded-xl ${colors.button.hover} focus:outline-none focus:ring-2 ${colors.button.focus} focus:ring-offset-2 shadow-lg transition-all duration-300`}
-      >
-        <div className={`absolute inset-0 rounded-xl ${colors.button.glow} blur-sm ${colors.button.hoverGlow} transition-all duration-300`} />
-        <div className="relative flex items-center gap-2">
-          {buttonContent}
+    <div className="flex justify-center items-center w-full">
+      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
+        {!isSubscribed ? (
+          <Button
+            onClick={handleSubscribe}
+            className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
+            disabled={loading}
+          >
+            {loading ? 'Following...' : 'Follow'}
+          </Button>
+        ) : (
+          <Button
+            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200 flex items-center justify-center gap-2"
+            disabled
+          >
+            <Check className="w-4 h-4" />
+            <span>Following </span>
+          </Button>
+        )}
+
+        <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
+          <svg 
+            className="w-4 h-4"
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span>Never miss new notes and insights{title ? ` in #${title}` : ''} 📚✨</span>
         </div>
-      </button>
-
-      {isOpen && !isSubscribed && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
-                Join Your {courseName} Study Network
-              </h2>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Your ULL id
-                </label>
-                <input
-                  type="text"
-                  placeholder="C00577XXX"
-                  value={cNumber}
-                  onChange={(e) => setCNumber(e.target.value.toUpperCase())}
-                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ${colors.input.focus}`}
-                />
-              </div>
-
-              {message && (
-                <div className={`text-sm ${message.includes('valid') || message.includes('wrong') ? 'text-red-600' : 'text-green-600'}`}>
-                  {message}
-                </div>
-              )}
-
-              {cNumber && (
-                <div className="text-sm text-gray-500">
-                  You'll receive notes at: {cNumber.toLowerCase()}@louisiana.edu
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className={`w-full px-4 py-3 text-white ${colors.submit.background} rounded-lg ${colors.submit.hover} focus:outline-none focus:ring-2 ${colors.submit.focus} disabled:opacity-50 font-medium transition-colors`}
-                disabled={!cNumber || loading}
-              >
-                {loading ? 'Joining...' : 'Join'}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
 
-export default SubscriptionPopup;
+export default Subscription;

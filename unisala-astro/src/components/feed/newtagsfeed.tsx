@@ -3,6 +3,11 @@ import React from 'react';
 import { extractHeading, threadPointer } from '@/utils/lib/utils';
 import linkifyHtml from 'linkify-html';
 import type { IPost } from "@/types/post";
+import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
+// components/feed/NoArticleCard.tsx
+import { EmptySpacePrompt } from "../ui/nocontent";
+// import SubscriptionPopup from '../newsletter/subscriptionPopUp';
+
 
 export const StaffPick: React.FC<{ article: IPost }> = ({ article }) => (
   <div className="flex items-start mb-4">
@@ -21,7 +26,6 @@ export const StaffPick: React.FC<{ article: IPost }> = ({ article }) => (
 );
 
 // components/feed/TopicBadge.tsx
-import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
 
 export const TopicBadge: React.FC<{ topic: string; id: string }> = ({ topic, id }) => (
   <a
@@ -68,10 +72,11 @@ export const CoverImage: React.FC<CoverImageProps> = ({
           <div className="text-center space-y-4">
      
             <div className="inline-block">
-              <SubscriptionPopup 
+              {/* <SubscriptionPopup 
                 courseName={title}
                 spaceId=""
-              />
+                colorScheme="blue"
+              /> */}
             </div>
           </div>
         </div>
@@ -80,9 +85,6 @@ export const CoverImage: React.FC<CoverImageProps> = ({
   );
 };
 
-// components/feed/NoArticleCard.tsx
-import { EmptySpacePrompt } from "../ui/nocontent";
-import SubscriptionPopup from '../newsletter/subscriptionPopUp';
 
 export const NoArticleCard: React.FC<{ title: string; id: string }> = ({ title, id }) => (
   <div className="max-w-screen-md mx-auto px-4 py-8">

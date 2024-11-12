@@ -2171,7 +2171,7 @@ getGenerateImage = gql`
     }
   `,
   Subscribe = gql`
-  mutation subscribe($id: ID!, $type: SubscribeType!, email: String) {
+  mutation subscribe($id: ID!, $type: SubscribeType!, $email: String) {
     subscribe(id: $id, type: $type, email: $email) {
       status {
         success

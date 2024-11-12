@@ -4,12 +4,11 @@ export const prerender = false;
 import MainLayout from "@/layouts/main-layout.astro";
 import { ArticleCard } from "@/components/feed/articlecard";
 import { StaffPick, TopicBadge, CoverImage, NoArticleCard } from "@/components/feed/newtagsfeed";
-// import SubscriptionPopup from "@/components/newsletter/subscriptionPopUp";
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";
 import type { IPost } from "@/types/post";
 const { slug = "" } = Astro.params;
-
+// import Subscription from "@/components/newsletter/subscription";
 const getNewsFeed = `
     query fetchFeedV2($feedQuery: FeedQueryInput) {
       fetchFeedV2(feedQuery: $feedQuery) {
@@ -165,12 +164,14 @@ const randomImage = images[Math.floor(Math.random() * images.length)];
               ) : (
                 <>
                   <CoverImage
-                    client:load
+                    client:only
                     articles={articles}
                     showImage={showImage}
                     randomImage={randomImage}
                     title={tagName}
+                    spaceId = {id}
                   />
+
                   {articles.map((article: IPost) => (
                     <ArticleCard client:load article={article} />
                   ))}
@@ -207,7 +208,10 @@ const randomImage = images[Math.floor(Math.random() * images.length)];
             )}
           </div>
         </div>
-
+        {/* <Subscription
+          client:load
+          title="Subscribe to our newsletter"
+          /> */}
       </section>
     )
   }

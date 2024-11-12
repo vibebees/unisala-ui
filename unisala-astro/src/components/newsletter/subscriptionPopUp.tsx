@@ -1,117 +1,202 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { useAstroMutation } from '@/datasource/apollo-client';
-import { Subscribe } from '@/datasource/graphql/user';
+import { Bell, Check } from "lucide-react";
 import toast from 'react-hot-toast';
+import { fetchApi } from "@/utils/api.utility";
+import { userServiceGql } from "@/datasource/servers";
 import { getCache, setCache } from '@/utils/cache';
-import { navigator } from '@/utils/lib/URLupdate';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
-import { Check } from 'lucide-react';
 
-interface SubscriptionProps {
-  spaceId?: string;
-  title?: string;
-}
-
+type ColorScheme = 'blue' | 'red' | 'green';
 interface FollowingCache {
   [key: string]: boolean;
 }
 
-const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
-  const [isSubscribed, setIsSubscribed] = useState(false);
+interface SubscriptionPopupProps {
+  courseName?: string;
+  spaceId?: string;
+  colorScheme?: ColorScheme;
+}
+
+const getColorClasses = (color: ColorScheme, isJoined: boolean) => ({
+  button: {
+    background: isJoined ? `bg-green-700` : `bg-green-400`,
+    hover: isJoined ? `hover:bg-green-800` : `hover:bg-green-500`,
+    focus: `focus:ring-green-500`,
+    glow: isJoined ? `bg-green-600/20` : `bg-green-300/20`,
+    hoverGlow: isJoined ? `group-hover:bg-green-600/30` : `group-hover:bg-green-300/30`,
+  },
+  input: {
+    focus: `focus:ring-green-500 focus:border-green-500`,
+  },
+  submit: {
+    background: `bg-green-600`,
+    hover: `hover:bg-green-700`,
+    focus: `focus:ring-green-500`,
+  }
+});
+
+const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({ 
+  courseName = '', 
+  spaceId = '', 
+  colorScheme = 'green' 
+}) => {
+  const [cNumber, setCNumber] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isJoined, setIsJoined] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const colors = getColorClasses(colorScheme, isJoined);
 
   // Check if already following on component mount
   useEffect(() => {
     if (spaceId) {
       const followingCache = getCache('following') as FollowingCache || {};
-      setIsSubscribed(!!followingCache[spaceId]);
+      setIsJoined(!!followingCache[spaceId]);
     }
   }, [spaceId]);
 
-  const [subscribe, { loading }] = useAstroMutation(Subscribe, {
-    context: { server: USER_SERVICE_GQL },
-    variables: {
-      id: spaceId,
-      type: 'space'
-    },
-    onCompleted: (data) => {
-      if (data.subscribe.status.success) {
-        // Update following cache
-        const followingCache = getCache('following') as FollowingCache || {};
-        followingCache[spaceId as string] = true;
-        setCache('following', followingCache);
-        
-        setIsSubscribed(true);
-        toast.success(data.subscribe.status.message || "You're now subscribed!");
+  const subscribe = async (email: string) => {
+    const mutation = `
+      mutation subscribe($id: ID!, $type: SubscribeType!, $email: String!) {
+        subscribe(id: $id, type: $type, email: $email) {
+          status {
+            success
+            message
+          }
+        }
       }
-    },
-    onError: (error) => {
-      toast.error(error?.message || 'Something went wrong. Please try again.');
-    }
-  });
+    `;
 
-  const handleSubscribe = async (e: React.FormEvent) => {
+    const response = await fetchApi(userServiceGql, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: mutation,
+        variables: {
+          id: spaceId,
+          type: 'space',
+          email: email
+        },
+      }),
+    });
+
+    if (response.errors) {
+      throw new Error(response.errors[0].message);
+    }
+
+    return response.data.subscribe;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     
-    if (!spaceId) {
-      toast.error('Invalid subscription target');
+    if (!/^C00\d{6}$/i.test(cNumber)) {
+      setMessage('Please enter a valid CLID (e.g., C00577123)');
+      setLoading(false);
       return;
     }
 
-    // Check if already subscribed
-    const followingCache = getCache('following') as FollowingCache || {};
-    if (followingCache[spaceId]) {
-      toast.success('You are already following this space');
-      return;
-    }
+    const email = `${cNumber.toLowerCase()}@louisiana.edu`;
 
-    // Check if user is authenticated
-    const authData = getCache('authData') as { authenticated?: boolean };
-    if (!authData?.authenticated) {
-      const currentUrl = `${window.location.pathname.trim()}${window.location.search.trim()}`;
-      navigator(`/auth?redirect=${encodeURIComponent(currentUrl)}`);
-      return;
-    }
+    try {
+      // Check if already subscribed
+      const followingCache = getCache('following') as FollowingCache || {};
+      if (followingCache[spaceId]) {
+        toast.success('You are already following this space');
+        setLoading(false);
+        return;
+      }
 
-    subscribe();
+      const result = await subscribe(email);
+      
+      if (result.status.success) {
+        // Update cache
+        const updatedCache = { ...followingCache, [spaceId]: true };
+        setCache('following', updatedCache);
+        setIsJoined(true);
+        setMessage('Successfully joined! Check your ULL email.');
+        toast.success("You're now subscribed!");
+        setIsOpen(false);
+      } else {
+        throw new Error(result.status.message || 'Subscription failed');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
+      setMessage(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center w-full">
-      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
-        {!isSubscribed ? (
-          <Button
-            onClick={handleSubscribe}
-            className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
-            disabled={loading}
-          >
-            {loading ? 'Following...' : 'Follow'}
-          </Button>
-        ) : (
-          <Button
-            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200 flex items-center justify-center gap-2"
-            disabled
-          >
-            <Check className="w-4 h-4" />
-            <span>Following </span>
-          </Button>
-        )}
-
-        <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
-          <svg 
-            className="w-4 h-4"
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2"
-          >
-            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span>Never miss new notes and insights{title ? ` in #${title}` : ''} 📚✨</span>
+    <div className="flex flex-col items-center gap-4">
+      <button
+        onClick={() => !isJoined && setIsOpen(!isOpen)}
+        className={`group relative flex items-center gap-2 px-6 py-3 text-sm font-medium text-white ${colors.button.background} backdrop-blur-sm border border-white/20 rounded-xl ${colors.button.hover} focus:outline-none focus:ring-2 ${colors.button.focus} focus:ring-offset-2 shadow-lg transition-all duration-300`}
+      >
+        <div className={`absolute inset-0 rounded-xl ${colors.button.glow} blur-sm ${colors.button.hoverGlow} transition-all duration-300`} />
+        
+        <div className="relative flex items-center gap-2">
+          {isJoined ? <Check className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+          <span className="font-semibold">{isJoined ? 'Joined' : 'Join study group'}</span>
         </div>
-      </div>
+      </button>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                Join Your {courseName} Study Network
+              </h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Your ULL id
+                </label>
+                <input
+                  type="text"
+                  placeholder="C00577XXX"
+                  value={cNumber}
+                  onChange={(e) => setCNumber(e.target.value.toUpperCase())}
+                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ${colors.input.focus}`}
+                />
+              </div>
+
+              {message && (
+                <div className={`text-sm ${message.includes('valid') || message.includes('wrong') ? 'text-red-600' : 'text-green-600'}`}>
+                  {message}
+                </div>
+              )}
+
+              {cNumber && (
+                <div className="text-sm text-gray-500">
+                  You'll receive notes at: {cNumber.toLowerCase()}@louisiana.edu
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className={`w-full px-4 py-3 text-white ${colors.submit.background} rounded-lg ${colors.submit.hover} focus:outline-none focus:ring-2 ${colors.submit.focus} disabled:opacity-50 font-medium transition-colors`}
+                disabled={loading}
+              >
+                {loading ? 'Joining...' : 'Join'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Subscription;
+export default SubscriptionPopup;

@@ -6,7 +6,7 @@ import type { IPost } from "@/types/post";
 import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
 // components/feed/NoArticleCard.tsx
 import { EmptySpacePrompt } from "../ui/nocontent";
-// import SubscriptionPopup from '../newsletter/subscriptionPopUp';
+import SubscriptionPopup from '../newsletter/subscriptionPopUp';
 
 
 export const StaffPick: React.FC<{ article: IPost }> = ({ article }) => (
@@ -43,13 +43,15 @@ interface CoverImageProps {
   showImage: boolean;
   randomImage: string;
   title: string;
+  spaceId: string;
 }
 
 export const CoverImage: React.FC<CoverImageProps> = ({ 
   articles, 
   showImage, 
   randomImage,
-  title 
+  title,
+  spaceId
 }) => {
   if (!articles.length || !showImage || !randomImage) return null;
 
@@ -68,15 +70,15 @@ export const CoverImage: React.FC<CoverImageProps> = ({
         </div>
         
         {/* Centered subscription prompt */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center space-y-4">
+        <div className="absolute inset-0 flex items-end justify-end">
+        <div className="text-center space-y-4">
      
             <div className="inline-block">
-              {/* <SubscriptionPopup 
+              <SubscriptionPopup
                 courseName={title}
-                spaceId=""
-                colorScheme="blue"
-              /> */}
+                spaceId={spaceId}
+                colorScheme="green"
+              />
             </div>
           </div>
         </div>

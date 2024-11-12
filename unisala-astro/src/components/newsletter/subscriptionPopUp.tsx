@@ -18,11 +18,11 @@ interface SubscriptionPopupProps {
 
 const getColorClasses = (color: ColorScheme, isJoined: boolean) => ({
   button: {
-    background: isJoined ? `bg-green-700` : `bg-green-400`,
-    hover: isJoined ? `hover:bg-green-800` : `hover:bg-green-500`,
+    background: isJoined ? `bg-green-700` : `bg-green-500`,
+    hover: isJoined ? `hover:bg-green-800` : `hover:bg-green-600`,
     focus: `focus:ring-green-500`,
-    glow: isJoined ? `bg-green-600/20` : `bg-green-300/20`,
-    hoverGlow: isJoined ? `group-hover:bg-green-600/30` : `group-hover:bg-green-300/30`,
+    glow: isJoined ? `bg-green-600/20` : `bg-green-400/20`,
+    hoverGlow: isJoined ? `group-hover:bg-green-600/30` : `group-hover:bg-green-400/30`,
   },
   input: {
     focus: `focus:ring-green-500 focus:border-green-500`,
@@ -47,7 +47,6 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
   
   const colors = getColorClasses(colorScheme, isJoined);
 
-  // Check if already following on component mount
   useEffect(() => {
     if (spaceId) {
       const followingCache = getCache('following') as FollowingCache || {};
@@ -99,7 +98,6 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
     const email = `${cNumber.toLowerCase()}@louisiana.edu`;
 
     try {
-      // Check if already subscribed
       const followingCache = getCache('following') as FollowingCache || {};
       if (followingCache[spaceId]) {
         toast.success('You are already following this space');
@@ -110,7 +108,6 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
       const result = await subscribe(email);
       
       if (result.status.success) {
-        // Update cache
         const updatedCache = { ...followingCache, [spaceId]: true };
         setCache('following', updatedCache);
         setIsJoined(true);
@@ -145,14 +142,14 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg">
+          <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Join Your {courseName} Study Network
               </h2>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               >
                 ✕
               </button>
@@ -160,7 +157,7 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Your ULL id
                 </label>
                 <input
@@ -168,18 +165,18 @@ const SubscriptionPopup: React.FC<SubscriptionPopupProps> = ({
                   placeholder="C00577XXX"
                   value={cNumber}
                   onChange={(e) => setCNumber(e.target.value.toUpperCase())}
-                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ${colors.input.focus}`}
+                  className={`w-full px-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 ${colors.input.focus} placeholder-gray-500 dark:placeholder-gray-400`}
                 />
               </div>
 
               {message && (
-                <div className={`text-sm ${message.includes('valid') || message.includes('wrong') ? 'text-red-600' : 'text-green-600'}`}>
+                <div className={`text-sm ${message.includes('valid') || message.includes('wrong') ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                   {message}
                 </div>
               )}
 
               {cNumber && (
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-600 dark:text-gray-300">
                   You'll receive notes at: {cNumber.toLowerCase()}@louisiana.edu
                 </div>
               )}

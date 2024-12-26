@@ -20,9 +20,9 @@ export default defineConfig({
     }),
     tailwind({ applyBaseStyles: false }),
     sitemap(),
-    node({  mode: 'ssr'})
+    node({ mode: 'ssr' })
   ],
-  output: "hybrid",
+  output: "server", // Change to 'server' for SSR mode
   site: "https://unisala.com",
   vite: {
     plugins: [visualizer({

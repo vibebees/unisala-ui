@@ -7,6 +7,29 @@ import AchievementBadge from "@/components/dashboard/achievementBadge";
 import TimelineChart from "@/components/dashboard/timelineChart";
 import KnowledgeGraph from "@/components/dashboard/knowledgeGraph"; // New Feature: Knowledge Growth Visualization
 
+import { calculateAnalytics } from "../dashboard/analytics";
+import {
+  Chart as ChartJS,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { getCache } from "@/utils/cache";
+import PeakUsageBarChart from "../dashboard/peakUsageChart";
+
+ChartJS.register(
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 interface Insights {
   totalNotes: number;
@@ -97,47 +120,70 @@ const RealTimeTyping: React.FC = () => {
 
 
 
-import {
-  Chart as ChartJS,
-  BarElement,
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
 
-ChartJS.register(
-  BarElement,
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-);
 
 const Dashboard: React.FC = () => {
-  const stats = [
+  const [stats, setStats] = useState([
     { title: "Typing Speed", value: "52 WPM", subtitle: "Keep up the great work!" },
-    { title: "Note Streak", value: "14 Days", subtitle: "Your best streak yet!" },
-    { title: "Weekly Notes", value: "5" },
-    { title: "Average Notes Per Week", value: "3.5", subtitle: "Consistent Progress!" },
-  ];
+    { title: "Note Streak", value: "0 Days", subtitle: "Your best streak yet!" },
+    { title: "Weekly Notes", value: "0" },
+    { title: "Average Notes Per Week", value: "0", subtitle: "Consistent Progress!" },
+  ]);
+
+  const [peakUsageDataUpdated, setPeakUsageDataUpdated] = useState<{ [key: string]: number }>({});
+  const [peakUsageDataCreated, setPeakUsageDataCreated] = useState<{ [key: string]: number }>({});
+  const [showUpdated, setShowUpdated] = useState<boolean>(true); // Default to show "updated"
+  const [dayCount, setDayCount] = useState<{ [key: string]: number }>({
+    Sunday: 0,
+    Monday: 0,
+    Tuesday: 0,
+    Wednesday: 0,
+    Thursday: 0,
+    Friday: 0,
+    Saturday: 0,
+  });  const toggleUsageData = () => {
+    setShowUpdated(prevState => !prevState); // Toggle between "updated" and "created"
+  };
+  const [mostActiveDay, setMostActiveDay] = useState<string>(""); // Store the most active day
+
+
+  useEffect(() => {
+    const drafts: { [key: string]: { createdAt: string; postText: string; updatedAt: string } } = getCache('storyDrafts') || {}; // Fetch the drafts from cache or any data source
+
+    const {
+      streak,
+      weeklyNotes, avgNotesPerWeek, peakUsageNotesUpdated, peakUsageNotesCreated,
+      mostActiveDay, dayCount
+
+    } = calculateAnalytics(drafts);
+     // Update the state with the calculated analytics values
+    setStats(prevStats => [
+      { ...prevStats[0] }, // Static Typing Speed stays the same
+      { title: "Note Streak", value: `${streak} Days`, subtitle: "Your best streak yet!" },
+      { title: "Weekly Notes", value: `${weeklyNotes}` },
+      { title: "Average Notes Per Week", value: `${avgNotesPerWeek.toFixed(1)}`, subtitle: "Consistent Progress!" }
+    ]);
+    setPeakUsageDataUpdated(peakUsageNotesUpdated);
+    setPeakUsageDataCreated(peakUsageNotesCreated);
+     setMostActiveDay(mostActiveDay);
+     setDayCount(dayCount)
+     console.log("---> ",dayCount)
+
+  }, []); // Empty dependency array to run on mount
+  const mostActiveDayIndex = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(mostActiveDay);
 
   const barChartData = {
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    labels: Array.from({ length: 7 }, (_, i) => `Day ${i + 1}`), // Placeholder for day labels
     datasets: [
       {
         label: "Notes Taken",
-        data: [3, 5, 2, 6, 4, 7, 5],
+        data: [5, 3, 7, 2, 6, 8, 4], // Placeholder data
         backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderRadius: 4,
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
       },
     ],
   };
-
   const lineChartData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
     datasets: [
@@ -192,8 +238,54 @@ const Dashboard: React.FC = () => {
     "Explore Data Visualization techniques",
   ];
 
+  // Chart Data Setup
+  const chartData = {
+    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Create labels for each hour
+    datasets: [
+      {
+        label: "Notes Updated",
+        data: Object.values(peakUsageDataUpdated), // Data for updated notes
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+        hidden: !showUpdated, // Hide this dataset when "showUpdated" is false
+      },
+      {
+        label: "Notes Created",
+        data: Object.values(peakUsageDataCreated), // Data for created notes
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+        hidden: showUpdated, // Hide this dataset when "showUpdated" is true
+      },
+    ],
+  };
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Hour of Day",
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Draft Count",
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+      },
+    },
+  };
   return (
-    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-6 bg-gray-50 dark:bg-gray-900 ">
       <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
         Dashboard
       </h1>
@@ -210,23 +302,40 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      {/* Real-Time Typing Feedback */}
       <div className="mb-6">
-        <RealTimeTyping />
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white">Peak Productivity Hours</h3>
+          <button
+            onClick={toggleUsageData}
+            className="bg-blue-500 text-white p-2 rounded-lg"
+          >
+            {showUpdated ? "Show Created Notes" : "Show Updated Notes"}
+          </button>
+        </div>
+
+        <PeakUsageBarChart
+          hoursCount={showUpdated ? peakUsageDataUpdated : peakUsageDataCreated}
+        />
       </div>
 
+
+      {/* Real-Time Typing Feedback */}
+      {/* <div className="mb-6">
+        <RealTimeTyping />
+      </div> */}
+
       {/* Personalized Goals Section */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <GoalsCard
           goals={[
             { title: "Improve Typing Speed", progress: 70 },
             { title: "Write 10 Notes This Week", progress: 50 },
           ]}
         />
-      </div>
+      </div> */}
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ChartCard
           title="Weekly Notes Taken"
           type="bar"
@@ -239,33 +348,59 @@ const Dashboard: React.FC = () => {
           data={lineChartData}
           options={{ responsive: true, plugins: { legend: { position: "top" } } }}
         />
+      </div> */}
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Chart for Weekly Notes Taken */}
+        <ChartCard
+          title={`Weekly Notes Taken - Most Active Day: ${mostActiveDay}`} // Adding the most active day to the title
+          type="bar"
+          data={barChartData}
+          options={{
+            responsive: true,
+            plugins: { legend: { position: "top" } },
+            // Highlight the most active day by changing its color
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+              x: {
+                ticks: {
+                  // Highlight the most active day
+                  callback: (value: any, index: number) => {
+                    
+                  },
+                },
+              },
+            },
+          }}
+        />
       </div>
 
       {/* Concept Mastery Section */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <ChartCard
           title="Concept Mastery"
           type="pie"
           data={conceptMasteryData}
           options={{ responsive: true }}
         />
-      </div>
+      </div> */}
 
       {/* Knowledge Growth Visualization */}
-      <div className="mt-6">
-        {/* <KnowledgeGraph /> */}
-      </div>
+      {/* <div className="mt-6"> */}
+      {/* <KnowledgeGraph /> */}
+      {/* </div> */}
 
       {/* Learning Timeline */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <TimelineChart
           title="Learning Milestones"
           data={learningTimelineData}
         />
-      </div>
+      </div> */}
 
       {/* Leaderboards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <Leaderboard
           title="Top Typing Speeds"
           data={leaderboardDataSpeed}
@@ -276,10 +411,10 @@ const Dashboard: React.FC = () => {
           data={leaderboardDataNotes}
           metric="Notes"
         />
-      </div>
+      </div> */}
 
       {/* Achievement Badges */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
           Achievements
         </h2>
@@ -296,10 +431,10 @@ const Dashboard: React.FC = () => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Advanced Insights Section */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <InsightsCard
           insights={{
             totalNotes: 150,
@@ -307,10 +442,10 @@ const Dashboard: React.FC = () => {
             focusTopics: ["React", "GraphQL"],
           }}
         />
-      </div>
+      </div> */}
 
       {/* Suggestions Section */}
-      <SuggestionsList suggestions={suggestions} />
+      {/* <SuggestionsList suggestions={suggestions} /> */}
     </div>
   );
 };

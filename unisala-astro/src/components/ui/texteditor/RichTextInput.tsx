@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "./RichTextInput.css";
 import { Image, Plus } from "lucide-react";
 import FloatingToolbar from "./FloatingToolbar";
+import TextMetrics from "@/components/metics/typingSpeedTracker";
 
 interface RichTextInputProps {
   initialValue: string;
@@ -236,6 +237,8 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
         </select>
         <button className="ql-video"></button>
       </div>
+      <TextMetrics text={content} />
+
       <ReactQuill
         ref={quillRef}
         theme="snow"

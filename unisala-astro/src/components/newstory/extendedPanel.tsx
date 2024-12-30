@@ -141,7 +141,8 @@ const Dashboard: React.FC = () => {
     Thursday: 0,
     Friday: 0,
     Saturday: 0,
-  });  const toggleUsageData = () => {
+  });
+   const toggleUsageData = () => {
     setShowUpdated(prevState => !prevState); // Toggle between "updated" and "created"
   };
   const [mostActiveDay, setMostActiveDay] = useState<string>(""); // Store the most active day
@@ -173,12 +174,28 @@ const Dashboard: React.FC = () => {
   const mostActiveDayIndex = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(mostActiveDay);
 
   const barChartData = {
-    labels: Array.from({ length: 7 }, (_, i) => `Day ${i + 1}`), // Placeholder for day labels
+    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     datasets: [
       {
         label: "Notes Taken",
-        data: [5, 3, 7, 2, 6, 8, 4], // Placeholder data
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        data: [
+          dayCount["Sunday"],
+          dayCount["Monday"],
+          dayCount["Tuesday"],
+          dayCount["Wednesday"],
+          dayCount["Thursday"],
+          dayCount["Friday"],
+          dayCount["Saturday"],
+        ],
+        backgroundColor: [
+          mostActiveDay === "Sunday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Monday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Tuesday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Wednesday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Thursday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Friday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          mostActiveDay === "Saturday" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+        ],
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
@@ -301,6 +318,7 @@ const Dashboard: React.FC = () => {
           />
         ))}
       </div>
+
 
       <div className="mb-6">
         <div className="flex justify-between items-center mb-4">

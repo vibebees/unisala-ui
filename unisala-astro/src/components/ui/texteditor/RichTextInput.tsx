@@ -5,6 +5,7 @@ import "./RichTextInput.css";
 import { Image, Plus } from "lucide-react";
 import FloatingToolbar from "./FloatingToolbar";
 import TextMetrics from "@/components/metics/typingSpeedTracker";
+import { computeAnalytics, trackToolbarUsage } from  "@/components/metics/analyticsUtils";
 
 interface RichTextInputProps {
   initialValue: string;
@@ -26,12 +27,25 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isInteractingWithToolbar, setIsInteractingWithToolbar] =
     useState(false);
+  const startTimeRef = useRef<number | null>(null);
 
+  const analyticsRef = useRef({
+    typingSpeed: 0,
+    wordCount: 0,
+    charCount: 0,
+    focusTime: 0,
+    idleTime: 0,
+    toolbarUsage: {},
+  });
   const modules = {
     toolbar: {
       container: "#floating-toolbar",
       handlers: {
-        // Custom handlers here
+        bold: () => handleToolbarAction("bold"),
+        italic: () => handleToolbarAction("italic"),
+        underline: () => handleToolbarAction("underline"),
+        link: () => handleLinkAction(),
+        image: () => handleImageAction(),
       },
     },
     clipboard: {
@@ -79,6 +93,9 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
 
   const handleChange = (newContent: string) => {
     setContent(newContent);
+    const analytics = computeAnalytics(newContent, startTimeRef.current, analyticsRef.current);
+    onContentChange(newContent, analytics);
+
   };
 
   const showToolbar = useCallback(() => {

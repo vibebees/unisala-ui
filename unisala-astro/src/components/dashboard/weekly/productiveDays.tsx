@@ -1,95 +1,95 @@
-import React, { useState, useEffect } from "react";
-import ChartCard from "../chartCard";
-import { calculateMostActiveDay } from "../analytics";
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-const ProductiveDays = ({ drafts }: { drafts: { [key: string]: { createdAt: string; updatedAt: string } } }) => {
-  const [mostActiveDay, setMostActiveDay] = useState<string>("");
-  const [barChartData, setBarChartData] = useState({
-    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+);
+
+export const options = (title: string, maxY: number, horizontalLines: number[]) => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: title,
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: maxY, // Extend Y-axis to accommodate horizontal bars
+      title: {
+        display: true,
+        text: 'Notes Count',
+      },
+      ticks: {
+        stepSize: 1,
+      },
+    },
+    x: {
+      title: {
+        display: true,
+        text: 'Day of the Week',
+      },
+    },
+  },
+});
+
+interface ProductiveDaysProps {
+  dayCount: { [key: string]: number };
+  title: string;
+  lineColor?: string;
+  fillColor?: string;
+  horizontalLines?: number[];
+}
+
+export const ProductiveDays: React.FC<ProductiveDaysProps> = ({
+  dayCount,
+  title,
+  lineColor = 'rgb(53, 162, 235)',
+  fillColor = 'rgba(53, 162, 235, 0.5)',
+  horizontalLines = [],
+}) => {
+  const labels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  const data = {
+    labels,
     datasets: [
       {
-        label: "Notes Taken",
-        data: [0, 0, 0, 0, 0, 0, 0],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
+        fill: true,
+        label: 'Notes Created',
+        data: labels.map((label) => dayCount[label]),
+        borderColor: lineColor,
+        backgroundColor: fillColor,
+        tension: 0.4,
+        borderWidth: 2,
       },
     ],
-  });
-
-  useEffect(() => {
-    // Run the effect only if drafts have changed
-    if (drafts && Object.keys(drafts).length > 0) {
-      const { mostActiveDay, dayCount } = calculateMostActiveDay(drafts);
-
-      // Update only if the most active day has changed
-      if (mostActiveDay !== mostActiveDay) {
-        setMostActiveDay(mostActiveDay);
-      }
-
-      // Update the bar chart data only if the day count has changed
-      setBarChartData((prevData) => {
-        const newData = Object.values(dayCount);
-        const prevDataValues = prevData.datasets[0].data;
-
-        // Only update the state if the new data is different from the previous one
-        if (JSON.stringify(newData) !== JSON.stringify(prevDataValues)) {
-          return {
-            ...prevData,
-            datasets: [
-              {
-                ...prevData.datasets[0],
-                data: newData,
-              },
-            ],
-          };
-        }
-        return prevData;
-      });
-    }
-  }, [drafts]); // Add drafts as a dependency so the effect runs whenever drafts change
-
-  const barChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-        display: false, // Hide legend since we have title
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: "Notes Count",
-        },
-        ticks: {
-          stepSize: 1,
-        },
-      },
-      x: {
-        title: {
-          display: true,
-          text: "Day of the Week",
-        },
-      },
-    },
   };
 
-  return (
-    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-4">
-      <div className="h-64">
-        <ChartCard
-          title={`Weekly Notes Taken - Most Active Day: ${mostActiveDay}`}
-          type="bar"
-          data={barChartData}
-          options={barChartOptions}
-        />
-      </div>
-    </div>
-  );
-};
+  // Calculate maximum Y value
+  const maxDataValue = Math.max(...Object.values(dayCount));
+  const maxY = Math.max(maxDataValue, ...horizontalLines) + 2; // Add buffer above highest line
 
-export default ProductiveDays;
+  return <Line options={options(title, maxY, horizontalLines)} data={data} />;
+};

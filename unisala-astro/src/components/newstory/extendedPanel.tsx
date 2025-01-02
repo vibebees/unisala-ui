@@ -6,6 +6,7 @@ import Leaderboard from "../dashboard/leaderBoard";
 import AchievementBadge from "@/components/dashboard/achievementBadge";
 import TimelineChart from "@/components/dashboard/timelineChart";
 import KnowledgeGraph from "@/components/dashboard/knowledgeGraph"; // New Feature: Knowledge Growth Visualization
+import { Line } from 'react-chartjs-2';
 
 import { calculateAnalytics } from "../dashboard/analytics";
 import {
@@ -20,6 +21,7 @@ import {
 } from "chart.js";
 import { getCache } from "@/utils/cache";
 import PeakUsageBarChart from "../dashboard/peakUsageChart";
+import { ProductiveDays } from "../dashboard/weekly/productiveDays";
 
 ChartJS.register(
   BarElement,
@@ -167,11 +169,10 @@ const Dashboard: React.FC = () => {
     setPeakUsageDataUpdated(peakUsageNotesUpdated);
     setPeakUsageDataCreated(peakUsageNotesCreated);
      setMostActiveDay(mostActiveDay);
+     console.log("dayCount", dayCount)
      setDayCount(dayCount)
-     console.log("---> ",dayCount)
 
   }, []); // Empty dependency array to run on mount
-  const mostActiveDayIndex = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(mostActiveDay);
 
   const barChartData = {
     labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -254,53 +255,7 @@ const Dashboard: React.FC = () => {
     "Improve your React Hooks usage",
     "Explore Data Visualization techniques",
   ];
-
-  // Chart Data Setup
-  const chartData = {
-    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Create labels for each hour
-    datasets: [
-      {
-        label: "Notes Updated",
-        data: Object.values(peakUsageDataUpdated), // Data for updated notes
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        hidden: !showUpdated, // Hide this dataset when "showUpdated" is false
-      },
-      {
-        label: "Notes Created",
-        data: Object.values(peakUsageDataCreated), // Data for created notes
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-        hidden: showUpdated, // Hide this dataset when "showUpdated" is true
-      },
-    ],
-  };
-  const chartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: "Hour of Day",
-        },
-      },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: "Draft Count",
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        position: "top",
-      },
-    },
-  };
+ 
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 ">
       <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
@@ -320,21 +275,25 @@ const Dashboard: React.FC = () => {
       </div>
 
 
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white">Peak Productivity Hours</h3>
-          <button
-            onClick={toggleUsageData}
-            className="bg-blue-500 text-white p-2 rounded-lg"
-          >
-            {showUpdated ? "Show Created Notes" : "Show Updated Notes"}
-          </button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
+        <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+            Notes Created
+          </h3>
+          <PeakUsageBarChart hoursCount={peakUsageDataCreated}  title="Notes Created" barColor="rgba(70, 230, 2, 0.6)"/>
         </div>
-
-        <PeakUsageBarChart
-          hoursCount={showUpdated ? peakUsageDataUpdated : peakUsageDataCreated}
-        />
+        <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+            Notes Updated
+          </h3>
+          <PeakUsageBarChart hoursCount={peakUsageDataUpdated}   title="Notes Updated" barColor="rgba(13, 24, 233, 0.6)"/>
+        </div>
       </div>
+
+
+
+
+      
 
 
       {/* Real-Time Typing Feedback */}
@@ -367,32 +326,18 @@ const Dashboard: React.FC = () => {
           options={{ responsive: true, plugins: { legend: { position: "top" } } }}
         />
       </div> */}
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Chart for Weekly Notes Taken */}
-        <ChartCard
-          title={`Weekly Notes Taken - Most Active Day: ${mostActiveDay}`} // Adding the most active day to the title
-          type="bar"
-          data={barChartData}
-          options={{
-            responsive: true,
-            plugins: { legend: { position: "top" } },
-            // Highlight the most active day by changing its color
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-              x: {
-                ticks: {
-                  // Highlight the most active day
-                  callback: (value: any, index: number) => {
-                    
-                  },
-                },
-              },
-            },
-          }}
-        />
-      </div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<ProductiveDays
+        dayCount={dayCount}
+        title="Weekly Notes Activity with Targets"
+        lineColor="rgb(0, 239, 56)"
+        fillColor="rgba(9, 200, 79, 0.2)"
+        horizontalLines={[5, 3, 2]} // Add horizontal bars at these Y-values
+      />
+</div>
+
+
+
 
       {/* Concept Mastery Section */}
       {/* <div className="mt-6">

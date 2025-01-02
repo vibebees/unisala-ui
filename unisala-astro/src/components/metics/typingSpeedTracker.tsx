@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-const TextMetrics: React.FC<{ text: string }> = ({ text }) => {
+interface TextMetricsProps {
+  text: string;
+}
+
+const TextMetrics: React.FC<TextMetricsProps> = ({ text }) => {
   const [wordsTyped, setWordsTyped] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(0);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [previousLength, setPreviousLength] = useState(0);
 
-  // Helper to strip HTML and count words
-  const stripHTML = (html: string) => {
+  // Helper to strip HTML tags and get plain text
+  const stripHTML = (html: string): string => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   };
@@ -23,19 +27,19 @@ const TextMetrics: React.FC<{ text: string }> = ({ text }) => {
       setStartTime(Date.now());
     }
 
-    // Update WPM calculation
+    // Calculate typing speed
     if (startTime !== null && plainText.length > previousLength) {
       const currentTime = Date.now();
       const elapsedTime = (currentTime - startTime) / 60000; // Time in minutes
-      const typingSpeed = wordCount / elapsedTime;
-
-      setTypingSpeed(parseFloat(typingSpeed.toFixed(2)));
+      const speed = wordCount / elapsedTime;
+      setTypingSpeed(parseFloat(speed.toFixed(2))); // Round to 2 decimal places
     }
 
+    // Update previous length for next comparison
     setPreviousLength(plainText.length);
   }, [text, startTime, previousLength]);
 
-  // Reset metrics when text is cleared
+  // Reset metrics if the text is cleared
   useEffect(() => {
     if (stripHTML(text).trim() === "") {
       setWordsTyped(0);
@@ -43,7 +47,6 @@ const TextMetrics: React.FC<{ text: string }> = ({ text }) => {
       setStartTime(null);
       setPreviousLength(0);
     }
-    console.log(stripHTML(text))
   }, [text]);
 
   return (

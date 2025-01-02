@@ -56,14 +56,49 @@ const calculateAvgNotesPerWeek = (dates: moment.Moment[]): number => {
 
 const calculatePeakUsageHours = (
     drafts: { [timestamp: string]: { createdAt: string, updatedAt: string } },
-    trackField: 'createdAt' | 'updatedAt'
+    trackField: 'createdAt' | 'updatedAt',
+    interval: number = 3 // Use larger interval (e.g., 4 hours)
 ): { [key: string]: number } => {
-    return Object.values(drafts).reduce((hoursCount, draft) => {
-        const hour = moment(draft[trackField]).hour();
-        hoursCount[hour] = (hoursCount[hour] || 0) + 1;
+    const dateTimeFormat = "DD/MM/YYYY, HH:mm:ss"; // Specify the format explicitly
+
+    const hoursCount = Object.values(drafts).reduce((hoursCount, draft) => {
+        const timestamp = draft[trackField];
+        const momentObj = moment(timestamp, dateTimeFormat, true); // Parse with format and strict mode
+
+        if (momentObj.isValid()) {
+            const hour = momentObj.hour();
+            const intervalStart = Math.floor(hour / interval) * interval;
+
+            // Shortened labels: "3-6 PM"
+            const formatHour = (h: number) => (h % 12 || 12); // Convert to 12-hour format
+            const startHour = formatHour(intervalStart);
+            const endHour = formatHour(intervalStart + interval);
+            const period = intervalStart < 12 ? "AM" : "PM"; // Use AM/PM once
+            const intervalKey = `${startHour}-${endHour} ${period}`;
+
+            hoursCount[intervalKey] = (hoursCount[intervalKey] || 0) + 1;
+        } else {
+            console.warn(`Invalid timestamp: ${timestamp}`);
+        }
+
         return hoursCount;
     }, {} as { [key: string]: number });
+
+    // Sort intervals based on 24-hour time (hidden behind 12-hour format)
+    return Object.fromEntries(
+        Object.entries(hoursCount).sort(([a], [b]) => {
+            const parseHour = (key: string) =>
+                parseInt(key.split("-")[0], 10) +
+                (key.includes("PM") && !key.startsWith("12") ? 12 : 0);
+            return parseHour(a) - parseHour(b);
+        })
+    );
 };
+
+
+
+
+
 
 const calculateWeeklyTrends = (dates: moment.Moment[]): { [key: string]: number } => {
     const dayOfWeekCount: { [key: string]: number } = {};
@@ -108,29 +143,29 @@ export const calculateMostActiveDay = (drafts: { [key: string]: { createdAt: str
     };
 
     Object.values(drafts).forEach(draft => {
-        // Check if createdAt is a valid date
-        const createdMoment = moment(draft.createdAt);
-        const updatedMoment = moment(draft.updatedAt);
+        const createdMoment = moment(draft.createdAt, "DD/MM/YYYY, HH:mm:ss", true);
+        const updatedMoment = moment(draft.updatedAt, "DD/MM/YYYY, HH:mm:ss", true);
 
-        // If createdAt and updatedAt are valid, process them
         if (createdMoment.isValid()) {
-            const createdDay = createdMoment.format('dddd'); // Get the day of the week for createdAt
+            const createdDay = createdMoment.format("dddd");
             dayCount[createdDay]++;
         }
 
-        // Similarly, process updatedAt only if valid
         if (updatedMoment.isValid()) {
-            const updatedDay = updatedMoment.format('dddd'); // Get the day of the week for updatedAt
-            if (createdMoment.isValid() && createdMoment.format('dddd') !== updatedDay) {
+            const updatedDay = updatedMoment.format("dddd");
+            if (createdMoment.isValid() && createdMoment.format("dddd") !== updatedDay) {
                 dayCount[updatedDay]++;
             }
         }
     });
 
+    const maxCount = Math.max(...Object.values(dayCount));
+    const mostActiveDays = Object.entries(dayCount)
+        .filter(([day, count]) => count === maxCount)
+        .map(([day]) => day);
 
-    const mostActiveDay = Object.entries(dayCount).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
     return {
-        mostActiveDay,
-        dayCount
+        mostActiveDays,
+        dayCount,
     };
 };

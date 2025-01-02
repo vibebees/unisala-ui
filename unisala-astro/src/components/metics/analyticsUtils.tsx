@@ -1,38 +1,18 @@
-interface Analytics {
-    typingSpeed: number;
-    wordCount: number;
-    charCount: number;
-    focusTime: number;
-    idleTime: number;
-    toolbarUsage: Record<string, number>;
-  }
-  
-  // Track typing speed
-  export const trackTypingSpeed = (content: string, startTime: number, analytics: Analytics) => {
-    const elapsedTime = (Date.now() - startTime) / 60000; // Time in minutes
-    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
-  
-    analytics.typingSpeed = parseFloat((wordCount / elapsedTime).toFixed(2));
+// utils/analyticsUtilities.ts
+export const calculateWordCount = (text: string) => {
+    return text.trim() ? text.trim().split(/\s+/).length : 0;
   };
   
-  // Track toolbar usage
-  export const trackToolbarUsage = (action: string, analytics: Analytics) => {
-    if (!analytics.toolbarUsage[action]) {
-      analytics.toolbarUsage[action] = 0;
-    }
-    analytics.toolbarUsage[action]++;
+  export const calculateCharacterCount = (text: string) => {
+    return text.length;
   };
   
-  // Compute analytics
-  export const computeAnalytics = (content: string, startTime: number, analytics: Analytics) => {
-    const plainText = content.trim();
+  export const calculateTypingSpeed = (wordCount: number, startTime: number, currentTime: number) => {
+    const timeElapsed = (currentTime - startTime) / 60000; // Time in minutes
+    return Math.round(wordCount / timeElapsed) || 0;
+  };
   
-    analytics.wordCount = plainText.split(/\s+/).filter(Boolean).length;
-    analytics.charCount = plainText.length;
-  
-    // Update typing speed
-    trackTypingSpeed(content, startTime, analytics);
-  
-    return analytics;
+  export const isUserIdle = (lastInteraction: number, idleThreshold = 7000) => {
+    return Date.now() - lastInteraction > idleThreshold;
   };
   

@@ -194,8 +194,9 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     },
     []
   );
+  
    const { metrics, resetIdleTimer } = EditorAnalytics(content);
-
+   console.log({metrics})
   return (
     <div className={`rich-text-editor-container ${theme}`}>
        <FloatingToolbar quillRef={quillRef} />

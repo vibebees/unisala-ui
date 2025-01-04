@@ -1,7 +1,10 @@
 import React from "react";
 
+// Define the available colors as a union type
+type BadgeColor = 'orange' | 'blue' | 'green' | 'gray';
+
 interface BadgeProps {
-  color: string;
+  color: BadgeColor;
   label: string;
 }
 
@@ -11,11 +14,11 @@ const Badge: React.FC<BadgeProps> = ({ color, label }) => {
     blue: "bg-blue-100 text-blue-800",
     green: "bg-green-100 text-green-800",
     gray: "bg-gray-100 text-gray-800",
-  };
+  } as const;
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-semibold border ${colorClasses[color] || colorClasses.gray}`}
+      className={`px-3 py-1 rounded-full text-xs font-semibold border ${colorClasses[color]}`}
     >
       {label}
     </span>
@@ -25,7 +28,7 @@ const Badge: React.FC<BadgeProps> = ({ color, label }) => {
 interface AchievementBadgeProps {
   title: string;
   description: string;
-  badges: { label: string; color: string }[];
+  badges: { label: string; color: BadgeColor }[];
   level?: number; // Gamified level
   progressStars?: number; // Number of stars
 }

@@ -54,7 +54,7 @@ export const useDraftManager = () => {
             // If no drafts in new format, try to migrate old data
             storedDrafts = migrateOldData();
             if (Object.keys(storedDrafts).length > 0) {
-               setCache('storyDrafts', storedDrafts);
+                setCache('storyDrafts', storedDrafts);
                 // Clean up old data
                 Object.keys(storedDrafts).forEach(timestamp => {
                     localStorage.removeItem(`${timestamp}.postTitle`);
@@ -63,7 +63,7 @@ export const useDraftManager = () => {
             }
         }
 
-        setDrafts(storedDrafts);
+        setDrafts(storedDrafts as StoryDrafts);
         setHasDrafts(Object.keys(storedDrafts).length > 0);
     }, [migrateOldData]);
 

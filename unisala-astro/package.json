@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build --silent",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",

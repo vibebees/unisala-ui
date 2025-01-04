@@ -195,7 +195,6 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     []
   );
    const { metrics, resetIdleTimer } = EditorAnalytics(content);
-
   return (
     <div className={`rich-text-editor-container ${theme}`}>
        <FloatingToolbar quillRef={quillRef} />
@@ -245,14 +244,14 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
         </select>
         <button className="ql-video"></button>
       </div>
-      <div className="metrics-display">
+      {/* <div className="metrics-display">
         <p>Word Count: {metrics.wordCount}</p>
         <p>Character Count: {metrics.characterCount}</p>
         <p>Typing Speed: {metrics.typingSpeed} words/min</p>
         <p>Active Time: {metrics.activeTime} seconds</p>
         <p>Max Typing Speed: {metrics.maxTypingSpeed} words/min</p>
         <p>{metrics.isIdle ? "User is idle" : "User is active"}</p>
-      </div>
+      </div> */}
       <ReactQuill
         ref={quillRef}
         theme="snow"

@@ -5,6 +5,7 @@
       "dom",
       "es6"
     ],
+    "esModuleInterop": true,
     "jsxImportSource": "react",
     "baseUrl": "./",
     "paths": {

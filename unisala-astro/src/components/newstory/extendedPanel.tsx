@@ -166,10 +166,11 @@ const Dashboard: React.FC = () => {
       { title: "Weekly Notes", value: `${weeklyNotes}` },
       { title: "Average Notes Per Week", value: `${avgNotesPerWeek.toFixed(1)}`, subtitle: "Consistent Progress!" }
     ]);
+
+
     setPeakUsageDataUpdated(peakUsageNotesUpdated);
     setPeakUsageDataCreated(peakUsageNotesCreated);
-     setMostActiveDay(mostActiveDay);
-     console.log("dayCount", dayCount)
+     setMostActiveDay(mostActiveDay[0]); // Fix: Change mostActiveDay type from string[] to string
      setDayCount(dayCount)
 
   }, []); // Empty dependency array to run on mount
@@ -263,7 +264,7 @@ const Dashboard: React.FC = () => {
       </h1>
 
       {/* Metrics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, index) => (
           <StatCard
             key={index}
@@ -272,7 +273,7 @@ const Dashboard: React.FC = () => {
             subtitle={stat.subtitle || undefined}
           />
         ))}
-      </div>
+      </div> */}
 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">

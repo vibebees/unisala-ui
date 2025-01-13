@@ -79,9 +79,18 @@ const DEFAULT_SESSION_METRICS: SessionMetrics = {
     actions: [],
     totalFormatActions: 0
   },
-  pasting: { wordsPasted: 0, pasteCount: 0 },
-  typing: { wordsAdded: 0, charactersTyped: 0 },
-  deleting: { wordsDeleted: 0, charactersDeleted: 0 }
+  pasting: { 
+    wordsPasted: 0, 
+    pasteCount: 0 
+  },
+  typing: { 
+    wordsAdded: 0, 
+    charactersTyped: 0 
+  },
+  deleting: { 
+    wordsDeleted: 0, 
+    charactersDeleted: 0 
+  }
 };
 
 const DEFAULT_DRAFT_METRICS = {
@@ -120,31 +129,19 @@ const useEditorAnalytics = (
   );
 
   const lastContentRef = useRef("");
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const draftId = useRef<string | null>(null);
   
   const sessionRef = useRef({
     id: Date.now(),
     startTime: Date.now(),
     lastUpdateTime: Date.now(),
-    currentMetrics: { ...DEFAULT_SESSION_METRICS },
+    currentMetrics: JSON.parse(JSON.stringify(DEFAULT_SESSION_METRICS)),
     pendingChanges: false
   });
 
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const draftId = useRef<string | null>(null);
-
   const countWords = (text: string): number => {
     return text.trim().split(/\s+/).filter(word => word.length > 0).length;
-  };
-
-  const startNewSession = () => {
-    const now = Date.now();
-    sessionRef.current = {
-      id: now,
-      startTime: now,
-      lastUpdateTime: now,
-      currentMetrics: { ...DEFAULT_SESSION_METRICS },
-      pendingChanges: false
-    };
   };
 
   const getDraft = (id: string): Draft => {
@@ -201,6 +198,19 @@ const useEditorAnalytics = (
     };
   };
 
+  const startNewSession = () => {
+    const now = Date.now();
+    sessionRef.current = {
+      id: now,
+      startTime: now,
+      lastUpdateTime: now,
+      currentMetrics: JSON.parse(JSON.stringify(DEFAULT_SESSION_METRICS)),
+      pendingChanges: false
+    };
+    // Reset content reference for new session
+    lastContentRef.current = quillRef.current?.getText() || "";
+  };
+
   const saveCurrentSession = (isIdle: boolean = false) => {
     const now = Date.now();
     const session: Session = {
@@ -210,7 +220,7 @@ const useEditorAnalytics = (
       startTime: sessionRef.current.startTime,
       endTime: now,
       idle: isIdle,
-      metrics: { ...sessionRef.current.currentMetrics }
+      metrics: JSON.parse(JSON.stringify(sessionRef.current.currentMetrics))
     };
 
     setMetrics(prev => {
@@ -231,6 +241,7 @@ const useEditorAnalytics = (
       };
     });
 
+    // Start fresh session after saving
     startNewSession();
   };
 
@@ -241,6 +252,7 @@ const useEditorAnalytics = (
     const newText = quillRef.current.getText();
     const oldText = lastContentRef.current;
     
+    // Create a new metrics object for this change
     const metricsUpdate = { ...sessionRef.current.currentMetrics };
 
     if (delta.ops?.some((op: any) => op.insert && typeof op.insert === 'string' && op.insert.length > 10)) {
@@ -265,6 +277,7 @@ const useEditorAnalytics = (
           });
         }
       });
+      
       metricsUpdate.formatting.actions = [
         ...metricsUpdate.formatting.actions,
         ...formattingActions
@@ -293,12 +306,12 @@ const useEditorAnalytics = (
       pendingChanges: true
     };
 
-    // Check if it's time to end the current session
+    // Check if session duration exceeded
     if (now - sessionRef.current.startTime >= sessionDuration) {
       saveCurrentSession(false);
     }
 
-    // Update last content and reset idle timer
+    // Update content reference and reset idle timer
     lastContentRef.current = newText;
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     idleTimerRef.current = setTimeout(() => saveCurrentSession(true), idleTimeout);

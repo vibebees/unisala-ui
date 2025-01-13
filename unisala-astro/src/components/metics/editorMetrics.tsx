@@ -51,7 +51,6 @@ type Metrics = {
 
 interface Config {
   saveInterval?: number;
-  minWordChangeThreshold?: number;
   sessionDuration?: number; // Default: 2 minutes (120000ms)
   idleTimeout?: number; // Default: 3 minutes (180000ms)
 }
@@ -62,12 +61,10 @@ const useEditorAnalytics = (
 ) => {
   const {
     saveInterval = 10000,
-    minWordChangeThreshold = 10,
     sessionDuration = 120000,
     idleTimeout = 180000,
   } = config;
 
-  // Initialize metrics state
   const [metrics, setMetrics] = useState<Metrics>(() =>
     getCache("editorMetrics") || { sessions: [], drafts: {} }
   );
@@ -108,27 +105,23 @@ const useEditorAnalytics = (
   const endSession = (type: "typing" | "idle") => {
     const currentTime = Date.now();
     const duration = currentTime - sessionStartRef.current;
-
-    if (duration < sessionDuration) {
-      console.log("Session duration too short, skipping.");
-      return;
-    }
-
-    const draft = draftId.current ? getDraft(draftId.current) : null;
-
+  
+    // Always end the session, even if short duration
     const session: Session = {
-      timestamp: Date.now(),
+      timestamp: currentTime,
       type,
       duration,
       wordsAdded: wordCountRef.current,
-      wordsDeleted: 0,
+      wordsDeleted: 0, // Adjust if word deletions are tracked
       idle: type === "idle",
       startTime: sessionStartRef.current,
       endTime: currentTime,
       actions: { wordsPasted: 0, wordsFormatted: 0, boldActions: 0, italicActions: 0 },
     };
-
+  
     setMetrics((prev) => {
+      const draft = draftId.current ? getDraft(draftId.current) : null;
+  
       const updatedDrafts = draft
         ? {
             ...prev.drafts,
@@ -156,17 +149,18 @@ const useEditorAnalytics = (
             },
           }
         : prev.drafts;
-
+  
       return {
         ...prev,
-        sessions: [...prev.sessions, session],
+        sessions: [...prev.sessions, session], // Ensure the session is pushed
         drafts: updatedDrafts,
       };
     });
-
+  
     sessionStartRef.current = Date.now();
     wordCountRef.current = 0;
   };
+  
 
   const handleIdle = () => {
     console.log("User is idle.");
@@ -180,8 +174,8 @@ const useEditorAnalytics = (
       quillRef.current?.getText()?.trim().split(/\s+/).length || 0;
 
     if (currentWordCount !== wordCountRef.current) {
-      console.log("Word count updated:", currentWordCount);
       wordCountRef.current = currentWordCount;
+      console.log("Word count updated:", currentWordCount);
     }
 
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
@@ -208,6 +202,7 @@ const useEditorAnalytics = (
   const saveMetrics = async () => {
     try {
       console.log("Saving metrics to cache:", metrics);
+      endSession("typing");
       setCache("editorMetrics", metrics);
     } catch (error) {
       console.error("Error saving metrics:", error);

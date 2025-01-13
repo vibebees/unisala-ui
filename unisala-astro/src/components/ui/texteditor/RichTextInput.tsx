@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "./RichTextInput.css";
 import { Image, Plus } from "lucide-react";
 import FloatingToolbar from "./FloatingToolbar";
-import EditorAnalytics from "@/components/metics/editorMetrics";
+import useEditorAnalytics from "@/components/metics/editorMetrics";
 
   
 
@@ -85,7 +85,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   
   const handleChange = (newContent: string) => {
     setContent(newContent);
-    resetIdleTimer();  
+    // resetIdleTimer();  
   };
 
   const showToolbar = useCallback(() => {
@@ -194,7 +194,15 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     },
     []
   );
-   const { metrics, resetIdleTimer } = EditorAnalytics(content);
+  const metrics = useEditorAnalytics(  { current: quillRef.current?.getEditor() || null },
+   {
+    // onSaveMetrics: async () => {
+    //   //setMetrics({ ...metrics, });
+    // },
+    saveInterval:  10000,  // 1 minutes
+    minWordChangeThreshold: 20    // 20 words
+  });
+
   return (
     <div className={`rich-text-editor-container ${theme}`}>
        <FloatingToolbar quillRef={quillRef} />

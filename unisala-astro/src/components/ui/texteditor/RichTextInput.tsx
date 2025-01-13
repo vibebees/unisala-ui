@@ -196,11 +196,9 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
   );
   const metrics = useEditorAnalytics(  { current: quillRef.current?.getEditor() || null },
    {
-    // onSaveMetrics: async () => {
-    //   //setMetrics({ ...metrics, });
-    // },
-    saveInterval:  10000,  // 1 minutes
-    minWordChangeThreshold: 20    // 20 words
+  saveInterval: 10000,    // Save every 10 seconds
+  sessionDuration: 10000, // New session every 2 minutes
+  idleTimeout: 180000     // Idle after 3 minutes
   });
 
   return (

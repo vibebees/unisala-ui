@@ -1,12 +1,4 @@
 import React, { useEffect, useState } from "react";
-import StatCard from "@/components/dashboard/statsCard";
-import ChartCard from "@/components/dashboard/chartCard";
-import SuggestionsList from "@/components/dashboard/suggestionsList";
-import Leaderboard from "../dashboard/leaderBoard";
-import AchievementBadge from "@/components/dashboard/achievementBadge";
-import TimelineChart from "@/components/dashboard/timelineChart";
-import KnowledgeGraph from "@/components/dashboard/knowledgeGraph"; // New Feature: Knowledge Growth Visualization
-import { Line } from 'react-chartjs-2';
 
 import { calculateAnalytics } from "../dashboard/analytics";
 import {

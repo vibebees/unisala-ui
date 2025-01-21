@@ -1,354 +1,301 @@
-import { useEffect, useRef, useState, type MutableRefObject } from "react";
-import Quill from "quill";
+import { useEffect, useRef, useState } from 'react';
 import { getCache, setCache } from "@/utils/cache";
+import { debounce } from 'lodash';
+import { RefObject } from 'react';
+import ReactQuill from 'react-quill';
 
-type FormattingAction = {
-  type: 'bold' | 'italic' | 'link' | 'list' | 'header' | 'blockquote' | 'code' | 'underline' | 'strike';
-  count: number;
-};
-
-type SessionMetrics = {
-  formatting: {
-    actions: FormattingAction[];
-    totalFormatActions: number;
-  };
-  pasting: {
-    wordsPasted: number;
-    pasteCount: number;
-  };
-  typing: {
-    wordsAdded: number;
-    charactersTyped: number;
-  };
-  deleting: {
-    wordsDeleted: number;
-    charactersDeleted: number;
-  };
-};
-
-type Session = {
-  id: number;
-  timestamp: number;
-  duration: number;
-  startTime: number;
-  endTime: number;
-  idle: boolean;
-  metrics: SessionMetrics;
-};
-
-type Draft = {
-  id: string;
-  createdAt: number;
-  updatedAt: number;
-  sessionIds: number[];
-  metrics: {
-    formatting: {
-      totalBoldActions: number;
-      totalItalicActions: number;
-      totalFormatActions: number;
-    };
-    content: {
-      totalWordsAdded: number;
-      totalWordsDeleted: number;
-      totalWordsPasted: number;
-      totalCharactersTyped: number;
-      totalCharactersDeleted: number;
-    };
-    focus: {
-      activeTime: number;
-      idleTime: number;
-      totalTime: number;
-      percentIdle: number;
-    };
-  };
-};
-
-type Metrics = {
-  sessions: Session[];
-  drafts: Record<string, Draft>;
-};
-
-interface Config {
-  saveInterval?: number; // Default: 10 seconds
-  sessionDuration?: number; // Default: 2 minutes
-  idleTimeout?: number; // Default: 3 minutes
+interface EditorConfig {
+  saveInterval?: number;
+  idleTimeout?: number;
 }
 
-const DEFAULT_SESSION_METRICS: SessionMetrics = {
-  formatting: {
-    actions: [],
-    totalFormatActions: 0
-  },
-  pasting: { 
-    wordsPasted: 0, 
-    pasteCount: 0 
-  },
-  typing: { 
-    wordsAdded: 0, 
-    charactersTyped: 0 
-  },
-  deleting: { 
-    wordsDeleted: 0, 
-    charactersDeleted: 0 
-  }
+interface SessionMetrics {
+  startTime: number;
+  endTime: number;
+  wordsWritten: number;
+  currentWpm: number;
+  maxWpm: number;
+  focusTime: number;
+  idleTime: number;
+}
+
+interface DraftMetrics {
+  totalWords: number;
+  totalFocusTime: number;
+  totalIdleTime: number;
+  maxWpmEver: number;
+  sessions: SessionMetrics[];
+  lastModified: number;
+}
+
+interface GlobalMetrics {
+  totalWordsWritten: number;
+  totalFocusTime: number;
+  totalIdleTime: number;
+  highestWpmEver: number;
+  firstSessionDate: number;
+  lastSessionDate: number;
+  consecutiveDays: number;
+  longestStreak: number;
+}
+
+interface MetricsStore {
+  drafts: {
+    [timestamp: string]: DraftMetrics;
+  };
+  global: GlobalMetrics;
+}
+
+const METRICS_STORE_KEY = 'editorMetrics';
+
+const DEFAULT_CONFIG = {
+  saveInterval: 3000,   // Save every 3 seconds
+  idleTimeout: 120000,  // 2 minutes until idle
 };
 
-const DEFAULT_DRAFT_METRICS = {
-  formatting: {
-    totalBoldActions: 0,
-    totalItalicActions: 0,
-    totalFormatActions: 0
-  },
-  content: {
-    totalWordsAdded: 0,
-    totalWordsDeleted: 0,
-    totalWordsPasted: 0,
-    totalCharactersTyped: 0,
-    totalCharactersDeleted: 0
-  },
-  focus: {
-    activeTime: 0,
-    idleTime: 0,
-    totalTime: 0,
-    percentIdle: 0
-  }
-};
+const useEditorAnalytics = (editorRef: RefObject<ReactQuill>, config: EditorConfig = {}) => {
+  const finalConfig = { ...DEFAULT_CONFIG, ...config };
 
-const useEditorAnalytics = (
-  quillRef: MutableRefObject<Quill | null>,
-  config: Config
-) => {
-  const {
-    saveInterval = 10000,
-    sessionDuration = 120000,
-    idleTimeout = 180000,
-  } = config;
+  const [isIdle, setIsIdle] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(0);
+  const [maxTypingSpeed, setMaxTypingSpeed] = useState(0);
+  const [activeTime, setActiveTime] = useState(0);
 
-  const [metrics, setMetrics] = useState<Metrics>(() =>
-    getCache("editorMetrics") || { sessions: [], drafts: {} }
-  );
-
-  const lastContentRef = useRef("");
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const draftId = useRef<string | null>(null);
-  
-  const sessionRef = useRef({
-    id: Date.now(),
+  const sessionStartTime = useRef(Date.now());
+  const lastActiveTime = useRef(Date.now());
+  const idleStartTime = useRef<number | null>(null);
+  const totalIdleTime = useRef(0);
+  const currentSession = useRef<SessionMetrics>({
     startTime: Date.now(),
-    lastUpdateTime: Date.now(),
-    currentMetrics: JSON.parse(JSON.stringify(DEFAULT_SESSION_METRICS)),
-    pendingChanges: false
+    endTime: Date.now(),
+    wordsWritten: 0,
+    currentWpm: 0,
+    maxWpm: 0,
+    focusTime: 0,
+    idleTime: 0
   });
 
-  const countWords = (text: string): number => {
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  const getDraftId = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id') || Date.now().toString();
   };
 
-  const getDraft = (id: string): Draft => {
-    if (metrics.drafts[id]) {
-      return metrics.drafts[id];
+  const loadMetrics = (): MetricsStore => {
+    const savedMetrics = getCache(METRICS_STORE_KEY);
+    if (savedMetrics && typeof savedMetrics === 'object') {
+      return savedMetrics;
     }
-
-    const newDraft: Draft = {
-      id,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      sessionIds: [],
-      metrics: { ...DEFAULT_DRAFT_METRICS }
-    };
-
-    setMetrics(prev => ({
-      ...prev,
-      drafts: { ...prev.drafts, [id]: newDraft }
-    }));
-
-    return newDraft;
-  };
-
-  const updateDraftWithSession = (draft: Draft, session: Session): Draft => {
-    const formatActions = session.metrics.formatting.actions;
-    const boldActions = formatActions.find(a => a.type === 'bold')?.count || 0;
-    const italicActions = formatActions.find(a => a.type === 'italic')?.count || 0;
 
     return {
-      ...draft,
-      sessionIds: [...draft.sessionIds, session.id],
-      updatedAt: Date.now(),
-      metrics: {
-        formatting: {
-          totalBoldActions: draft.metrics.formatting.totalBoldActions + boldActions,
-          totalItalicActions: draft.metrics.formatting.totalItalicActions + italicActions,
-          totalFormatActions: draft.metrics.formatting.totalFormatActions + session.metrics.formatting.totalFormatActions
-        },
-        content: {
-          totalWordsAdded: draft.metrics.content.totalWordsAdded + session.metrics.typing.wordsAdded,
-          totalWordsDeleted: draft.metrics.content.totalWordsDeleted + session.metrics.deleting.wordsDeleted,
-          totalWordsPasted: draft.metrics.content.totalWordsPasted + session.metrics.pasting.wordsPasted,
-          totalCharactersTyped: draft.metrics.content.totalCharactersTyped + session.metrics.typing.charactersTyped,
-          totalCharactersDeleted: draft.metrics.content.totalCharactersDeleted + session.metrics.deleting.charactersDeleted
-        },
-        focus: {
-          activeTime: draft.metrics.focus.activeTime + (session.idle ? 0 : session.duration),
-          idleTime: draft.metrics.focus.idleTime + (session.idle ? session.duration : 0),
-          totalTime: draft.metrics.focus.totalTime + session.duration,
-          percentIdle: ((draft.metrics.focus.idleTime + (session.idle ? session.duration : 0)) /
-            (draft.metrics.focus.totalTime + session.duration)) * 100
-        }
+      drafts: {},
+      global: {
+        totalWordsWritten: 0,
+        totalFocusTime: 0,
+        totalIdleTime: 0,
+        highestWpmEver: 0,
+        firstSessionDate: Date.now(),
+        lastSessionDate: Date.now(),
+        consecutiveDays: 1,
+        longestStreak: 1
       }
     };
   };
 
-  const startNewSession = () => {
-    const now = Date.now();
-    sessionRef.current = {
-      id: now,
-      startTime: now,
-      lastUpdateTime: now,
-      currentMetrics: JSON.parse(JSON.stringify(DEFAULT_SESSION_METRICS)),
-      pendingChanges: false
-    };
-    // Reset content reference for new session
-    lastContentRef.current = quillRef.current?.getText() || "";
+  const createNewDraftMetrics = (): DraftMetrics => ({
+    totalWords: 0,
+    totalFocusTime: 0,
+    totalIdleTime: 0,
+    maxWpmEver: 0,
+    sessions: [],
+    lastModified: Date.now()
+  });
+
+  const saveMetrics = (store: MetricsStore) => {
+    setCache(METRICS_STORE_KEY, store);
   };
 
-  const saveCurrentSession = (isIdle: boolean = false) => {
-    const now = Date.now();
-    const session: Session = {
-      id: sessionRef.current.id,
-      timestamp: now,
-      duration: now - sessionRef.current.startTime,
-      startTime: sessionRef.current.startTime,
-      endTime: now,
-      idle: isIdle,
-      metrics: JSON.parse(JSON.stringify(sessionRef.current.currentMetrics))
-    };
-
-    setMetrics(prev => {
-      const draft = draftId.current ? getDraft(draftId.current) : null;
-      const newMetrics = {
-        ...prev,
-        sessions: [...prev.sessions, session]
-      };
-
-      if (!draft) return newMetrics;
-
-      return {
-        ...newMetrics,
-        drafts: {
-          ...prev.drafts,
-          [draft.id]: updateDraftWithSession(draft, session)
-        }
-      };
-    });
-
-    // Start fresh session after saving
-    startNewSession();
+  const calculateWPM = (words: number) => {
+    const timeElapsed = (Date.now() - sessionStartTime.current - totalIdleTime.current) / 1000 / 60;
+    return timeElapsed > 0 ? Math.round(words / timeElapsed) : 0;
   };
 
-  const handleTextChange = (delta: any, oldContents: any, source: string) => {
-    if (source !== 'user' || !quillRef.current) return;
-
-    const now = Date.now();
-    const newText = quillRef.current.getText();
-    const oldText = lastContentRef.current;
-    
-    // Create a new metrics object for this change
-    const metricsUpdate = { ...sessionRef.current.currentMetrics };
-
-    if (delta.ops?.some((op: any) => op.insert && typeof op.insert === 'string' && op.insert.length > 10)) {
-      // Paste operation
-      const pastedWords = Math.max(0, countWords(newText) - countWords(oldText));
-      metricsUpdate.pasting.wordsPasted += pastedWords;
-      metricsUpdate.pasting.pasteCount += 1;
-    } else if (delta.ops?.some((op: any) => op.attributes)) {
-      // Formatting operation
-      const formattingActions: FormattingAction[] = [];
-      delta.ops.forEach((op: any) => {
-        if (op.attributes) {
-          Object.keys(op.attributes).forEach((attr: string) => {
-            if (['bold', 'italic', 'link', 'list', 'header', 'blockquote', 'code', 'underline', 'strike'].includes(attr)) {
-              const existing = formattingActions.find(a => a.type === attr);
-              if (existing) {
-                existing.count++;
-              } else {
-                formattingActions.push({ type: attr as any, count: 1 });
-              }
-            }
-          });
-        }
-      });
-      
-      metricsUpdate.formatting.actions = [
-        ...metricsUpdate.formatting.actions,
-        ...formattingActions
-      ];
-      metricsUpdate.formatting.totalFormatActions += 
-        formattingActions.reduce((sum, action) => sum + action.count, 0);
-    } else {
-      // Regular typing or deleting
-      const charDelta = newText.length - oldText.length;
-      const wordDelta = countWords(newText) - countWords(oldText);
-
-      if (charDelta > 0) {
-        metricsUpdate.typing.wordsAdded += Math.max(0, wordDelta);
-        metricsUpdate.typing.charactersTyped += charDelta;
-      } else if (charDelta < 0) {
-        metricsUpdate.deleting.wordsDeleted += Math.max(0, -wordDelta);
-        metricsUpdate.deleting.charactersDeleted += Math.abs(charDelta);
-      }
-    }
-
-    // Update session state
-    sessionRef.current = {
-      ...sessionRef.current,
-      lastUpdateTime: now,
-      currentMetrics: metricsUpdate,
-      pendingChanges: true
-    };
-
-    // Check if session duration exceeded
-    if (now - sessionRef.current.startTime >= sessionDuration) {
-      saveCurrentSession(false);
-    }
-
-    // Update content reference and reset idle timer
-    lastContentRef.current = newText;
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    idleTimerRef.current = setTimeout(() => saveCurrentSession(true), idleTimeout);
-  };
-
-  useEffect(() => {
-    const quill = quillRef.current;
+  const updateMetrics = () => {
+    const quill = editorRef.current?.getEditor();
     if (!quill) return;
 
-    quill.on('text-change', handleTextChange);
-    lastContentRef.current = quill.getText();
+    try {
+      const text = quill.getText();
+      const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+      const newWordCount = words.length;
+      const wpm = calculateWPM(newWordCount);
+
+      setWordCount(newWordCount);
+      setTypingSpeed(wpm);
+      if (wpm > maxTypingSpeed) {
+        setMaxTypingSpeed(wpm);
+      }
+
+      const metricsStore = loadMetrics();
+      const draftId = getDraftId();
+
+      if (!metricsStore.drafts[draftId]) {
+        metricsStore.drafts[draftId] = createNewDraftMetrics();
+      }
+
+      const draft = metricsStore.drafts[draftId];
+      const oldWordCount = draft.totalWords;
+
+      // Update draft metrics
+      draft.totalWords = newWordCount;
+      draft.maxWpmEver = Math.max(draft.maxWpmEver, wpm);
+      draft.lastModified = Date.now();
+
+      // Update session metrics
+      currentSession.current = {
+        ...currentSession.current,
+        wordsWritten: newWordCount,
+        currentWpm: wpm,
+        maxWpm: Math.max(currentSession.current.maxWpm, wpm),
+        endTime: Date.now()
+      };
+
+      // Update focus/idle time
+      if (!isIdle) {
+        const focusTime = Math.floor((Date.now() - sessionStartTime.current - totalIdleTime.current) / 1000);
+        draft.totalFocusTime = focusTime * 1000;
+        currentSession.current.focusTime = focusTime;
+        setActiveTime(focusTime);
+      }
+
+      // Update global metrics
+      metricsStore.global.totalWordsWritten += (newWordCount - oldWordCount);
+      metricsStore.global.highestWpmEver = Math.max(metricsStore.global.highestWpmEver, wpm);
+      metricsStore.global.lastSessionDate = Date.now();
+
+      // Update streak
+      const lastDate = new Date(metricsStore.global.lastSessionDate).setHours(0, 0, 0, 0);
+      const today = new Date().setHours(0, 0, 0, 0);
+      
+      if (lastDate < today) {
+        metricsStore.global.consecutiveDays++;
+        metricsStore.global.longestStreak = Math.max(
+          metricsStore.global.longestStreak,
+          metricsStore.global.consecutiveDays
+        );
+      }
+
+      saveMetrics(metricsStore);
+    } catch (error) {
+      console.error('Error updating metrics:', error);
+    }
+  };
+
+  const debouncedUpdateMetrics = debounce(updateMetrics, finalConfig.saveInterval);
+
+  const handleIdle = () => {
+    if (!isIdle) {
+      setIsIdle(true);
+      idleStartTime.current = Date.now();
+      
+      const metricsStore = loadMetrics();
+      const draftId = getDraftId();
+      const draft = metricsStore.drafts[draftId];
+      
+      if (draft) {
+        const idleTime = Date.now() - (lastActiveTime.current || Date.now());
+        draft.totalIdleTime += idleTime;
+        currentSession.current.idleTime += idleTime;
+        saveMetrics(metricsStore);
+      }
+    }
+  };
+
+  const handleActive = () => {
+    if (isIdle) {
+      setIsIdle(false);
+      if (idleStartTime.current) {
+        totalIdleTime.current += Date.now() - idleStartTime.current;
+        idleStartTime.current = null;
+      }
+    }
+    lastActiveTime.current = Date.now();
+  };
+
+  // Initialize metrics
+  useEffect(() => {
+    const draftId = getDraftId();
+    const metricsStore = loadMetrics();
+    
+    if (!metricsStore.drafts[draftId]) {
+      metricsStore.drafts[draftId] = createNewDraftMetrics();
+      saveMetrics(metricsStore);
+    }
+
+    // Initial metrics update
+    updateMetrics();
+  }, []);
+
+  // Monitor text changes
+  useEffect(() => {
+    const quill = editorRef.current?.getEditor();
+    if (!quill) return;
+
+    // Using Quill's built-in text-change event
+    quill.on('text-change', debouncedUpdateMetrics);
+    
+    return () => {
+      quill.off('text-change', debouncedUpdateMetrics);
+    };
+  }, [editorRef.current]);
+
+  // Set up idle detection
+  useEffect(() => {
+    let idleTimer: NodeJS.Timeout;
+
+    const resetIdleTimer = () => {
+      clearTimeout(idleTimer);
+      handleActive();
+      idleTimer = setTimeout(handleIdle, finalConfig.idleTimeout);
+    };
+
+    const events = ['mousedown', 'keypress', 'scroll', 'mousemove'];
+    events.forEach(event => {
+      document.addEventListener(event, resetIdleTimer);
+    });
+
+    resetIdleTimer();
 
     return () => {
-      quill.off('text-change', handleTextChange);
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      events.forEach(event => {
+        document.removeEventListener(event, resetIdleTimer);
+      });
+      clearTimeout(idleTimer);
+    };
+  }, []);
+
+  // Save final session data on unmount
+  useEffect(() => {
+    return () => {
+      const metricsStore = loadMetrics();
+      const draftId = getDraftId();
       
-      if (sessionRef.current.pendingChanges) {
-        saveCurrentSession(false);
+      if (metricsStore.drafts[draftId]) {
+        currentSession.current.endTime = Date.now();
+        metricsStore.drafts[draftId].sessions.push(currentSession.current);
+        saveMetrics(metricsStore);
       }
     };
-  }, [quillRef.current]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (sessionRef.current.pendingChanges) {
-        saveCurrentSession(false);
-      }
-      setCache("editorMetrics", metrics);
-    }, saveInterval);
-
-    return () => clearInterval(interval);
-  }, [metrics, saveInterval]);
+  }, []);
 
   return {
-    metrics,
-    setDraftId: (id: string) => { draftId.current = id; },
-    getCurrentSession: () => ({ ...sessionRef.current })
+    wordCount,
+    typingSpeed,
+    maxTypingSpeed,
+    activeTime,
+    isIdle,
+    currentDraft: loadMetrics().drafts[getDraftId()],
+    global: loadMetrics().global
   };
 };
 

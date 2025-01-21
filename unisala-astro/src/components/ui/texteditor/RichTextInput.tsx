@@ -194,11 +194,18 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     },
     []
   );
-  const metrics = useEditorAnalytics(  { current: quillRef.current?.getEditor() || null },
-   {
-  saveInterval: 10000,    // Save every 10 seconds
-  sessionDuration: 10000, // New session every 2 minutes
-  idleTimeout: 180000     // Idle after 3 minutes
+  const {
+    wordCount,
+    typingSpeed,
+    maxTypingSpeed,
+    activeTime,
+    isIdle,
+    currentDraft,
+    global
+  } = useEditorAnalytics(quillRef, {
+    saveInterval: 10000,
+    sessionDuration: 120000,
+    idleTimeout: 180000
   });
 
   return (

@@ -202,11 +202,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     isIdle,
     currentDraft,
     global
-  } = useEditorAnalytics(quillRef, {
-    saveInterval: 10000,
-    sessionDuration: 120000,
-    idleTimeout: 180000
-  });
+  } = useEditorAnalytics(quillRef);
 
   return (
     <div className={`rich-text-editor-container ${theme}`}>

@@ -194,15 +194,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     },
     []
   );
-  const {
-    wordCount,
-    typingSpeed,
-    maxTypingSpeed,
-    activeTime,
-    isIdle,
-    currentDraft,
-    global
-  } = useEditorAnalytics(quillRef);
+  useEditorAnalytics(quillRef);
 
   return (
     <div className={`rich-text-editor-container ${theme}`}>

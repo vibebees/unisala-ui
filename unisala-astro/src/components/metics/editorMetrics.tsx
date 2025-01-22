@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { getCache, setCache } from "@/utils/cache";
 import { debounce } from 'lodash';
-import { RefObject } from 'react';
+import { type RefObject } from 'react';
 import ReactQuill from 'react-quill';
 
 interface WordSample {

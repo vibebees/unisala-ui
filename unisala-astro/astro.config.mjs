@@ -4,7 +4,7 @@ import icons from 'astro-icon';
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import { visualizer } from 'rollup-plugin-visualizer';
-import node from '@astrojs/node'; // Import the node adapter
+import node from '@astrojs/node';
 
 export default defineConfig({
   server: {
@@ -19,15 +19,17 @@ export default defineConfig({
       }
     }),
     tailwind({ applyBaseStyles: false }),
-    sitemap(),
-    node({  mode: 'ssr'})
+    sitemap()
   ],
-  output: "hybrid",
+  output: "server",
+  adapter: node({
+    mode: 'standalone' // 'standalone' is recommended for production
+  }),
   site: "https://unisala.com",
   vite: {
     plugins: [visualizer({
-      open: true, // This will automatically open the stats page in your default browser
-      filename: 'stats.html' // Outputs an HTML file in the root of your project
+      open: true,
+      filename: 'stats.html'
     })]
   }
 });

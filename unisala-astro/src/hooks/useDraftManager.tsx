@@ -1,3 +1,4 @@
+import { getCache, setCache } from '@/utils/cache';
 import { useState, useEffect, useCallback } from 'react';
 
 interface Draft {
@@ -47,13 +48,13 @@ export const useDraftManager = () => {
     
 
     const loadDrafts = useCallback(() => {
-        let storedDrafts = JSON.parse(localStorage.getItem('storyDrafts') || '{}');
+        let storedDrafts = getCache('storyDrafts') || {};
         
         if (Object.keys(storedDrafts).length === 0) {
             // If no drafts in new format, try to migrate old data
             storedDrafts = migrateOldData();
             if (Object.keys(storedDrafts).length > 0) {
-                localStorage.setItem('storyDrafts', JSON.stringify(storedDrafts));
+                setCache('storyDrafts', storedDrafts);
                 // Clean up old data
                 Object.keys(storedDrafts).forEach(timestamp => {
                     localStorage.removeItem(`${timestamp}.postTitle`);
@@ -62,7 +63,7 @@ export const useDraftManager = () => {
             }
         }
 
-        setDrafts(storedDrafts);
+        setDrafts(storedDrafts as StoryDrafts);
         setHasDrafts(Object.keys(storedDrafts).length > 0);
     }, [migrateOldData]);
 

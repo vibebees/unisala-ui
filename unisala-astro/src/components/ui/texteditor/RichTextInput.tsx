@@ -4,6 +4,9 @@ import "react-quill/dist/quill.snow.css";
 import "./RichTextInput.css";
 import { Image, Plus } from "lucide-react";
 import FloatingToolbar from "./FloatingToolbar";
+import useEditorAnalytics from "@/components/metics/editorMetrics";
+
+  
 
 interface RichTextInputProps {
   initialValue: string;
@@ -59,6 +62,9 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     "video",
   ];
 
+ 
+ 
+
   useEffect(() => {
     const savedContent = initialValue
     if (savedContent) {
@@ -74,10 +80,12 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       // saveDraftPostText(draftKey, content);
     }
   }, [draftKey, content]);
+ 
 
-
+  
   const handleChange = (newContent: string) => {
     setContent(newContent);
+    // resetIdleTimer();  
   };
 
   const showToolbar = useCallback(() => {
@@ -186,6 +194,15 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     },
     []
   );
+  const {
+    wordCount,
+    typingSpeed,
+    maxTypingSpeed,
+    activeTime,
+    isIdle,
+    currentDraft,
+    global
+  } = useEditorAnalytics(quillRef);
 
   return (
     <div className={`rich-text-editor-container ${theme}`}>
@@ -236,6 +253,14 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
         </select>
         <button className="ql-video"></button>
       </div>
+      {/* <div className="metrics-display">
+        <p>Word Count: {metrics.wordCount}</p>
+        <p>Character Count: {metrics.characterCount}</p>
+        <p>Typing Speed: {metrics.typingSpeed} words/min</p>
+        <p>Active Time: {metrics.activeTime} seconds</p>
+        <p>Max Typing Speed: {metrics.maxTypingSpeed} words/min</p>
+        <p>{metrics.isIdle ? "User is idle" : "User is active"}</p>
+      </div> */}
       <ReactQuill
         ref={quillRef}
         theme="snow"

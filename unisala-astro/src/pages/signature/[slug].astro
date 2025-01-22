@@ -1,0 +1,156 @@
+---
+export const prerender = false;
+
+import MainLayout from '@/layouts/main-layout.astro';
+import MediumFeed from '@/components/feed/feed copy';
+import Introudction from '@/components/profile/intro.astro';
+import { fetchApi } from '@/utils/api.utility';
+import { userServiceGql } from '@/datasource/servers';
+
+const { slug = '' } = Astro.params;
+const getNewsFeed = `
+    query fetchFeedV2($feedQuery: FeedQueryInput) {
+      fetchFeedV2(feedQuery: $feedQuery) {
+        validToken
+        data {
+          section
+          postText
+          upVoted
+          upVoteCount
+          postCommentsCount
+          type
+          date
+          _id
+          title
+          images
+          user {
+            oneLinerBio
+            firstName
+            lastName
+            picture
+            username
+            _id
+          }
+        }
+      }
+    }
+`;
+
+const GetTopActiveSpaces = `
+    query getTopActiveSpaces($limit: Int) {
+      getTopActiveSpaces(limit: $limit) {
+        status {
+          success
+          message
+        }
+        spaceCategory {
+          _id
+          name
+        }
+      }
+    }
+`;
+
+let articles = [];
+let staffPicks = [];
+let topics = [];
+let error = '';
+let authorName = '';
+let oneLinerBio = '';
+try {
+  // Fetch regular articles
+  function getObjectIdFromSignature(signature: string) {
+    const parts = signature.split('-');
+    return parts[parts.length - 1];
+  }
+  const userId = getObjectIdFromSignature(slug);
+
+  const regularFeed = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: getNewsFeed,
+      variables: {
+        feedQuery: {
+          feedType: 'user',
+          page: 0,
+          feedId: userId,
+          pageSize: 25
+        }
+      }
+    })
+  });
+
+  // Fetch staff picks
+  const staffPicksResult = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: getNewsFeed,
+      variables: {
+        feedQuery: {
+          feedType: 'org',
+          page: 0,
+          pageSize: 6
+        }
+      }
+    })
+  });
+
+  // Fetch top active spaces for topics
+  const topicsResult = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: GetTopActiveSpaces,
+      variables: {
+        limit: 9
+      }
+    })
+  });
+
+  if (regularFeed.errors || staffPicksResult.errors || topicsResult.errors) {
+    throw new Error('Error fetching data');
+  }
+
+  articles = regularFeed.data?.fetchFeedV2?.data || [];
+  staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
+  topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory || [];
+} catch (e) {
+  console.error('Error fetching data:', e);
+  error = e instanceof Error ? e.message : String(e);
+}
+authorName = `${articles[0]?.user?.firstName ?? ''} ${articles[0]?.user?.lastName ?? ''}`.trim() || '';
+oneLinerBio = articles[0]?.user?.oneLinerBio ?? '';
+
+---
+
+<MainLayout title='Unisala universe'>
+  {error && <div>Error: {error}</div>}
+  {
+    !error && (
+      <section class='container  max-w-screen-lg pt-12'>
+        <Introudction
+          authorName={authorName}
+          oneLinerBio={oneLinerBio}
+          images={[
+            'https://d2wpk2fhu8mz8q.cloudfront.net/e314e8c6-9621-4093-be31-708d52553cc9',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/cd7cb533-58da-47c8-a9f8-d1daaa011ea1',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/b077ff52-c123-4207-95ee-f90255a2c28f',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/cdef95ac-30c7-4321-a9a5-cf31a8de2530',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/b7dc1492-652d-46b8-a7fe-fab29205fa37',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/5872f49f-9a1e-4043-8707-c9780f47d192',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/6e338784-d42d-4fa7-b51d-b94f32a07612',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/aaa89c33-dbc5-4fe3-ab0d-4b48af799d35',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/7417186a-15e0-4ded-ad32-4194e3883703',
+            'https://d2wpk2fhu8mz8q.cloudfront.net/519b5a16-3c85-4ef1-8d4e-8d630cb5e3bc'
+          ]}
+        />
+        <MediumFeed
+          showTags={false}
+          articles={articles}
+          staffPicks={staffPicks}
+          topics={topics}
+          title={''}
+        />
+      </section>
+    )
+  }
+</MainLayout>

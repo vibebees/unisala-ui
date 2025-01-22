@@ -1,0 +1,16 @@
+/* This will apply styles for screens smaller than 768px */
+@media (max-width: 768px) {
+    .thread_content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .max-w-2xl {
+      max-width: 100%;
+    }
+
+    /* Ensure images and other content are full width */
+    img, .thread_comment, .thread_footer, .ImageCollage {
+      width: 100%;
+    }
+  }

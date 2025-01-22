@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+import type { HTMLAttributes } from "astro/types";
+interface Props extends HTMLAttributes<"div"> {
+  heading: string;
+  username: string;
+  date: string;
+  claps: number;
+  comments: number;
+  className?: string;
+showBorder?: boolean;
+}
+const { heading, username, date, claps, comments, className,showBorder, ...attrs } = Astro.props;
+---
+
+<div class=`flex items-center justify-between text-gray-500 ${showBorder && "border-t border-b"} py-4`>
+  <div class="flex items-center space-x-4">
+    <button class="flex items-center space-x-1 hover:text-gray-700">
+      <Icon name="lucide:heart" class="size-5" />
+      <span>{claps}</span>
+    </button>
+    <button class="flex items-center space-x-1 hover:text-gray-700">
+      <Icon name="lucide:message-circle" class="size-5" />
+      <span>{comments}</span>
+    </button>
+  </div>
+  <div class="flex items-center space-x-4">
+    <button class="hover:text-gray-700">
+      <Icon name="lucide:bookmark" class="size-5" />
+    </button>
+    <button class="hover:text-gray-700">
+      <Icon name="lucide:share" class="size-5" />
+    </button>
+  </div>
+</div>

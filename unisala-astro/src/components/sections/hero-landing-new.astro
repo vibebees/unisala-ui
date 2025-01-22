@@ -1,0 +1,40 @@
+---
+import { cn } from '@/utils/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import GoToUnisalaPortal from './goToUnisalaPortal.astro';
+import { Image } from 'astro:assets';
+---
+<section class='space-y-6 py-12 sm:py-20 lg:py-20'>
+  <div class='container flex max-w-5xl flex-col items-center gap-5 text-center'>
+
+      <span class='mr-3'>🎉</span> A knowledge garden
+
+    <h1
+      class='text-balance font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[66px]'
+    >
+    Spark a Thought – {' '}
+      <span class='text-gradient_indigo-purple font-extrabold'> Ignite a Mind </span>
+    </h1>
+
+    <p
+      class='max-w-2xl text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8'
+    >
+"Unisala is a platform to facilitate the sharing of knowledge, ideas, and experiences."
+    </p>
+
+    <div class='mx-auto max-w-lg'>
+      <Image
+        class='w-full h-auto object-cover object-center'
+        src={'/images/story.webp'}
+        alt={'data.title'}
+        width={500}
+        height={200}
+        loading='eager'
+      />
+    </div>
+
+
+
+    <GoToUnisalaPortal href='/new-story' title='Share my notes' />
+  </div>
+</section>

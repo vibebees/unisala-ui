@@ -1,0 +1,22 @@
+---
+import { Icon } from "astro-icon/components";
+import { buttonVariants } from '../ui/button';
+import { cn } from '@/utils/lib/utils';
+
+interface Props {
+  title: string;
+  href: string;
+}
+
+const { title = "Go to Unisala App", href ="/login" } = Astro.props;
+---
+
+<div class="flex justify-center space-x-2 md:space-x-4">
+    <a
+      href={href}
+      class={cn(buttonVariants({ size: "lg", rounded: "full" }), "gap-2 bg-purple-500 text-white hover:bg-purple-600")}
+    >
+      <span>{title}</span>
+      <Icon name="lucide:arrow-right" class="size-4" />
+    </a>
+</div>

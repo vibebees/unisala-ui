@@ -1,0 +1,83 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import StepIndicator from "../welcome-form/StepIndicator";
+import Image from "astro/components/Image.astro";
+import clsx from "clsx";
+
+type Props = {
+  title: string;
+  description?: string;
+  ImageSrc: string;
+  ImageAlt?: string;
+  className?: string;
+  step: number;
+};
+
+const {
+  ImageSrc,
+  ImageAlt = "Welcome to Astro!",
+  description,
+  title,
+  className,
+  step,
+} = Astro.props;
+---
+
+<MainLayout title={title} description={description}>
+  <StepIndicator step={step} client:load />
+  <div class="card">
+    <div class={clsx("image-section max-md:hidden", className)}>
+      <Image
+        src={ImageSrc}
+        alt="Welcome"
+        width={200}
+        height={200}
+        alt={ImageAlt}
+        class={"object-contain w-full h-full"}
+      />
+    </div>
+    <div class="content-section">
+      <slot />
+    </div>
+  </div>
+
+  <style>
+    .card {
+      display: flex;
+      background-color: white;
+      overflow: hidden;
+      height: calc(100vh - 80px);
+    }
+    .image-section {
+      height: 100%;
+    }
+    .image-section img {
+      width: 100%;
+      height: 100%;
+    }
+    .content-section {
+      flex: 1;
+      padding: 2rem;
+      color: white;
+    }
+
+    @media screen and (max-width: 768px) {
+      .content-section {
+        padding: 1rem;
+      }
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    button {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</MainLayout>

@@ -10,7 +10,11 @@
     "astro": "astro",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint . --fix",
-    "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'"
+    "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -61,8 +65,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
+    "@playwright/test": "^1.50.0",
     "@tailwindcss/typography": "^0.5.13",
     "@types/lodash": "^4.17.12",
+    "@types/node": "^22.10.10",
     "@types/react": "^18.3.2",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
@@ -73,9 +79,11 @@
     "eslint-plugin-unused-imports": "^4.1.2",
     "globals": "^15.9.0",
     "husky": "^9.0.11",
+    "jsdom": "^26.0.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.0.1"
+    "typescript-eslint": "^8.0.1",
+    "vitest": "^3.0.4"
   }
 }

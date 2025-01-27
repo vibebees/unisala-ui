@@ -66,8 +66,6 @@ const calculatePeakUsageHours = (
         // Remove strict mode to allow more flexible parsing
         const momentObj = moment(timestamp, dateTimeFormat);
 
-        console.log(`Processing timestamp: ${timestamp}`);
-        console.log(`Is valid: ${momentObj.isValid()}`);
         if (momentObj.isValid()) {
             console.log(`Hour: ${momentObj.hour()}`);
             
@@ -173,7 +171,6 @@ const calculateMostActiveDay = (drafts: { [key: string]: { createdAt: string; up
         .filter(([day, count]) => count === maxCount)
         .map(([day]) => day)  
 
-        console.log('Most active day:', mostActiveDay);
     return {
         mostActiveDay,
         dayCount,

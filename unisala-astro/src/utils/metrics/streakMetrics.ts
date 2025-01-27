@@ -28,8 +28,11 @@ export const calculateDayDifference = (lastVisit: number, currentTime: number): 
   // Calculate the difference in days
   return currentDate.diff(lastDate, 'days');
 };
+
+
+
 export const calculateStreak = (sessionType: SessionType, configMetrics?: Metrics): Metrics => {
-    const currentTime = configMetrics?.lastVisit || Date.now();
+    const currentTime = Date.now(); // Always use the actual current time
     const metrics = configMetrics || getCache<Metrics>('streakMetrics');
 
     if (!metrics) {
@@ -38,22 +41,30 @@ export const calculateStreak = (sessionType: SessionType, configMetrics?: Metric
 
     if (sessionType === 'SESSION_START') {
         const daysDifference = calculateDayDifference(metrics.lastVisit, currentTime);
+
+        if (daysDifference < 0) {
+            throw new Error('Invalid timestamp: lastVisit cannot be in the future');
+        }
+
+        
         let newStreak = metrics.currentStreak;
-        const newLastVisit = max([new Date(metrics.lastVisit), new Date(currentTime)]).getTime();
 
         if (daysDifference === 0) {
+            // Same day, no change to the streak
             newStreak = metrics.currentStreak;
         } else if (daysDifference === 1) {
+            // Consecutive day, increment the streak
             newStreak = metrics.currentStreak + 1;
         } else if (daysDifference > 1) {
+            // More than one day gap, reset the streak
             newStreak = 1;
         }
 
         return {
-            lastVisit: newLastVisit,
+            lastVisit: currentTime, // Update lastVisit to the current time
             currentStreak: newStreak,
             longestStreak: Math.max(newStreak, metrics.longestStreak),
-            startTime: currentTime,
+            startTime: metrics.startTime, // Keep the original start time
             lastActiveTime: currentTime,
             totalSessions: metrics.totalSessions + 1,
             totalTimeSpent: metrics.totalTimeSpent

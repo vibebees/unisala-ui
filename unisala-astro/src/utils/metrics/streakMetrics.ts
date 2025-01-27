@@ -1,6 +1,7 @@
 import moment from 'moment';
 import type { Metrics } from "@/types/metrics";
 import { getCache, setCache } from "../cache";
+import { differenceInDays, startOfDay ,max} from 'date-fns';
 
 export type SessionType = 'SESSION_START' | 'SESSION_END';
 
@@ -18,13 +19,15 @@ export const initializeStreak = (currentTime = Date.now()): Metrics => {
     };
 };
 
+
 export const calculateDayDifference = (lastVisit: number, currentTime: number): number => {
-    const lastDate = moment(lastVisit).startOf('day'); // Reset to midnight
-    const currentDate = moment(currentTime).startOf('day'); // Reset to midnight
+  // Convert timestamps to Moment objects
+  const lastDate = moment(lastVisit).startOf('day'); // Reset to midnight
+  const currentDate = moment(currentTime).startOf('day'); // Reset to midnight
 
-    return currentDate.diff(lastDate, 'days');
+  // Calculate the difference in days
+  return currentDate.diff(lastDate, 'days');
 };
-
 export const calculateStreak = (sessionType: SessionType, configMetrics?: Metrics): Metrics => {
     const currentTime = configMetrics?.lastVisit || Date.now();
     const metrics = configMetrics || getCache<Metrics>('streakMetrics');
@@ -36,18 +39,13 @@ export const calculateStreak = (sessionType: SessionType, configMetrics?: Metric
     if (sessionType === 'SESSION_START') {
         const daysDifference = calculateDayDifference(metrics.lastVisit, currentTime);
         let newStreak = metrics.currentStreak;
-        const newLastVisit = moment.max(moment(metrics.lastVisit), moment(currentTime)).valueOf(); // Get the max of the two timestamps
+        const newLastVisit = max([new Date(metrics.lastVisit), new Date(currentTime)]).getTime();
 
-        // Same day - maintain streak
         if (daysDifference === 0) {
             newStreak = metrics.currentStreak;
-        }
-        // Next day - increment streak
-        else if (daysDifference === 1) {
+        } else if (daysDifference === 1) {
             newStreak = metrics.currentStreak + 1;
-        }
-        // Gap in days - reset streak
-        else if (daysDifference > 1) {
+        } else if (daysDifference > 1) {
             newStreak = 1;
         }
 

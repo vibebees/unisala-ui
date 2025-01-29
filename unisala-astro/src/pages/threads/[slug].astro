@@ -189,6 +189,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   {post && (
     <section class='container max-w-screen-lg space-y-6 pt-12'>
       <ThreadHeader 
+        authorId = {post?.user?._id}
         heading={linkifyHtml(heading)} 
         username={post?.user?.username}  
         firstName={post?.user?.firstName}  
@@ -197,6 +198,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
         claps={post?.upVoteCount} 
         comments={post?.postCommentsCount} 
         queryCount={post?.queryCount}
+
       />
       <ul class='pt-6'>
         <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
@@ -221,6 +223,7 @@ const linkifiedText = post ? linkifyHtml(post.postText, {
   <Comments client:only="react" postId={postId} />
   
   <ThreadAuthor
+    authorId={post?.user?._id}
     author={post?.user?.firstName + ' ' + post?.user?.lastName}
     authorDescription={post?.user?.oneLinerBio}
   />

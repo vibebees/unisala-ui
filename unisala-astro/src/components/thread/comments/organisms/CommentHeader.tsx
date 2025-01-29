@@ -13,13 +13,16 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
     <footer className='flex justify-between items-center mb-2'>
       <div className='flex items-center'>
         <p className='inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold'>
+
           <img
             className='mr-2 w-6 h-6 rounded-full'
             src={`https://api.multiavatar.com/${comment?.user?.firstName}.svg`}
             alt={comment?.user?.firstName}
           />
-          {comment?.user?.firstName} {comment?.user?.lastName}
+          <a href={`/signature/${comment?.user?.id}`} data-astro-reload>
 
+            {comment?.user?.firstName} {comment?.user?.lastName}
+          </a>
         </p>
         <p className='text-sm text-gray-600 dark:text-gray-400'>
           <time
@@ -36,11 +39,11 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
           </time>
         </p>
       </div>
-      <CommentOptionsButton 
-        onEdit={onEdit} 
+      <CommentOptionsButton
+        onEdit={onEdit}
         onDelete={onDelete}
         commentId={comment._id}
-      commentUserId={comment?.userId} />
+        commentUserId={comment?.userId} />
     </footer>
   );
 };

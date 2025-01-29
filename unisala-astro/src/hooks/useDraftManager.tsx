@@ -71,8 +71,8 @@ export const useDraftManager = () => {
         loadDrafts();
     }, [loadDrafts]);
     
-    const saveDraft = useCallback((id: string, postTitle?: string, postText?: string) => {
-        const timestamp = Date.now();
+    const saveDraft = useCallback((id: string, postTitle?: string, postText?: string, pastDate: number) => {
+        const timestamp = pastDate || Date.now();
         const updatedAt = new Date(timestamp).toLocaleString();
         const updatedDrafts = { ...drafts };
         

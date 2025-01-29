@@ -2179,4 +2179,15 @@ getGenerateImage = gql`
       }
     }
   }
-`;
+`,
+getNotes =  gql`
+query getNotes($userId: String) {
+  getNotes( userId: $userId) {
+     status{
+      success
+      message
+      }
+    data
+  }
+}
+`

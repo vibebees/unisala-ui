@@ -10,9 +10,7 @@
     "astro": "astro",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint . --fix",
-    "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'",
-    "prepare": "husky",
-    "test": "echo \"No test specified\" && exit 0"
+    "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -74,7 +72,6 @@
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-unused-imports": "^4.1.2",
     "globals": "^15.9.0",
-    "husky": "^9.1.7",
     "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4",

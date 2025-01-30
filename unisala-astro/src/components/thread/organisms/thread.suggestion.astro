@@ -1,0 +1,276 @@
+---
+// ThreadSuggestions.astro
+import { fetchApi } from '@/utils/api.utility';
+import { SimilarThread } from './similar.thread';
+import { userServiceGql } from '@/datasource/servers';
+// import { GetTopActiveSpaces } from '@/datasource/graphql/user';
+// Declare the prop
+interface Props {
+  feedId?: string;
+}
+
+let { feedId = '' } = Astro.props;
+
+const getNewsFeed = `
+    query fetchFeedV2($feedQuery: FeedQueryInput) {
+      fetchFeedV2(feedQuery: $feedQuery) {
+        validToken
+        data {
+          section
+          postText
+          admissionAndApplicationRating
+          financialAidAndScholarshipRating
+          academicProgramsAndDepartmentRating
+          studentLifeAndServiceRating
+          careerAndAlumniResourceRating
+          upVoted
+          upVoteCount
+          postCommentsCount
+          type
+          saved
+          postType
+          levelOfStudy
+          videoURL
+          postTags {
+            tagType
+            tag {
+              _id
+              name
+            }
+          }
+          event {
+            _id
+            title
+            description
+            isRegistered
+            address
+            eventDate
+            interestedUsers {
+              userId
+            }
+            images
+          }
+          date
+          _id
+          images
+          user {
+            firstName
+            lastName
+            picture
+            username
+            _id
+          }
+          elevatorInfo {
+            tags
+            ownType
+            name
+            majors {
+              title
+            }
+            pictures
+            address {
+              streetAddressOrPOBox
+              city
+              stateAbbreviation
+              zipCode
+            }
+          }
+          studentCharges {
+            combinedChargeForRoomAndBoard
+            undergraduateApplicationFee
+            graduateApplicationFee
+            unitId
+            undergraduate {
+              inState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              outOfState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              inDistrict {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              onCampus {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              offCampusWithFamily {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              offCampusNotWithFamily {
+                costOfAttendance {
+                  inDistrict
+                  inState
+                  outOfState
+                }
+                roomAndBoard
+                otherExpenses
+              }
+              booksAndSupplies
+            }
+            graduate {
+              inState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              outOfState {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+              inDistrict {
+                tuition
+                requiredFees
+                perCreditHourCharge
+              }
+            }
+          }
+          suggestedOrgs {
+            name
+            type
+            spaces {
+              _id
+              name
+              description
+              image
+            }
+          }
+          suggestedSpace {
+            type
+            name
+            spaces {
+              _id
+              name
+              description
+              image
+            }
+          }
+          userEvaluation {
+            unitId
+            rankings {
+              rank
+              title
+              totalPlayers
+            }
+            report {
+              academics
+              average
+              value
+              diversity
+              campus
+              atheltics
+              partyScene
+              professors
+              location
+              dorms
+              campusFood
+              studentLife
+              safety
+            }
+            reviews {
+              rating
+              type
+              votes
+            }
+          }
+          unitId
+          applied_level
+          status
+          attempt
+          university
+          conversation
+          major
+        }
+      }
+    }
+`;
+
+let posts = [];
+let error = '';
+
+try {
+  const GetTopActiveSpaces = `
+    query getTopActiveSpaces($limit: Int) {
+      getTopActiveSpaces(limit: $limit) {
+        status {
+          success
+          message
+        }
+        spaceCategory {
+          _id
+          name
+          parentId
+        }
+      }
+    }
+  `;
+
+  if (feedId === '') {
+    const spaceSuggestion = await fetchApi(userServiceGql, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: GetTopActiveSpaces,
+        variables: {
+          limit: 1
+        }
+      })
+    });
+    const spaceData = await spaceSuggestion?.data?.getTopActiveSpaces?.spaceCategory;
+    feedId = spaceData?.length > 0 ? spaceData[0]._id : '';
+   }
+  const result = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query: getNewsFeed,
+      variables: {
+        feedQuery: {
+          feedType: 'specificSpace',
+          feedId,
+          page: 0
+        }
+      }
+    })
+  });
+
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+  posts = result.data?.fetchFeedV2?.data || [];
+
+} catch (e) {
+  console.error('Error fetching feed:', e);
+  error = e instanceof Error ? e.message : String(e);
+}
+---
+
+{error && <div>Error: {error}</div>}
+
+{
+  !error && (
+    <SimilarThread
+      client:only="react"
+      articles={posts}
+      id=" similar-thread"
+      title="recommended for you"
+      titleDescription="We use an agile approach to test assumptions and connect with the needs of your audience early and often."
+    />
+  )
+}

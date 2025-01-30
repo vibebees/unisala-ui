@@ -1,0 +1,25 @@
+---
+import MainLayout from '@/layouts/main-layout.astro';
+import StoryForm from '@/components/newstory/storyform';
+import type { PostDraft } from '@/types/post';
+import {Toast} from '@/components/ui/toast';
+
+const id = Astro.url.searchParams.get('id');
+const draftId = id || Date.now().toString();
+const currentUrl = Astro.url.toString();
+
+const initialPostDraft: PostDraft = {
+    title: '',
+    tags: [],
+    reviewSubCategories: '',
+    postText: '',
+};
+
+
+---
+
+<MainLayout title='Create Post'>
+    <Toast client:load />
+    <StoryForm client:only initialPostDraft={initialPostDraft} />
+    
+</MainLayout>

@@ -27,3 +27,8 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+.next
+node_modules
+
+unisala-ionic/dist/
+unisala-astro/stats.html

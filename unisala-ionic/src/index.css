@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: Manrope, sans-serif !important;
+}
+
+@layer utilities {
+
+    .BorderCard {
+        @apply shadow-none border border-neutral-300 rounded-md
+    }
+
+    .ThreadFooterBtn {
+        @apply active:scale-90 min-w-16 flex justify-center hover:bg-blue-100 px-2 py-1 rounded-full duration-200
+    }
+}
+
+
+.left-container {
+    width: 100%;
+    max-width: 300px;
+}
+
+.right-container {
+    width: 100%;
+    max-width: 300px;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.ql-container,
+.ql-blank {
+    min-height: 200px;
+}
+
+
+.ql-toolbar {
+    position: sticky;
+    top: 0;
+    background-color: #F0F2F5;
+    z-index: 10;
+
+}
+
+
+
+.slider::-webkit-scrollbar-track {
+    background: transparent;
+    height: 2px;
+
+}
+
+.slider::-webkit-scrollbar {
+    width: 2px;
+    border-radius: 10px;
+    height: 1px;
+}
+
+.slider::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+
+
+}
+
+.message-container {
+    scrollbar-gutter: stable both-edges;
+}
+
+.message-container::-webkit-scrollbar-track {
+    background: rgb(236, 236, 236);
+    height: 2px;
+
+}
+
+.message-container::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    height: 5px;
+}
+
+.message-container::-webkit-scrollbar-thumb {
+    background: #a8a8a8;
+    border-radius: 10px;
+}
+
+.mention {
+    background-color: transparent !important;
+}
+
+
+.ql-editor a {
+    color: #0727da;
+
+}

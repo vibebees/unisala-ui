@@ -1,0 +1,91 @@
+name: Test/Release
+
+on:
+  push:
+    branches: [release]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Ionic Project Setup and Build
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+        working-directory: unisala-ionic
+
+      - name: Install Ionic dependencies and build application
+        run: |
+          npm install --force
+          npm run build --prod
+        env:
+          CI: false
+          NODE_ENV: TEST
+        working-directory: unisala-ionic
+
+      # Astro Project Setup and Build
+      - name: Install Astro dependencies and build application
+        run: |
+          npm install
+          npm run build
+          cp package.json dist/
+          cp package-lock.json dist/
+          cp start-astro-server.mjs dist/
+
+        working-directory: unisala-astro
+
+  # Prepare and clear the deployment directory on the server
+      - name: Clear deployment directory
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "52.5.105.211"
+          username: "ec2-user"
+          key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo chown -R ec2-user:ec2-user ~/unisala-web
+            sudo rm -rf ~/unisala-web/unisala-astro/{*,.[!.]*,..?*}
+            sudo rm -rf ~/unisala-web/unisala-ionic/{*,.[!.]*,..?*}
+
+            echo "Directory ~/unisala-web cleared"
+
+
+
+      # Deploy Astro build artifacts
+      - name: Deploy Astro build artifacts
+        uses: appleboy/scp-action@master
+        with:
+          host: "52.5.105.211"
+          username: "ec2-user"
+          key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "unisala-astro/dist/*"  # Make sure the path is relative to the GitHub workspace or absolute path
+          target: "~/unisala-web/"
+
+
+      # Install production dependencies for Astro
+      - name: Install Astro production dependenciesls
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "52.5.105.211"
+          username: "ec2-user"
+          key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/unisala-web/unisala-astro/dist
+            npm install --production
+
+      # Reload Nginx to apply changes
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: "52.5.105.211"
+          username: "ec2-user"
+          key: ${{ secrets.LG_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo systemctl reload nginx
+            echo "Nginx reloaded for both Ionic and Astro"
+            pm2 restart unisala-astro

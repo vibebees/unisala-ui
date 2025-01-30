@@ -1,0 +1,29 @@
+---
+import MainLayout from '@/layouts/main-layout.astro';
+import HeroLanding from "@/components/sections/hero-landing-new.astro"
+import BentoGrid from "@/components/sections/bentogrid.astro"
+import InfoLanding from "@/components/sections/info-landing.astro"
+import { infos, search } from "@/config/landing";
+
+import Features from '@/components/sections/features-new.astro';
+import Features1 from '@/components/sections/features.astro';
+
+
+import Testimonials from '@/components/sections/testimonials.astro';
+import Organization from '@/components/sections/organization.astro';
+import GoToUnisalaPortal from '@/components/sections/goToUnisalaPortal.astro';
+---
+<MainLayout title ="Home">
+  <HeroLanding/>
+  <!-- <BentoGrid /> -->
+
+  <!-- <Features data={infos[0]} reverse={false} /> -->
+  <Features1 data={infos[0]} reverse={false} />
+
+  <GoToUnisalaPortal title="Scratch pad" href="/new-story" />
+
+  <!-- <Testimonials /> -->
+
+  <!-- <GoToUnisalaPortal title="Go to old app" href="/login" /> -->
+
+</MainLayout>

@@ -82,27 +82,6 @@ npx cap sync android
 npx cap open android
 ```
 
-## Platform-Specific Features
-
-### Web (PWA)
-- Progressive Web App capabilities
-- Desktop responsive layouts
-- Browser API integrations
-- Web-specific optimizations
-
-### Mobile (iOS/Android)
-- Native UI components
-- Device API access
-- Touch gestures
-- Platform-specific features
-
-### Shared Features
-- Authentication system
-- Data management
-- Analytics tracking
-- Core business logic
-
-## Development Guidelines
 
 ### Cross-Platform Considerations
 
@@ -111,33 +90,6 @@ npx cap open android
    - Test across different screen sizes
    - Consider touch and mouse interactions
 
-2. **Platform Detection**
-```typescript
-import { isPlatform } from '@ionic/react';
-
-const MyComponent = () => {
-  if (isPlatform('ios')) {
-    return <IOSStyleComponent />;
-  }
-  return <DefaultComponent />;
-};
-```
-
-3. **Capacitor Plugins**
-```typescript
-import { Camera } from '@capacitor/camera';
-
-// Works on both mobile and web
-const takePicture = async () => {
-  const image = await Camera.getPhoto({
-    quality: 90,
-    allowEditing: true,
-    resultType: 'uri'
-  });
-  // Handle image
-};
-```
-
 ## Component Development
 
 - Use Ionic components for cross-platform consistency
@@ -145,33 +97,6 @@ const takePicture = async () => {
 - Implement responsive layouts
 - Add platform-specific code when needed
 
-Example:
-```typescript
-import { IonButton, IonIcon, isPlatform } from '@ionic/react';
-
-const CrossPlatformButton = () => {
-  const buttonStyle = isPlatform('ios')
-    ? 'ios-style'
-    : 'material-style';
-
-  return (
-    <IonButton className={buttonStyle}>
-      Click Me
-    </IonButton>
-  );
-};
-```
-
-## Build & Deployment
-
-### Web Deployment
-```bash
-# Build for web
-pnpm build:web
-
-# Deploy to hosting service
-pnpm deploy:web
-```
 
 ### Mobile Deployment
 ```bash

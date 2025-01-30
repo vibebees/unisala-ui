@@ -45,34 +45,15 @@ ui/
 └── stories/           # Storybook documentation
 ```
 
-## Key Components
 
-### Metrics System
 
-The metrics system includes features for tracking user engagement, including:
 
-- Daily streaks tracking
-- Session management
-- Activity timestamps
-- Comprehensive testing suite
 
-Example usage:
-
-```typescript
-import { updateStreak } from '@/utils/metrics/streakMetrics'
-
-// Initialize or update user streak
-const metrics = updateStreak('SESSION_START', {
-  lastVisit: Date.now(),
-  currentStreak: 1,
-  longestStreak: 1,
-  totalSessions: 1
-})
-```
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions!
+Working on our[Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Workflow
 

@@ -8,7 +8,7 @@ import { calculateAnalytics } from "../../dashboard/analytics";
 import { getCache } from "@/utils/cache";
 
 const DashboardMetrics: React.FC = () => {
-  const [isDashboardCollapsed, setIsDashboardCollapsed] = useState(true); // State moved inside the component
+  const [isDashboardCollapsed, setIsDashboardCollapsed] = useState(true);
   const [peakUsageDataUpdated, setPeakUsageDataUpdated] = useState<{ [key: string]: number }>({});
   const [peakUsageDataCreated, setPeakUsageDataCreated] = useState<{ [key: string]: number }>({});
   const [dayCount, setDayCount] = useState<{ [key: string]: number }>({
@@ -22,15 +22,33 @@ const DashboardMetrics: React.FC = () => {
   });
 
   useEffect(() => {
-    const drafts: { [key: string]: { createdAt: string; postText: string; updatedAt: string } } =
-      getCache("storyDrafts") || {}; // Fetch the drafts from cache or any data source
+    // Add debug logging
+    const drafts: { [key: string]: { createdAt: string; postText: string; updatedAt: string } } = getCache('storyDrafts') || {};
+    console.log('Raw drafts from cache:', drafts);
 
-    const { peakUsageNotesUpdated, peakUsageNotesCreated, dayCount } = calculateAnalytics(drafts);
+    if (!drafts) {
+      console.log('No drafts found in cache');
+      return;
+    }
 
-    setPeakUsageDataUpdated(peakUsageNotesUpdated);
-    setPeakUsageDataCreated(peakUsageNotesCreated);
-    setDayCount(dayCount);
-  }, []);
+    try {
+      const analytics = calculateAnalytics(drafts);
+      console.log('Calculated analytics:', analytics);
+
+      // Check if the required properties exist
+      if (analytics.peakUsageNotesUpdated) {
+        setPeakUsageDataUpdated(analytics.peakUsageNotesUpdated);
+      }
+      if (analytics.peakUsageNotesCreated) {
+        setPeakUsageDataCreated(analytics.peakUsageNotesCreated);
+      }
+      if (analytics.dayCount) {
+        setDayCount(analytics.dayCount);
+      }
+    } catch (error) {
+      console.error('Error calculating analytics:', error);
+    }
+  }, []); // Empty dependency array to run only on mount
 
   return (
     <div>
@@ -48,24 +66,28 @@ const DashboardMetrics: React.FC = () => {
       {!isDashboardCollapsed && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
           <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-              Notes Created
-            </h3>
-            <PeakUsageBarChart
-              hoursCount={peakUsageDataCreated}
-              title="Notes Created"
-              barColor="rgba(70, 230, 2, 0.6)"
-            />
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Notes Created</h3>
+            {Object.keys(peakUsageDataCreated).length > 0 ? (
+              <PeakUsageBarChart
+                hoursCount={peakUsageDataCreated}
+                title="Notes Created"
+                barColor="rgba(70, 230, 2, 0.6)"
+              />
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400">No data available</p>
+            )}
           </div>
           <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-              Notes Updated
-            </h3>
-            <PeakUsageBarChart
-              hoursCount={peakUsageDataUpdated}
-              title="Notes Updated"
-              barColor="rgba(13, 24, 233, 0.6)"
-            />
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Notes Updated</h3>
+            {Object.keys(peakUsageDataUpdated).length > 0 ? (
+              <PeakUsageBarChart
+                hoursCount={peakUsageDataUpdated}
+                title="Notes Updated"
+                barColor="rgba(13, 24, 233, 0.6)"
+              />
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400">No data available</p>
+            )}
           </div>
           <div className="col-span-2">
             <ProductiveDays
@@ -73,7 +95,7 @@ const DashboardMetrics: React.FC = () => {
               title="Weekly Notes Activity with Targets"
               lineColor="rgb(0, 239, 56)"
               fillColor="rgba(9, 200, 79, 0.2)"
-              horizontalLines={[5, 3, 2]} // Add horizontal bars at these Y-values
+              horizontalLines={[5, 3, 2]}
             />
           </div>
         </div>

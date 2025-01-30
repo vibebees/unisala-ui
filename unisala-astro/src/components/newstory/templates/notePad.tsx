@@ -22,7 +22,6 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
     const [ showImagePanel, setShowImagePanel ] = useState(false);
     const [ activeTab, setActiveTab ] = useState<'editor' | 'visual'>('editor');
     const { hasPosts } = usePublishedPostManager();
-    const [ isDashboardCollapsed, setIsDashboardCollapsed ] = useState(false);
 
     const {
         hasDrafts,
@@ -67,7 +66,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
             deleteDraft(draftId);
             toast.success('Your Story is Published!');
 
-            const notesPublished = getCache('notesPublished') || {};
+            const notesPublished: { [key: string]: any } = getCache('notesPublished') || {};
             notesPublished[ data.addPost.post._id ] = {
                 postTitle: draftTitle,
                 postText: draftContent,
@@ -145,8 +144,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
                 topics={topics}
                 setTopics={setTopics} isDashboardCollapsed={false} setIsDashboardCollapsed={function (isDashboardCollapsed: boolean): void {
                     throw new Error("Function not implemented.");
-                } }                    // isDashboardCollapsed = { isDashboardCollapsed }
-                    // setIsDashboardCollapsed = { setIsDashboardCollapsed }
+                } }
             />
         </AuthProvider>
     );

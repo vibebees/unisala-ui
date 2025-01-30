@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { calculateAnalytics } from "../dashboard/analytics";
+import { calculateAnalytics } from "../../dashboard/analytics";
 import {
   Chart as ChartJS,
   BarElement,
@@ -12,8 +12,8 @@ import {
   Legend,
 } from "chart.js";
 import { getCache } from "@/utils/cache";
-import PeakUsageBarChart from "../dashboard/peakUsageChart";
-import { ProductiveDays } from "../dashboard/weekly/productiveDays";
+import PeakUsageBarChart from "../../dashboard/peakUsageChart";
+import { ProductiveDays } from "../../dashboard/weekly/productiveDays";
 
 ChartJS.register(
   BarElement,
@@ -248,7 +248,7 @@ const Dashboard: React.FC = () => {
     "Improve your React Hooks usage",
     "Explore Data Visualization techniques",
   ];
- 
+
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 ">
       <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
@@ -286,7 +286,7 @@ const Dashboard: React.FC = () => {
 
 
 
-      
+
 
 
       {/* Real-Time Typing Feedback */}

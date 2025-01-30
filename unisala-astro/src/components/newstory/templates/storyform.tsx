@@ -7,17 +7,17 @@ import { navigator } from '@/utils/lib/URLupdate';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager';
 import type { PostDraft, TopicOptions } from '@/types/post';
-import { X, Image, Wand2, PenTool, Eye, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, Wand2, PenTool,  ChevronDown, ChevronUp } from 'lucide-react';
 
 // Import existing components
-import { MainEditor } from './molecules/MainEditor';
+import { MainEditor } from '../molecules/MainEditor';
 import PreviewModal from './storyPreviewModal';
 import VisualAid from './aidPanel';
-import DashboardMetrics from './extendedPanel';
 
 import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
 import { AuthProvider } from '@/context/AuthContext';
 import { debounce } from 'lodash';
+import { DashboardMetrics } from '..';
 
 
 interface PostFormProps {
@@ -27,7 +27,7 @@ interface PostFormProps {
 
 
 
-const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
+const PostForm: React.FC<PostFormProps> = ({  }) => {
   // Essential state
   const [showPreview, setShowPreview] = useState(false);
   const [topics, setTopics] = useState<TopicOptions[]>([]);
@@ -211,7 +211,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
         <div className="flex h-[calc(100vh-64px)]">
           {/* Editor Area */}
           <div className={`flex-1 px-4 py-6 transition-all duration-300 ${showImagePanel ? 'mr-[400px]' : ''}`}>
-          <div className={`flex-1 px-4 py-6 transition-all duration-300 ${showImagePanel ? 'mr-[400px]' : ''}`}>          
+          <div className={`flex-1 px-4 py-6 transition-all duration-300 ${showImagePanel ? 'mr-[400px]' : ''}`}>
           <button
             onClick={() => setIsDashboardCollapsed(!isDashboardCollapsed)}
             className="bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded-md mb-4"

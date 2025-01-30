@@ -1,10 +1,8 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
-import StoryForm from '@/components/newstory/storyform';
 import type { PostDraft } from '@/types/post';
 import {Toast} from '@/components/ui/toast';
-import VisualAidPanel from '@/components/newstory/visualAidPanel';
-import ImageEditor from '@/components/newstory/imageEditor';
+import {VisualAidPanel} from '@/components/newstory/index';
 
 const id = Astro.url.searchParams.get('id');
 const draftId = id || Date.now().toString();
@@ -20,8 +18,8 @@ const initialPostDraft: PostDraft = {
 
 <MainLayout title='Create Post'>
     <div class="flex">
-            <ImageEditor client:only />
+            <!-- <ImageEditor client:only /> -->
             <VisualAidPanel client:only />
-       
+
     </div>
 </MainLayout>

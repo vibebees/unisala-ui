@@ -67,8 +67,6 @@ const calculatePeakUsageHours = (
         const momentObj = moment(timestamp, dateTimeFormat);
 
         if (momentObj.isValid()) {
-            console.log(`Hour: ${momentObj.hour()}`);
-            
             const hour = momentObj.hour();
             const intervalStart = Math.floor(hour / interval) * interval;
 
@@ -77,8 +75,6 @@ const calculatePeakUsageHours = (
             const endHour = formatHour(intervalStart + interval);
             const period = intervalStart < 12 ? "AM" : "PM";
             const intervalKey = `${startHour}-${endHour} ${period}`;
-
-            console.log(`Interval key: ${intervalKey}`);
             hoursCount[intervalKey] = (hoursCount[intervalKey] || 0) + 1;
         } else {
             console.warn(`Invalid timestamp: ${timestamp}`);

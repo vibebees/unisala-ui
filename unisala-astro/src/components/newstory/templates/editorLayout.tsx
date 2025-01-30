@@ -46,8 +46,6 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
     handlePublish,
     topics,
     setTopics,
-    isDashboardCollapsed,
-    setIsDashboardCollapsed,
 }) => (
     <div className="dark:text-black dark:text-white relative min-h-screen">
         <BottomNavigationBar
@@ -56,13 +54,11 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
             setShowPreview={setShowPreview}
             hasDrafts={hasDrafts}
             hasPosts={hasPosts}
+            setShowImagePanel={setShowImagePanel}
         />
         <div className="flex h-[calc(100vh-64px)]">
             <div className={`flex-1 px-4 py-6 transition-all duration-300 ${showImagePanel ? 'mr-[400px]' : ''}`}>
-                <DashboardMetrics
-                    isDashboardCollapsed={isDashboardCollapsed}
-                    setIsDashboardCollapsed={setIsDashboardCollapsed}
-                />
+                <DashboardMetrics/>
                 <div className="max-w-4xl mx-auto">
                     <MainEditor
                         draftId={draftId}

@@ -13,7 +13,6 @@
     "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'",
     "prepare": "husky",
     "test": "echo \"No test specified\" && exit 0"
-
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",

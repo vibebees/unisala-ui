@@ -2,7 +2,8 @@
   "name": "unisala",
   "private": true,
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "exit 0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",

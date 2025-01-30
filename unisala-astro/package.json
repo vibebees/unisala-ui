@@ -11,16 +11,37 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint . --fix",
     "remove-unused": "eslint --fix --quiet --config eslint.config.js '**/*.{js,jsx,ts,tsx}'",
-    "commit": "cz",
+    "commit": "git-cz",
     "release": "standard-version",
-    "prepare": "husky",
+    "prepare": "husky install",
     "postversion": "git push && git push --tags"
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "cz-conventional-changelog"
     }
   },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"],
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore"]
+      ],
+      "scope-empty": [2, "never"], 
+      "scope-case": [2, "always", "lower-case"],
+      "subject-case": [2, "always", ["sentence-case", "start-case", "lower-case"]],
+      "subject-empty": [2, "never"],
+      "header-max-length": [2, "always", 72]
+    }
+  },  
   "standard-version": {
     "types": [
       {
@@ -37,6 +58,41 @@
         "type": "docs",
         "section": "Documentation",
         "bump": "patch"
+      },
+      {
+        "type": "style",
+        "section": "Styling",
+        "bump": "patch"
+      },
+      {
+        "type": "refactor",
+        "section": "Code Refactoring",
+        "bump": "patch"
+      },
+      {
+        "type": "perf",
+        "section": "Performance Improvements",
+        "bump": "patch"
+      },
+      {
+        "type": "test",
+        "section": "Tests",
+        "bump": "patch"
+      },
+      {
+        "type": "build",
+        "section": "Build System",
+        "bump": "patch"
+      },
+      {
+        "type": "ci",
+        "section": "CI",
+        "bump": "patch"
+      },
+      {
+        "type": "chore",
+        "section": "Chores",
+        "hidden": true
       }
     ],
     "releaseCommitMessageFormat": "chore(release): {{currentTag}} [skip ci]",
@@ -108,12 +164,15 @@
     "@typescript-eslint/parser": "^8.0.1",
     "astro-icon": "^1.1.1",
     "classnames": "^2.5.1",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.8.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-unused-imports": "^4.1.2",
     "globals": "^15.9.0",
     "husky": "^9.1.7",
     "rollup-plugin-visualizer": "^5.12.0",
+    "standard-version": "^9.5.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.1"

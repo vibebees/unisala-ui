@@ -1,0 +1,1 @@
+#!/bin/sh\n. "$(dirname "$0")/_/husky.sh"\nnpx --no-install commitlint --edit "$1"

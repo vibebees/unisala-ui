@@ -17,14 +17,12 @@ import VisualAid from './aidPanel';
 import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
 import { AuthProvider } from '@/context/AuthContext';
 import { debounce } from 'lodash';
-import { DashboardMetrics } from '..';
+import  DashboardMetrics  from './dashboard';
 
 
 interface PostFormProps {
   initialPostDraft?: PostDraft;
 }
-
-
 
 
 const PostForm: React.FC<PostFormProps> = ({  }) => {

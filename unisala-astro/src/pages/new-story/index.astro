@@ -1,6 +1,6 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
-import {StoryForm} from '@/components/newstory/templates/storyform';
+import {NotePad} from '@/components/newstory/index';
 import type { PostDraft } from '@/types/post';
 import {Toast} from '@/components/ui/toast';
 
@@ -20,6 +20,6 @@ const initialPostDraft: PostDraft = {
 
 <MainLayout title='Create Post'>
     <Toast client:load />
-    <StoryForm client:only initialPostDraft={initialPostDraft} />
+    <NotePad client:only initialPostDraft={initialPostDraft} />
 
 </MainLayout>

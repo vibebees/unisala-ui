@@ -6,8 +6,6 @@ import SelectAtom from "../atoms/Select"
 import { htmlForEditor } from "./htmlForEditor"
 
 const generateInputTag = ({item,postData, setPostData}) => {
-    console.log({ item })
-
     return (
       <>
         <Typography className="text-sm">{item.name}</Typography>

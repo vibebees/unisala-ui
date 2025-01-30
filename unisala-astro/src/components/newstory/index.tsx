@@ -4,5 +4,5 @@ import DashboardMetrics from '@/components/newstory/templates/dashboard';
 import PreviewModal from '@/components/newstory/templates/storyPreviewModal';
 import VisualAidPanel from '@/components/newstory/templates/visualAidPanel';
 import DraftsList from '@/components/newstory/templates/draftlist';
-import NotePad from '@/components/newstory/templates/storyform';
+import NotePad from '@/components/newstory/templates/notePad';
 export { PublishedPostsList, VisualAidTemplate, DashboardMetrics, PreviewModal, VisualAidPanel, DraftsList, NotePad};

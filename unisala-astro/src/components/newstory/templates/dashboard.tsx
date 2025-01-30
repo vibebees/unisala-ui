@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { calculateAnalytics } from "../../dashboard/analytics";
 import {
   Chart as ChartJS,
   BarElement,
@@ -11,9 +10,13 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { getCache } from "@/utils/cache";
 import PeakUsageBarChart from "../../dashboard/peakUsageChart";
 import { ProductiveDays } from "../../dashboard/weekly/productiveDays";
+import Button from "../atoms/button";
+import Icon from "../atoms/icon";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { getCache } from "@/utils/cache";
+import { calculateAnalytics } from "@/components/dashboard/analytics";
 
 ChartJS.register(
   BarElement,
@@ -34,90 +37,16 @@ interface Insights {
 interface InsightsCardProps {
   insights: Insights;
 }
-
-const InsightsCard: React.FC<InsightsCardProps> = ({ insights }) => {
-  return (
-    <div className="p-4 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
-      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-        Weekly Insights
-      </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        <strong>Total Notes:</strong> {insights.totalNotes}
-      </p>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        <strong>Most Productive Hours:</strong> {insights.productiveHours}
-      </p>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        <strong>Focus Topics:</strong> {insights.focusTopics.join(", ")}
-      </p>
-    </div>
-  );
-};
-
-
-
-interface GoalsCardProps {
-  goals: { title: string; progress: number }[];
+interface DashboardMetricsProps {
+  isDashboardCollapsed: boolean;
+  setIsDashboardCollapsed: (isCollapsed: boolean) => void;
 }
 
-const GoalsCard: React.FC<GoalsCardProps> = ({ goals }) => {
-  return (
-    <div className="p-4 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
-      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-        Your Goals
-      </h3>
-      <ul>
-        {goals.map((goal, index) => (
-          <li key={index} className="mb-4">
-            <p className="text-sm text-gray-800 dark:text-white mb-1">{goal.title}</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div
-                className="bg-blue-500 h-2.5 rounded-full"
-                style={{ width: `${goal.progress}%` }}
-              ></div>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {goal.progress}% Complete
-            </p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const RealTimeTyping: React.FC = () => {
-  const [typingSpeed, setTypingSpeed] = useState(0); // WPM
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    // Simulate dynamic typing speed for demo purposes
-    const interval = setInterval(() => {
-      const speed = Math.floor(Math.random() * (80 - 40) + 40); // Random WPM
-      setTypingSpeed(speed);
-      setMessage(speed > 60 ? "Great job! Keep it up!" : "You can do better!");
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="p-4 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
-      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
-        Real-Time Typing Feedback
-      </h3>
-      <p className="text-4xl font-bold text-blue-500">{typingSpeed} WPM</p>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{message}</p>
-    </div>
-  );
-};
-
-
-
-
-
-const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState([
+const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
+  isDashboardCollapsed,
+  setIsDashboardCollapsed,
+}) => {
+ const [stats, setStats] = useState([
     { title: "Typing Speed", value: "52 WPM", subtitle: "Keep up the great work!" },
     { title: "Note Streak", value: "0 Days", subtitle: "Your best streak yet!" },
     { title: "Weekly Notes", value: "0" },
@@ -250,160 +179,33 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 dark:bg-gray-900 ">
-      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-        Dashboard
-      </h1>
-
-      {/* Metrics Section */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {stats.map((stat, index) => (
-          <StatCard
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            subtitle={stat.subtitle || undefined}
+    <div>
+      <Button
+        onClick={() => setIsDashboardCollapsed(!isDashboardCollapsed)} // Toggle collapse state
+        className="bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded-md mb-4"
+      >
+        {isDashboardCollapsed ? (
+          <Icon icon={ChevronDown} className="w-4 h-4 inline-block" />
+        ) : (
+          <Icon icon={ChevronUp} className="w-4 h-4 inline-block" />
+        )}{' '}
+        Metrics
+      </Button>
+      {!isDashboardCollapsed && (
+        <div>
+          {/* Your existing DashboardMetrics content */}
+          <PeakUsageBarChart hoursCount={peakUsageDataCreated} title="Notes Created" barColor="rgba(70, 230, 2, 0.6)" />
+          <PeakUsageBarChart hoursCount={peakUsageDataUpdated} title="Notes Updated" barColor="rgba(13, 24, 233, 0.6)" />
+          <ProductiveDays
+            dayCount={dayCount}
+            title="Weekly Notes Activity with Targets"
+            lineColor="rgb(0, 239, 56)"
+            fillColor="rgba(9, 200, 79, 0.2)"
+            horizontalLines={[5, 3, 2]}
           />
-        ))}
-      </div> */}
-
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
-        <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-            Notes Created
-          </h3>
-          <PeakUsageBarChart hoursCount={peakUsageDataCreated}  title="Notes Created" barColor="rgba(70, 230, 2, 0.6)"/>
         </div>
-        <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-            Notes Updated
-          </h3>
-          <PeakUsageBarChart hoursCount={peakUsageDataUpdated}   title="Notes Updated" barColor="rgba(13, 24, 233, 0.6)"/>
-        </div>
-      </div>
-
-
-
-
-
-
-
-      {/* Real-Time Typing Feedback */}
-      {/* <div className="mb-6">
-        <RealTimeTyping />
-      </div> */}
-
-      {/* Personalized Goals Section */}
-      {/* <div className="mb-6">
-        <GoalsCard
-          goals={[
-            { title: "Improve Typing Speed", progress: 70 },
-            { title: "Write 10 Notes This Week", progress: 50 },
-          ]}
-        />
-      </div> */}
-
-      {/* Charts Section */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ChartCard
-          title="Weekly Notes Taken"
-          type="bar"
-          data={barChartData}
-          options={{ responsive: true, plugins: { legend: { position: "top" } } }}
-        />
-        <ChartCard
-          title="Typing Speed Progress"
-          type="line"
-          data={lineChartData}
-          options={{ responsive: true, plugins: { legend: { position: "top" } } }}
-        />
-      </div> */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-<ProductiveDays
-        dayCount={dayCount}
-        title="Weekly Notes Activity with Targets"
-        lineColor="rgb(0, 239, 56)"
-        fillColor="rgba(9, 200, 79, 0.2)"
-        horizontalLines={[5, 3, 2]} // Add horizontal bars at these Y-values
-      />
-</div>
-
-
-
-
-      {/* Concept Mastery Section */}
-      {/* <div className="mt-6">
-        <ChartCard
-          title="Concept Mastery"
-          type="pie"
-          data={conceptMasteryData}
-          options={{ responsive: true }}
-        />
-      </div> */}
-
-      {/* Knowledge Growth Visualization */}
-      {/* <div className="mt-6"> */}
-      {/* <KnowledgeGraph /> */}
-      {/* </div> */}
-
-      {/* Learning Timeline */}
-      {/* <div className="mt-6">
-        <TimelineChart
-          title="Learning Milestones"
-          data={learningTimelineData}
-        />
-      </div> */}
-
-      {/* Leaderboards */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        <Leaderboard
-          title="Top Typing Speeds"
-          data={leaderboardDataSpeed}
-          metric="WPM"
-        />
-        <Leaderboard
-          title="Top Note Takers"
-          data={leaderboardDataNotes}
-          metric="Notes"
-        />
-      </div> */}
-
-      {/* Achievement Badges */}
-      {/* <div className="mt-6">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
-          Achievements
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {achievementBadges.map((badge, index) => (
-            <AchievementBadge
-              key={index}
-              title={badge.title}
-              description={badge.description}
-              badges={[
-                { label: "Note-Taking", color: "orange" },
-                { label: "Consistent Effort", color: "blue" },
-              ]}
-            />
-          ))}
-        </div>
-      </div> */}
-
-      {/* Advanced Insights Section */}
-      {/* <div className="mt-6">
-        <InsightsCard
-          insights={{
-            totalNotes: 150,
-            productiveHours: "Mornings",
-            focusTopics: ["React", "GraphQL"],
-          }}
-        />
-      </div> */}
-
-      {/* Suggestions Section */}
-      {/* <SuggestionsList suggestions={suggestions} /> */}
+      )}
     </div>
   );
 };
-
-export default Dashboard;
+export default DashboardMetrics;

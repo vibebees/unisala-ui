@@ -7,6 +7,7 @@ import { ViewTransitions } from "astro:transitions";
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import '@uppy/image-editor/dist/style.css';
+import AnalyticsProvider from "../metrics/analyticsUtils";
 
 
 interface Props {
@@ -139,3 +140,4 @@ const {
 </script>
 
 <ViewTransitions />
+<AnalyticsProvider client:load />

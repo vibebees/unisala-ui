@@ -27,7 +27,7 @@ interface PostFormProps {
 
 
 
-const PostForm: React.FC<PostFormProps> = ({ initialPostDraft }) => {
+const PostForm: React.FC<PostFormProps> = ({  }) => {
   // Essential state
   const [showPreview, setShowPreview] = useState(false);
   const [topics, setTopics] = useState<TopicOptions[]>([]);

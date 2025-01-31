@@ -18,7 +18,6 @@ export const MainEditor: React.FC<MainEditorProps> = ({
   draftContent,
   onTitleChange,
   onContentChange,
-  panelLayout,
 }) => (
   <div className="flex-1 min-w-0 h-full overflow-y-auto">
     <div className={`h-full container max-w-screen-md mx-auto'}`}>
@@ -42,10 +41,10 @@ export const MainEditor: React.FC<MainEditorProps> = ({
             onContentChange={onContentChange}
           />
         </div>
-        
+
       </form>
-      
-      
+
+
     </div>
   </div>
 );

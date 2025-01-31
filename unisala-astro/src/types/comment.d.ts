@@ -16,11 +16,12 @@ export interface Comment {
 
 
 interface IUser {
+  id: string;
   _id: string;
   firstName: string;
   lastName: string;
   username: string;
   picture: string | null;
   userId: string;
-  
+
 }

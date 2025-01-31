@@ -11,7 +11,6 @@ describe('calculateDayDifference', () => {
   const YESTERDAY = NOW - DAY_IN_MS;
   const TOMORROW = NOW + DAY_IN_MS;
   const TWO_DAYS_AGO = NOW - 2 * DAY_IN_MS;
-  const TWO_DAYS_LATER = NOW + 2 * DAY_IN_MS;
 
 
 
@@ -258,7 +257,7 @@ describe('Streak Metrics - Edge Cases', () => {
 
   it('should maintain longest streak after multiple streak resets', () => {
     let metrics = updateStreak('SESSION_START');
-    
+
     // Build up a 5-day streak by visiting each consecutive day
     for(let i = 4; i >= 0; i--) {
         metrics = updateStreak('SESSION_START', {
@@ -269,7 +268,7 @@ describe('Streak Metrics - Edge Cases', () => {
         });
     }
     expect(metrics.longestStreak).toBe(5);
-    
+
     // Break streak by not visiting for a week
     metrics = updateStreak('SESSION_START', {
         ...metrics,
@@ -321,7 +320,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
   const DAY_IN_MS = 24 * 60 * 60 * 1000;
   const NOW = new Date().getTime();
 
- 
+
 
   describe('Session timing validation', () => {
     it('should handle invalid session end (end before start)', () => {
@@ -335,12 +334,12 @@ describe('Streak Metrics - Additional Test Cases', () => {
         totalSessions: 1,
         totalTimeSpent: 0
       };
-      
+
       const result = updateStreak('SESSION_END', metrics);
       expect(result.totalTimeSpent).toBeGreaterThanOrEqual(0);
       expect(result.totalTimeSpent).toBeLessThan(3000);
     });
-    
+
     it('should handle long sessions appropriately', () => {
       const startTime = NOW - (2 * 60 * 60 * 1000); // 2 hours ago
       const metrics = {
@@ -352,7 +351,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
         totalSessions: 1,
         totalTimeSpent: 0
       };
-      
+
       const result = updateStreak('SESSION_END', metrics);
       expect(result.totalTimeSpent).toBeGreaterThan(0);
       expect(result.totalTimeSpent).toBeGreaterThanOrEqual(1 * 60 * 60 * 1000);
@@ -381,7 +380,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
         currentStreak: 1
         // missing other required fields
       };
-      
+
       const result = updateStreak('SESSION_START', incompleteMetrics as any);
       expect(result).toHaveProperty('longestStreak');
       expect(result).toHaveProperty('totalSessions');
@@ -396,7 +395,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
       // Use past DST transition dates
       const beforeDST = new Date(2023, 2, 12, 1, 59).getTime(); // March 12, 2023 1:59 AM
       const afterDST = new Date(2023, 2, 12, 3, 0).getTime();  // March 12, 2023 3:00 AM
-      
+
       const metrics = updateStreak('SESSION_START', {
         lastVisit: beforeDST,
         currentStreak: 1,
@@ -406,12 +405,12 @@ describe('Streak Metrics - Additional Test Cases', () => {
         totalSessions: 1,
         totalTimeSpent: 0
       });
-      
+
       const dstMetrics = updateStreak('SESSION_START', {
         ...metrics,
         lastVisit: afterDST
       });
-      
+
       expect(dstMetrics.currentStreak).toBe(1); // Same day
     });
   });
@@ -421,7 +420,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
       // Create initial metrics for Feb 28
       const NOW = new Date().getTime();
       const baseMetrics = updateStreak('SESSION_START');
-      
+
       // Simulate a visit on Feb 28 (yesterday)
       const yesterdayMetrics = updateStreak('SESSION_START', {
         ...baseMetrics,
@@ -429,13 +428,13 @@ describe('Streak Metrics - Additional Test Cases', () => {
         currentStreak: 1,
         longestStreak: 1
       });
-      
+
       // Simulate the next visit on Feb 29 (today)
       const todayMetrics = updateStreak('SESSION_START', {
         ...yesterdayMetrics,
         lastVisit: NOW,
       });
-      
+
       // Since these are consecutive days, streak should increment
       expect(todayMetrics.currentStreak).toBe(2);
     });
@@ -444,7 +443,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
     it('should handle high session counts efficiently', () => {
       let metrics = updateStreak('SESSION_START');
       const baseTime = NOW - (1000 * 1000); // Start 1000 seconds ago
-      
+
       // Simulate 1000 sessions in the same day
       const startTime = performance.now();
       for(let i = 0; i < 1000; i++) {
@@ -455,7 +454,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
         });
       }
       const endTime = performance.now();
-      
+
       expect(endTime - startTime).toBeLessThan(1000); // Should process in under 1 second
       expect(metrics.totalSessions).toBe(1001);
     });

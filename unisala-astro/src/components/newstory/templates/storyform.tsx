@@ -216,7 +216,9 @@ const PostForm: React.FC<PostFormProps> = ({  }) => {
           >
             {isDashboardCollapsed ? <ChevronDown className="w-4 h-4 inline-block" /> : <ChevronUp className="w-4 h-4 inline-block" />} Metrics
           </button>
-          {!isDashboardCollapsed && <DashboardMetrics />}
+          {!isDashboardCollapsed && <DashboardMetrics isDashboardCollapsed={false} setIsDashboardCollapsed={function (isCollapsed: boolean): void {
+                throw new Error('Function not implemented.');
+              } } />}
         </div>
             <div className="max-w-4xl mx-auto">
               <MainEditor

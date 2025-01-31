@@ -85,14 +85,16 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
       { ...prevStats[0] }, // Static Typing Speed stays the same
       { title: "Note Streak", value: `${streak} Days`, subtitle: "Your best streak yet!" },
       { title: "Weekly Notes", value: `${weeklyNotes}` },
-      { title: "Average Notes Per Week", value: `${avgNotesPerWeek.toFixed(1)}`, subtitle: "Consistent Progress!" }
+      { title: "Average Notes Per Week", value: `${(avgNotesPerWeek ?? 0).toFixed(1)}`, subtitle: "Consistent Progress!" }
     ]);
 
 
-    setPeakUsageDataUpdated(peakUsageNotesUpdated);
-    setPeakUsageDataCreated(peakUsageNotesCreated);
-     setMostActiveDay(mostActiveDay[0]); // Fix: Change mostActiveDay type from string[] to string
-     setDayCount(dayCount)
+    setPeakUsageDataUpdated(peakUsageNotesUpdated || {});
+    setPeakUsageDataCreated(peakUsageNotesCreated || {});
+     setMostActiveDay(mostActiveDay ? mostActiveDay[0] : ""); // Fix: Change mostActiveDay type from string[] to string
+     if (dayCount) {
+       setDayCount(dayCount);
+     }
 
   }, []); // Empty dependency array to run on mount
 

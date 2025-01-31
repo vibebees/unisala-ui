@@ -33,8 +33,7 @@ const BottomNavigationBar: React.FC<BottomNavigationBarProps> = ({
               isActive={activeTab === 'editor'}
               onClick={() => {
                 setActiveTab('editor');
-                setShowImagePanel(false);
-
+                setShowImagePanel && setShowImagePanel(false);
               }}
             />
             <TabButton
@@ -43,7 +42,7 @@ const BottomNavigationBar: React.FC<BottomNavigationBarProps> = ({
               isActive={activeTab === 'visual'}
               onClick={() => {
                 setActiveTab('visual');
-                setShowImagePanel(true);
+                setShowImagePanel && setShowImagePanel(true);
 
               }}
             />

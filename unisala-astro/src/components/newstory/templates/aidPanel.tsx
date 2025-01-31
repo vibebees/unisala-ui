@@ -7,7 +7,6 @@ import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import UppyImageEditor from './imageEditor';
 import Text2ImagePanel from './imageGeneration';
 import { getSearchImages } from '@/datasource/graphql/user';
-import { useAuth } from '@/context/AuthContext';
 
 interface VisualAidTemplateProps {
   editorHeight?: number;
@@ -17,7 +16,6 @@ interface VisualAidTemplateProps {
 
 const VisualAidTemplate: React.FC<VisualAidTemplateProps> = ({
   editorHeight = 350,
-  containerWidth = 400,
   children,
 }) => {
   const [isDragging, setIsDragging] = useState(false);

@@ -22,7 +22,7 @@ export const useDraftManager = () => {
     const migrateOldData = useCallback(() => {
         const keys = Object.keys(localStorage);
         const migratedDrafts: StoryDrafts = {};
-    
+
         keys.forEach(key => {
             if (key.endsWith('.postTitle') || key.endsWith('.postText')) {
                 const timestamp = key.split('.')[0];
@@ -42,14 +42,14 @@ export const useDraftManager = () => {
                 }
             }
         });
-    
+
         return migratedDrafts;
     }, []);
-    
+
 
     const loadDrafts = useCallback(() => {
         let storedDrafts = getCache('storyDrafts') || {};
-        
+
         if (Object.keys(storedDrafts).length === 0) {
             // If no drafts in new format, try to migrate old data
             storedDrafts = migrateOldData();
@@ -70,12 +70,12 @@ export const useDraftManager = () => {
     useEffect(() => {
         loadDrafts();
     }, [loadDrafts]);
-    
-    const saveDraft = useCallback((id: string, postTitle?: string, postText?: string, pastDate: number) => {
+
+    const saveDraft = useCallback((id: string, postTitle?: string, postText?: string, pastDate?: number) => {
         const timestamp = pastDate || Date.now();
         const updatedAt = new Date(timestamp).toLocaleString();
         const updatedDrafts = { ...drafts };
-        
+
         if (id && id in updatedDrafts) {
             // Update existing draft
             updatedDrafts[id] = {
@@ -94,7 +94,7 @@ export const useDraftManager = () => {
                 updatedAt
             };
         }
-    
+
         // Only save if there's content
         if (updatedDrafts[id].postTitle.trim() || updatedDrafts[id].postText.trim()) {
             localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
@@ -106,17 +106,17 @@ export const useDraftManager = () => {
         } else {
             console.warn("Cannot save empty draft");
         }
-    
+
         return id;
     }, [drafts]);
 
- 
+
 
     const saveDraftPostTitle = useCallback((id: string, postTitle: string) => {
         const timestamp = Date.now();
         const updatedAt = new Date(timestamp).toLocaleString();
         const updatedDrafts = { ...drafts };
-        
+
         if (id && id in updatedDrafts) {
             console.log("Updating draft title", id);
             updatedDrafts[id].postTitle = postTitle;
@@ -133,7 +133,7 @@ export const useDraftManager = () => {
         }
 
         // update this to trim at least have 1 white space in the beginning
-        
+
         localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
         setDrafts(updatedDrafts);
         setDraftId(id);
@@ -151,7 +151,7 @@ export const useDraftManager = () => {
 
 
 
-        
+
         if (id && id in updatedDrafts) {
             console.log("Updating draft text", id);
             updatedDrafts[id] = {

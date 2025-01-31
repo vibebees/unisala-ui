@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { extractImageFromPostText } from '@/utils/lib/image';
 import { stripHtmlTags } from '@/utils/lib/utils';
-import AsyncAutoComplete from '../ui/asyncSelect';
+import AsyncAutoComplete from '../../ui/asyncSelect';
 import { userServer } from '@/datasource/servers/endpoints';
 import type { TopicOptions } from '@/types/post';
-import { navigator } from '@/utils/lib/URLupdate';
 import { SaveNotesButton } from './saveNotes';
 
 interface PreviewModalProps {
@@ -21,14 +20,14 @@ interface PreviewModalProps {
   draftId: string;
 }
 
-const PreviewModal: React.FC<PreviewModalProps> = ({ 
-  postDraft, 
-  onClose, 
-  onPublish, 
-  onSave, 
-  topics, 
+const PreviewModal: React.FC<PreviewModalProps> = ({
+  postDraft,
+  onClose,
+  onPublish,
+  onSave,
+  topics,
   draftId,
-  setTopics 
+  setTopics
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isPublic, setIsPublic] = useState(true);
@@ -50,7 +49,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
 
   const handlePublish = async () => {
     if (isSubmitting || isPublished) return;
-    
+
     setIsSubmitting(true);
     try {
       const success = await onPublish(topics, imageUrl, isPublic);
@@ -71,8 +70,8 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
       <div className="container mx-auto p-4 sm:p-8 max-w-5xl">
         <div className="flex justify-between items-center mb-8">
           <p className="text-xl font-semibold">Story Preview</p>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-3xl text-gray-500 hover:text-gray-700"
             disabled={isSubmitting || isPublished}
           >
@@ -108,7 +107,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
           {/* Add Topics and Buttons Section (Right) */}
           <div>
             <p className="text-sm text-gray-600 mb-4">Add or change topics (up to 5) so readers know what your story is about</p>
-            
+
             <AsyncAutoComplete
               topics={topics}
               setTopics={setTopics}
@@ -127,8 +126,8 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
               >
                 {buttonText}
               </Button>
-              <SaveNotesButton 
-                draftId={draftId} 
+              <SaveNotesButton
+                draftId={draftId}
                 onClose={onClose}
               />
             </div>

@@ -10,7 +10,7 @@ import type { PostDraft, TopicOptions } from '@/types/post';
 import { X, Wand2, PenTool, ChevronDown, ChevronUp } from 'lucide-react';
 
 // Import existing components
-import { MainEditor } from './molecules/mainEditor';
+import { MainEditor } from './molecules/textEditor';
 import PreviewModal from './storyPreviewModal';
 import VisualAid from './aidPanel';
 import DashboardMetrics from './extendedPanel';

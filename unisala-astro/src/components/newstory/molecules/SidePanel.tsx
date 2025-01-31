@@ -1,5 +1,5 @@
 // components/PostForm/Layout/SidePanel.tsx
-import { PanelResizeHandle } from "./panelResizeHandle";
+import { PanelResizeHandle } from "./resizePanelHandle";
 
 interface SidePanelProps {
   width: number;

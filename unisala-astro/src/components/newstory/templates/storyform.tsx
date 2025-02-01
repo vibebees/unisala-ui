@@ -86,7 +86,7 @@ const PostForm: React.FC<PostFormProps> = ({  }) => {
       notesPublished[data.addPost.post._id] = {
         postTitle: draftTitle,
         postText: draftContent,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().getTime().toString()
       };
       setCache('notesPublished', notesPublished);
 

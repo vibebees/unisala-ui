@@ -70,7 +70,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
             notesPublished[ data.addPost.post._id ] = {
                 postTitle: draftTitle,
                 postText: draftContent,
-                createdAt: new Date().toLocaleString(),
+                createdAt: new Date().getTime(),
             };
             setCache('notesPublished', notesPublished);
 

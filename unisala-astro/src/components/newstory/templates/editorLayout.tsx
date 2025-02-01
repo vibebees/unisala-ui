@@ -3,7 +3,7 @@ import { MainEditor } from "../molecules/mainEditor";
 import BottomNavigationBar from "../organisms/bottomNavigationBar";
 import VisualAidPanel from "../organisms/visualAidPanels";
 import PreviewModal from "./storyPreviewModal";
-import DashboardMetrics from "../organisms/dashboard";
+import DashboardMetrics from "@/components/dashboard/index";
 
 
 

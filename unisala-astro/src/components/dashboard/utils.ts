@@ -4,13 +4,10 @@ export interface TimeSeriesData {
     wpm: number;
     focusScore: number;
   }
-  
-  // utils/metricsCalculations.ts
   export const calculateTotalWords = (timeSeriesData: TimeSeriesData[]): number => {
     if (!timeSeriesData || timeSeriesData.length === 0) return 0;
     
     return timeSeriesData.reduce((sum, dataPoint) => {
-      // Assuming each dataPoint.wpm represents words written in that minute
       return sum + (dataPoint.wpm || 0);
     }, 0);
   };

@@ -9,7 +9,7 @@ import { calculateAnalytics } from "../analytics";
 import type { TimeSeriesData } from "@/types/metrics"
 
 interface DraftData {
-  createdAt: string;
+  createdAt: number;
   postText: string;
   updatedAt: number;
   totalWords?: number;
@@ -33,28 +33,60 @@ export const DashboardMetrics: React.FC = () => {
     Friday: 0,
     Saturday: 0,
   });
+  const editorMetrics: { [key: string]: DraftData } = getCache('editorMetrics') || {};
 
-  const processTimeSeriesData = (drafts: { [key: string]: DraftData }): TimeSeriesData[] => {
-    const timePoints: TimeSeriesData[] = [];
-    const sortedDrafts = Object.entries(drafts)
-      .sort(([aKey], [bKey]) => parseInt(aKey) - parseInt(bKey));
 
-    sortedDrafts.forEach(([timestamp, draft]) => {
-      if (draft.totalSessionTime && draft.totalFocusTime) {
-        const time = new Date(parseInt(timestamp)).toLocaleTimeString();
-        const wpm = draft.totalWords && draft.totalSessionTime 
-          ? Math.round((draft.totalWords / draft.totalSessionTime) * 60000) 
-          : 0;
-        const focusScore = draft.totalSessionTime 
-          ? Math.round((draft.totalFocusTime / draft.totalSessionTime) * 100)
-          : 0;
+  useEffect(() => {
+  
+    if (!editorMetrics) return;
+  
+    try {
+      const analytics = calculateAnalytics(drafts);
+      setPeakUsageDataUpdated(analytics.peakUsageNotesUpdated || {});
+      setPeakUsageDataCreated(analytics.peakUsageNotesCreated || {});
+      setDayCount(analytics.dayCount || {});
+  
+      // Process time series and distribution data
+      const processedTimeData = processTimeSeriesData(drafts);
+      const processedDayDist = processDayDistribution(drafts);
+      
+      setTimeSeriesData(processedTimeData);
+      setDayDistribution(processedDayDist);
+    } catch (error) {
+      console.error('Error calculating analytics:', error);
+    }
+  }, []);
 
-        timePoints.push({ time, wpm, focusScore });
-      }
+
+
+const processTimeSeriesData = (drafts: { [key: string]: DraftData }): TimeSeriesData[] => {
+  const timePoints: TimeSeriesData[] = [];
+  const sortedDrafts = Object.entries(drafts)
+    .sort(([aKey], [bKey]) => parseInt(aKey) - parseInt(bKey));
+
+  sortedDrafts.forEach(([timestamp, draft]) => {
+    // Convert timestamp to a number if it's a string
+    const parsedTimestamp = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+
+    // Use default values if fields are missing or zero
+    const totalWords = draft.totalWords || 0;
+    const totalSessionTime = draft.totalSessionTime || 1; // Avoid division by zero
+    const totalFocusTime = draft.totalFocusTime || 0;
+
+    // Calculate WPM and focusScore
+    const wpm = Math.round((totalWords / (totalSessionTime / 60000))); // WPM calculation
+    const focusScore = Math.round((totalFocusTime / totalSessionTime) * 100); // Focus score calculation
+
+    // Add data point
+    timePoints.push({
+      time: new Date(parsedTimestamp).toLocaleTimeString(),
+      wpm,
+      focusScore,
     });
+  });
 
-    return timePoints;
-  };
+  return timePoints;
+};
 
   const processDayDistribution = (drafts: { [key: string]: DraftData }) => {
     const distribution: { [key: string]: number } = {};
@@ -98,10 +130,7 @@ export const DashboardMetrics: React.FC = () => {
 
       {!isDashboardCollapsed && (
         <div className="grid grid-cols-1 gap-6">
-          <WritingAnalytics 
-            timeSeriesData={timeSeriesData}
-            dayDistribution={dayDistribution}
-          />
+          <WritingAnalytics editorMetrics={editorMetrics} />;
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <UsageMetrics

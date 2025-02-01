@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const calculateAnalytics = (drafts: { [ timestamp: string ]: { createdAt: number, postText: string, updatedAt: number } }) => {
+export const calculateAnalytics = (drafts: { [timestamp: string]: { createdAt: number, postText: string, updatedAt: number } }) => {
     try {
         const postTexts = Object.values(drafts).map(draft => draft.postText); // Content focus
         const dates = Object.keys(drafts).map(timestamp => moment(parseInt(timestamp))); // Convert timestamps to Moment.js objects
@@ -37,7 +37,7 @@ const calculateStreak = (dates: moment.Moment[]): number => {
     let streak = 1;
 
     for (let i = 1; i < sortedDates.length; i++) {
-        if (sortedDates[ i ].diff(sortedDates[ i - 1 ], 'days') === 1) {
+        if (sortedDates[i].diff(sortedDates[i - 1], 'days') === 1) {
             streak++;
         } else {
             break;
@@ -55,55 +55,48 @@ const calculateAvgNotesPerWeek = (dates: moment.Moment[]): number => {
     if (dates.length === 0) return 0;
 
     const totalNotes = dates.length;
-    const weeks = moment().diff(dates[ 0 ], 'weeks', true); // Calculate total weeks, fractional
+    const weeks = moment().diff(dates[0], 'weeks', true); // Calculate total weeks, fractional
     return weeks < 1 ? totalNotes : totalNotes / weeks;
 };
 
 const calculatePeakUsageHours = (
-    drafts: { [ timestamp: string ]: { createdAt: number, updatedAt: number } },
+    drafts: { [timestamp: string]: { createdAt: number, updatedAt: number } },
     trackField: 'createdAt' | 'updatedAt',
     interval: number = 3
-): { [ key: string ]: number } => {
-
+): { [key: string]: number } => {
     try {
-        console.log({
-            drafts,
-            trackField,
-            interval
-        })
-        const dateTimeFormat = "M/D/YYYY, h:mm:ss A";  // Changed format to match your data
 
         const hoursCount = Object.values(drafts).reduce((hoursCount, draft) => {
-            console.log({ draft, trackField });
-            const timestamp = draft[ trackField ];
-            // Remove strict mode to allow more flexible parsing
-            const momentObj = moment(timestamp, dateTimeFormat);
+            const timestamp = draft[trackField];
 
-            if (momentObj.isValid()) {
-                const hour = momentObj.hour();
-                const intervalStart = Math.floor(hour / interval) * interval;
+            // Convert timestamp to a Date object
+            const date = new Date(timestamp);
 
-                const formatHour = (h: number) => (h % 12 || 12);
-                const startHour = formatHour(intervalStart);
-                const endHour = formatHour(intervalStart + interval);
-                const period = intervalStart < 12 ? "AM" : "PM";
-                const intervalKey = `${startHour}-${endHour} ${period}`;
-                hoursCount[ intervalKey ] = (hoursCount[ intervalKey ] || 0) + 1;
-            } else {
+            if (isNaN(date.getTime())) {
                 console.error(`Invalid timestamp: ${timestamp}`);
+                return hoursCount;
             }
 
+            const hour = date.getHours();
+            const intervalStart = Math.floor(hour / interval) * interval;
+
+            const formatHour = (h: number) => (h % 12 || 12);
+            const startHour = formatHour(intervalStart);
+            const endHour = formatHour(intervalStart + interval);
+            const period = intervalStart < 12 ? "AM" : "PM";
+            const intervalKey = `${startHour}-${endHour} ${period}`;
+            hoursCount[intervalKey] = (hoursCount[intervalKey] || 0) + 1;
+
             return hoursCount;
-        }, {} as { [ key: string ]: number });
+        }, {} as { [key: string]: number });
 
         // Log the final hours count before sorting
-        console.log('Final hours count before sorting:', hoursCount);
 
         // Sort intervals
         return Object.fromEntries(
-            Object.entries(hoursCount).sort(([ a ], [ b ]) => {
+            Object.entries(hoursCount).sort(([a], [b]) => {
                 const parseHour = (key: string) =>
-                    parseInt(key.split("-")[ 0 ], 10) +
+                    parseInt(key.split("-")[0], 10) +
                     (key.includes("PM") && !key.startsWith("12") ? 12 : 0);
                 return parseHour(a) - parseHour(b);
             })
@@ -119,25 +112,25 @@ const calculatePeakUsageHours = (
 
 
 
-const calculateWeeklyTrends = (dates: moment.Moment[]): { [ key: string ]: number } => {
-    const dayOfWeekCount: { [ key: string ]: number } = {};
+const calculateWeeklyTrends = (dates: moment.Moment[]): { [key: string]: number } => {
+    const dayOfWeekCount: { [key: string]: number } = {};
 
     dates.forEach(date => {
         const dayOfWeek = date.format('dddd'); // Get full name of the day
-        dayOfWeekCount[ dayOfWeek ] = (dayOfWeekCount[ dayOfWeek ] || 0) + 1;
+        dayOfWeekCount[dayOfWeek] = (dayOfWeekCount[dayOfWeek] || 0) + 1;
     });
     return dayOfWeekCount;
 };
 
-const calculateContentFocus = (postTexts: string[]): { [ key: string ]: number } => {
+const calculateContentFocus = (postTexts: string[]): { [key: string]: number } => {
     try {
-        const keywordCount: { [ key: string ]: number } = {};
+        const keywordCount: { [key: string]: number } = {};
 
         postTexts.forEach(post => {
             const words = post.toLowerCase().split(/\W+/); // Split by non-word characters
             words.forEach(word => {
                 if (word) {
-                    keywordCount[ word ] = (keywordCount[ word ] || 0) + 1;
+                    keywordCount[word] = (keywordCount[word] || 0) + 1;
                 }
             });
         });
@@ -152,16 +145,16 @@ const calculateContentFocus = (postTexts: string[]): { [ key: string ]: number }
 const calculateEngagementGap = (dates: moment.Moment[]): number[] => {
     try {
         const sortedDates = dates.sort((a, b) => a.valueOf() - b.valueOf());
-        return sortedDates.slice(1).map((date, i) => date.diff(sortedDates[ i ], 'days'));
+        return sortedDates.slice(1).map((date, i) => date.diff(sortedDates[i], 'days'));
     } catch (error) {
         console.error('Error calculating engagement gap:', error);
         return [];
     }
 };
 
-const calculateMostActiveDay = (drafts: { [ key: string ]: { createdAt: string; updatedAt: number } }) => {
+const calculateMostActiveDay = (drafts: { [key: string]: { createdAt: number; updatedAt: number } }) => {
     try {
-        const dayCount: { [ key: string ]: number } = {
+        const dayCount: { [key: string]: number } = {
             Sunday: 0,
             Monday: 0,
             Tuesday: 0,
@@ -173,29 +166,28 @@ const calculateMostActiveDay = (drafts: { [ key: string ]: { createdAt: string; 
 
         Object.values(drafts).forEach(draft => {
             // Parse with the correct format: "M/D/YYYY, h:mm:ss A"
-            const createdMoment = moment(draft.createdAt, "M/D/YYYY, h:mm:ss A");
-            const updatedMoment = moment(draft.updatedAt, "M/D/YYYY, h:mm:ss A");
+            const createdMoment = moment(draft.createdAt);
+            const updatedMoment = moment(draft.updatedAt);
 
             if (createdMoment.isValid()) {
                 const createdDay = createdMoment.format("dddd");
-                dayCount[ createdDay ]++;
+                dayCount[createdDay]++;
             }
 
             if (updatedMoment.isValid()) {
                 const updatedDay = updatedMoment.format("dddd");
                 // Only count update if it's on a different day than creation
                 if (createdMoment.isValid() && createdMoment.format("dddd") !== updatedDay) {
-                    dayCount[ updatedDay ]++;
+                    dayCount[updatedDay]++;
                 }
             }
         });
 
         const maxCount = Math.max(...Object.values(dayCount));
         const mostActiveDay = Object.entries(dayCount)
-            .filter(([ day, count ]) => count === maxCount)
-            .map(([ day ]) => day)
+            .filter(([day, count]) => count === maxCount)
+            .map(([day]) => day)
 
-        console.log('Most active day:', mostActiveDay);
         return {
             mostActiveDay,
             dayCount,

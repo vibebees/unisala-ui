@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const calculateAnalytics = (drafts: { [ timestamp: string ]: { createdAt: string, postText: string, updatedAt: string } }) => {
+export const calculateAnalytics = (drafts: { [ timestamp: string ]: { createdAt: number, postText: string, updatedAt: number } }) => {
     try {
         const postTexts = Object.values(drafts).map(draft => draft.postText); // Content focus
         const dates = Object.keys(drafts).map(timestamp => moment(parseInt(timestamp))); // Convert timestamps to Moment.js objects
@@ -60,15 +60,21 @@ const calculateAvgNotesPerWeek = (dates: moment.Moment[]): number => {
 };
 
 const calculatePeakUsageHours = (
-    drafts: { [ timestamp: string ]: { createdAt: string, updatedAt: string } },
+    drafts: { [ timestamp: string ]: { createdAt: number, updatedAt: number } },
     trackField: 'createdAt' | 'updatedAt',
     interval: number = 3
 ): { [ key: string ]: number } => {
 
     try {
+        console.log({
+            drafts,
+            trackField,
+            interval
+        })
         const dateTimeFormat = "M/D/YYYY, h:mm:ss A";  // Changed format to match your data
 
         const hoursCount = Object.values(drafts).reduce((hoursCount, draft) => {
+            console.log({ draft, trackField });
             const timestamp = draft[ trackField ];
             // Remove strict mode to allow more flexible parsing
             const momentObj = moment(timestamp, dateTimeFormat);
@@ -153,7 +159,7 @@ const calculateEngagementGap = (dates: moment.Moment[]): number[] => {
     }
 };
 
-const calculateMostActiveDay = (drafts: { [ key: string ]: { createdAt: string; updatedAt: string } }) => {
+const calculateMostActiveDay = (drafts: { [ key: string ]: { createdAt: string; updatedAt: number } }) => {
     try {
         const dayCount: { [ key: string ]: number } = {
             Sunday: 0,

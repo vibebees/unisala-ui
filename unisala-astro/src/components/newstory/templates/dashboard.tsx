@@ -72,7 +72,7 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
 
 
   useEffect(() => {
-    const drafts: { [key: string]: { createdAt: string; postText: string; updatedAt: string } } = getCache('storyDrafts') || {}; // Fetch the drafts from cache or any data source
+    const drafts: { [key: string]: { createdAt: number; postText: string; updatedAt: number } } = getCache('storyDrafts') || {}; // Fetch the drafts from cache or any data source
 
     const {
       streak,

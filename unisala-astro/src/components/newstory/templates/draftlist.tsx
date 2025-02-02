@@ -42,7 +42,7 @@ const DraftsList: React.FC = () => {
                     const localDraft = drafts[id];
                     
                     // If draft doesn't exist locally or server version is newer
-                    if (!localDraft || new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt)) {
+                    if (!localDraft || (serverDraft.updatedAt && localDraft.updatedAt && new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt))) {
                         saveDraft(id, serverDraft.postTitle, serverDraft.postText);
                     }
                 });

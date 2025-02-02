@@ -82,6 +82,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: expect.any(Number),
       totalSessions: 1,
       totalTimeSpent: 0,
+      sessions: [{ startTime: YESTERDAY, endTime: YESTERDAY }]
     });
   });
 
@@ -95,6 +96,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: YESTERDAY,
       totalSessions: 1,
       totalTimeSpent: 0,
+      sessions: [{ startTime: YESTERDAY, endTime: YESTERDAY }]
     };
 
     const result = updateStreak('SESSION_START', previousMetrics);
@@ -114,6 +116,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: TWO_DAYS_AGO,
       totalSessions: 3,
       totalTimeSpent: 1000,
+      sessions: [{ startTime: TWO_DAYS_AGO, endTime: TWO_DAYS_AGO }]
     };
 
     const result = updateStreak('SESSION_START', previousMetrics);
@@ -133,6 +136,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: YESTERDAY,
       totalSessions: 1,
       totalTimeSpent: 0,
+      sessions: [{ startTime: YESTERDAY, endTime: YESTERDAY }]
     };
 
     const result = updateStreak('SESSION_START', previousMetrics);
@@ -153,6 +157,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: startTime,
       totalSessions: 1,
       totalTimeSpent: 0,
+      sessions: [{ startTime: YESTERDAY, endTime: YESTERDAY }]
     };
 
     const result = updateStreak('SESSION_END', previousMetrics);
@@ -173,6 +178,7 @@ describe('Streak Metrics', () => {
       lastActiveTime: futureTimestamp,
       totalSessions: 3,
       totalTimeSpent: 1000,
+      sessions: [{ startTime: futureTimestamp, endTime: futureTimestamp }]
     };
 
 
@@ -208,7 +214,9 @@ describe('Streak Metrics - Edge Cases', () => {
       startTime: lastDayOfMonth,
       lastActiveTime: lastDayOfMonth,
       totalSessions: 1,
-      totalTimeSpent: 0
+      totalTimeSpent: 0,
+      sessions: [{ startTime: lastDayOfMonth, endTime:lastDayOfMonth }]
+
     };
     const result = updateStreak('SESSION_START', previousMetrics);
     expect(result.currentStreak).toBe(1); // Should reset as it's not consecutive
@@ -224,7 +232,9 @@ describe('Streak Metrics - Edge Cases', () => {
       startTime: newYearEve,
       lastActiveTime: newYearEve,
       totalSessions: 1,
-      totalTimeSpent: 0
+      totalTimeSpent: 0,
+      sessions: [{ startTime: newYearEve, endTime: newYearEve + 1000 }]
+
     };
     const result = updateStreak('SESSION_START', previousMetrics);
     expect(result.currentStreak).toBe(1); // Should reset as it's not consecutive
@@ -259,24 +269,24 @@ describe('Streak Metrics - Edge Cases', () => {
     let metrics = updateStreak('SESSION_START');
 
     // Build up a 5-day streak by visiting each consecutive day
-    for(let i = 4; i >= 0; i--) {
-        metrics = updateStreak('SESSION_START', {
-            ...metrics,
-            lastVisit: moment().subtract(i, 'days').valueOf(),
-            currentStreak: 5 - i,  // Streak increases as we get closer to today
-            longestStreak: 5 - i
-        });
+    for (let i = 4; i >= 0; i--) {
+      metrics = updateStreak('SESSION_START', {
+        ...metrics,
+        lastVisit: moment().subtract(i, 'days').valueOf(),
+        currentStreak: 5 - i,  // Streak increases as we get closer to today
+        longestStreak: 5 - i
+      });
     }
     expect(metrics.longestStreak).toBe(5);
 
     // Break streak by not visiting for a week
     metrics = updateStreak('SESSION_START', {
-        ...metrics,
-        lastVisit: moment().subtract(7, 'days').valueOf()
+      ...metrics,
+      lastVisit: moment().subtract(7, 'days').valueOf()
     });
     expect(metrics.currentStreak).toBe(1);
     expect(metrics.longestStreak).toBe(5);
-});
+  });
 
 
   it('should handle very short sessions correctly', () => {
@@ -288,7 +298,9 @@ describe('Streak Metrics - Edge Cases', () => {
       startTime: startTime,
       lastActiveTime: startTime,
       totalSessions: 1,
-      totalTimeSpent: 0
+      totalTimeSpent: 0,
+      sessions: [{ startTime: startTime, endTime: startTime + 1000 }]
+
     };
 
     // End session immediately
@@ -306,7 +318,9 @@ describe('Streak Metrics - Edge Cases', () => {
       startTime: startTime,
       lastActiveTime: startTime,
       totalSessions: 1,
-      totalTimeSpent: 0
+      totalTimeSpent: 0,
+      sessions: [{ startTime: startTime, endTime: startTime + 1000 }]
+
     };
 
     const result = updateStreak('SESSION_END', previousMetrics);
@@ -332,7 +346,8 @@ describe('Streak Metrics - Additional Test Cases', () => {
         startTime: startTime + 2000, // Start time after lastVisit/lastActiveTime
         lastActiveTime: startTime,
         totalSessions: 1,
-        totalTimeSpent: 0
+        totalTimeSpent: 0,
+        sessions: [{ startTime: startTime, endTime: startTime + 1000 }]
       };
 
       const result = updateStreak('SESSION_END', metrics);
@@ -349,7 +364,9 @@ describe('Streak Metrics - Additional Test Cases', () => {
         startTime: startTime,
         lastActiveTime: startTime,
         totalSessions: 1,
-        totalTimeSpent: 0
+        totalTimeSpent: 0,
+        sessions: [{startTime: new Date().getTime(), endTime: new Date().getTime()}]
+
       };
 
       const result = updateStreak('SESSION_END', metrics);
@@ -403,7 +420,8 @@ describe('Streak Metrics - Additional Test Cases', () => {
         startTime: beforeDST,
         lastActiveTime: beforeDST,
         totalSessions: 1,
-        totalTimeSpent: 0
+        totalTimeSpent: 0,
+        sessions: [{ startTime: beforeDST, endTime: beforeDST }]
       });
 
       const dstMetrics = updateStreak('SESSION_START', {
@@ -415,7 +433,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
     });
   });
 
-   describe('Leap year handling', () => {
+  describe('Leap year handling', () => {
     it('should maintain streak across February 28/29 boundary', () => {
       // Create initial metrics for Feb 28
       const NOW = new Date().getTime();
@@ -446,7 +464,7 @@ describe('Streak Metrics - Additional Test Cases', () => {
 
       // Simulate 1000 sessions in the same day
       const startTime = performance.now();
-      for(let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 1000; i++) {
         metrics = updateStreak('SESSION_START', {
           ...metrics,
           lastVisit: baseTime + (i * 1000), // Each session 1 second apart

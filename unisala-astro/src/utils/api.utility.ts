@@ -11,8 +11,6 @@ export async function fetchApi(
     console.log("Error fetching authData from cache:", error);
   }
 
-  // console.log("AuthData:", authData); // Debug log
-  // console.log("AccessToken:", accessToken); // Debug log
   const defaultOptions = {
     headers: {
       "Content-Type": "application/json",

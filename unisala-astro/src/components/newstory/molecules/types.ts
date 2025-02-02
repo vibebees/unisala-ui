@@ -1,4 +1,4 @@
-import type { PostDraft, TopicOptions } from '@/types/post';
+import type { PostDraft } from '@/types/post';
 
 export interface EditorPanelProps {
     draftTitle: string;

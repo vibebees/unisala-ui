@@ -2,11 +2,10 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./RichTextInput.css";
-import { Image, Plus } from "lucide-react";
 import FloatingToolbar from "./FloatingToolbar";
-import useEditorAnalytics from "@/components/metics/editorMetrics";
+import useEditorAnalytics from "@/components/metrics/editorMetrics";
 
-  
+
 
 interface RichTextInputProps {
   initialValue: string;
@@ -62,8 +61,8 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     "video",
   ];
 
- 
- 
+
+
 
   useEffect(() => {
     const savedContent = initialValue
@@ -80,12 +79,12 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       // saveDraftPostText(draftKey, content);
     }
   }, [draftKey, content]);
- 
 
-  
+
+
   const handleChange = (newContent: string) => {
     setContent(newContent);
-    // resetIdleTimer();  
+    // resetIdleTimer();
   };
 
   const showToolbar = useCallback(() => {

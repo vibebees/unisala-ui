@@ -42,8 +42,8 @@ const DraftsList: React.FC = () => {
                     const localDraft = drafts[id];
 
                     // If draft doesn't exist locally or server version is newer
-                    if (!localDraft || new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt)) {
-                        saveDraft(id, serverDraft.postTitle, serverDraft.postText, serverDraft.updatedAt);
+                    if (!localDraft || (serverDraft.updatedAt && localDraft.updatedAt && new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt))) {
+                        saveDraft(id, serverDraft.postTitle, serverDraft.postText);
                     }
                 });
 
@@ -78,12 +78,13 @@ const DraftsList: React.FC = () => {
         return <div className="p-4">Loading drafts...</div>;
     }
 
+    
     return (
         <>
             {error && (
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 mb-4">
                     <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-                        Working in offline mode. Your drafts are saved locally.
+                        Working in offline mode. Your drafts are not in sync with account
                     </p>
                 </div>
             )}
@@ -106,10 +107,10 @@ const DraftsList: React.FC = () => {
                             </Button>
                         </div>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            Created: {draft.createdAt}
+                            Created: {draft.createdAt ? new Date(draft.createdAt).toLocaleString() : ''}
                         </p>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                            Last updated: {draft.updatedAt}
+                            Last updated: {draft.updatedAt ? new Date(draft.updatedAt).toLocaleString() : ''}
                         </p>
                     </li>
                 ))}

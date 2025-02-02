@@ -3,31 +3,13 @@ import { getCache, setCache } from "@/utils/cache";
 import { debounce } from 'lodash';
 import { type RefObject } from 'react';
 import ReactQuill from 'react-quill';
+import type { DraftMetrics, GlobalMetrics } from '@/types/metrics';
 
 interface WordSample {
   timestamp: number;
   wordCount: number;
 }
 
-interface DraftMetrics {
-  totalWords: number;
-  totalFocusTime: number;
-  totalIdleTime: number;
-  totalSessionTime: number;
-  maxWpmEver: number;
-  lastModified: number;
-}
-
-interface GlobalMetrics {
-  totalWordsWritten: number;
-  totalFocusTime: number;
-  totalIdleTime: number;
-  highestWpmEver: number;
-  firstSessionDate: number;
-  lastSessionDate: number;
-  consecutiveDays: number;
-  longestStreak: number;
-}
 
 const METRICS_STORE_KEY = 'editorMetrics';
 const WPM_SAMPLE_INTERVAL = 5000;
@@ -120,9 +102,9 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
     setWordCount(newWordCount);
     setActiveTime(Math.floor((now - sessionStart.current) / 1000));
 
-    const metricsStore = loadMetrics();
+    const metricsStore = loadMetrics() as { drafts: Record<string, DraftMetrics>; global: GlobalMetrics };
     const draftId = getDraftId();
-    const draft = metricsStore.drafts[draftId] || {
+    const draft = (metricsStore.drafts as Record<string, DraftMetrics>)[draftId] || {
       totalWords: 0,
       totalFocusTime: 0,
       totalIdleTime: 0,
@@ -137,7 +119,7 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
     draft.lastModified = now;
     draft.totalIdleTime = totalIdleTime.current;
 
-    metricsStore.drafts[draftId] = draft;
+    (metricsStore.drafts as Record<string, DraftMetrics>)[draftId] = draft;
     saveMetrics(metricsStore);
   };
 
@@ -182,16 +164,19 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
 
   useEffect(() => {
     const draftId = getDraftId();
-    const metricsStore = loadMetrics();
+    const metricsStore = loadMetrics() as { drafts: Record<string, DraftMetrics>; global: GlobalMetrics };
     
-    if (!metricsStore.drafts[draftId]) {
+    if (metricsStore.drafts[draftId]) {
       metricsStore.drafts[draftId] = {
         totalWords: 0,
         totalFocusTime: 0,
         totalIdleTime: 0,
         totalSessionTime: 0,
         maxWpmEver: 0,
-        lastModified: Date.now()
+        lastModified: Date.now(),
+        createdAt: Date.now(),
+        postText: '',
+        updatedAt: Date.now()
       };
       saveMetrics(metricsStore);
     }
@@ -215,7 +200,8 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
         firstSessionDate: Date.now(),
         lastSessionDate: Date.now(),
         consecutiveDays: 1,
-        longestStreak: 1
+        longestStreak: 1,
+        draftsVersion: 1
       }
     };
   };
@@ -230,7 +216,7 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
     maxWpm: maxWpm.current,
     activeTime,
     isTabActive,
-    draft: loadMetrics().drafts[getDraftId()],
+    draft: (loadMetrics().drafts as Record<string, DraftMetrics>)[getDraftId()],
     global: loadMetrics().global
   };
 };

@@ -7,24 +7,22 @@ import { navigator } from '@/utils/lib/URLupdate';
 import { getCache, setCache } from '@/utils/cache';
 import { useDraftManager } from '@/hooks/useDraftManager';
 import type { PostDraft, TopicOptions } from '@/types/post';
-import { X, Wand2, PenTool, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, Wand2, PenTool,  ChevronDown, ChevronUp } from 'lucide-react';
 
 // Import existing components
-import { MainEditor } from './molecules/textEditor';
+import { MainEditor } from '../molecules/mainEditor';
 import PreviewModal from './storyPreviewModal';
 import VisualAid from './aidPanel';
-import DashboardMetrics from './extendedPanel';
 
 import { usePublishedPostManager } from '@/hooks/usePublishedPostManager';
 import { AuthProvider } from '@/context/AuthContext';
 import { debounce } from 'lodash';
+import  DashboardMetrics  from './dashboard';
 
 
 interface PostFormProps {
   initialPostDraft?: PostDraft;
 }
-
-
 
 
 const PostForm: React.FC<PostFormProps> = ({  }) => {
@@ -88,7 +86,7 @@ const PostForm: React.FC<PostFormProps> = ({  }) => {
       notesPublished[data.addPost.post._id] = {
         postTitle: draftTitle,
         postText: draftContent,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().getTime().toString()
       };
       setCache('notesPublished', notesPublished);
 
@@ -218,7 +216,9 @@ const PostForm: React.FC<PostFormProps> = ({  }) => {
           >
             {isDashboardCollapsed ? <ChevronDown className="w-4 h-4 inline-block" /> : <ChevronUp className="w-4 h-4 inline-block" />} Metrics
           </button>
-          {!isDashboardCollapsed && <DashboardMetrics />}
+          {!isDashboardCollapsed && <DashboardMetrics isDashboardCollapsed={false} setIsDashboardCollapsed={function (isCollapsed: boolean): void {
+                throw new Error('Function not implemented.');
+              } } />}
         </div>
             <div className="max-w-4xl mx-auto">
               <MainEditor

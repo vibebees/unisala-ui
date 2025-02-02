@@ -16,7 +16,7 @@ export interface Comment {
 
 
 interface IUser {
-  id: any;
+  id: string;
   _id: string;
   firstName: string;
   lastName: string;

@@ -1,13 +1,12 @@
 import moment from 'moment';
-import type { Metrics } from "@/types/metrics";
-import { getCache, setCache } from "../cache";
-import { differenceInDays, startOfDay ,max} from 'date-fns';
+ import { getCache, setCache } from "../cache";
+import type { StreakMetrics } from '@/types/metrics';
 
 export type SessionType = 'SESSION_START' | 'SESSION_END';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-export const initializeStreak = (currentTime = Date.now()): Metrics => {
+export const initializeStreak = (currentTime = Date.now()): StreakMetrics => {
     return {
         lastVisit: currentTime,
         currentStreak: 1,
@@ -15,7 +14,11 @@ export const initializeStreak = (currentTime = Date.now()): Metrics => {
         startTime: currentTime,
         lastActiveTime: currentTime,
         totalSessions: 1,
-        totalTimeSpent: 0
+        totalTimeSpent: 0,
+        sessions:[{
+            startTime: currentTime,
+            endTime: currentTime
+        }]
     };
 };
 
@@ -31,9 +34,9 @@ export const calculateDayDifference = (lastVisit: number, currentTime: number): 
 
 
 
-export const calculateStreak = (sessionType: SessionType, configMetrics?: Metrics): Metrics => {
+export const calculateStreak = (sessionType: SessionType, configMetrics?: StreakMetrics): StreakMetrics => {
     const currentTime = Date.now(); // Always use the actual current time
-    const metrics = configMetrics || getCache<Metrics>('streakMetrics');
+    const metrics = configMetrics || getCache<StreakMetrics>('streakMetrics');
 
     if (!metrics) {
         return initializeStreak(currentTime);
@@ -67,12 +70,18 @@ export const calculateStreak = (sessionType: SessionType, configMetrics?: Metric
             startTime: metrics.startTime, // Keep the original start time
             lastActiveTime: currentTime,
             totalSessions: metrics.totalSessions + 1,
-            totalTimeSpent: metrics.totalTimeSpent
+            totalTimeSpent: metrics.totalTimeSpent,
+            sessions: [...metrics.sessions, {
+                startTime: currentTime,
+                endTime: currentTime
+            }]
         };
     }
 
     if (sessionType === 'SESSION_END') {
-        const sessionTime = Math.max(0, currentTime - metrics.startTime);
+        const sessionTime = Math.max(0, currentTime - metrics.sessions[metrics.sessions.length - 1].startTime);
+        const updatedSessions = [...metrics.sessions];
+        updatedSessions[updatedSessions.length - 1].endTime = currentTime;
         return {
             ...metrics,
             lastActiveTime: currentTime,
@@ -85,8 +94,8 @@ export const calculateStreak = (sessionType: SessionType, configMetrics?: Metric
 
 export const updateStreak = (
     sessionType: SessionType,
-    sessionData?: Metrics
-): Metrics => {
+    sessionData?: StreakMetrics
+): StreakMetrics => {
     const data = calculateStreak(sessionType, sessionData);
     setCache('streakMetrics', data);
     return data;

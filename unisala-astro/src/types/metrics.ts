@@ -5,6 +5,7 @@ export interface TimeSeriesData {
   }
   
   export interface DraftData {
+    totalIdleTime: number;
     createdAt: number;
     postText: string;
     updatedAt: number;
@@ -29,6 +30,9 @@ export interface TimeSeriesData {
     totalSessionTime: number;
     maxWpmEver: number;
     lastModified: number;
+    createdAt: number;
+    postText: string;
+    updatedAt: number;
   }
   
   export interface GlobalMetrics {
@@ -42,9 +46,29 @@ export interface TimeSeriesData {
     longestStreak: number;
     draftsVersion: number;
   }
-  
-  export type MetaData = {
-    drafts: Record<string, DraftMetrics>; // Map of draft IDs to their metrics
+
+  export type EditorMetrics = {
+    drafts?: Record<string, DraftMetrics>; // Map of draft IDs to their metrics
     global: GlobalMetrics;
   };
   
+  export interface StreakMetrics{
+    lastVisit: number;
+    currentStreak: number;
+    longestStreak: number;
+    startTime: number;
+    lastActiveTime: number;
+    totalSessions: number;
+    totalTimeSpent: number;
+    sessions: { startTime: number; endTime: number; }[]
+}
+
+
+ 
+
+export interface StoryDraft{
+  postTitle: string;
+  postText: string;
+  createdAt: number;
+  updatedAt: number;
+}

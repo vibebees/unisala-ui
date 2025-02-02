@@ -102,7 +102,7 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
     setWordCount(newWordCount);
     setActiveTime(Math.floor((now - sessionStart.current) / 1000));
 
-    const metricsStore = loadMetrics();
+    const metricsStore = loadMetrics() as { drafts: Record<string, DraftMetrics>; global: GlobalMetrics };
     const draftId = getDraftId();
     const draft = (metricsStore.drafts as Record<string, DraftMetrics>)[draftId] || {
       totalWords: 0,
@@ -164,16 +164,19 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
 
   useEffect(() => {
     const draftId = getDraftId();
-    const metricsStore = loadMetrics();
+    const metricsStore = loadMetrics() as { drafts: Record<string, DraftMetrics>; global: GlobalMetrics };
     
-    if (!metricsStore.drafts[draftId]) {
+    if (metricsStore.drafts[draftId]) {
       metricsStore.drafts[draftId] = {
         totalWords: 0,
         totalFocusTime: 0,
         totalIdleTime: 0,
         totalSessionTime: 0,
         maxWpmEver: 0,
-        lastModified: Date.now()
+        lastModified: Date.now(),
+        createdAt: Date.now(),
+        postText: '',
+        updatedAt: Date.now()
       };
       saveMetrics(metricsStore);
     }

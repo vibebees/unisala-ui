@@ -1,4 +1,4 @@
-import type { DraftMetrics, GlobalMetrics, MetaData } from '@/types/metrics';
+import type { DraftMetrics, EditorMetrics, GlobalMetrics } from '@/types/metrics';
 import { getCache, setCache } from '@/utils/cache';
 import moment from 'moment';
 import { useState, useEffect, useCallback } from 'react';
@@ -16,11 +16,7 @@ interface StoryDrafts {
 
 
  
-
-type MetaData = {
-    drafts: DraftMetrics;
-    global: GlobalMetrics;
-};
+ 
 
 
 export const useDraftManager = () => {
@@ -56,15 +52,8 @@ export const useDraftManager = () => {
 
         return migratedDrafts;
     }, []);
-    const getDefaultMetaData = (): MetaData => ({
-        drafts: {
-            totalWords: 0,
-            totalFocusTime: 0,
-            totalIdleTime: 0,
-            totalSessionTime: 0,
-            maxWpmEver: 0,
-            lastModified: 0
-        }, // Ensure drafts is an empty object
+    const getDefaultMetaData = (): EditorMetrics => ({
+        drafts: {}, // Ensure drafts is an empty object
         global: {
             draftsVersion: 0,
             totalWordsWritten: 0,
@@ -75,10 +64,11 @@ export const useDraftManager = () => {
             lastSessionDate: Date.now(),
             consecutiveDays: 1,
             longestStreak: 1,
+            
         },
     });
     
-    const ensureMetaDataIntegrity = (metaData: MetaData): MetaData => {
+    const ensureMetaDataIntegrity = (metaData: EditorMetrics): EditorMetrics => {
         if (!metaData.global) {
             return getDefaultMetaData();
         }
@@ -106,7 +96,7 @@ export const useDraftManager = () => {
         console.log("loading drafts");
         let storedDrafts: StoryDrafts = getCache('storyDrafts') || {};
 
-        let metaData: MetaData = getCache("editorMetrics") || getDefaultMetaData();
+        let metaData: EditorMetrics = getCache("editorMetrics") || getDefaultMetaData();
 
         // Ensure metadata structure is correct
         metaData = ensureMetaDataIntegrity(metaData);
@@ -172,12 +162,12 @@ export const useDraftManager = () => {
         }
 
         // Only save if there's content
-        if (updatedDrafts[id].postTitle.trim() || updatedDrafts[id].postText.trim()) {
+        if ((updatedDrafts[id].postTitle || "").trim() || (updatedDrafts[id].postText || "").trim()) {
             localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
             setDrafts(updatedDrafts);
             setDraftId(id);
-            setDraftTitle(updatedDrafts[id].postTitle);
-            setDraftContent(updatedDrafts[id].postText);
+            setDraftTitle(updatedDrafts[id].postTitle || '');
+            setDraftContent(updatedDrafts[id].postText || '');
             setHasDrafts(true);
         } else {
             console.warn("Cannot save empty draft");
@@ -264,8 +254,8 @@ export const useDraftManager = () => {
         const draft = drafts[id];
         if (draft) {
             setDraftId(id);
-            setDraftTitle(draft.postTitle);
-            setDraftContent(draft.postText);
+            setDraftTitle(draft.postTitle || '');
+            setDraftContent(draft.postText || '');
         }
     }, [drafts]);
 

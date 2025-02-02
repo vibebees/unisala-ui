@@ -1,52 +1,124 @@
-// types/metrics.ts
-export interface TimeSeriesData {
-    time: string;
-    wpm: number;
-    focusScore: number;
+import type { DraftData, EditorMetrics, StreakMetrics } from "@/types/metrics";
+import { getCache } from "@/utils/cache";
+
+// Calculate total time spent in the app
+  const calculateTotalTimeSpent = (drafts: { [key: string]: DraftData }): number => {
+    if (!drafts) return 0;
+    return Object.values(drafts).reduce((sum, draft) => sum + (draft.totalSessionTime || 0), 0);
+  };
+
+  // Calculate total words written
+  const calculateTotalWords = (drafts: { [key: string]: DraftData }): number => {
+    if (!drafts) return 0;
+    return Object.values(drafts).reduce((sum, draft) => sum + (draft.totalWords || 0), 0);
+  };
+
+  // Calculate average WPM
+  const calculateAverageWpm = (totalWords: number, totalTimeSpent: number): number => {
+    if (totalTimeSpent === 0) return 0;
+    return Math.trunc(totalWords / (totalTimeSpent / 60000))
+  };
+
+  // Find max WPM ever
+  const findMaxWpm = (drafts: { [key: string]: DraftData }): number => {
+    if (!drafts) return 0;
+    return Math.max(...Object.values(drafts).map(draft => draft.maxWpmEver || 0));
+  };
+
+  // Calculate total focus time
+  const calculateTotalFocusTime = (drafts: { [key: string]: DraftData }): number => {
+    if (!drafts) return 0;
+    return Object.values(drafts).reduce((sum, draft) => sum + (draft.totalFocusTime || 0), 0);
+  };
+
+  // Calculate total idle time
+  const calculateTotalIdleTime = (drafts: { [key: string]: DraftData }): number => {
+    if (!drafts) return 0;
+    return Object.values(drafts).reduce((sum, draft) => sum + (draft.totalIdleTime || 0), 0);
+  };
+
+  // Calculate focus percentage
+  const calculateFocusPercentage = (totalFocusTime: number, totalTimeSpent: number): number => {
+    if (totalTimeSpent === 0) return 0;
+    return parseFloat(((totalFocusTime / totalTimeSpent) * 100).toFixed(2));
+  };
+
+  const millisecondsToHours = (ms: number): number => {
+    return parseFloat((ms / (1000 * 60 * 60)).toFixed(2)); // Convert to hours and round to 2 decimal places
+  };
+
+  const calculateLongestStreak = (
+    storyDrafts = getCache('storyDrafts'),
+    editorMetrics: EditorMetrics = getCache('editorMetrics') || {} as EditorMetrics,
+    streakMetrics: StreakMetrics = getCache('streakMetrics') || {} as StreakMetrics
+  ): number => {
+    console.log({
+      storyDrafts,
+      editorMetrics,
+      streakMetrics
+    })
+    const allTimestamps: number[] = [];
+  
+    // Add timestamps from storyDrafts
+    if (storyDrafts) {
+      Object.values(storyDrafts).forEach(draft => {
+        if (draft.createdAt) allTimestamps.push(draft.createdAt);
+        if (draft.updatedAt) allTimestamps.push(draft.updatedAt);
+      });
+    }
+  
+    // Add timestamps from editorMetrics.drafts
+    if (editorMetrics?.drafts) {
+      Object.values(editorMetrics.drafts).forEach(draft => {
+        if (draft.lastModified) allTimestamps.push(draft.lastModified);
+      });
+    }
+  
+    // Add timestamps from streakMetrics.sessions
+    if (streakMetrics?.sessions) {
+      streakMetrics.sessions.forEach(session => {
+        allTimestamps.push(session.startTime);
+        allTimestamps.push(session.endTime);
+      });
+    }
+  
+    // If no timestamps are available, return 0
+    if (allTimestamps.length === 0) return 0;
+  
+    // Sort and deduplicate timestamps
+    const uniqueTimestamps = Array.from(new Set(allTimestamps)).sort((a, b) => a - b);
+  
+    // Convert timestamps to dates and calculate the streak
+    const sortedDates = uniqueTimestamps.map(timestamp => new Date(timestamp).toISOString().split('T')[0]); // Extract YYYY-MM-DD
+    const uniqueDates = Array.from(new Set(sortedDates)).sort(); // Deduplicate and sort dates
+  
+    let maxStreak = 0;
+    let currentStreak = 1;
+  
+    for (let i = 1; i < uniqueDates.length; i++) {
+      const prevDate = new Date(uniqueDates[i - 1]);
+      const currentDate = new Date(uniqueDates[i]);
+  
+      const diffInDays = Math.floor((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+      if (diffInDays === 1) {
+        currentStreak++;
+      } else if (diffInDays > 1) {
+        maxStreak = Math.max(maxStreak, currentStreak);
+        currentStreak = 1;
+      }
+    }
+    return Math.max(maxStreak, currentStreak);
+  };
+
+  export {
+    calculateTotalTimeSpent,
+    calculateTotalWords,
+    calculateAverageWpm,
+    findMaxWpm,
+    calculateTotalFocusTime,
+    calculateTotalIdleTime,
+    calculateFocusPercentage,
+    millisecondsToHours,
+    calculateLongestStreak
   }
-  export const calculateTotalWords = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    return timeSeriesData.reduce((sum, dataPoint) => {
-      return sum + (dataPoint.wpm || 0);
-    }, 0);
-  };
-  
-  export const findMaxWpm = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    return Math.max(...timeSeriesData.map(point => point.wpm));
-  };
-  
-  export const calculateAverageWpm = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    const validPoints = timeSeriesData.filter(point => point.wpm > 0);
-    if (validPoints.length === 0) return 0;
-    
-    const totalWpm = validPoints.reduce((sum, point) => sum + point.wpm, 0);
-    return Math.round(totalWpm / validPoints.length);
-  };
-  
-  export const calculateTotalFocusTime = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    // Assuming each data point represents one minute of time
-    return timeSeriesData.filter(point => point.focusScore > 50).length;
-  };
-  
-  export const calculateTotalSessionTime = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    // Total time is the number of data points (assuming each represents one minute)
-    return timeSeriesData.length;
-  };
-  
-  export const calculateFocusPercentage = (timeSeriesData: TimeSeriesData[]): number => {
-    if (!timeSeriesData || timeSeriesData.length === 0) return 0;
-    
-    const totalTime = timeSeriesData.length;
-    const focusedTime = timeSeriesData.filter(point => point.focusScore > 50).length;
-    
-    return Math.round((focusedTime / totalTime) * 100);
-  };

@@ -33,13 +33,11 @@ export const DashboardMetrics: React.FC = () => {
     Friday: 0,
     Saturday: 0,
   });
-  const editorMetrics: { [key: string]: DraftData } = getCache('editorMetrics') || {};
 
 
   useEffect(() => {
   
-    if (!editorMetrics) return;
-  
+    const drafts: { [key: string]: DraftData } = getCache('storyDrafts') || {};
     try {
       const analytics = calculateAnalytics(drafts);
       setPeakUsageDataUpdated(analytics.peakUsageNotesUpdated || {});
@@ -130,7 +128,7 @@ const processTimeSeriesData = (drafts: { [key: string]: DraftData }): TimeSeries
 
       {!isDashboardCollapsed && (
         <div className="grid grid-cols-1 gap-6">
-          <WritingAnalytics editorMetrics={editorMetrics} />;
+          <WritingAnalytics   />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <UsageMetrics

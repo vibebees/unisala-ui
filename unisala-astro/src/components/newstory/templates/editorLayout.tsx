@@ -1,9 +1,9 @@
 import type { TopicOptions } from "@/types/post";
-import { MainEditor } from "../molecules/mainEditor";
-import BottomNavigationBar from "../organisms/bottomNavigationBar";
+ import BottomNavigationBar from "../organisms/bottomNavigationBar";
 import VisualAidPanel from "../organisms/visualAidPanels";
 import PreviewModal from "./storyPreviewModal";
 import DashboardMetrics from "@/components/dashboard/index";
+import { MainEditor } from "../molecules/textEditor";
 
 
 

@@ -52,11 +52,7 @@ import { getCache } from "@/utils/cache";
     editorMetrics: EditorMetrics = getCache('editorMetrics') || {} as EditorMetrics,
     streakMetrics: StreakMetrics = getCache('streakMetrics') || {} as StreakMetrics
   ): number => {
-    console.log({
-      storyDrafts,
-      editorMetrics,
-      streakMetrics
-    })
+  
     const allTimestamps: number[] = [];
   
     // Add timestamps from storyDrafts

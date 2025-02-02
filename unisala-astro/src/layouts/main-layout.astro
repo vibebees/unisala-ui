@@ -9,6 +9,7 @@ import { MainNavigationMenu } from "@/components/shared/main-navigation-menu";
 import { navMenuConfig } from "@/config/nav-menu";
 import { SheetMobileNav } from "@/components/layout/sheet-mobile-nav";
 import ProfileAvatar from "@/components/shared/top_nav/ProfileAvatar";
+import { UseGlobal } from "@/components/shared/global";
 
 type Props = {
   title: string;
@@ -77,6 +78,7 @@ const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
     <div class="flex items-center gap-x-4" slot="right-header">
       <!-- <ThemeToggle client:load /> -->
       <ProfileAvatar client:load />
+     <UseGlobal client:only/>
     </div>
   </Header>
 

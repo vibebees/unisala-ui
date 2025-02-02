@@ -12,11 +12,11 @@ import {
 } from "chart.js";
 import PeakUsageBarChart from "../../dashboard/peakUsageChart";
 import { ProductiveDays } from "../../dashboard/weekly/productiveDays";
-import Button from "../atoms/button";
 import Icon from "../atoms/icon";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getCache } from "@/utils/cache";
 import { calculateAnalytics } from "@/components/dashboard/analytics";
+import { Button } from "@/components/ui/button";
 
 ChartJS.register(
   BarElement,
@@ -184,8 +184,7 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
     <div>
       <Button
         onClick={() => setIsDashboardCollapsed(!isDashboardCollapsed)} // Toggle collapse state
-        className="bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded-md mb-4"
-      >
+        className="bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded-md mb-4 inline-block"  >
         {isDashboardCollapsed ? (
           <Icon icon={ChevronDown} className="w-4 h-4 inline-block" />
         ) : (

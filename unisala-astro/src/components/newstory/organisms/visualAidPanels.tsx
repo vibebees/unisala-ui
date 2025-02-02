@@ -1,4 +1,4 @@
-import Button from "../atoms/button";
+import { Button } from "@/components/ui/button";
 import Icon from "../atoms/icon";
 import VisualAid from "../templates/aidPanel";
 import { X } from 'lucide-react';

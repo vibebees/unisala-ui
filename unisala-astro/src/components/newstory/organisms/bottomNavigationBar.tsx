@@ -3,8 +3,8 @@ import React from 'react';
 import { PenTool, Wand2 } from 'lucide-react';
 import TabButton from '../molecules/tabButton';
 import NavigationLink from '../molecules/navigationLink';
-import Button from '../atoms/button';
-
+import { Button } from '@/components/ui/button';
+ 
 interface BottomNavigationBarProps {
   activeTab: 'editor' | 'visual';
   setActiveTab: (tab: 'editor' | 'visual') => void;

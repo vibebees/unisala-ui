@@ -184,7 +184,6 @@ export const useDraftManager = () => {
         const updatedDrafts = { ...drafts };
 
         if (id && id in updatedDrafts) {
-            console.log("Updating draft title", id);
             updatedDrafts[id].postTitle = postTitle;
             updatedDrafts[id].updatedAt = updatedAt;
         } else {

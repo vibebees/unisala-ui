@@ -24,6 +24,7 @@
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^5.1.4",
     "@iconify-json/lucide": "^1.1.188",
+    "@iconify/utils": "^2.2.1",
     "@nanostores/react": "^0.7.2",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",

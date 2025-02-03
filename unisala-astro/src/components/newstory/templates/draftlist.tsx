@@ -12,11 +12,11 @@ interface NotesQueryResponse {
 }
 
 const DraftsList: React.FC = () => {
-    const { 
-        drafts, 
-        deleteDraft, 
+    const {
+        drafts,
+        deleteDraft,
         loadDrafts,
-        saveDraft 
+        saveDraft
     } = useDraftManager();
 
     const { data, loading, error } = useAstroQuery<NotesQueryResponse>(getNotes, {
@@ -36,13 +36,13 @@ const DraftsList: React.FC = () => {
         if (!loading && !error && data?.getNotes?.data) {
             try {
                 const serverNotes = JSON.parse(data.getNotes.data);
-                
+
                 // For each server note, save it to local drafts if it's new or updated
                 Object.entries(serverNotes).forEach(([id, serverDraft]: [string, any]) => {
                     const localDraft = drafts[id];
-                    
+
                     // If draft doesn't exist locally or server version is newer
-                    if (!localDraft || new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt)) {
+                    if (!localDraft || (serverDraft.updatedAt && localDraft.updatedAt && new Date(serverDraft.updatedAt) > new Date(localDraft.updatedAt))) {
                         saveDraft(id, serverDraft.postTitle, serverDraft.postText);
                     }
                 });
@@ -78,12 +78,13 @@ const DraftsList: React.FC = () => {
         return <div className="p-4">Loading drafts...</div>;
     }
 
+    
     return (
         <>
             {error && (
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 mb-4">
                     <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-                        Working in offline mode. Your drafts are saved locally.
+                        Working in offline mode. Your drafts are not in sync with account
                     </p>
                 </div>
             )}
@@ -91,8 +92,8 @@ const DraftsList: React.FC = () => {
                 {Object.entries(drafts).map(([id, draft]) => (
                     <li key={id} className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 transition-colors duration-200">
                         <div className="flex justify-between items-center">
-                            <a 
-                                href={`/new-story?id=${id}`} 
+                            <a
+                                href={`/new-story?id=${id}`}
                                 onClick={(e) => handleDraftClick(e, id)}
                                 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                             >
@@ -106,10 +107,10 @@ const DraftsList: React.FC = () => {
                             </Button>
                         </div>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            Created: {draft.createdAt}
+                            Created: {draft.createdAt ? new Date(draft.createdAt).toLocaleString() : ''}
                         </p>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                            Last updated: {draft.updatedAt}
+                            Last updated: {draft.updatedAt ? new Date(draft.updatedAt).toLocaleString() : ''}
                         </p>
                     </li>
                 ))}

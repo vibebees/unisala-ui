@@ -43,3 +43,26 @@ export const calculateWordCount = (text: string) => {
       wpm: currentWPM
     };
   };
+
+
+  import { useEffect } from 'react';
+import { useUserAnalytics } from './userMetrics';
+
+  
+  export default function AnalyticsProvider() {
+    useEffect(() => {
+      const analytics = useUserAnalytics()
+      analytics.updateAnalytics(SESSION_START)
+      
+      const handleUnload = () => analytics.updateAnalytics(SESSION_END)
+      window.addEventListener('beforeunload', handleUnload)
+      return () => window.removeEventListener('beforeunload', handleUnload)
+    }, [])
+  
+    return null
+  }
+
+
+export const SESSION_START = 'SESSION_START'
+export const SESSION_END = 'SESSION_END'
+export const ANALYTICS_KEY = 'user-analytics'

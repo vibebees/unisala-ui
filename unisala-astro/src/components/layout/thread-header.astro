@@ -6,6 +6,7 @@ import { EyeIconOutline } from "../packages/icons/eye";
 // import ThreadAction from "@/components/thread/thread.action.astro";
 
 interface Props extends HTMLAttributes<"div"> {
+  authorId: string;
   heading: string;
   username: string;
   date: string;
@@ -16,7 +17,19 @@ interface Props extends HTMLAttributes<"div"> {
   lastName?: string;
   queryCount?: number;
 }
-const { heading, username, date, claps, comments, firstName, lastName, className, queryCount, ...attrs } = Astro.props;
+const {
+  authorId,
+  heading,
+  username,
+  date,
+  claps,
+  comments,
+  firstName,
+  lastName,
+  className,
+  queryCount,
+  ...attrs
+} = Astro.props;
 ---
 
 <div class={cn("space-y-4", className)} {...attrs}>
@@ -24,7 +37,15 @@ const { heading, username, date, claps, comments, firstName, lastName, className
     {heading}
   </h1>
   <div class="flex items-center space-x-4 text-sm mb-6">
-    <span class="font-larget">{firstName} {lastName}</span>
+    <img
+      class="mr-2 w-6 h-6 rounded-full"
+      src={`https://api.multiavatar.com/${firstName}.svg`}
+      alt={firstName + " " + lastName}
+    />
+    <a href={`/signature/${authorId}`} data-astro-reload>
+      <span class="font-larget">{firstName} {lastName}</span>
+    </a>
+
     <!-- <span class="font-medium">@{firstName} {lastName}</span> -->
     <!-- <span class="text-green-600 hover:text-green-700 font-large">Follow</span> -->
   </div>
@@ -32,8 +53,9 @@ const { heading, username, date, claps, comments, firstName, lastName, className
     <div>
       {formatCommentDate(date)}
     </div>
-    <div class="flex items-center gap-1 ml-8"> {/* Changed from ml-4 to ml-8 for more space */}
-      <EyeIconOutline /> 
+    <div class="flex items-center gap-1 ml-8">
+      {/* Changed from ml-4 to ml-8 for more space */}
+      <EyeIconOutline />
       <span>{queryCount} views</span>
     </div>
   </div>

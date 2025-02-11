@@ -26,7 +26,7 @@ export const PostCard = ({ post }: { post: IPost }) => {
       <div className="flex items-center mb-3">
         <img
           className="w-8 h-8 rounded-full mr-2"
-          src={`https://api.multiavatar.com/${post?.user?.firstName}.svg`}
+          src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${post?.user?.firstName}`}
           alt="Author avatar"
         />
         <div className="flex flex-col xs:flex-row xs:items-center">

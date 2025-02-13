@@ -1,6 +1,7 @@
 ---
 import MainLayout from "@/layouts/main-layout.astro";
 import MediumFeed from "@/components/feed/tagsfeed";
+export const prerender = true;
 
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";

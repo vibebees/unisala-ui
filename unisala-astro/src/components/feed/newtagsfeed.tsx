@@ -13,7 +13,7 @@ export const StaffPick: React.FC<{ article: IPost }> = ({ article }) => (
   <div className="flex items-start mb-4">
     <img
       className="w-10 h-10 rounded-full mr-2"
-      src={`https://api.multiavatar.com/${article.user.firstName}.svg`}
+      src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${article.user.firstName}`}
       alt="Author avatar"
     />
     <div className="ml-3">

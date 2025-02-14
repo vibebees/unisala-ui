@@ -36,7 +36,7 @@ const ProfileAvatar = () => {
   if (!user.authenticated) {
     return (
       <div className="flex gap-3 items-center">
-        <a href="/universe/search" data-astro-reload>
+        <a href="/universe/search?q=popular" data-astro-reload>
           <SearchIcon />
         </a>
         <a href="/auth" data-astro-reload>
@@ -49,7 +49,7 @@ const ProfileAvatar = () => {
 
   return (
     <div className="flex gap-3 items-center">
-      <a href="/universe/search" data-astro-reload>
+      <a href="/universe/search?q=popular" data-astro-reload>
         <SearchIcon />
       </a>
       <DropdownMenu>

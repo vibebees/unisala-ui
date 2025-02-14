@@ -22,7 +22,7 @@ const StaffPick: React.FC<{ article: IPost }> = ({ article }) => (
   <div className="flex items-start mb-4">
     <img
       className="w-10 h-10 rounded-full mr-2"
-      src={`https://api.multiavatar.com/${article.user.firstName}.svg`}
+      src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${article.user.firstName}`}
       alt="Author avatar"
     />
     <div className="ml-3">
@@ -107,7 +107,7 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
           <div className="md:w-1/4">
             {showStaffPicks && staffPicks.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-lg font-bold mb-4">Staff Picks</h2>
+                <h2 className="text-lg font-bold mb-4">Stafff Picks</h2>
                 {staffPicks.map((pick, index) => (
                   <StaffPick key={index} article={pick} />
                 ))}

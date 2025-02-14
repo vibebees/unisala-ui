@@ -122,7 +122,7 @@ const SearchResult = () => {
                       >
                         <Avatar.Root className="flex-shrink-0">
                           <Avatar.Image
-                            src={item.picture || `https://api.multiavatar.com/${item.name}.svg`}
+                            src={item.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${item.name}`}
                             alt={item.name}
                             className="h-12 w-12 rounded-full"
                           />
@@ -190,7 +190,7 @@ const SearchResult = () => {
                     <div key={user.username} className="flex items-center gap-3">
                       <Avatar.Root>
                         <Avatar.Image
-                          src={user.picture || `https://api.multiavatar.com/${user.name}.svg`}
+                          src={user.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.name}`}
                           alt={user.name}
                           className="h-8 w-8 rounded-full"
                         />

@@ -55,12 +55,12 @@ const DraftsList: React.FC = () => {
                 loadDrafts();
             }
         }
-    }, [data, loading, error, drafts, saveDraft, loadDrafts]);
+    }, [loading]);
 
     // Initial load of local drafts
     useEffect(() => {
         loadDrafts();
-    }, [loadDrafts]);
+    }, []);
 
     const handleDeleteDraft = (id: string) => {
         if (window.confirm('Are you sure you want to delete this draft?')) {

@@ -107,6 +107,58 @@ import { getCache } from "@/utils/cache";
     return Math.max(maxStreak, currentStreak);
   };
 
+
+  const calculateWritingStreak = (
+    editorMetrics: EditorMetrics = getCache('editorMetrics') || {} as EditorMetrics,
+    storyDrafts = getCache('storyDrafts')
+  ): number => {
+    const allTimestamps: number[] = [];
+  
+    // Add timestamps from editorMetrics.drafts (preferred source)
+    if (editorMetrics?.drafts) {
+      Object.values(editorMetrics.drafts).forEach(draft => {
+        if (draft.lastModified) allTimestamps.push(draft.lastModified);
+      });
+    }
+  
+    // Optionally, add timestamps from storyDrafts (if needed)
+    if (storyDrafts) {
+      Object.values(storyDrafts).forEach(draft => {
+        if (draft.createdAt) allTimestamps.push(draft.createdAt);
+        if (draft.updatedAt) allTimestamps.push(draft.updatedAt);
+      });
+    }
+  
+    // If no timestamps are available, return 0
+    if (allTimestamps.length === 0) return 0;
+  
+    // Sort and deduplicate timestamps
+    const uniqueTimestamps = Array.from(new Set(allTimestamps)).sort((a, b) => a - b);
+  
+    // Convert timestamps to dates and calculate the streak
+    const sortedDates = uniqueTimestamps.map(timestamp => new Date(timestamp).toISOString().split('T')[0]); // Extract YYYY-MM-DD
+    const uniqueDates = Array.from(new Set(sortedDates)).sort(); // Deduplicate and sort dates
+  
+    let maxStreak = 0;
+    let currentStreak = 1;
+  
+    for (let i = 1; i < uniqueDates.length; i++) {
+      const prevDate = new Date(uniqueDates[i - 1]);
+      const currentDate = new Date(uniqueDates[i]);
+  
+      const diffInDays = Math.floor((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+      if (diffInDays === 1) {
+        currentStreak++;
+      } else if (diffInDays > 1) {
+        maxStreak = Math.max(maxStreak, currentStreak);
+        currentStreak = 1;
+      }
+    }
+    return Math.max(maxStreak, currentStreak);
+  };
+
+
   export {
     calculateTotalTimeSpent,
     calculateTotalWords,
@@ -116,5 +168,6 @@ import { getCache } from "@/utils/cache";
     calculateTotalIdleTime,
     calculateFocusPercentage,
     millisecondsToHours,
-    calculateLongestStreak
+    calculateLongestStreak,
+    calculateWritingStreak
   }

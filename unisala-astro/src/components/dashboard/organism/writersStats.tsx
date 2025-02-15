@@ -1,5 +1,5 @@
 // components/organisms/StatsDisplay.tsx
-import { Clock, Edit, Zap, Target, Brain, Coffee, Percent, Calendar, type LucideIcon } from "lucide-react";
+import { Clock, Edit, Zap, Target, Brain, Coffee, Percent, Calendar, type LucideIcon, Pen } from "lucide-react";
 import {StatCard} from "../molecules/statDisplay"
  
 interface StatsDisplayProps {
@@ -12,6 +12,7 @@ interface StatsDisplayProps {
     totalIdleTime: number;
     focusPercentage: number;
     longestStreak: number;
+    totalWritingTime: number;
   };
 }
 
@@ -21,13 +22,21 @@ export const StatsDisplay = ({ stats }: StatsDisplayProps) => {
     minutes: 60000,
     unit: 'hours'
   };
-
+  console.log(stats)
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <StatCard
+      {/* <StatCard
         label="Total Time"
         value={`${Math.round(stats.totalTimeSpent / timeUnit.hours)} ${timeUnit.unit}`}
         icon={Clock}
+        iconColor="text-blue-500"
+        valueColor="text-blue-700"
+        gradient="bg-gradient-to-br from-blue-50 to-blue-100"
+      /> */}
+       <StatCard
+        label="Total Time"
+        value={`${Math.round(stats.totalWritingTime / timeUnit.hours)} ${timeUnit.unit}`}
+        icon={Edit}
         iconColor="text-blue-500"
         valueColor="text-blue-700"
         gradient="bg-gradient-to-br from-blue-50 to-blue-100"
@@ -35,7 +44,7 @@ export const StatsDisplay = ({ stats }: StatsDisplayProps) => {
       <StatCard
         label="Words Written"
         value={stats.totalWordsWritten.toLocaleString()}
-        icon={Edit}
+        icon={Pen}
         iconColor="text-green-500"
         valueColor="text-green-700"
         gradient="bg-gradient-to-br from-green-50 to-green-100"
@@ -81,7 +90,7 @@ export const StatsDisplay = ({ stats }: StatsDisplayProps) => {
         gradient="bg-gradient-to-br from-teal-50 to-teal-100"
       />
       <StatCard
-        label="Writing Streak"
+        label="Longest Streak"
         value={`${stats.longestStreak} days`}
         icon={Calendar}
         iconColor="text-pink-500"

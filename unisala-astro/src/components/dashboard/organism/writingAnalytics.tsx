@@ -4,7 +4,7 @@ import type { EditorMetrics } from '@/types/metrics';
 import { StatsDisplay } from './writersStats';
 import { calculateAverageWpm, calculateFocusPercentage, calculateLongestStreak, calculateTotalFocusTime, calculateTotalIdleTime, calculateTotalTimeSpent, calculateTotalWords, calculateWritingStreak, findMaxWpm } from '../utils';
 import { getCache } from '@/utils/cache';
-import { getUpdatedMetrics } from '../utlis3';
+import { getUpdatedMetrics } from '../metricsUtils';
 
 
 export const WritingAnalytics  = ( ) => {

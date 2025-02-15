@@ -7,6 +7,7 @@ import { ProductiveDaysCard } from "../organism/productiveDaysCard";
 import { WritingAnalytics } from "../organism/writingAnalytics";
 import { calculateAnalytics } from "../analytics";
 import type { TimeSeriesData } from "@/types/metrics"
+import KnowledgeGraph from "../knowledgeGraph";
 
 interface DraftData {
   createdAt: number;
@@ -145,6 +146,7 @@ const processTimeSeriesData = (drafts: { [key: string]: DraftData }): TimeSeries
             
             <ProductiveDaysCard dayCount={dayCount} />
           </div>
+          <KnowledgeGraph />
         </div>
       )}
     </div>

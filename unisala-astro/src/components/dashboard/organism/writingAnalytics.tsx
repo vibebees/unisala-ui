@@ -2,8 +2,9 @@ import { MetricCard } from '../molecules/metricCard';
 import { useEffect, useState } from 'react';
 import type { EditorMetrics } from '@/types/metrics';
 import { StatsDisplay } from './writersStats';
-import { calculateAverageWpm, calculateFocusPercentage, calculateLongestStreak, calculateTotalFocusTime, calculateTotalIdleTime, calculateTotalTimeSpent, calculateTotalWords, findMaxWpm } from '../utils';
+import { calculateAverageWpm, calculateFocusPercentage, calculateLongestStreak, calculateTotalFocusTime, calculateTotalIdleTime, calculateTotalTimeSpent, calculateTotalWords, calculateWritingStreak, findMaxWpm } from '../utils';
 import { getCache } from '@/utils/cache';
+import { getUpdatedMetrics } from '../utlis3';
 
 
 export const WritingAnalytics  = ( ) => {
@@ -17,57 +18,47 @@ export const WritingAnalytics  = ( ) => {
   const [totalIdleTime, setTotalIdleTime] = useState<number>(0);
   const [focusPercentage, setFocusPercentage] = useState<number>(0);
   const [longestStreak, setLongestStreak] = useState<number>(0);
+  const [totalWritingTime, setTotalWritingTime] = useState<number>(0);
   const [timeSeriesData, setTimeSeriesData] = useState<any[]>([]);
 
    
    useEffect(() => {
-    const editorMetrics: EditorMetrics = getCache('editorMetrics') || {
-      drafts: {},
-      global: {
-        totalWordsWritten: 0,
-        totalFocusTime: 0,
-        totalIdleTime: 0,
-        highestWpmEver: 0,
-        firstSessionDate: 0,
-        lastSessionDate: 0,
-        consecutiveDays: 0,
-        longestStreak: 0,
-        draftsVersion: 0,
-      },
-    };
-    if (!editorMetrics || !editorMetrics.drafts) {
-      console.warn('No editorMetrics or drafts found.');
-      return;
-    }
+
+    const {editorMetrics, streakMetrics} = getUpdatedMetrics()
+    console.log({editorMetrics, streakMetrics})
     try {
-      const totalTime = calculateTotalTimeSpent(editorMetrics.drafts);
-      const totalWords = calculateTotalWords(editorMetrics.drafts);
-      const avgWpm = calculateAverageWpm(totalWords, totalTime);
-      const maxWpm = findMaxWpm(editorMetrics.drafts);
-      const idleTime = calculateTotalIdleTime(editorMetrics.drafts);
-      const focusTime = totalTime - idleTime;
+      // const totalTime = calculateTotalTimeSpent(editorMetrics.drafts);
+      // const totalWords = calculateTotalWords(editorMetrics.drafts);
+      // const avgWpm = calculateAverageWpm(totalWords, totalTime);
+      // const maxWpm = findMaxWpm(editorMetrics.drafts);
+      // const idleTime = calculateTotalIdleTime(editorMetrics.drafts);
+      // const focusTime = totalTime - idleTime;
 
-      const focusPerc = calculateFocusPercentage(focusTime, totalTime);
+      const { averageWpm, totalIdleTime, totalFocusTime, totalWords, totalTime } = editorMetrics;
+      const {currentStreak, longestStreak, sessionTimeSpent, totalSessions} = streakMetrics;
+      // const focusPerc = calculateFocusPercentage(focusTime, totalTime);
 
-      setTotalTimeSpent(totalTime);
+      setTotalTimeSpent(sessionTimeSpent);
+      setTotalWritingTime(totalTime);
       setTotalWordsWritten(totalWords);
-      setAverageWpm(avgWpm);
-      setMaxWpmEver(maxWpm);
-      setTotalFocusTime(focusTime);
-      setTotalIdleTime(idleTime);
-      setFocusPercentage(focusPerc);
-      const streak = calculateLongestStreak();
+      setAverageWpm(averageWpm);
+      setMaxWpmEver(0);
+      setTotalFocusTime(totalTime - totalIdleTime);
+      setTotalIdleTime(totalIdleTime);
+      setFocusPercentage(0);
+      const streak = calculateWritingStreak();
       setLongestStreak(streak);
 
 
 
       // Prepare time series data for the chart
-      const timeSeries = Object.values(editorMetrics.drafts).map(draft => ({
-        time: new Date(draft.lastModified).toLocaleDateString(),
-        wpm: draft.maxWpmEver || 0,
-        focusScore: (draft.totalFocusTime || 0) / (draft.totalSessionTime || 1) * 100,
-      }));
-      setTimeSeriesData(timeSeries);
+      // const timeSeries = Object.values(editorMetrics.drafts).map(draft => ({
+      //   time: new Date(draft.lastModified).toLocaleDateString(),
+      //   wpm: draft.maxWpmEver || 0,
+      //   focusScore: (draft.totalFocusTime || 0) / (draft.totalSessionTime || 1) * 100,
+      // }));
+      // const
+      // setTimeSeriesData(timeSeries);
 
     } catch (error) {
       console.error('Error calculating metrics:', error);
@@ -87,7 +78,8 @@ export const WritingAnalytics  = ( ) => {
           totalFocusTime,
           totalIdleTime,
           focusPercentage,
-          longestStreak
+          longestStreak,
+          totalWritingTime
         }}
       />
 

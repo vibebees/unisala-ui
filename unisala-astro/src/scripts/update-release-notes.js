@@ -17,17 +17,17 @@ function formatCommitMessage(message) {
   // Remove conventional commit prefixes and make more readable
   let formattedMessage = message.trim();
   
-  // Replace conventional commit prefixes with more friendly language
+  // Replace conventional commit prefixes with more friendly language and add emojis
   formattedMessage = formattedMessage
-    .replace(/^feat(\([^)]*\))?:\s*/i, 'New Feature: ')
-    .replace(/^fix(\([^)]*\))?:\s*/i, 'Bug Fix: ')
-    .replace(/^perf(\([^)]*\))?:\s*/i, 'Performance Improvement: ')
-    .replace(/^refactor(\([^)]*\))?:\s*/i, 'Code Improvement: ')
-    .replace(/^style(\([^)]*\))?:\s*/i, 'UI Update: ')
-    .replace(/^docs(\([^)]*\))?:\s*/i, 'Documentation Update: ')
-    .replace(/^test(\([^)]*\))?:\s*/i, 'Test Improvement: ')
-    .replace(/^build(\([^)]*\))?:\s*/i, 'Build System Update: ')
-    .replace(/^ci(\([^)]*\))?:\s*/i, 'CI Improvement: ');
+    .replace(/^feat(\([^)]*\))?:\s*/i, '🚀 New Feature: ')
+    .replace(/^fix(\([^)]*\))?:\s*/i, '🐛 Improvement: ')
+    .replace(/^perf(\([^)]*\))?:\s*/i, '⚡ Performance Enhancement: ')
+    .replace(/^refactor(\([^)]*\))?:\s*/i, '🔧 Platform Update: ')
+    .replace(/^style(\([^)]*\))?:\s*/i, '🎨 Visual Update: ')
+    .replace(/^docs(\([^)]*\))?:\s*/i, '📚 Documentation Update: ')
+    .replace(/^test(\([^)]*\))?:\s*/i, '🧪 Quality Improvement: ')
+    .replace(/^build(\([^)]*\))?:\s*/i, '🏗️ Platform Update: ')
+    .replace(/^ci(\([^)]*\))?:\s*/i, '🔄 Platform Update: ');
   
   // Capitalize first letter if not already capitalized
   if (formattedMessage.length > 0 && formattedMessage[0].toLowerCase() === formattedMessage[0]) {
@@ -41,81 +41,123 @@ function formatCommitMessage(message) {
 function groupChangesByType(commitMessage, files) {
   // Determine change type from commit message
   let changeType = 'Other Updates';
+  let emoji = '✨';
   
   if (commitMessage.toLowerCase().includes('fix') || 
       commitMessage.toLowerCase().startsWith('fix:')) {
-    changeType = 'Bug Fixes';
+    changeType = 'Improvements & Bug Fixes';
+    emoji = '🐛';
   } else if (commitMessage.toLowerCase().includes('feat') || 
              commitMessage.toLowerCase().startsWith('feat:')) {
     changeType = 'New Features';
+    emoji = '🚀';
   } else if (commitMessage.toLowerCase().includes('perf') || 
              commitMessage.toLowerCase().startsWith('perf:')) {
-    changeType = 'Performance Improvements';
+    changeType = 'Performance Enhancements';
+    emoji = '⚡';
   } else if (commitMessage.toLowerCase().includes('ui') || 
              commitMessage.toLowerCase().includes('style') ||
              commitMessage.toLowerCase().startsWith('style:')) {
-    changeType = 'UI Enhancements';
+    changeType = 'Visual Updates';
+    emoji = '🎨';
   }
   
   return {
     type: changeType,
+    emoji: emoji,
     message: formatCommitMessage(commitMessage),
     files: files
   };
 }
 
-// Generate user-friendly file paths
-function formatFilePath(filePath) {
-  // Remove project-specific prefixes that users don't need to see
-  return filePath
-    .replace(/^unisala-astro\//, '')
-    .replace(/\.js$/, '')
-    .replace(/\.astro$/, '')
-    .replace(/\.json$/, '')
-    .replace(/\.md$/, '')
-    .replace(/\/index$/, '');
-}
-
-// Summarize changes in user-friendly terms
-function summarizeChanges(files) {
-  // Count changes by directory to create a summary
-  const areaChanges = {};
+// Generate user-focused descriptions based on file types
+function generateUserDescription(changeInfo) {
+  const message = changeInfo.message.toLowerCase();
+  const files = changeInfo.files;
   
-  files.forEach(file => {
-    const normalizedPath = file.replace(/^unisala-astro\//, '');
-    const mainArea = normalizedPath.split('/')[0];
-    
-    if (!areaChanges[mainArea]) {
-      areaChanges[mainArea] = 0;
+  // Check for specific update patterns
+  if (files.some(f => f.includes('/search'))) {
+    if (message.includes('popular') || message.includes('trending')) {
+      return "We've added a way to discover popular content that other students are finding valuable.";
+    } else if (message.includes('filter')) {
+      return "We've improved the search filters to help you find scholarships more easily.";
+    } else {
+      return "We've enhanced the search experience to make finding scholarships more efficient.";
     }
-    areaChanges[mainArea]++;
-  });
-  
-  // Create summary text
-  const summaryParts = [];
-  for (const [area, count] of Object.entries(areaChanges)) {
-    let readableArea = area;
-    
-    // Make area names more readable
-    switch(area) {
-      case 'src':
-        readableArea = 'core application';
-        break;
-      case 'pages':
-        readableArea = 'page templates';
-        break;
-      case 'scripts':
-        readableArea = 'internal scripts';
-        break;
-      case 'content':
-        readableArea = 'content files';
-        break;
-    }
-    
-    summaryParts.push(`${count} ${readableArea} ${count === 1 ? 'file' : 'files'}`);
   }
   
-  return summaryParts.join(', ');
+  if (files.some(f => f.includes('/editor'))) {
+    return "We've refined the text editor to make writing and formatting your content smoother.";
+  }
+  
+  if (message.includes('performance') || message.includes('speed') || message.includes('faster')) {
+    return "We've optimized the platform for faster loading and smoother browsing.";
+  }
+  
+  if (message.includes('fix') && message.includes('bug')) {
+    return "We've resolved several issues to make your experience more reliable.";
+  }
+  
+  // Generic descriptions by type
+  switch (changeInfo.type) {
+    case 'New Features':
+      return "We've added new capabilities to enhance your UniSala experience.";
+    case 'Improvements & Bug Fixes':
+      return "We've polished the platform to work more smoothly for you.";
+    case 'Performance Enhancements':
+      return "We've made things faster and more responsive.";
+    case 'Visual Updates':
+      return "We've refreshed the visual design for better usability.";
+    default:
+      return "We've made behind-the-scenes improvements to the platform.";
+  }
+}
+
+// Determine which areas of the application were affected
+function getAffectedAreas(files) {
+  const areas = new Set();
+  
+  files.forEach(file => {
+    if (file.includes('/search')) areas.add('search experience');
+    else if (file.includes('/profile')) areas.add('profile management');
+    else if (file.includes('/thread') || file.includes('/comment')) areas.add('discussion threads');
+    else if (file.includes('/scholarship')) areas.add('scholarship listings');
+    else if (file.includes('/editor')) areas.add('writing tools');
+    else if (file.includes('/login') || file.includes('/auth')) areas.add('account services');
+    else if (file.includes('/notification')) areas.add('notifications');
+    else if (file.includes('/ui/') || file.includes('/components/')) areas.add('user interface');
+  });
+  
+  // If no specific areas were found but we have files
+  if (areas.size === 0 && files.length > 0) {
+    areas.add('platform');
+  }
+  
+  return Array.from(areas);
+}
+
+// Generate a user-friendly summary of changes
+function createUserFriendlySummary(changeInfo) {
+  const areas = getAffectedAreas(changeInfo.files);
+  const userDescription = generateUserDescription(changeInfo);
+  
+  let summary = '';
+  
+  // Include a specific area if we can identify one
+  if (areas.length > 0) {
+    if (areas.length === 1) {
+      summary = `We've updated the ${areas[0]}. ${userDescription}`;
+    } else if (areas.length <= 3) {
+      const areasList = areas.join(', ').replace(/, ([^,]*)$/, ' and $1');
+      summary = `We've improved several areas including ${areasList}. ${userDescription}`;
+    } else {
+      summary = `We've made platform-wide improvements. ${userDescription}`;
+    }
+  } else {
+    summary = userDescription;
+  }
+  
+  return summary;
 }
 
 // Function to filter user-relevant files
@@ -161,25 +203,12 @@ function updateReleaseNotes(message, files) {
   // Group changes
   const changeInfo = groupChangesByType(message, relevantFiles);
   
-  // Format the files in a user-friendly way
-  const formattedFiles = relevantFiles
-    .map(file => formatFilePath(file))
-    .filter(file => file) // Remove empty strings
-    .map(file => `- ${file}`);
+  // Create user-friendly summary
+  const userSummary = createUserFriendlySummary(changeInfo);
   
-  // Create a summary of changes
-  const changeSummary = summarizeChanges(relevantFiles);
-  
-  // Format the entry content
+  // Format the entry content - more user-friendly approach
   let entryContent = `### ${changeInfo.message}\n`;
-  
-  if (changeSummary) {
-    entryContent += `Updated ${changeSummary}.\n\n`;
-  }
-  
-  if (formattedFiles.length > 0 && formattedFiles.length <= 5) {
-    entryContent += `Changed files:\n${formattedFiles.join('\n')}\n\n`;
-  }
+  entryContent += `${userSummary}\n\n`;
   
   // Check if there's already a section for this date
   const dateSection = new RegExp(`## Updates - ${date}`);

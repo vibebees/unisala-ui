@@ -36,7 +36,6 @@ export const WritingAnalytics  = ( ) => {
       },
     };
     if (!editorMetrics || !editorMetrics.drafts) {
-      console.warn('No editorMetrics or drafts found.');
       return;
     }
     try {

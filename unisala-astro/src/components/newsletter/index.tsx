@@ -51,9 +51,7 @@ const Subsciption: React.FC<SubsciptionProps> = ({
       // Simulating a successful subscription for both authenticated and non-authenticated users
       await new Promise(resolve => setTimeout(resolve, 1000));
       setIsSubscribed(true);
-      console.log("Subscription successful, isSubscribed:", true);
     } catch (error) {
-      console.error('Error:', error);
       setError(config.errorMessage);
     }
   };

@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
-    "test": "exit 0"
+    "test": "exit 0",
+    "update-release-notes": "node unisala-astro/src/scripts/update-release-notes.js"
+
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",

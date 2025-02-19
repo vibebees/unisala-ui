@@ -1,1 +1,13 @@
 npm test
+
+
+#!/usr/bin/env sh
+# This script runs before the existing pre-commit hook
+# to update release notes
+
+
+npm run update-release-notes
+
+
+# Return success to allow the commit to proceed
+exit 0

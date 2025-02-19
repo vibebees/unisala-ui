@@ -11,20 +11,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Ionic Project Setup and Build
-      - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
-        working-directory: unisala-ionic
-
-      - name: Install Ionic dependencies and build application
-        run: |
-          npm install --force
-          npm run build --prod
-        env:
-          CI: false
-          NODE_ENV: TEST
-        working-directory: unisala-ionic
-
       # Astro Project Setup and Build
       - name: Install Astro dependencies and build application
         run: |

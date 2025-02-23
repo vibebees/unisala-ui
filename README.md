@@ -1,6 +1,6 @@
 # Unisala UI
 
-The open-source UI components and utilities powering [Unisala.com](https://unisala.com). Built with React, TypeScript, and Tailwind CSS.
+The open-source UI components and utilities powering [Unisala.com](https://unisala.com). Built with React, TypeScript, and Tailwind CSS. Poweredby Astro.
 
 ## Overview
 

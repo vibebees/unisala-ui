@@ -8,7 +8,6 @@ const posts = await getCollection("releases");
 posts.sort((a, b) => +b.data.date - +a.data.date);
 
 ---
-
 <MainLayout title="Changelog">
   <section class="container max-w-screen-lg space-y-6 pt-12">
 

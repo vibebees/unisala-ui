@@ -22,7 +22,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export const SearchTemplate = ({ initialQuery = '' }) => {
+export const SearchTemplate = ({ initialQuery = 'popular' }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const debouncedSearchQuery = useDebounce(searchQuery, 1000); // 1 second debounce
 

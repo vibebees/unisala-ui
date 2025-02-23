@@ -6,19 +6,15 @@ import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
 import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.tsx';
 import ThreadHeader from '@/components/layout/thread-header.astro';
-import ThreadAction from '@/components/thread/thread.action.astro';
-import { Badge } from '@/components/ui/badge';
 import linkifyHtml from 'linkify-html';
 import { Toaster, toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
-import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 import {userServiceGql} from '@/datasource/servers/index';
 import {Toast} from '@/components/ui/toast';
 import { FourOhFour } from '@/components/ui/404';
 import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
 import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
-import NewsLetter from "@/components/sections/newsletter.astro";
 import { createSlug, extractIdFromSlug } from '@/utils/slug.utility';
 import ThreadAuthor from '@/components/thread/organisms/thread.author.astro';
 

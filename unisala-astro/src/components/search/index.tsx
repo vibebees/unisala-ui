@@ -5,7 +5,7 @@ export interface SearchProps {
   }
   
   // Export main component with proper typing
-  export default function Search({ initialQuery = '' }: SearchProps) {
+  export default function Search({ initialQuery = 'popular' }: SearchProps) {
     const currentUrl = new URL(window.location.href);
     const query = currentUrl.searchParams.get('q') ||  initialQuery;
 

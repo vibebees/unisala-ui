@@ -136,15 +136,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location ~ ^/thread/(.*)$ {
-            rewrite ^/thread/(.*)$ /threads/$1 break;
-            proxy_pass http://localhost:3000;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
     # Serve specific paths for user, uni, and msg services
     location /user/ {
         proxy_pass http://localhost:4444/;
@@ -153,33 +144,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-
-    location /uni/ {
-        proxy_pass http://localhost:9999/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /msg/ {
-        proxy_pass http://localhost:2222/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /msg/socket/ {
-        proxy_pass http://localhost:2224/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
 }
-
 
 EOL
 
@@ -216,9 +181,7 @@ log_message "Permissions set for the SSH key."
 
 # Create directories for Unisala services
 log_message "Creating directories for Unisala services..."
-mkdir -p /home/ec2-user/Unisala-University-Service
-mkdir -p /home/ec2-user/Unisala-User-Service
-mkdir -p /home/ec2-user/Unisala-Message-Service
+mkdir -p /home/ec2-user/unisala-services
 mkdir -p /home/ec2-user/unisala-web
 log_message "Directories for Unisala services created."
 

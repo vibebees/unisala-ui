@@ -6,35 +6,31 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "astro-icon/components";
 ---
 
-<MainLayout title="About" description="Lorem ipsum dolor sit amet">
+<MainLayout title="About Unisala" description="Unisala is your personal productivity engine—designed to help you build momentum, develop habits, and accelerate growth in any field.">
   <section class="space-y-5">
-    <section
-      class="relative container max-w-screen-md mb-28 mt-16 sm:mt-20 lg:mt-28"
-    >
+    {/* Hero Section */}
+    <section class="relative container max-w-screen-md mb-28 mt-16 sm:mt-20 lg:mt-28">
       <div class="flex h-full flex-col justify-between">
         <div class="grid gap-8 sm:grid-cols-2">
           <div>
-            <h1 class="text-4xl font-heading text-foreground">mickasmt</h1>
+            <h1 class="text-4xl font-heading text-foreground">Unisala</h1>
             <p class="text-base text-muted-foreground mt-0.5">
-              Fullstack Developer
+             Creating a momentum!
             </p>
           </div>
           <div>
             <p class="mb-12 text-base text-muted-foreground">
-              Hi there! I'm mickasmt, a web dev enthusiast with a passion for
-              user interfaces.
-              <br />
-              What's up with you?
+              Unisala is a learning and productivity platform that combines note-taking, AI, and community-driven growth. Whether you're a developer, writer, engineer, or creator, Unisala helps you stay ahead by fostering deep learning, note-taking.
             </p>
             <div class="flex items-center gap-3">
-              <Button className="rounded-xl">
+              <!-- <Button className="rounded-xl">
                 <Icon name="lucide:mail" class="mr-2 size-4" />
-                <a href="mailto:">Talk with me</a>
-              </Button>
+                <a href="mailto:">Contact Us</a>
+              </Button> -->
 
               <Button variant="outline" className="rounded-xl">
                 <Icon name="lucide:briefcase" class="mr-2.5 size-4" />
-                <a href="https://mickasmt.com/" target="_blank">My works</a>
+                <a href="https://unisala.com/" target="_blank">Explore Unisala</a>
               </Button>
             </div>
           </div>
@@ -42,17 +38,12 @@ import { Icon } from "astro-icon/components";
       </div>
     </section>
 
-    <div
-      class="relative z-10 flex flex-col justify-center overflow-hidden lg:overflow-visible pb-16"
-    >
-      <div
-        class="mx-auto flex w-max -translate-x-[15%] justify-center lg:w-full lg:translate-x-0"
-      >
-        <div
-          class="relative z-10 mx-auto max-w-4xl px-4 md:max-w-6xl md:px-12 lg:max-w-5xl lg:px-6 xl:max-w-[80rem] xl:px-6 2xl:px-0"
-        >
+    {/* Visual Storytelling Section */}
+    <div class="relative z-10 flex flex-col justify-center overflow-hidden lg:overflow-visible pb-16">
+      <div class="mx-auto flex w-max -translate-x-[15%] justify-center lg:w-full lg:translate-x-0">
+        <div class="relative z-10 mx-auto max-w-4xl px-4 md:max-w-6xl md:px-12 lg:max-w-5xl lg:px-6 xl:max-w-[80rem] xl:px-6 2xl:px-0">
           <div class="grid grid-cols-4 items-center gap-4 md:gap-6">
-            {/* First Column */}
+            {/* First Column - Aspiration */}
             <div class="space-y-4 md:space-y-6">
               <Image
                 class="h-full w-auto object-cover overflow-hidden rounded-xl"
@@ -73,7 +64,7 @@ import { Icon } from "astro-icon/components";
               </div>
             </div>
 
-            {/* Second Column */}
+            {/* Second Column - Learning and Growth */}
             <div class="space-y-4 md:space-y-6">
               <div class="h-48 overflow-hidden rounded-xl">
                 <Image
@@ -104,7 +95,7 @@ import { Icon } from "astro-icon/components";
               </div>
             </div>
 
-            {/* Third Column */}
+            {/* Third Column - Collaboration and Momentum */}
             <div class="space-y-4 md:space-y-6">
               <div class="h-56 overflow-hidden rounded-xl">
                 <Image
@@ -127,7 +118,7 @@ import { Icon } from "astro-icon/components";
               </div>
             </div>
 
-            {/* Fourth Column */}
+            {/* Fourth Column - Transformation and Achievement */}
             <div class="space-y-4 md:space-y-6">
               <div class="overflow-hidden rounded-xl bg-white">
                 <Image

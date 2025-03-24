@@ -41,7 +41,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
     const debouncedSaveDraft = useCallback(
         debounce((id: string, title: string, content: string) => {
             saveDraft(id, title, content);
-        }, 2000),
+        }, 500),
         [ saveDraft ]
     );
 

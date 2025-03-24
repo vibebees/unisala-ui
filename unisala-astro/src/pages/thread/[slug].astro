@@ -1,0 +1,233 @@
+---
+export const prerender = false;
+
+import MainLayout from '@/layouts/main-layout.astro';
+import ThreadSkeleton from '@/components/layout/skeleton/thread.astro';
+import SingleThread from '@/components/packages/thread/singleThread/index';
+import Comments from '@/components/thread/comments/index.tsx';
+import ThreadHeader from '@/components/layout/thread-header.astro';
+import linkifyHtml from 'linkify-html';
+import { Toaster, toast } from "react-hot-toast";
+import ThreadActionTsx from '@/components/thread/actions/upvote';
+import { fetchApi } from '@/utils/api.utility';
+import {userServiceGql} from '@/datasource/servers/index';
+import {Toast} from '@/components/ui/toast';
+import { FourOhFour } from '@/components/ui/404';
+import ThreadSuggestions from '@/components/thread/organisms/thread.suggestion.astro'
+import SameWriterSuggestions from '@/components/thread/organisms/same.writer.suggestion.astro'
+import { createSlug, extractIdFromSlug } from '@/utils/slug.utility';
+import ThreadAuthor from '@/components/thread/organisms/thread.author.astro';
+
+// Get slug from URL parameters
+const { slug = "" } = Astro.params;
+const postId = extractIdFromSlug(slug);
+const loadingToastId = toast.loading('Loading...');
+
+let post = null;
+let error: string = '';
+
+const query = `
+  query getPostById($id: String!, $user: String) {
+    getPostById(id: $id, user: $user) {
+      status {
+        success
+        message
+      }
+      post {
+        _id
+        postText
+        title
+        postCommentsCount
+        admissionAndApplicationRating
+        financialAidAndScholarshipRating
+        academicProgramsAndDepartmentRating
+        studentLifeAndServiceRating
+        careerAndAlumniResourceRating
+        postType
+        postImage
+        videoURL
+        date
+        tags {
+          _id
+          name
+          parentId
+          image
+          description
+        }
+        postTags {
+          tagType
+          tag {
+            _id
+            name
+          }
+        }
+        upVoted
+        images
+        upVoteCount
+        user {
+          _id
+          username
+          firstName
+          lastName
+          picture
+          oneLinerBio
+        }
+        comments {
+          _id
+          commentText
+          upVoted
+          upVoteCount
+          user {
+            _id
+            firstName
+            lastName
+            picture
+            username
+          }
+        }
+          queryCount
+      }
+    }
+  }
+`;
+
+try {
+  const result = await fetchApi(userServiceGql, {
+    method: 'POST',
+    body: JSON.stringify({
+      query,
+      variables: { id: postId, user: null }, // Use extracted postId
+    }),
+  });
+
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+
+  post = result.data?.getPostById?.post;
+
+  // Check if the current URL matches the expected slug format
+  if (post && post.title) {
+    const correctSlug = createSlug(post.title, post._id);
+    if (slug !== correctSlug) {
+      return Astro.redirect(`/threads/${correctSlug}`, 301);
+    }
+  }
+
+} catch (e) {
+  console.error("Error fetching post:", e);
+  error = e instanceof Error ? e.message : String(e);
+}
+
+function extractHeading(text: string): string {
+  if (!text) return '';
+  
+  // First, try to extract content from heading tags (h1 to h6)
+  const headingMatch = text.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
+  if (headingMatch) {
+    return headingMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
+  }
+
+  // If no heading tags, try to extract the first non-empty paragraph
+  const paragraphMatch = text.match(/<p[^>]*>(.*?)<\/p>/i);
+  if (paragraphMatch) {
+    const cleanParagraph = paragraphMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
+    if (cleanParagraph) {
+      return cleanParagraph.length > 150 ? cleanParagraph.slice(0, 147) + '...' : cleanParagraph;
+    }
+  }
+
+  // If no suitable heading found, extract text from the entire content
+  let cleanText = text
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&[a-z]+;/g, match => {
+      const entities: { [key: string]: string } = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&apos;': "'"
+      };
+      return entities[match] || match;
+    })
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return cleanText.length > 150 ? cleanText.slice(0, 147) + '...' : cleanText;
+}
+
+// heading is post.title if not empty, else extract from postText
+const heading = post
+  ? post?.title?.length > 0 
+    ? extractHeading(post.title)
+    : extractHeading(post.postText)
+  : 'Loading...';
+
+const linkifiedText = post ? linkifyHtml(post.postText, {
+  defaultProtocol: 'https',
+  className: 'custom-link',
+  target: {
+    url: '_blank'
+  }
+}) : '';
+---
+
+<MainLayout
+  title={post ? `${heading}` : 'Thread'}
+  description={post ? linkifiedText : 'Loading...'}
+  publishedTime={post?.date}
+>
+  <Toast client:load />
+  {error && <FourOhFour message={error} />}
+
+  {!post && !error && <ThreadSkeleton />}
+  {post && (
+    <section class='container max-w-screen-lg space-y-6 pt-12'>
+      <ThreadHeader 
+        authorId = {post?.user?._id}
+        heading={linkifyHtml(heading)} 
+        username={post?.user?.username}  
+        firstName={post?.user?.firstName}  
+        lastName={post?.user?.lastName}  
+        date={post?.date} 
+        claps={post?.upVoteCount} 
+        comments={post?.postCommentsCount} 
+        queryCount={post?.queryCount}
+
+      />
+      <ul class='pt-6'>
+        <li class='flex flex-col max-md:gap-y-4 md:flex-row w-full'>
+          <div class='prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24'>
+            <SingleThread post={post} />
+          </div>
+        </li>
+        <ThreadActionTsx
+          heading={heading}
+          username={post?.user?.username}
+          date={post?.date}
+          comments={post?.postCommentsCount}
+          postId={postId}
+          initialClaps={post?.upVoteCount}
+          client:only="react"
+          upVoted={post?.upVoted}
+        />
+      </ul>
+    </section>
+  )}
+
+  <Comments client:only="react" postId={postId} />
+  
+  <ThreadAuthor
+    authorId={post?.user?._id}
+    author={post?.user?.firstName + ' ' + post?.user?.lastName}
+    authorDescription={post?.user?.oneLinerBio}
+  />
+  
+  <hr class="my-4" />
+  
+  <SameWriterSuggestions feedId={post?.user?._id} />
+  <hr class="my-4" />
+  
+  <ThreadSuggestions feedId={post?.postTags?.tag?._id} />
+</MainLayout>

@@ -73,7 +73,6 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
                 createdAt: new Date().getTime(),
             };
             setCache('notesPublished', notesPublished);
-
             navigator('/threads/' + data?.addPost?.post?._id);
         },
         onError: (error) => {

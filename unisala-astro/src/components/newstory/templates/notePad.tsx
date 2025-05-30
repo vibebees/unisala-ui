@@ -43,12 +43,10 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
         return (fn: (id: string, title: any, content: string) => void) => {
             return (id: string, title: string, content: string) => {
                 let now = Date.now()
-                if (now - lastExec.current <= delay) {
-                    console.log('rate limited')
-                    return
+                if (delay < (now - lastExec.current)) {
+                    lastExec.current = Date.now()
+                    fn(id, title, content)
                 }
-                lastExec.current = Date.now()
-                fn(id, title, content)
             }
         }
     }

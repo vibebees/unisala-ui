@@ -5,7 +5,6 @@ import { transformToUrlFriendly } from '@/utils/lib/URLupdate';
 import { EmptySpacePrompt } from "../ui/nocontent";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
-import SubscriptionPopup from '../newsletter/subscriptionPopUp';
 interface FeedProps {
   articles: IPost[];
   staffPicks?: IPost[];

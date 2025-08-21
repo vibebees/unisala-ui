@@ -1,4 +1,4 @@
-import type { DraftMetrics, EditorMetrics, GlobalMetrics } from '@/types/metrics';
+import type { EditorMetrics } from '@/types/metrics';
 import { getCache, setCache } from '@/utils/cache';
 import moment from 'moment';
 import { useState, useEffect, useCallback } from 'react';

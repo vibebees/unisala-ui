@@ -1,5 +1,5 @@
 // components/organisms/StatsDisplay.tsx
-import { Clock, Edit, Zap, Target, Brain, Coffee, Percent, Calendar, type LucideIcon } from "lucide-react";
+import { Clock, Edit, Zap, Brain, Coffee, Percent, Calendar } from "lucide-react";
 import {StatCard} from "../molecules/statDisplay"
  
 interface StatsDisplayProps {

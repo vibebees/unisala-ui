@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
 
 const SearchResultsPage = () => {
   const tabs = [

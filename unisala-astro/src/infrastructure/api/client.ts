@@ -1,7 +1,12 @@
-import { ApolloClient, DocumentNode, OperationVariables } from '@apollo/client';
-import { Result, Ok, Err } from '@/core/result';
+import { ApolloClient } from '@apollo/client';
+import type { DocumentNode } from 'graphql';
+import type { Result } from '@/core/result';
+import { Ok, Err } from '@/core/result';
 import { TransportError, createTransportError, isRetryableError, getRetryDelay } from '@/infrastructure/errors';
 import { errorReporter, ErrorSeverity } from '@/infrastructure/error-reporter';
+
+// Define OperationVariables type locally since it's not exporting properly
+export type OperationVariables = Record<string, any>;
 
 /**
  * API operation configuration
@@ -299,5 +304,4 @@ export function createAPIClient(apolloClient: ApolloClient<any>): APIClient {
   return new ApolloAPIClient(apolloClient);
 }
 
-// Re-export for convenience
-export { Result, Ok, Err } from '@/core/result';
+// Re-exports removed to avoid circular dependencies

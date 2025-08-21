@@ -5,10 +5,13 @@ import {
   InMemoryCache,
   from,
   split,
+  useMutation,
+  useQuery,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { createAPIClient, APIClient } from './client';
+import type { APIClient } from './client';
+import { createAPIClient } from './client';
 import { getCache } from '@/utils/cache';
 import { errorReporter, ErrorSeverity } from '@/infrastructure/error-reporter';
 import { createTransportError } from '@/infrastructure/errors';
@@ -203,8 +206,6 @@ export const apiClient: APIClient = createAPIClient(apolloClient);
 export const useAstroMutation = (query: any, options: any) => {
   console.warn('useAstroMutation is deprecated. Use service layer (useUserService, usePostService) instead.');
   
-  // Import at runtime to avoid circular dependencies
-  const { useMutation } = require('@apollo/client');
   return useMutation(query, {
     ...options,
     client: apolloClient,
@@ -217,8 +218,6 @@ export const useAstroMutation = (query: any, options: any) => {
 export const useAstroQuery = (query: any, options: any) => {
   console.warn('useAstroQuery is deprecated. Use service layer (useUserService, usePostService) instead.');
   
-  // Import at runtime to avoid circular dependencies
-  const { useQuery } = require('@apollo/client');
   return useQuery(query, {
     ...options,
     client: apolloClient,

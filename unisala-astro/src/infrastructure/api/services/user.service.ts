@@ -1,4 +1,5 @@
-import { DocumentNode, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
+import type { DocumentNode } from 'graphql';
 import { Result } from '@/core/result';
 import { TransportError } from '@/infrastructure/errors';
 import { APIClient } from '../client';

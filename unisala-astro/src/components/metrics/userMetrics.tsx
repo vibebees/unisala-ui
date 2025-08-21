@@ -37,14 +37,18 @@ export const useUserAnalytics = () => {
    }
 
    // SESSION_END: Calculate time spent
-   const timeSpent = (Date.now() - cached.streakData[today].firstAccess) / 1000
+   const todayData = cached.streakData[today];
+   if (!todayData?.firstAccess) {
+     return cached; // Return cached data if no session started today
+   }
+   const timeSpent = (Date.now() - todayData.firstAccess) / 1000
    const newData = {
      currentStreak: cached.streakData[yesterday] ? cached.currentStreak + 1 : 1,
      streakData: {
        ...cached.streakData,
        [today]: {
-         ...cached.streakData[today],
-         totalTimeSpent: cached.streakData[today].totalTimeSpent + timeSpent
+         ...todayData,
+         totalTimeSpent: todayData.totalTimeSpent + timeSpent
        }
      }
    }

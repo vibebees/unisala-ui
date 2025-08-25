@@ -7,7 +7,7 @@ import type { PostDraft, TopicOptions } from "@/types/post";
 import { getCache, setCache } from "@/utils/cache";
 import { navigator } from "@/utils/lib/URLupdate";
 import { debounce } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthProvider } from '@/context/AuthContext';
 import EditorLayout from "./editorLayout";
@@ -17,10 +17,10 @@ interface PostFormProps {
 }
 
 const NotePad: React.FC<PostFormProps> = ({ }) => {
-    const [ showPreview, setShowPreview ] = useState(false);
-    const [ topics, setTopics ] = useState<TopicOptions[]>([]);
-    const [ showImagePanel, setShowImagePanel ] = useState(false);
-    const [ activeTab, setActiveTab ] = useState<'editor' | 'visual'>('editor');
+    const [showPreview, setShowPreview] = useState(false);
+    const [topics, setTopics] = useState<TopicOptions[]>([]);
+    const [showImagePanel, setShowImagePanel] = useState(false);
+    const [activeTab, setActiveTab] = useState<'editor' | 'visual'>('editor');
     const { hasPosts } = usePublishedPostManager();
 
     const {
@@ -38,12 +38,28 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id') || '';
 
+    const rateLimitedSaveDraft = (delay: number) => {
+        const lastExec = useRef(0);
+        return (fn: (id: string, title: any, content: string) => void) => {
+            return (id: string, title: string, content: string) => {
+                let now = Date.now()
+                if (delay < (now - lastExec.current)) {
+                    lastExec.current = Date.now()
+                    fn(id, title, content)
+                }
+            }
+        }
+    }
+
+    const rateLimited = rateLimitedSaveDraft(1000)(saveDraft);
+
     const debouncedSaveDraft = useCallback(
         debounce((id: string, title: string, content: string) => {
-            saveDraft(id, title, content);
+            rateLimited(id, title, content);
         }, 500),
-        [ saveDraft ]
+        [saveDraft]
     );
+
 
     useEffect(() => {
         const initializeDraft = async () => {
@@ -58,22 +74,21 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
         };
 
         initializeDraft();
-    }, [ id, loadDraft, createNewDraft ]);
+    }, [id, loadDraft, createNewDraft]);
 
-    const [ addPost ] = useAstroMutation(AddPost, {
+    const [addPost] = useAstroMutation(AddPost, {
         context: { server: USER_SERVICE_GQL },
         onCompleted: (data: { addPost: { post: { _id: string } } }) => {
             deleteDraft(draftId);
             toast.success('Your Story is Published!');
 
             const notesPublished: { [key: string]: any } = getCache('notesPublished') || {};
-            notesPublished[ data.addPost.post._id ] = {
+            notesPublished[data.addPost.post._id] = {
                 postTitle: draftTitle,
                 postText: draftContent,
                 createdAt: new Date().getTime(),
             };
             setCache('notesPublished', notesPublished);
-
             navigator('/threads/' + data?.addPost?.post?._id);
         },
         onError: (error) => {
@@ -86,14 +101,14 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
         (newTitle: string) => {
             saveDraftPostTitle(draftId, newTitle);
         },
-        [ draftId, saveDraftPostTitle ]
+        [draftId, saveDraftPostTitle]
     );
 
     const handlePostTextChange = useCallback(
         (newPostText: string) => {
             debouncedSaveDraft(draftId, draftTitle, newPostText);
         },
-        [ draftId, draftTitle, debouncedSaveDraft ]
+        [draftId, draftTitle, debouncedSaveDraft]
     );
 
     const handlePublish = async (
@@ -144,7 +159,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
                 topics={topics}
                 setTopics={setTopics} isDashboardCollapsed={false} setIsDashboardCollapsed={function (isDashboardCollapsed: boolean): void {
                     throw new Error("Function not implemented.");
-                } }
+                }}
             />
         </AuthProvider>
     );

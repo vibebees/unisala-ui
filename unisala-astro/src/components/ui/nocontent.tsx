@@ -1,6 +1,4 @@
 import { PlusCircle } from 'lucide-react';
-import Carousel from "@/components/ui/carouselWithoutDescription"
-import { navigator } from '@/utils/lib/URLupdate';
 
 export const EmptySpacePrompt = ({ spaceName , id}: {spaceName:string, id:string}) => {
     const carouselItems = [

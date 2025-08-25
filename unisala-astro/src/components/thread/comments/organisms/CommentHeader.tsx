@@ -16,7 +16,7 @@ export const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, onEdit, o
 
           <img
             className='mr-2 w-6 h-6 rounded-full'
-            src={`https://api.multiavatar.com/${comment?.user?.firstName}.svg`}
+            src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${comment?.user?.firstName}`}
             alt={comment?.user?.firstName}
           />
           <a href={`/signature/${comment?.user?.id}`} data-astro-reload>

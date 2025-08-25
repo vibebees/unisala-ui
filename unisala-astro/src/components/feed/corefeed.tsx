@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { ArticleCard } from "./articlecard";
 import type { IPost } from "@/types/post";
 import { EmptySpacePrompt } from "../ui/nocontent";

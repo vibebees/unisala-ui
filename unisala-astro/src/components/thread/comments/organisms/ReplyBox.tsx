@@ -5,7 +5,7 @@ import { USER_SERVICE_GQL } from "@/datasource/servers/types";
 import { sendGAEvent } from "@/utils/analytics/events";
 import { getCache } from "@/utils/cache";
 import { stripHtmlAndTrim } from "@/utils/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';

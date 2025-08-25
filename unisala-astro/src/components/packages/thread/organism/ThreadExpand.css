@@ -41,7 +41,7 @@
 }
 
 .thread-expand-content .ql-editor > * {
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .thread-expand-content .ql-editor h1,
@@ -68,7 +68,6 @@
 }
 
 .thread-expand-content .ql-editor p {
-  margin-bottom: 1em;
   color: var(--text-color);
 }
 

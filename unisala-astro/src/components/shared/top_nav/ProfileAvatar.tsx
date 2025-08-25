@@ -12,7 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authenticated, getCache } from "@/utils/cache";
+import { getCache } from "@/utils/cache";
 import DarkModeToggle from "@/components/ui/theme-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ProfileIcon } from "@/components/packages/icons/profile";
@@ -36,7 +36,7 @@ const ProfileAvatar = () => {
   if (!user.authenticated) {
     return (
       <div className="flex gap-3 items-center">
-        <a href="/universe/search" data-astro-reload>
+        <a href="/universe/search?q=popular" data-astro-reload>
           <SearchIcon />
         </a>
         <a href="/auth" data-astro-reload>
@@ -49,7 +49,7 @@ const ProfileAvatar = () => {
 
   return (
     <div className="flex gap-3 items-center">
-      <a href="/universe/search" data-astro-reload>
+      <a href="/universe/search?q=popular" data-astro-reload>
         <SearchIcon />
       </a>
       <DropdownMenu>

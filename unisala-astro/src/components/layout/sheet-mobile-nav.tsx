@@ -42,7 +42,7 @@ export function SheetMobileNav({
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <a href="/" className="flex items-center">
+        <a href="/" className="flex items-center" data-astro-reload>
           <Icons.logo className="mr-2 size-8" />
           <span className="font-bold">{siteConfig.name}</span>
         </a>
@@ -57,6 +57,7 @@ export function SheetMobileNav({
                         key={item.href}
                         href={item.href}
                         className="text-muted-foreground"
+                        data-astro-reload
                         onClick={() =>
                           item.href.startsWith("/#")
                             ? setOpen(false)
@@ -89,6 +90,7 @@ export function SheetMobileNav({
                               href={subItem.href}
                               target={subItem?.external ? "_blank" : undefined}
                               className="text-muted-foreground" rel="noreferrer"
+                              data-astro-reload
                             >
                               {subItem.title}
                             </a>

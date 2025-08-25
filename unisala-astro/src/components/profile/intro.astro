@@ -3,55 +3,116 @@ type Props = {
   authorName: string;
   oneLinerBio: string;
   images: string[];
-
 };
 
-const { authorName, oneLinerBio, images} = Astro.props;
- const randomImage = images[Math.floor(Math.random() * images.length)]
+const { authorName, oneLinerBio, images } = Astro.props;
+const randomImage = images[Math.floor(Math.random() * images.length)];
 ---
-{oneLinerBio.length > 0 && <section class="bg-white dark:bg-gray-900">
-    <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+
+{/* Show quote section if oneLinerBio has content */}
+{
+  oneLinerBio.length > 0 && (
+    <section class="bg-white dark:bg-gray-900">
+      <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
         <figure class="max-w-screen-md mx-auto">
-            <svg class="h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
-            </svg> 
-            <blockquote>
-                <p class="text-2xl font-medium text-gray-900 dark:text-white">
-                    {oneLinerBio}
-                </p>
-            </blockquote>
-            <figcaption class="flex items-center justify-center mt-6 space-x-3">
-              <img
+          <svg
+            class="h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600"
+            viewBox="0 0 24 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z"
+              fill="currentColor"
+            />
+          </svg>
+          <blockquote>
+            <p
+              class="text-2xl font-medium text-gray-900 dark:text-white"
+              set:html={oneLinerBio}
+            ></p>
+          </blockquote>
+          <figcaption class="flex items-center justify-center mt-6 space-x-3">
+            <img
               class="w-8 h-8 rounded-full mr-2"
-              src={`https://api.multiavatar.com/aaa.svg`}
+              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=john`}
               alt="Author avatar"
             />
-                <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
-                    <div class="pr-3 font-medium text-gray-900 dark:text-white">{authorName}</div>
-                    <!-- <div class="pl-3 text-sm font-light text-gray-500 dark:text-gray-400">Software Developer</div> -->
-                </div>
-            </figcaption>
-        </figure>
-    </div>
-  </section>}
-  <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-    <div class="max-w-lg sm:text-center sm:mx-auto">
-      <div class="max-w-screen-md mx-auto px-4 py-8">
-        <div class="">
-            <div class="w-full max-w-4xl mx-auto mb-8">
-            <img
-             src={randomImage} 
-             alt={`${'title'}
-              unisala image`} 
-              class="w-full h-full object-contain"
-            />
+            <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
+              <div class="pr-3 font-medium text-gray-900 dark:text-white">
+                {authorName}
+              </div>
             </div>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  )
+}
+
+{/* Show welcome section if oneLinerBio is empty */}
+{
+  oneLinerBio.length === 0 && (
+    <section class="bg-white dark:bg-gray-900 px-4 py-8 max-w-2xl mx-auto text-gray-800 dark:text-gray-200">
+      <h1 class="text-2xl sm:text-3xl font-signature italic font-semibold text-center mb-4">
+        👋 Welcome — You've Landed on My Signature Page
+      </h1>
+      <p class="text-base sm:text-lg mb-4">
+        Hey, I'm{' '}
+        <strong class="text-black dark:text-white">{authorName}</strong> —
+        software engineer at
+        <a
+          href="https://unisala.com"
+          class="text-indigo-600 dark:text-indigo-400 underline hover:no-underline"
+        >
+          Unisala.com
+        </a>
+        .
+      </p>
+      <p class="text-base sm:text-lg mb-6">
+        You're viewing my <strong>Signature</strong>, a space where I share what
+        I'm learning, building, and thinking about — all in one place.
+      </p>
+      <div class="border-l-4 border-indigo-400 dark:border-indigo-500 pl-4 italic mb-6 text-sm sm:text-base text-gray-700 dark:text-gray-400">
+        📍 If you came here from my LinkedIn, personal website, or a shared
+        link:
+        <br />
+        This is not a portfolio in the traditional sense — it's more like a
+        public digital notebook. Every article, thread, or note you see here was
+        written by me, mostly to document useful things and help others who are
+        on the same path.
+      </div>
+      <h2 class="text-lg font-semibold mb-2">What You'll Find Here:</h2>
+      <ul class="list-disc list-inside space-y-1 text-sm sm:text-base">
+        <li>✍️ My thoughts on algorithms, systems, and software design</li>
+        <li>🧠 Insights from real-world engineering work</li>
+        <li>🔗 Direct links to every article I've published on Unisala</li>
+      </ul>
+    </section>
+  )
+}
+
+{/* Image and signature section - always shown */}
+<div
+  class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20"
+>
+  <div class="max-w-lg sm:text-center sm:mx-auto">
+    <div class="max-w-screen-md mx-auto px-4 py-8">
+      <div class="">
+        <div class="w-full max-w-4xl mx-auto mb-8">
+          <img
+            src={randomImage}
+            alt={`${authorName} signature image`}
+            class="w-full h-full object-contain"
+          />
         </div>
       </div>
-
-      <h1 class="font-signature italic text-xl lg:text-3xl text-black dark:text-white tracking-wide border-b-2 border-indigo-300 dark:border-gray-600 pb-2 mb-4 shadow-sm">
-          Signature of {authorName}
-      </h1>
-      
     </div>
+
+    <h1
+      class="font-signature italic text-xl lg:text-3xl text-black dark:text-white tracking-wide border-b-2 border-indigo-300 dark:border-gray-600 pb-2 mb-4 shadow-sm"
+    >
+      Signature of {authorName}
+    </h1>
   </div>
+</div>

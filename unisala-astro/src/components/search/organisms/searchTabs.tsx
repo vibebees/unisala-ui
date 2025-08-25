@@ -1,5 +1,4 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { cn } from '@/utils/lib/utils';
 import type { IPost } from "@/types/post";
 import { UserCard, type User } from '../molecules/cards/userCard';

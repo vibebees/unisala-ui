@@ -1,7 +1,7 @@
 ---
 import MainLayout from "@/layouts/main-layout.astro";
 import MediumFeed from "@/components/feed/tagsfeed";
-
+export const prerender = true;
 import { fetchApi } from "@/utils/api.utility";
 import { userServiceGql } from "@/datasource/servers";
 
@@ -68,14 +68,14 @@ try {
     }),
   });
 
-  // Fetch staff picks
   const staffPicksResult = await fetchApi(userServiceGql, {
     method: "POST",
     body: JSON.stringify({
       query: getNewsFeed,
       variables: {
         feedQuery: {
-          feedType: "space",
+          feedType: "specificSpace",
+          feedId:"64e51cd2b4c2827fdb5da4ab",
           page: 0,
           pageSize: 6,
         },
@@ -100,6 +100,7 @@ try {
 
   articles = regularFeed.data?.fetchFeedV2?.data || [];
   staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
+
   topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory || [];
 } catch (e) {
   console.error("Error fetching data:", e);

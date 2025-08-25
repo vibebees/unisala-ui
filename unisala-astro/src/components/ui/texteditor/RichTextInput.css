@@ -99,10 +99,11 @@
   color: var(--placeholder-color);
 }
 
+
 .ql-editor p {
-  padding-bottom: 1em;
-  margin-bottom: 0;
+  padding-bottom: 0.5em;
 }
+
 
 .ql-editor li {
   padding-bottom: 0.5em;

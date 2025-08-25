@@ -27,7 +27,7 @@ export const UserCard = ({ user }: UserCardProps) => {
       <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
         <Avatar.Root>
           <Avatar.Image
-            src={user.picture || `https://api.multiavatar.com/${user.username || fullName}.svg`}
+            src={user.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.username || fullName}`}
             alt={fullName}
             className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
           />

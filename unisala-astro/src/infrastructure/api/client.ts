@@ -4,6 +4,7 @@ import type { Result } from '@/core/result';
 import { Ok, Err } from '@/core/result';
 import { TransportError, createTransportError, isRetryableError, getRetryDelay } from '@/infrastructure/errors';
 import { errorReporter, ErrorSeverity } from '@/infrastructure/error-reporter';
+import { USER_SERVICE_GQL } from '@/datasource/servers/types';
 
 // Define OperationVariables type locally since it's not exporting properly
 export type OperationVariables = Record<string, any>;
@@ -109,6 +110,7 @@ export class ApolloAPIClient implements APIClient {
           variables,
           fetchPolicy: 'cache-first',
           errorPolicy: 'all',
+          context: { server: USER_SERVICE_GQL }, // Default to user service for queries
         });
 
         if (result.error) {
@@ -159,6 +161,7 @@ export class ApolloAPIClient implements APIClient {
           mutation,
           variables,
           errorPolicy: 'all',
+          context: { server: USER_SERVICE_GQL }, // Default to user service for mutations
         });
 
         if (result.errors && result.errors.length > 0) {

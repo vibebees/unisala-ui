@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
-import { Result } from '@/core/result';
+import type { Result } from '@/core/result';
 import { TransportError } from '@/infrastructure/errors';
-import { APIClient } from '../client';
-import {
+import type { APIClient } from '../client';
+import type {
   Post,
   PostDraft,
   Comment,
@@ -13,7 +13,7 @@ import {
   PostSearchCriteria,
   PostSearchResult,
 } from '@/core/domain/post';
-import {
+import type {
   PostDTO,
   PostDraftDTO,
   CommentDTO,

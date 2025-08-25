@@ -1,4 +1,4 @@
-import {
+import type {
   User,
   UserProfile,
   UserPreferences,
@@ -9,7 +9,7 @@ import {
   UpdateUserData,
 } from '@/core/domain/user';
 
-import {
+import type {
   UserDTO,
   UserProfileDTO,
   UserPreferencesDTO,

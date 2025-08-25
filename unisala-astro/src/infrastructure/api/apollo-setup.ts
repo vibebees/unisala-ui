@@ -123,14 +123,14 @@ const serviceConfig = getServiceConfig();
 
 const serviceLink = split(
   operation => operation.getContext().server === USER_SERVICE_GQL,
-  createServiceHttpLink(serviceConfig.userServiceAddress),
+  createServiceHttpLink(`${serviceConfig.userServiceAddress}/graphql`),
   split(
     operation => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
-    createServiceHttpLink(serviceConfig.universityServiceAddress),
+    createServiceHttpLink(`${serviceConfig.universityServiceAddress}/graphql`),
     split(
       operation => operation.getContext().server === MESSAGE_SERVICE_GQL,
-      createServiceHttpLink(serviceConfig.messagingServiceAddress),
-      createServiceHttpLink(serviceConfig.userServiceAddress) // Default fallback
+      createServiceHttpLink(`${serviceConfig.messagingServiceAddress}/graphql`),
+      createServiceHttpLink(`${serviceConfig.userServiceAddress}/graphql`) // Default fallback
     )
   )
 );

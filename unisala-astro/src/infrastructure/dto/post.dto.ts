@@ -1,4 +1,4 @@
-import { UserDTO } from './user.dto';
+import type { UserDTO } from './user.dto';
 
 /**
  * Post DTO from API responses

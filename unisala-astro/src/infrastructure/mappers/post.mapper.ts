@@ -1,4 +1,4 @@
-import {
+import type {
   Post,
   PostStatus,
   PostVisibility,
@@ -12,7 +12,7 @@ import {
   PostSearchResult,
 } from '@/core/domain/post';
 
-import {
+import type {
   PostDTO,
   TagDTO,
   PostMetricsDTO,

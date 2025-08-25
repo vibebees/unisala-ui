@@ -122,12 +122,13 @@ class ErrorReportingService {
 
   constructor() {
     // Use console reporter in development, remote in production
-    this.reporter = process.env.NODE_ENV === 'development'
+    const isDev = import.meta.env.MODE === 'development';
+    const endpoint = import.meta.env['ERROR_REPORTING_ENDPOINT'];
+    const apiKey = import.meta.env['ERROR_REPORTING_API_KEY'];
+    
+    this.reporter = isDev || !endpoint || !apiKey
       ? new ConsoleErrorReporter()
-      : new RemoteErrorReporter(
-          process.env.ERROR_REPORTING_ENDPOINT || '',
-          process.env.ERROR_REPORTING_API_KEY || ''
-        );
+      : new RemoteErrorReporter(endpoint, apiKey);
   }
 
   /**
@@ -193,8 +194,8 @@ class ErrorReportingService {
       url: typeof window !== 'undefined' ? window.location.href : undefined,
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
       timestamp: new Date(),
-      environment: process.env.NODE_ENV,
-      buildVersion: process.env.BUILD_VERSION,
+      environment: import.meta.env.MODE,
+      buildVersion: import.meta.env['BUILD_VERSION'],
       ...context,
     };
 

@@ -1,6 +1,8 @@
 import { APIClient } from './client';
-import { UserService, createUserService } from './services/user.service';
-import { PostService, createPostService } from './services/post.service';
+import type { UserService } from './services/user.service';
+import { createUserService } from './services/user.service';
+import type { PostService } from './services/post.service';
+import { createPostService } from './services/post.service';
 
 /**
  * Service registry that provides access to all API services

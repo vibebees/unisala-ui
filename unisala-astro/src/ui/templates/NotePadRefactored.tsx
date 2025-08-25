@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDraftsStore, useUserStore } from '@/app/stores';
 import { usePostService } from '@/infrastructure/api/service-registry';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
-import { CreatePostData, Tag } from '@/core/domain/post';
+import type { CreatePostData, Tag } from '@/core/domain/post';
 import { unwrap } from '@/core/result';
 import toast from 'react-hot-toast';
 

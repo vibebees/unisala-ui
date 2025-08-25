@@ -1,15 +1,15 @@
 import { gql } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
-import { Result } from '@/core/result';
+import type { Result } from '@/core/result';
 import { TransportError } from '@/infrastructure/errors';
-import { APIClient } from '../client';
-import {
+import type { APIClient } from '../client';
+import type {
   User,
   UserAuth,
   CreateUserData,
   UpdateUserData,
 } from '@/core/domain/user';
-import {
+import type {
   UserDTO,
   AuthResponseDTO,
   CreateUserRequestDTO,

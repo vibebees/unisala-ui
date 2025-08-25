@@ -33,6 +33,8 @@ export const useDraftManager = () => {
         keys.forEach(key => {
             if (key.endsWith('.postTitle') || key.endsWith('.postText')) {
                 const timestamp = key.split('.')[0];
+                if (!timestamp) return; // Skip if timestamp is undefined
+                
                 // Initialize if not already added
                 if (!migratedDrafts[timestamp]) {
                     migratedDrafts[timestamp] = {
@@ -144,12 +146,15 @@ export const useDraftManager = () => {
 
         if (id && id in updatedDrafts) {
             // Update existing draft
-            updatedDrafts[id] = {
-                ...updatedDrafts[id],
-                postTitle: postTitle !== undefined ? postTitle : updatedDrafts[id].postTitle,
-                postText: postText !== undefined ? postText : updatedDrafts[id].postText,
-                updatedAt
-            };
+            const existingDraft = updatedDrafts[id];
+            if (existingDraft) {
+                updatedDrafts[id] = {
+                    ...existingDraft,
+                    postTitle: postTitle !== undefined ? postTitle : existingDraft.postTitle,
+                    postText: postText !== undefined ? postText : existingDraft.postText,
+                    updatedAt
+                };
+            }
         } else {
             // Create new draft
             id = id || timestamp.toString(); // Use provided id or create new one
@@ -162,12 +167,13 @@ export const useDraftManager = () => {
         }
 
         // Only save if there's content
-        if ((updatedDrafts[id].postTitle || "").trim() || (updatedDrafts[id].postText || "").trim()) {
+        const currentDraft = updatedDrafts[id];
+        if (currentDraft && ((currentDraft.postTitle || "").trim() || (currentDraft.postText || "").trim())) {
             localStorage.setItem('storyDrafts', JSON.stringify(updatedDrafts));
             setDrafts(updatedDrafts);
             setDraftId(id);
-            setDraftTitle(updatedDrafts[id].postTitle || '');
-            setDraftContent(updatedDrafts[id].postText || '');
+            setDraftTitle(currentDraft.postTitle || '');
+            setDraftContent(currentDraft.postText || '');
             setHasDrafts(true);
         } else {
             console.warn("Cannot save empty draft");
@@ -184,8 +190,11 @@ export const useDraftManager = () => {
         const updatedDrafts = { ...drafts };
 
         if (id && id in updatedDrafts) {
-            updatedDrafts[id].postTitle = postTitle;
-            updatedDrafts[id].updatedAt = updatedAt;
+            const existingDraft = updatedDrafts[id];
+            if (existingDraft) {
+                existingDraft.postTitle = postTitle;
+                existingDraft.updatedAt = updatedAt;
+            }
         } else {
             // Create new draft if it doesn't exist
             id = id || timestamp.toString();
@@ -294,6 +303,7 @@ export const useDraftManager = () => {
     
         Object.keys(drafts).forEach(timestamp => {
             const draft = drafts[timestamp];
+            if (!draft) return; // Skip if draft is undefined
     
             // Handle null or undefined values safely
             const createdAt = draft.createdAt

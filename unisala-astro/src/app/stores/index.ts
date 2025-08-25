@@ -17,19 +17,26 @@ export type { AppStore, Theme, LayoutConfig, EditorConfig, AppNotification } fro
 export type { User, UserAuth } from '@/core/domain/user';
 export type { PostDraft, Tag } from '@/core/domain/post';
 
+import type { UserStore } from './user.store';
+import type { DraftsStore } from './drafts.store';
+import type { AppStore } from './app.store';
+import { useUserStore } from './user.store';
+import { useDraftsStore } from './drafts.store';
+import { useAppStore } from './app.store';
+
 /**
  * Combined store selector type for components that need multiple stores
  */
 export interface StoreSelectors {
-  user: ReturnType<typeof useUserStore>;
-  drafts: ReturnType<typeof useDraftsStore>;
-  app: ReturnType<typeof useAppStore>;
+  user: UserStore;
+  drafts: DraftsStore;
+  app: AppStore;
 }
 
 /**
  * Hook to access all stores (use sparingly to avoid unnecessary re-renders)
  */
-export function useAllStores() {
+export function useAllStores(): StoreSelectors {
   return {
     user: useUserStore(),
     drafts: useDraftsStore(),
@@ -41,9 +48,9 @@ export function useAllStores() {
  * Hook for components that only need specific store actions (no re-renders on state changes)
  */
 export function useStoreActions() {
-  const userStore = useUserStore();
-  const draftsStore = useDraftsStore();
-  const appStore = useAppStore();
+  const userStore = useUserStore.getState();
+  const draftsStore = useDraftsStore.getState();
+  const appStore = useAppStore.getState();
   
   return {
     user: {
@@ -84,8 +91,8 @@ export function initializeStores() {
   // Set up store cross-subscriptions if needed
   // For example, when user logs out, clear drafts
   useUserStore.subscribe(
-    (state) => state.isAuthenticated,
-    (isAuthenticated, previousIsAuthenticated) => {
+    (state: UserStore) => state.isAuthenticated,
+    (isAuthenticated: boolean, previousIsAuthenticated: boolean) => {
       if (previousIsAuthenticated && !isAuthenticated) {
         // User logged out, optionally clear drafts or other sensitive data
         console.log('User logged out, cleaning up state...');
@@ -96,11 +103,11 @@ export function initializeStores() {
   // Set up drafts auto-save subscription
   let autoSaveTimeout: NodeJS.Timeout;
   useDraftsStore.subscribe(
-    (state) => ({ 
+    (state: DraftsStore) => ({ 
       currentDraftId: state.currentDraftId, 
       currentDraft: state.currentDraftId ? state.drafts[state.currentDraftId] : null 
     }),
-    ({ currentDraftId, currentDraft }) => {
+    ({ currentDraftId, currentDraft }: { currentDraftId: string | null; currentDraft: any }) => {
       if (currentDraft && currentDraft.autoSaveEnabled && !useDraftsStore.getState().isSaving) {
         clearTimeout(autoSaveTimeout);
         autoSaveTimeout = setTimeout(() => {
@@ -135,7 +142,7 @@ export function cleanupStores() {
 /**
  * Development helpers
  */
-if (process.env.NODE_ENV === 'development') {
+if (process.env['NODE_ENV'] === 'development') {
   // Add stores to window object for debugging
   if (typeof window !== 'undefined') {
     (window as any).__STORES__ = {

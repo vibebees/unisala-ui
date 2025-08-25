@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
-import { User, UserAuth } from '@/core/domain/user';
-import { Result } from '@/core/result';
+import type { User, UserAuth } from '@/core/domain/user';
+import type { Result } from '@/core/result';
 import { TransportError } from '@/infrastructure/errors';
 import { getCache, setCache, removeCache } from '@/utils/cache';
 import { UserService } from '@/infrastructure/api/services/user.service';
@@ -83,13 +83,13 @@ export const useUserStore = create<UserStore>()(
               createdAt: new Date(),
               updatedAt: new Date(),
               profile: {
-                firstName: undefined,
-                lastName: undefined,
-                bio: undefined,
-                university: undefined,
-                major: undefined,
-                graduationYear: undefined,
-                location: undefined,
+                firstName: '',
+                lastName: '',
+                bio: '',
+                university: '',
+                major: '',
+                graduationYear: 0,
+                location: '',
               },
               preferences: {
                 theme: 'system',

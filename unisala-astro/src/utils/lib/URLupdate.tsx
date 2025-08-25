@@ -110,7 +110,7 @@ export const navigator = ( url:string = '') => {
           if (redirectUrl) {
             // Preserve the structure of the redirect URL
             const [path, query] = redirectUrl.split('?');
-            const redirectUrlObj = new URL(path, window.location.origin);
+            const redirectUrlObj = new URL(path || '/new-story', window.location.origin);
             if (query) {
               redirectUrlObj.search = query;
             }
@@ -164,7 +164,7 @@ export const extractNameAndId = (url:string)=> {
   let [, name, id] = match;
   
   // Replace hyphens with spaces in the name
-  name = name.replace(/-/g, ' ');
+  name = name?.replace(/-/g, ' ') || '';
   
   // Capitalize the first letter of each word in the name
   const capitalizedName = name.replace(/\b\w/g, char => char.toUpperCase());

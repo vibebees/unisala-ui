@@ -79,9 +79,12 @@ export const calculateStreak = (sessionType: SessionType, configMetrics?: Streak
     }
 
     if (sessionType === 'SESSION_END') {
-        const sessionTime = Math.max(0, currentTime - metrics.sessions[metrics.sessions.length - 1].startTime);
+        const sessionTime = Math.max(0, currentTime - (metrics.sessions[metrics.sessions.length - 1]?.startTime || currentTime));
         const updatedSessions = [...metrics.sessions];
-        updatedSessions[updatedSessions.length - 1].endTime = currentTime;
+        if (updatedSessions[updatedSessions.length - 1]) {
+            const lastSession = updatedSessions[updatedSessions.length - 1];
+            if (lastSession) lastSession.endTime = currentTime;
+        }
         return {
             ...metrics,
             lastActiveTime: currentTime,

@@ -20,5 +20,5 @@ export function createSlug(title: string, id: string): string {
   
   export function extractIdFromSlug(slug: string): string {
     const parts = slug.split('-');
-    return parts[parts.length - 1];
+    return parts[parts.length - 1] || '';
   }

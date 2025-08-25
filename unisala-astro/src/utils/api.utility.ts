@@ -23,7 +23,7 @@ export async function fetchApi(
     ...options,
     headers: {
       ...defaultOptions.headers,
-      ...options.headers,
+      ...options['headers'],
     },
   };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import { NotePadRefactored } from '@/ui/templates/NotePadRefactored';
 import { useAppStore } from '@/app/stores';
 

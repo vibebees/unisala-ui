@@ -116,7 +116,7 @@ export const similarThreadDetail = (text:string) =>{
 
 export function extractHeading(text: string) {
   const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
-  if (headingMatch) return headingMatch[1].trim();
+  if (headingMatch) return headingMatch[1]?.trim() || '';
 
   let cleanText = text
     .replace(/<[^>]*>/g, '')

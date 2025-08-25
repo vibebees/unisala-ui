@@ -29,7 +29,7 @@ export function mapUserDTOToDomain(dto: UserDTO): User {
     email: dto.email,
     username: dto.username,
     displayName: dto.displayName,
-    avatarUrl: dto.avatarUrl,
+    avatarUrl: dto.avatarUrl ?? '',
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
     profile: mapUserProfileDTOToDomain(dto.profile || {}),
@@ -42,13 +42,13 @@ export function mapUserDTOToDomain(dto: UserDTO): User {
  */
 function mapUserProfileDTOToDomain(dto: UserProfileDTO): UserProfile {
   return {
-    firstName: dto.firstName,
-    lastName: dto.lastName,
-    bio: dto.bio,
-    university: dto.university,
-    major: dto.major,
-    graduationYear: dto.graduationYear,
-    location: dto.location,
+    firstName: dto.firstName ?? '',
+    lastName: dto.lastName ?? '',
+    bio: dto.bio ?? '',
+    university: dto.university ?? '',
+    major: dto.major ?? '',
+    graduationYear: dto.graduationYear ?? 0,
+    location: dto.location ?? '',
   };
 }
 
@@ -105,12 +105,21 @@ export function mapAuthResponseDTOToDomain(dto: AuthResponseDTO): UserAuth {
  * Maps CreateUserData to CreateUserRequestDTO
  */
 export function mapCreateUserDataToDTO(data: CreateUserData): CreateUserRequestDTO {
+  if (data.profile) {
+    return {
+      email: data.email,
+      username: data.username,
+      password: data.password,
+      displayName: data.displayName,
+      profile: mapUserProfileDomainToDTO(data.profile),
+    };
+  }
+  
   return {
     email: data.email,
     username: data.username,
     password: data.password,
     displayName: data.displayName,
-    profile: data.profile ? mapUserProfileDomainToDTO(data.profile) : undefined,
   };
 }
 
@@ -119,11 +128,11 @@ export function mapCreateUserDataToDTO(data: CreateUserData): CreateUserRequestD
  */
 export function mapUpdateUserDataToDTO(data: UpdateUserData): UpdateUserRequestDTO {
   return {
-    displayName: data.displayName,
-    avatarUrl: data.avatarUrl,
-    profile: data.profile ? mapUserProfileDomainToDTO(data.profile) : undefined,
-    preferences: data.preferences ? mapUserPreferencesDomainToDTO(data.preferences) : undefined,
-  };
+    ...(data.displayName !== undefined && { displayName: data.displayName }),
+    ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
+    ...(data.profile && { profile: mapUserProfileDomainToDTO(data.profile) }),
+    ...(data.preferences && { preferences: mapUserPreferencesDomainToDTO(data.preferences) }),
+  } as UpdateUserRequestDTO;
 }
 
 /**
@@ -131,14 +140,14 @@ export function mapUpdateUserDataToDTO(data: UpdateUserData): UpdateUserRequestD
  */
 function mapUserProfileDomainToDTO(profile: Partial<UserProfile>): Partial<UserProfileDTO> {
   return {
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    bio: profile.bio,
-    university: profile.university,
-    major: profile.major,
-    graduationYear: profile.graduationYear,
-    location: profile.location,
-  };
+    ...(profile.firstName !== undefined && { firstName: profile.firstName }),
+    ...(profile.lastName !== undefined && { lastName: profile.lastName }),
+    ...(profile.bio !== undefined && { bio: profile.bio }),
+    ...(profile.university !== undefined && { university: profile.university }),
+    ...(profile.major !== undefined && { major: profile.major }),
+    ...(profile.graduationYear !== undefined && { graduationYear: profile.graduationYear }),
+    ...(profile.location !== undefined && { location: profile.location }),
+  } as Partial<UserProfileDTO>;
 }
 
 /**
@@ -146,10 +155,10 @@ function mapUserProfileDomainToDTO(profile: Partial<UserProfile>): Partial<UserP
  */
 function mapUserPreferencesDomainToDTO(preferences: Partial<UserPreferences>): Partial<UserPreferencesDTO> {
   return {
-    theme: preferences.theme,
-    notifications: preferences.notifications ? mapNotificationPreferencesDomainToDTO(preferences.notifications) : undefined,
-    privacy: preferences.privacy ? mapPrivacySettingsDomainToDTO(preferences.privacy) : undefined,
-  };
+    ...(preferences.theme !== undefined && { theme: preferences.theme }),
+    ...(preferences.notifications && { notifications: mapNotificationPreferencesDomainToDTO(preferences.notifications) }),
+    ...(preferences.privacy && { privacy: mapPrivacySettingsDomainToDTO(preferences.privacy) }),
+  } as Partial<UserPreferencesDTO>;
 }
 
 /**
@@ -157,13 +166,13 @@ function mapUserPreferencesDomainToDTO(preferences: Partial<UserPreferences>): P
  */
 function mapNotificationPreferencesDomainToDTO(notifications: Partial<NotificationPreferences>): NotificationPreferencesDTO {
   return {
-    email: notifications.email,
-    browser: notifications.browser,
-    comments: notifications.comments,
-    replies: notifications.replies,
-    mentions: notifications.mentions,
-    newsletters: notifications.newsletters,
-  };
+    ...(notifications.email !== undefined && { email: notifications.email }),
+    ...(notifications.browser !== undefined && { browser: notifications.browser }),
+    ...(notifications.comments !== undefined && { comments: notifications.comments }),
+    ...(notifications.replies !== undefined && { replies: notifications.replies }),
+    ...(notifications.mentions !== undefined && { mentions: notifications.mentions }),
+    ...(notifications.newsletters !== undefined && { newsletters: notifications.newsletters }),
+  } as NotificationPreferencesDTO;
 }
 
 /**
@@ -171,8 +180,8 @@ function mapNotificationPreferencesDomainToDTO(notifications: Partial<Notificati
  */
 function mapPrivacySettingsDomainToDTO(privacy: Partial<PrivacySettings>): PrivacySettingsDTO {
   return {
-    profileVisibility: privacy.profileVisibility,
-    activityTracking: privacy.activityTracking,
-    dataSharing: privacy.dataSharing,
-  };
+    ...(privacy.profileVisibility !== undefined && { profileVisibility: privacy.profileVisibility }),
+    ...(privacy.activityTracking !== undefined && { activityTracking: privacy.activityTracking }),
+    ...(privacy.dataSharing !== undefined && { dataSharing: privacy.dataSharing }),
+  } as PrivacySettingsDTO;
 }

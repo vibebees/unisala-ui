@@ -3,6 +3,7 @@ import { useDraftsStore, useUserStore } from '@/app/stores';
 import { usePostService } from '@/infrastructure/api/service-registry';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import type { CreatePostData, Tag } from '@/core/domain/post';
+import { PostVisibility } from '@/core/domain/post';
 import { unwrap } from '@/core/result';
 import toast from 'react-hot-toast';
 
@@ -125,7 +126,7 @@ export const NotePadRefactored: React.FC<NotePadProps> = ({
         title: currentDraft.title,
         content: currentDraft.content,
         tags: currentDraft.tags.map(tag => tag.id),
-        visibility: 'public', // Could be made configurable
+        visibility: PostVisibility.PUBLIC, // Could be made configurable
         publishImmediately: true,
       };
 

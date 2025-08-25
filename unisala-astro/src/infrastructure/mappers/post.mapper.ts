@@ -1,7 +1,5 @@
 import type {
   Post,
-  PostStatus,
-  PostVisibility,
   Tag,
   PostMetrics,
   PostDraft,
@@ -11,6 +9,7 @@ import type {
   CreateCommentData,
   PostSearchResult,
 } from '@/core/domain/post';
+import { PostStatus, PostVisibility } from '@/core/domain/post';
 
 import type {
   PostDTO,
@@ -129,23 +128,30 @@ export function mapCreatePostDataToDTO(data: CreatePostData): CreatePostRequestD
  */
 export function mapUpdatePostDataToDTO(data: UpdatePostData): UpdatePostRequestDTO {
   return {
-    title: data.title,
-    postText: data.content,
-    tags: data.tags?.map(tagName => ({ name: tagName, _id: '' })),
-    visibility: data.visibility,
-    imageUrl: data.imageUrl,
-    status: data.status,
-  };
+    ...(data.title !== undefined && { title: data.title }),
+    ...(data.content !== undefined && { postText: data.content }),
+    ...(data.tags !== undefined && { tags: data.tags.map(tagName => ({ name: tagName, _id: '' })) }),
+    ...(data.visibility !== undefined && { visibility: data.visibility }),
+    ...(data.imageUrl !== undefined && { imageUrl: data.imageUrl }),
+    ...(data.status !== undefined && { status: data.status }),
+  } as UpdatePostRequestDTO;
 }
 
 /**
  * Maps CreateCommentData to CreateCommentRequestDTO
  */
 export function mapCreateCommentDataToDTO(data: CreateCommentData): CreateCommentRequestDTO {
+  if (data.parentId !== undefined) {
+    return {
+      content: data.content,
+      postId: data.postId,
+      parentId: data.parentId,
+    };
+  }
+  
   return {
     content: data.content,
     postId: data.postId,
-    parentId: data.parentId,
   };
 }
 

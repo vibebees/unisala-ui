@@ -1,10 +1,10 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, type ReactNode } from 'react';
 import type { DomainError } from '@/core/errors';
 import type { TransportError } from '@/infrastructure/errors';
 
 interface ErrorBoundaryState {
   hasError: boolean;
-  error?: Error;
+  error: Error | null;
 }
 
 interface ErrorBoundaryProps {
@@ -20,14 +20,14 @@ interface ErrorBoundaryProps {
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
     // Log to external service in production
@@ -37,10 +37,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   private handleRetry = () => {
-    this.setState({ hasError: false, error: undefined });
+    this.setState({ hasError: false, error: null });
   };
 
-  render() {
+  override render() {
     if (this.state.hasError && this.state.error) {
       if (this.props.fallback) {
         return this.props.fallback(this.state.error, this.handleRetry);
@@ -62,8 +62,8 @@ interface DefaultErrorFallbackProps {
  * Default error fallback UI component
  */
 function DefaultErrorFallback({ error, onRetry }: DefaultErrorFallbackProps) {
-  const isDomainError = error instanceof DomainError;
-  const isTransportError = error instanceof TransportError;
+  const isDomainError = (error as any).constructor.name === 'DomainError';
+  const isTransportError = (error as any).constructor.name === 'TransportError';
 
   let title = 'Something went wrong';
   let message = 'An unexpected error occurred. Please try again.';
@@ -120,7 +120,7 @@ function DefaultErrorFallback({ error, onRetry }: DefaultErrorFallbackProps) {
             </button>
           </div>
 
-          {process.env.NODE_ENV === 'development' && (
+          {process.env['NODE_ENV'] === 'development' && (
             <details className="mt-6 text-left">
               <summary className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
                 Debug Info

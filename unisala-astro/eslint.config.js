@@ -4,7 +4,8 @@ import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    ignores: ["dist/**", "node_modules/**", ".astro/**"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {

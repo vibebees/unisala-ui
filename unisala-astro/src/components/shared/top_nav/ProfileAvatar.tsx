@@ -12,7 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authenticated, getCache } from "@/utils/cache";
+import { getCache } from "@/utils/cache";
 import DarkModeToggle from "@/components/ui/theme-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ProfileIcon } from "@/components/packages/icons/profile";

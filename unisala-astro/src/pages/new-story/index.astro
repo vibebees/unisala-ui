@@ -19,7 +19,7 @@ const initialPostDraft: PostDraft = {
 ---
 
 <MainLayout title='Create Post'>
-    <Toast client:load />
-    <NotePad client:only initialPostDraft={initialPostDraft} />
+    <Toast client:only="react" />
+    <NotePad client:only="react" initialPostDraft={initialPostDraft} />
 
 </MainLayout>

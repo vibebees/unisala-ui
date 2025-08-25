@@ -2,9 +2,8 @@ import type { IPost } from '@/types/post';
 import { formatDate } from '@/utils/date';
 import { extractImageFromPostText } from '@/utils/lib/image';
 import { calculateReadTime, threadPointer } from '@/utils/lib/utils';
-import * as Avatar from '@radix-ui/react-avatar';
 
- 
+
 
 
 export const PostCard = ({ post }: { post: IPost }) => {

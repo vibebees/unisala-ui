@@ -1,8 +1,7 @@
-import { MetricCard } from '../molecules/metricCard';
 import { useEffect, useState } from 'react';
 import type { EditorMetrics } from '@/types/metrics';
 import { StatsDisplay } from './writersStats';
-import { calculateAverageWpm, calculateFocusPercentage, calculateLongestStreak, calculateTotalFocusTime, calculateTotalIdleTime, calculateTotalTimeSpent, calculateTotalWords, findMaxWpm } from '../utils';
+import { calculateAverageWpm, calculateFocusPercentage, calculateLongestStreak, calculateTotalIdleTime, calculateTotalTimeSpent, calculateTotalWords, findMaxWpm } from '../utils';
 import { getCache } from '@/utils/cache';
 
 

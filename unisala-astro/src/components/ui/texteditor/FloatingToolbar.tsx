@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import "react-quill/dist/quill.snow.css";
 import { Plus, Minus, Image, Loader } from "lucide-react";
 import { getServiceConfig } from "@/datasource/servers/index";

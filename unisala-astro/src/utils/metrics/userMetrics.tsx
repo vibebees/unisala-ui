@@ -1,5 +1,3 @@
-import { ANALYTICS_KEY, SESSION_END, SESSION_START } from "@/components/metrics/analyticsUtils"
-import { getCache, setCache } from "@/utils/cache"
 
 // INIT constants to be more meaningful
 

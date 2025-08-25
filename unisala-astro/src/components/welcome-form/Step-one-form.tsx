@@ -3,11 +3,7 @@ import {
   Book,
   BookOpen,
   Code,
-  Compass,
-  MessageSquare,
-  Share2,
   Star,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import Button from "./atoms/Button";

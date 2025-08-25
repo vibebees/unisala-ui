@@ -1,0 +1,39 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import { Image } from "astro:assets";
+import { hobbies } from "@/config/about.ts";
+import { Button } from "@/components/ui/button";
+import { Icon } from "astro-icon/components";
+---
+
+<MainLayout title="About Unisala" description="Unisala is your personal productivity engine—designed to help you build momentum, develop habits, and accelerate growth in any field.">
+  <section class="space-y-5">
+    {/* Hero Section */}
+    <section class="relative container max-w-screen-md mb-28 mt-16 sm:mt-20 lg:mt-28">
+      <div class="flex h-full flex-col justify-between">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h1 class="text-4xl font-heading text-foreground">Our Mission</h1>
+            <p class="text-base text-muted-foreground mt-0.5">
+              Empowering Growth Through Learning and Productivity
+            </p>
+          </div>
+          <div>
+            <p class="mb-12 text-base text-muted-foreground">
+              At Unisala, we believe that everyone has the potential to achieve greatness. Our mission is to provide the tools, resources, and community to help you build momentum, develop habits, and accelerate growth in any field.
+            </p>
+            <div class="flex items-center gap-3">
+              <!-- <Button className="rounded-xl">
+                <Icon name="lucide:mail" class="mr-2 size-4" />
+                <a href="mailto:">Contact Us</a>
+              </Button> -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+  </section>
+</MainLayout>

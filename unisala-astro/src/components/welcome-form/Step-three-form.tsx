@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, Briefcase, Rocket, Microscope, School, User, Book, Star } from 'lucide-react';
+import { GraduationCap, School, User, Book, Star } from 'lucide-react';
 import { useAstroMutation } from '@/datasource/apollo-client';
 import { EditProfile } from '@/datasource/graphql/user';
 import Button from './atoms/Button';

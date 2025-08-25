@@ -1,14 +1,4 @@
-import {  useMutation, useQuery} from "@apollo/client";
-import { client } from "./servers/endpoints";
-
-export const useAstroMutation: typeof useMutation = (query, options) =>
-  useMutation(query, {
-    ...options,
-    client,
-  });
-
-export const useAstroQuery: typeof useQuery = (query, options) =>
-  useQuery(query, {
-    ...options,
-    client,
-  });
+/**
+ * @deprecated This file is deprecated. Use the new API client from @/infrastructure/api/apollo-setup
+ */
+export { useAstroMutation, useAstroQuery, client, apiClient } from '@/infrastructure/api/apollo-setup';

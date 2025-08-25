@@ -2,14 +2,16 @@ import type { SidebarNavItem, SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
   name: "Unisala",
-  description: "Connecting students worldwide with universities and educational resources, helping them make informed decisions for their future.",
+  description: "Unisala: Unisala is your space to learn smarter, experiment with top LLMs, and build momentum with a community that fuels your growth"  ,
   url: "https://unisala.com",
   ogImage: "images/unisala.png",
   links: {
-    twitter: "",
-    github: ""
+    linkedin: "https://www.linkedin.com/company/unisala/", // Add actual links if available
+    github: "https://github.com/vibebees"
   }
 };
+ 
+
 export const footerLinks: SidebarNavItem[] = [
   {
     title: "About Unisala",
@@ -20,15 +22,7 @@ export const footerLinks: SidebarNavItem[] = [
       { title: "Contact Us", href: "/contact" },
     ],
   },
-  {
-    title: "Resources",
-    items: [
-      { title: "University Finder", href: "/universities" },
-      { title: "Consulting Services", href: "/consulting" },
-      { title: "Webinars", href: "/webinars" },
-      { title: "FAQs", href: "/faqs" },
-    ],
-  },
+
   {
     title: "Legal",
     items: [

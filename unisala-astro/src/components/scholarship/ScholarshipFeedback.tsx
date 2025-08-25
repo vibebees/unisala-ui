@@ -27,6 +27,7 @@ const ScholarshipFeedback = () => {
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, []);
 
   const handleEmojiClick = (value: number) => {

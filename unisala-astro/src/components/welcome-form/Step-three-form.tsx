@@ -17,11 +17,11 @@ const StepThreeForm = () => {
   );
   const [editProfile, { loading }] = useAstroMutation(EditProfile, {
     context: { server: USER_SERVICE_GQL },
-    onCompleted: (data) => {
+    onCompleted: (data: any) => {
       toast.success("Profile setup successfully!");
       navigator();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error("Error setting up profile. Please try again.");
     },
   });

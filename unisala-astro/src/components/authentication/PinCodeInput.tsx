@@ -38,7 +38,7 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
         navigator()
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(
         error?.message ||
           "Error occured while checking email address. Please try again."
@@ -60,7 +60,7 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
           setCountdown(30);
         }
       },
-      onError: (error) => {
+      onError: (error: any) => {
         toast.error(
           error?.message ||
             "Error occured while checking email address. Please try again."
@@ -74,13 +74,15 @@ const PinCodeInput: React.FC<PinCodeInputProps> = ({ onBack, email }) => {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [countdown]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!pinCode || pinCode.length < 6) {
-      return toast.error("Please enter your PIN code.");
+      toast.error("Please enter your PIN code.");
+      return;
     }
     verifyValidationCode({
       variables: {

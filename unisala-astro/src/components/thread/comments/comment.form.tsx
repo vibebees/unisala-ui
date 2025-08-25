@@ -26,7 +26,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
 
   const [addComment, { loading }] = useAstroMutation(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data }) => {
+    update: (cache: any, { data }: any) => {
       if (data?.addComment?.status?.success) {
         const newComment = data.addComment.data;
         console.log('New comment:', newComment);
@@ -60,7 +60,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId = '', parentId, replyT
         toast.error(data?.addComment?.status?.message || 'Failed to post comment. Please try again.');
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error submitting comment:', error);
       toast.error('An error occurred while submitting your comment. Please try again.');
     },

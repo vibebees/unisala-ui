@@ -41,9 +41,9 @@ export function mapPostDTOToDomain(dto: PostDTO): Post {
     visibility: mapPostVisibilityFromDTO(dto.visibility || 'public'),
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
-    publishedAt: dto.publishedAt ? new Date(dto.publishedAt) : undefined,
+    publishedAt: dto.publishedAt ? new Date(dto.publishedAt) : new Date(),
     metrics: mapPostMetricsDTOToDomain(dto.metrics || {}),
-    imageUrl: dto.imageUrl,
+    imageUrl: dto.imageUrl || '',
   };
 }
 
@@ -55,8 +55,8 @@ function mapTagDTOToDomain(dto: TagDTO): Tag {
     id: dto._id,
     name: dto.name,
     slug: dto.slug || generateSlug(dto.name),
-    description: dto.description,
-    color: dto.color,
+    description: dto.description || '',
+    color: dto.color || '',
     postCount: dto.postCount || 0,
   };
 }
@@ -84,7 +84,7 @@ export function mapPostDraftDTOToDomain(dto: PostDraftDTO): PostDraft {
     content: dto.postText,
     authorId: dto.authorId,
     tags: dto.tags?.map(mapTagDTOToDomain) || [],
-    imageUrl: dto.imageUrl,
+    imageUrl: dto.imageUrl || '',
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
     autoSaveEnabled: dto.autoSaveEnabled ?? true,
@@ -100,7 +100,7 @@ export function mapCommentDTOToDomain(dto: CommentDTO): Comment {
     content: dto.content,
     author: mapUserDTOToDomain(dto.author),
     postId: dto.postId,
-    parentId: dto.parentId,
+    parentId: dto.parentId || '',
     replies: dto.replies?.map(mapCommentDTOToDomain) || [],
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
@@ -118,7 +118,7 @@ export function mapCreatePostDataToDTO(data: CreatePostData): CreatePostRequestD
     postText: data.content,
     tags: data.tags.map(tagName => ({ name: tagName })),
     visibility: data.visibility,
-    imageUrl: data.imageUrl,
+    imageUrl: data.imageUrl || '',
     id: 'others', // API requirement - seems to be a legacy field
   };
 }

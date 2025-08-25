@@ -19,11 +19,11 @@ const DraftsList: React.FC = () => {
         saveDraft
     } = useDraftManager();
 
-    const { data, loading, error } = useAstroQuery<NotesQueryResponse>(getNotes, {
+    const { data, loading, error } = useAstroQuery(getNotes, {
         context: { server: USER_SERVICE_GQL },
         fetchPolicy: 'cache-and-network',
         variables: { q: "searchQuery" },
-        onError: (error) => {
+        onError: (error: any) => {
             // Log error but don't block local functionality
             console.warn('Failed to fetch server notes:', error);
             // Load local drafts anyway

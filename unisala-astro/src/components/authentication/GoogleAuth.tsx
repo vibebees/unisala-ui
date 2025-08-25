@@ -14,7 +14,7 @@ export const GoogleAuth = memo(() => {
 
   const [Googlelogin] = useAstroMutation(GoogleLogin, {
     context: { server: USER_SERVICE_GQL },
-    onCompleted: (data) => {
+    onCompleted: (data: any) => {
       if (data.google?.status?.success && data.google && data.google.data) {
         const user = data?.google?.data;
 
@@ -38,7 +38,7 @@ export const GoogleAuth = memo(() => {
         };
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.log("login error", error);
     },
   });

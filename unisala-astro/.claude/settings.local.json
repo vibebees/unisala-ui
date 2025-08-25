@@ -3,7 +3,8 @@
     "allow": [
       "Bash(rm:*)",
       "Bash(npm run remove-unused:*)",
-      "Bash(npm run typecheck:*)"
+      "Bash(npm run typecheck:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

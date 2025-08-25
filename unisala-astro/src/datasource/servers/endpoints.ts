@@ -29,12 +29,12 @@ const {
 } = getServiceConfig(),
   responseLink = new ApolloLink((operation, forward) => {
     return new Observable((observer) => {
-      const processOperation = async () => {
+      const processOperation = async (): Promise<void> => {
         try {
           const forwardedOperation = await forward(operation);
           const subscription = forwardedOperation.subscribe({
             next: (response) => {
-              const { validToken } = response?.data?.fetchFeedV2 ?? {};
+              const { validToken } = response?.data?.['fetchFeedV2'] ?? {};
               if (validToken === false) {
                 console.log("Token is invalid or expired, refreshing token...");
               } else {
@@ -45,10 +45,12 @@ const {
             complete: observer.complete.bind(observer),
           });
 
-          return () => subscription.unsubscribe();
+          // Store cleanup function for later use if needed
+          // return () => subscription.unsubscribe();
         } catch (error) {
           observer.error(error);
         }
+        return Promise.resolve();
       };
 
       processOperation();
@@ -98,13 +100,13 @@ const authData: { accessToken?: string } | null = getCache('authData') || {} as 
 const accessToken = authData?.accessToken;
 
 const httpLink = split(
-  (operation) => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
+  (operation) => operation.getContext()['server'] === UNIVERSITY_SERVICE_GQL,
   universityServerGql,
   split(
-    (operation) => operation.getContext().server === MESSAGE_SERVICE_GQL,
+    (operation) => operation.getContext()['server'] === MESSAGE_SERVICE_GQL,
     messageServerGql,
     split(
-      (operation) => operation.getContext().server === USER_SERVICE_GQL,
+      (operation) => operation.getContext()['server'] === USER_SERVICE_GQL,
       userServerGql
     )
   )

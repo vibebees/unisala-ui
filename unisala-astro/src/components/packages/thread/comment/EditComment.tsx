@@ -29,7 +29,7 @@ const EditComments = ({
         id: cache.identify({
           __typename: "Comment",
           id: _id,
-        }),
+        }) || '',
         fields: {
           commentText: () => commentText,
         },

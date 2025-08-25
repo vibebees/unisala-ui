@@ -116,7 +116,7 @@ export class RemoteErrorReporter implements ErrorReporter {
 class ErrorReportingService {
   private reporter: ErrorReporter;
   private batchedReports: ErrorReport[] = [];
-  private batchTimeout?: NodeJS.Timeout;
+  private batchTimeout?: NodeJS.Timeout | undefined;
   private readonly batchSize = 10;
   private readonly batchDelay = 5000; // 5 seconds
 
@@ -191,8 +191,8 @@ class ErrorReportingService {
     context: Partial<ErrorContext>
   ): ErrorReport {
     const fullContext: ErrorContext = {
-      url: typeof window !== 'undefined' ? window.location.href : undefined,
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+      url: typeof window !== 'undefined' ? window.location.href : '',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
       timestamp: new Date(),
       environment: import.meta.env.MODE,
       buildVersion: import.meta.env['BUILD_VERSION'],

@@ -26,7 +26,7 @@ interface AddNotesResponse {
 
 // Custom hook for managing notes mutation
 export const useAddNotes = () => {
-    const [addNotesMutation] = useAstroMutation<AddNotesResponse>(ADD_NOTES, {
+    const [addNotesMutation] = useAstroMutation(ADD_NOTES, {
         context: { server: USER_SERVICE_GQL },
         onCompleted: (data: { addNotes: { status: { success: any; }; }; }) => {
             if (data.addNotes.status.success) {

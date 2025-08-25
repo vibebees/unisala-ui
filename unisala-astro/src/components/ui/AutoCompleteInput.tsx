@@ -67,13 +67,19 @@ export default function AutoComplete({
           if (e.key === "ArrowDown") {
             const index = filteredOptions.indexOf(searchValue);
             if (index < filteredOptions.length - 1) {
-              setSearchValue(filteredOptions[index + 1]);
+              const nextOption = filteredOptions[index + 1];
+              if (nextOption) {
+                setSearchValue(nextOption);
+              }
             }
           }
           if (e.key === "ArrowUp") {
             const index = filteredOptions.indexOf(searchValue);
             if (index > 0) {
-              setSearchValue(filteredOptions[index - 1]);
+              const prevOption = filteredOptions[index - 1];
+              if (prevOption) {
+                setSearchValue(prevOption);
+              }
             }
           }
 

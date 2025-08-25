@@ -20,33 +20,33 @@ export const useUserAnalytics = () => {
      streakData: {}
    }
 
-   const today = new Date().toISOString().split('T')[0]
-   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+   const today = new Date().toISOString().split('T')[0] as string
+   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0] as string
 
    if (sessionState === SESSION_START) {
      return {
        ...cached,
        streakData: {
          ...cached.streakData,
-         [today]: {
+         [today as string]: {
            firstAccess: Date.now(),
-           totalTimeSpent: cached.streakData[today]?.totalTimeSpent || 0
+           totalTimeSpent: cached.streakData[today as string]?.totalTimeSpent || 0
          }
        }
      }
    }
 
    // SESSION_END: Calculate time spent
-   const todayData = cached.streakData[today];
+   const todayData = cached.streakData[today as string];
    if (!todayData?.firstAccess) {
      return cached; // Return cached data if no session started today
    }
    const timeSpent = (Date.now() - todayData.firstAccess) / 1000
    const newData = {
-     currentStreak: cached.streakData[yesterday] ? cached.currentStreak + 1 : 1,
+     currentStreak: cached.streakData[yesterday as string] ? cached.currentStreak + 1 : 1,
      streakData: {
        ...cached.streakData,
-       [today]: {
+       [today as string]: {
          ...todayData,
          totalTimeSpent: todayData.totalTimeSpent + timeSpent
        }

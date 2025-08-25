@@ -185,7 +185,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
     // Add the Dashboard plugin
     const dashboard = uppyInstance.current.use(Dashboard, {
       inline: true,
-      target: dashboardElement.current || undefined,
+      target: dashboardElement.current!,
       width: '100%',
       height: height,
       proudlyDisplayPoweredByUppy: false,
@@ -195,7 +195,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
 
     // Now use the ImageEditor plugin with the correct target
     uppyInstance.current.use(ImageEditor, {
-      target: dashboard.getPlugin('Dashboard'),  // Pass the dashboard plugin instance instead of the class
+      target: dashboardElement.current!,
       quality: 0.8,
       cropperOptions: {
         viewMode: 1,
@@ -252,6 +252,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         uppyInstance.current = null;
       }
     };
+    return undefined;
   }, [height, onFileUpload]);
 
 
@@ -281,7 +282,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
           await addImageToUppy(file);
         } else if (files?.length) {
           const file = files[0];
-          if (file.type.startsWith('image/')) {
+          if (file && file.type.startsWith('image/')) {
             await addImageToUppy(file);
           } else {
             uppyInstance.current?.info('Please drop an image file', 'error', 3000);
@@ -324,6 +325,7 @@ const UppyImageEditor: React.FC<UppyImageEditorProps> = ({
         dropZone.removeEventListener('dragenter', handleDragOver);
       };
     }
+    return () => {};
   }, [addImageToUppy, fetchAndProcessImage]);
 
   return (

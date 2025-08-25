@@ -107,7 +107,7 @@ export class ApolloAPIClient implements APIClient {
       try {
         const result = await this.apolloClient.query<TData, TVars>({
           query,
-          variables,
+          variables: variables as TVars,
           fetchPolicy: 'cache-first',
           errorPolicy: 'all',
           context: { server: USER_SERVICE_GQL }, // Default to user service for queries
@@ -120,16 +120,18 @@ export class ApolloAPIClient implements APIClient {
               transportError,
               finalConfig.errorReportingSeverity,
               {
-                operation: 'query',
-                operationName: this.getOperationName(query),
-                variables: variables as Record<string, unknown>,
+                additionalData: {
+                  operation: 'query',
+                  operationName: this.getOperationName(query),
+                  variables: variables as Record<string, unknown>,
+                }
               }
             );
           }
           return Err(transportError);
         }
 
-        return Ok(result.data);
+        return Ok(result.data as TData);
       } catch (error) {
         const transportError = this.mapApolloErrorToTransportError(error);
         if (!finalConfig.skipErrorReporting) {
@@ -137,9 +139,11 @@ export class ApolloAPIClient implements APIClient {
             transportError,
             finalConfig.errorReportingSeverity,
             {
-              operation: 'query',
-              operationName: this.getOperationName(query),
-              variables: variables as Record<string, unknown>,
+              additionalData: {
+                operation: 'query',
+                operationName: this.getOperationName(query),
+                variables: variables as Record<string, unknown>,
+              }
             }
           );
         }
@@ -159,7 +163,7 @@ export class ApolloAPIClient implements APIClient {
       try {
         const result = await this.apolloClient.mutate<TData, TVars>({
           mutation,
-          variables,
+          variables: variables as TVars,
           errorPolicy: 'all',
           context: { server: USER_SERVICE_GQL }, // Default to user service for mutations
         });
@@ -171,16 +175,18 @@ export class ApolloAPIClient implements APIClient {
               transportError,
               finalConfig.errorReportingSeverity,
               {
-                operation: 'mutation',
-                operationName: this.getOperationName(mutation),
-                variables: variables as Record<string, unknown>,
+                additionalData: {
+                  operation: 'mutation',
+                  operationName: this.getOperationName(mutation),
+                  variables: variables as Record<string, unknown>,
+                }
               }
             );
           }
           return Err(transportError);
         }
 
-        return Ok(result.data!);
+        return Ok(result.data as TData);
       } catch (error) {
         const transportError = this.mapApolloErrorToTransportError(error);
         if (!finalConfig.skipErrorReporting) {
@@ -188,9 +194,11 @@ export class ApolloAPIClient implements APIClient {
             transportError,
             finalConfig.errorReportingSeverity,
             {
-              operation: 'mutation',
-              operationName: this.getOperationName(mutation),
-              variables: variables as Record<string, unknown>,
+              additionalData: {
+                operation: 'mutation',
+                operationName: this.getOperationName(mutation),
+                variables: variables as Record<string, unknown>,
+              }
             }
           );
         }

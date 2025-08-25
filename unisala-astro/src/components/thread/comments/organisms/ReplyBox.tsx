@@ -47,7 +47,7 @@ export const ReplyBox: React.FC<{
 
   const [addComment, { loading: addCommentLoading }] = useAstroMutation(AddComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data }) => {
+    update: (cache: any, { data }: any) => {
       if (data?.addComment?.status?.success) {
         const newComment = data.addComment.data;
         
@@ -55,8 +55,8 @@ export const ReplyBox: React.FC<{
           const topLevelCacheKey = { query: GetCommentList, variables: { postId } };
           const repliesCacheKey = { query: GetCommentList, variables: { postId, parentId } };
         
-          const topLevelData = cache.readQuery<CommentListData>(topLevelCacheKey);
-          const repliesData = cache.readQuery<CommentListData>(repliesCacheKey);
+          const topLevelData = cache.readQuery(topLevelCacheKey) as CommentListData | null;
+          const repliesData = cache.readQuery(repliesCacheKey) as CommentListData | null;
 
           if (topLevelData?.commentList) {
             const updatedComments = topLevelData.commentList.data.map((comment: Comment) =>
@@ -93,7 +93,7 @@ export const ReplyBox: React.FC<{
             variables: { postId }
           };
       
-          const currentLevelData = cache.readQuery<CommentListData>(currentLevelCacheKey);
+          const currentLevelData = cache.readQuery(currentLevelCacheKey) as CommentListData | null;
       
           if (currentLevelData?.commentList) {
             const updatedCurrentLevelData = {
@@ -120,7 +120,7 @@ export const ReplyBox: React.FC<{
         toast.error(data?.addComment?.status?.message || 'Failed to post comment. Please try again.');
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error submitting comment:', error);
       toast.error('An error occurred while submitting your comment. Please try again.');
     },
@@ -128,7 +128,7 @@ export const ReplyBox: React.FC<{
 
   const [updateComment, { loading: updateLoading }] = useAstroMutation(EditComment, {
     context: { server: USER_SERVICE_GQL },
-    update: (cache, { data }) => {
+    update: (cache: any, { data }: any) => {
       if (data?.editComment?.status?.success) {
         const updatedComment = data.editComment.data;
         const variables = { postId } as { postId: string; parentId?: string };
@@ -164,7 +164,7 @@ export const ReplyBox: React.FC<{
         toast.error(data?.editComment?.status?.message || 'Failed to update comment. Please try again.');
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error updating comment:', error);
       toast.error('An error occurred while updating your comment. Please try again.');
     },

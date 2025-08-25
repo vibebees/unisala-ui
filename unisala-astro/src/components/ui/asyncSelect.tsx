@@ -89,7 +89,10 @@ export default function AsyncAutoComplete({
     if (e.key === "Enter") {
       e.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {
-        handleOptionSelect(filteredOptions[selectedIndex]);
+        const selectedOption = filteredOptions[selectedIndex];
+        if (selectedOption) {
+          handleOptionSelect(selectedOption);
+        }
       } else if (searchValue.trim()) {
         const selectedOption: TopicOptions = {
           name: searchValue.trim(),
@@ -114,7 +117,10 @@ export default function AsyncAutoComplete({
     } else if (e.key === "Tab") {
       e.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {
-        handleOptionSelect(filteredOptions[selectedIndex]);
+        const selectedOption = filteredOptions[selectedIndex];
+        if (selectedOption) {
+          handleOptionSelect(selectedOption);
+        }
       }
     }
   };

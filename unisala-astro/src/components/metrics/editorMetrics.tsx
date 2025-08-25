@@ -57,8 +57,11 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
   const calculateWPM = (samples: WordSample[]): number => {
     if (samples.length < 2) return 0;
     
-    const wordDelta = samples[samples.length - 1].wordCount - samples[0].wordCount;
-    const timeDelta = (samples[samples.length - 1].timestamp - samples[0].timestamp) / 1000 / 60;
+    const lastSample = samples[samples.length - 1];
+    const firstSample = samples[0];
+    if (!lastSample || !firstSample) return 0;
+    const wordDelta = lastSample.wordCount - firstSample.wordCount;
+    const timeDelta = (lastSample.timestamp - firstSample.timestamp) / 1000 / 60;
     
     return timeDelta <= 0 ? 0 : Math.round(wordDelta / timeDelta);
   };
@@ -110,7 +113,10 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
       totalIdleTime: 0,
       totalSessionTime: 0,
       maxWpmEver: 0,
-      lastModified: now
+      lastModified: now,
+      createdAt: now,
+      postText: text,
+      updatedAt: now
     };
 
     draft.totalWords = newWordCount;
@@ -119,6 +125,9 @@ const useEditorAnalytics = (editorRef: RefObject<ReactQuill>) => {
     draft.lastModified = now;
     draft.totalIdleTime = totalIdleTime.current;
 
+    draft.postText = text;
+    draft.updatedAt = now;
+    
     (metricsStore.drafts as Record<string, DraftMetrics>)[draftId] = draft;
     saveMetrics(metricsStore);
   };

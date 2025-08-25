@@ -68,7 +68,7 @@ try {
       throw new Error("Invalid url format: expected name-[24 character ID]");
     }
     let [, name, id] = match;
-    name = name.replace(/-/g, " ");
+    name = name!.replace(/-/g, " ");
     const capitalizedName = name.replace(/\b\w/g, (char) => char.toUpperCase());
     return { name: capitalizedName, id };
   };
@@ -124,7 +124,7 @@ try {
   staffPicks = staffPicksResult.data?.fetchFeedV2?.data || [];
   topics = topicsResult.data?.getTopActiveSpaces?.spaceCategory || [];
   tagName = tag;
-  id = tagId;
+  id = tagId || '';
 } catch (e) {
   console.error("Error fetching data:", e);
   error = e instanceof Error ? e.message : String(e);
@@ -167,7 +167,7 @@ const randomImage = images[Math.floor(Math.random() * images.length)];
                     client:only
                     articles={articles}
                     showImage={showImage}
-                    randomImage={randomImage}
+                    randomImage={randomImage || ''}
                     title={tagName}
                     spaceId = {id}
                   />

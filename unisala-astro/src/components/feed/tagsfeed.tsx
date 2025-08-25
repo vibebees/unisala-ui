@@ -95,7 +95,7 @@ const ConfigurableFeed: React.FC<FeedProps> = ({
         <div className={`w-full ${(showStaffPicks || showTopics) ? 'lg:w-3/4 lg:pr-8' : ''}`}>
           {articles.length === 0 && <NoArticleCard />}
           {/* <CoverImageTest image= {randomImage} /> */}
-        <CoverImage articles={articles} showImage={showImage} randomImage={randomImage} />
+        <CoverImage articles={articles} showImage={showImage} randomImage={randomImage || ''} />
 
           {articles.length > 0 && articles.map((article, index) => (
             <ArticleCard key={index} article={article} />

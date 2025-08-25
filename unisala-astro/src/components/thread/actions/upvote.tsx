@@ -33,12 +33,12 @@ const ThreadActionTsx: React.FC<Props> = ({ initialClaps, comments, postId, show
     variables: {
       postId,
     },
-    onCompleted: (data) => {
+    onCompleted: (data: any) => {
       const { upVotesCount, success, message } = data.upVote;
       setUpvoteCount(upVotesCount);
       toast.success(message);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       setUpVoteError(error);
       toast.error(`Error upvoting post: ${error?.message}`);
     },

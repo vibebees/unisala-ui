@@ -172,7 +172,7 @@ const Text2ImageModal = () => {
     context: { server: USER_SERVICE_GQL },
     skip: true,
     fetchPolicy: "no-cache",
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Query error:', error);
       toast.error('Failed to generate image. Please try again.');
       setError('Failed to generate image. Please try again.');

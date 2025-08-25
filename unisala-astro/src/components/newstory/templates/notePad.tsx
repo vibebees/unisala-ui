@@ -91,7 +91,7 @@ const NotePad: React.FC<PostFormProps> = ({ }) => {
             setCache('notesPublished', notesPublished);
             navigator('/threads/' + data?.addPost?.post?._id);
         },
-        onError: (error) => {
+        onError: (error: any) => {
             console.error('Error publishing post:', error);
             toast.error('Failed to publish your story. Please try again.');
         },

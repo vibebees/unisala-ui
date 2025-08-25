@@ -100,7 +100,7 @@ const SingleThread: FC<SingleThreadProps> = ({
               htmlText={postText!}
               _id={_id}
               tags={tags as any}
-              videoURL={videoURL}
+              videoURL={videoURL ?? null}
             />
            
           </>

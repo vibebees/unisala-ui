@@ -4,8 +4,8 @@ import { DomainError } from '@/core/errors';
  * Transport/Infrastructure layer errors
  */
 export class TransportError extends DomainError {
-  readonly code = 'TRANSPORT_ERROR';
-  readonly httpStatus = 500;
+  readonly code: string = 'TRANSPORT_ERROR';
+  readonly httpStatus: number = 500;
 
   constructor(
     message: string,
@@ -21,8 +21,8 @@ export class TransportError extends DomainError {
  * Network connection errors
  */
 export class NetworkError extends TransportError {
-  readonly code = 'NETWORK_ERROR';
-  readonly httpStatus = 503;
+  override readonly code = 'NETWORK_ERROR' as const;
+  override readonly httpStatus = 503 as const;
 
   constructor(message: string = 'Network connection failed', cause?: unknown) {
     super(message, undefined, cause, { type: 'network' });
@@ -33,8 +33,8 @@ export class NetworkError extends TransportError {
  * API rate limiting errors
  */
 export class RateLimitError extends TransportError {
-  readonly code = 'RATE_LIMIT_ERROR';
-  readonly httpStatus = 429;
+  override readonly code = 'RATE_LIMIT_ERROR' as const;
+  override readonly httpStatus = 429 as const;
 
   constructor(
     message: string = 'Rate limit exceeded',
@@ -49,8 +49,8 @@ export class RateLimitError extends TransportError {
  * Server errors (5xx)
  */
 export class ServerError extends TransportError {
-  readonly code = 'SERVER_ERROR';
-  readonly httpStatus = 500;
+  override readonly code = 'SERVER_ERROR' as const;
+  override readonly httpStatus = 500 as const;
 
   constructor(message: string, originalStatus: number = 500, cause?: unknown) {
     super(message, originalStatus, cause, { type: 'server' });
@@ -91,13 +91,13 @@ export function createTransportError(
 ): TransportError {
   switch (true) {
     case status === 429:
-      return new RateLimitError(message, undefined, cause);
+      return new RateLimitError(message, undefined, cause) as TransportError;
     case status >= 500:
-      return new ServerError(message, status, cause);
+      return new ServerError(message, status, cause) as TransportError;
     case status >= 400:
       return new TransportError(message, status, cause);
     default:
-      return new NetworkError(message, cause);
+      return new NetworkError(message, cause) as TransportError;
   }
 }
 
@@ -107,7 +107,7 @@ export function createTransportError(
 export function isRetryableError(error: unknown): boolean {
   if (error instanceof NetworkError) return true;
   if (error instanceof RateLimitError) return true;
-  if (error instanceof ServerError && error.originalStatus >= 500) return true;
+  if (error instanceof ServerError && error.originalStatus && error.originalStatus >= 500) return true;
   return false;
 }
 

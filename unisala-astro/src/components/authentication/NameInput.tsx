@@ -42,7 +42,7 @@ const NameInput: React.FC<NameInputProps> = ({
         );
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(
         error?.message ||
           "Error occured while checking email address. Please try again."
@@ -53,7 +53,8 @@ const NameInput: React.FC<NameInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.firstName.trim() || !name.lastName.trim()) {
-      return toast.error("Please enter your full name.");
+      toast.error("Please enter your full name.");
+      return;
     }
     RegisterUser({
       variables: {

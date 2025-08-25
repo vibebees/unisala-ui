@@ -92,8 +92,8 @@ import { getCache } from "@/utils/cache";
     let currentStreak = 1;
   
     for (let i = 1; i < uniqueDates.length; i++) {
-      const prevDate = new Date(uniqueDates[i - 1]);
-      const currentDate = new Date(uniqueDates[i]);
+      const prevDate = new Date(uniqueDates[i - 1] || '');
+      const currentDate = new Date(uniqueDates[i] || '');
   
       const diffInDays = Math.floor((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
   

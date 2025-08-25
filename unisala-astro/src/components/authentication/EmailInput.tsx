@@ -35,7 +35,7 @@ const EmailInput: React.FC<EmailInputProps> = ({
         setAuthState("pincode");
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(
         error?.message ||
           "Error occured while checking email address. Please try again."
@@ -46,7 +46,8 @@ const EmailInput: React.FC<EmailInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      return toast.error("Please enter your email address.");
+      toast.error("Please enter your email address.");
+      return;
     }
 
     CheckEmail();

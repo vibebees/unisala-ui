@@ -60,7 +60,7 @@ const ThreadRating = ({
               <Rating
                 key={index}
                 label={item.label}
-                rating={item.rating}
+                rating={item.rating ?? null}
                 ratingKey={item.ratingKey}
               />
             ))}

@@ -41,7 +41,7 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
   const [deleteComment] = useAstroMutation(DeleteComment, {
     context: { server: USER_SERVICE_GQL },
     variables: { id: comment._id },
-    update: (cache, { data }) => {
+    update: (cache: any, { data }: any) => {
       if (data?.deleteComment?.status?.success) {
         // Remove the comment from the cache
         const variables: { postId: string; parentId?: string | null } = { postId: comment.postId };
@@ -80,14 +80,14 @@ export const CommentItem: React.FC<{ comment: Comment, nestedComment:boolean }> 
         });
       }
     },
-    onCompleted: (data) => {
+    onCompleted: (data: any) => {
       if (data?.deleteComment?.status?.success) {
         toast.success(data.deleteComment.status.message || 'Comment removed successfully!');
       } else {
         toast.error(data?.deleteComment?.status?.message || 'Failed to remove comment. Please try again.');
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error removing comment:', error);
       toast.error('An error occurred while removing your comment. Please try again.');
     },

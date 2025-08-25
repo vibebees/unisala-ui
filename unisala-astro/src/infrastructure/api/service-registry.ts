@@ -1,4 +1,4 @@
-import { APIClient } from './client';
+import type { APIClient } from './client';
 import type { UserService } from './services/user.service';
 import { createUserService } from './services/user.service';
 import type { PostService } from './services/post.service';

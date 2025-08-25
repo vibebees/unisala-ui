@@ -29,7 +29,7 @@ import {
  */
 const authLink = setContext((operation, { headers = {} }) => {
   const authData = getCache('authData') || { accessToken: null };
-  const { accessToken } = authData;
+  const { accessToken } = authData as { accessToken: string | null };
 
   return {
     headers: {
@@ -57,9 +57,11 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
         transportError,
         ErrorSeverity.MEDIUM,
         {
-          operation: 'graphql',
-          operationName: operation.operationName,
-          variables: operation.variables,
+          additionalData: {
+            operation: 'graphql',
+            operationName: operation.operationName,
+            variables: operation.variables,
+          }
         }
       );
 
@@ -79,9 +81,11 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
       transportError,
       ErrorSeverity.HIGH,
       {
-        operation: 'network',
-        operationName: operation.operationName,
-        variables: operation.variables,
+        additionalData: {
+          operation: 'network',
+          operationName: operation.operationName,
+          variables: operation.variables,
+        }
       }
     );
 
@@ -97,7 +101,7 @@ const responseLink = new ApolloLink((operation, forward) => {
     // Handle successful responses
     if (response.data && !response.errors) {
       // Log successful operations in development
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env['NODE_ENV'] === 'development') {
         console.log(`✓ ${operation.operationName}:`, response.data);
       }
     }
@@ -122,13 +126,13 @@ function createServiceHttpLink(serviceUrl: string): HttpLink {
 const serviceConfig = getServiceConfig();
 
 const serviceLink = split(
-  operation => operation.getContext().server === USER_SERVICE_GQL,
+  operation => operation.getContext()['server'] === USER_SERVICE_GQL,
   createServiceHttpLink(`${serviceConfig.userServiceAddress}/graphql`),
   split(
-    operation => operation.getContext().server === UNIVERSITY_SERVICE_GQL,
+    operation => operation.getContext()['server'] === UNIVERSITY_SERVICE_GQL,
     createServiceHttpLink(`${serviceConfig.universityServiceAddress}/graphql`),
     split(
-      operation => operation.getContext().server === MESSAGE_SERVICE_GQL,
+      operation => operation.getContext()['server'] === MESSAGE_SERVICE_GQL,
       createServiceHttpLink(`${serviceConfig.messagingServiceAddress}/graphql`),
       createServiceHttpLink(`${serviceConfig.userServiceAddress}/graphql`) // Default fallback
     )
@@ -191,7 +195,7 @@ export const apolloClient = new ApolloClient({
       errorPolicy: 'all',
     },
   },
-  connectToDevTools: process.env.NODE_ENV === 'development',
+  connectToDevTools: process.env['NODE_ENV'] === 'development',
 });
 
 /**

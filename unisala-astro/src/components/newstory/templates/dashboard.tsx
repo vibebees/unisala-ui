@@ -81,17 +81,17 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
 
     } = calculateAnalytics(drafts);
      // Update the state with the calculated analytics values
-    setStats(prevStats => [
-      { ...prevStats[0] }, // Static Typing Speed stays the same
-      { title: "Note Streak", value: `${streak} Days`, subtitle: "Your best streak yet!" },
-      { title: "Weekly Notes", value: `${weeklyNotes}` },
+    setStats(() => [
+      { title: "Typing Speed", value: "52 WPM", subtitle: "Keep up the great work!" },
+      { title: "Note Streak", value: `${streak || 0} Days`, subtitle: "Your best streak yet!" },
+      { title: "Weekly Notes", value: `${weeklyNotes || 0}` },
       { title: "Average Notes Per Week", value: `${(avgNotesPerWeek ?? 0).toFixed(1)}`, subtitle: "Consistent Progress!" }
     ]);
 
 
     setPeakUsageDataUpdated(peakUsageNotesUpdated || {});
     setPeakUsageDataCreated(peakUsageNotesCreated || {});
-     setMostActiveDay(mostActiveDay ? mostActiveDay[0] : ""); // Fix: Change mostActiveDay type from string[] to string
+     setMostActiveDay(mostActiveDay && Array.isArray(mostActiveDay) ? mostActiveDay[0] || "" : mostActiveDay || "");
      if (dayCount) {
        setDayCount(dayCount);
      }

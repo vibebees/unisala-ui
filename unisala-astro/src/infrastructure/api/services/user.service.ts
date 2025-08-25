@@ -227,7 +227,7 @@ export class UserService {
         profile: {
           firstName: result.data.verifyEmail.data.firstName,
           lastName: result.data.verifyEmail.data.lastName,
-          university: result.data.verifyEmail.data.university,
+          university: result.data.verifyEmail.data.university || '',
         },
       },
       accessToken: result.data.verifyEmail.data.accessToken,

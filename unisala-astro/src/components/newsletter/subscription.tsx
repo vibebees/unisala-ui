@@ -34,7 +34,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
       id: spaceId,
       type: 'space'
     },
-    onCompleted: (data) => {
+    onCompleted: (data: any) => {
       if (data.subscribe.status.success) {
         // Update following cache
         const followingCache = getCache('following') as FollowingCache || {};
@@ -45,7 +45,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ spaceId, title }) => {
         toast.success(data.subscribe.status.message || "You're now subscribed!");
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error?.message || 'Something went wrong. Please try again.');
     }
   });

@@ -55,7 +55,7 @@ export const SearchTabs = ({ loading, posts, users, spaces }: SearchTabsProps) =
       <Tabs.Content value="stories" className="space-y-4">
           <div className="flex flex-col space-y-4">
             {posts.map(post => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post['id']} post={post} />
             ))}
           </div>
           {posts.length === 0 && (

@@ -37,7 +37,7 @@ const calculateStreak = (dates: moment.Moment[]): number => {
     let streak = 1;
 
     for (let i = 1; i < sortedDates.length; i++) {
-        if (sortedDates[i].diff(sortedDates[i - 1], 'days') === 1) {
+        if (sortedDates[i] && sortedDates[i - 1] && sortedDates[i]!.diff(sortedDates[i - 1]!, 'days') === 1) {
             streak++;
         } else {
             break;
@@ -95,9 +95,11 @@ const calculatePeakUsageHours = (
         // Sort intervals
         return Object.fromEntries(
             Object.entries(hoursCount).sort(([a], [b]) => {
-                const parseHour = (key: string) =>
-                    parseInt(key.split("-")[0], 10) +
-                    (key.includes("PM") && !key.startsWith("12") ? 12 : 0);
+                const parseHour = (key: string) => {
+                    const hourPart = key.split("-")[0];
+                    return parseInt(hourPart || "0", 10) +
+                        (key.includes("PM") && !key.startsWith("12") ? 12 : 0);
+                };
                 return parseHour(a) - parseHour(b);
             })
         );
@@ -171,13 +173,15 @@ const calculateMostActiveDay = (drafts: { [key: string]: { createdAt: number; up
 
             if (createdMoment.isValid()) {
                 const createdDay = createdMoment.format("dddd");
-                dayCount[createdDay]++;
+                if (dayCount[createdDay] !== undefined) {
+                    dayCount[createdDay]++;
+                }
             }
 
             if (updatedMoment.isValid()) {
                 const updatedDay = updatedMoment.format("dddd");
                 // Only count update if it's on a different day than creation
-                if (createdMoment.isValid() && createdMoment.format("dddd") !== updatedDay) {
+                if (createdMoment.isValid() && createdMoment.format("dddd") !== updatedDay && dayCount[updatedDay] !== undefined) {
                     dayCount[updatedDay]++;
                 }
             }

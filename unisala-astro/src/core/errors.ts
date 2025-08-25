@@ -7,7 +7,7 @@ export abstract class DomainError extends Error {
   
   constructor(
     message: string,
-    public readonly cause?: unknown,
+    public override readonly cause?: unknown,
     public readonly metadata?: Record<string, unknown>
   ) {
     super(message);

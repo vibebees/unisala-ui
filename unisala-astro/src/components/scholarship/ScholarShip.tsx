@@ -45,7 +45,7 @@ const ScholarShip = () => {
       } else {
         if (filters[key as keyof FilterState].includes("-")) {
           const [min, max] = filters[key as keyof FilterState].split("-");
-          newOjb[key] = { min: parseFloat(min), max: parseFloat(max) };
+          newOjb[key] = { min: parseFloat(min || "0"), max: parseFloat(max || "0") };
         } else {
           if (!isNaN(parseFloat(filters[key as keyof FilterState]))) {
             newOjb[key] = {

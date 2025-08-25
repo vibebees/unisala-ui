@@ -8,7 +8,7 @@ const axiosOjb = () => {
   const authData: any = getCache("authData") || { accessToken: false },
     { accessToken } = authData || { accessToken: false };
   return {
-    baseURL: authBaseURL,
+    baseURL: authBaseURL || '',
     headers: {
       Authorization: accessToken ? "Bearer " + accessToken : null,
       "Content-Type": "application/json",
@@ -43,7 +43,8 @@ authInstance.interceptors.response.use(
       const refreshToken = getCache("refreshToken");
 
       if (refreshToken) {
-        const tokenParts = JSON.parse(atob((refreshToken as string).split(".")[1]));
+        const refreshTokenStr = refreshToken as string;
+        const tokenParts = JSON.parse(atob(refreshTokenStr.split(".")[1] || ''));
         const now = Date.now();
         if (tokenParts.exp > now) {
           return axios

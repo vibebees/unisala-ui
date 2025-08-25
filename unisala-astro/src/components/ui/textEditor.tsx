@@ -19,7 +19,7 @@ const TextareaEditor: FC<TextareaEditorProps> = ({
   return (
     draftKey !=='.postText' && <RichTextInput
       draftKey={draftKey}
-      placeholder={placeholder}
+      placeholder={placeholder || ''}
       initialValue={initialValue}
       onContentChange={onContentChange}
     />

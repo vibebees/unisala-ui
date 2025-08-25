@@ -150,8 +150,8 @@ export const useDraftManager = () => {
             if (existingDraft) {
                 updatedDrafts[id] = {
                     ...existingDraft,
-                    postTitle: postTitle !== undefined ? postTitle : existingDraft.postTitle,
-                    postText: postText !== undefined ? postText : existingDraft.postText,
+                    postTitle: postTitle !== undefined ? (postTitle || '') : (existingDraft.postTitle || ''),
+                    postText: postText !== undefined ? (postText || '') : (existingDraft.postText || ''),
                     updatedAt
                 };
             }

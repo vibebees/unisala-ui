@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import { ArrowRight } from "lucide-react";
 import Spinner from "../ui/Spinner";
 import clsx from "clsx";

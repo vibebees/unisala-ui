@@ -1,4 +1,4 @@
-import React, { useRef, memo } from "react";
+import { useRef, memo } from "react";
 import { useScript } from "@/hooks/useScript";
 import { useAstroMutation } from "@/datasource/apollo-client";
 import { GoogleLogin } from "@/datasource/graphql/user";

@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import MainLayout from '@/layouts/main-layout.astro';
-import MediumFeed from '@/components/feed/feed copy';
+import MediumFeed from '@/components/feed/feed';
 import Introudction from '@/components/profile/intro.astro';
 import { fetchApi } from '@/utils/api.utility';
 import { userServiceGql } from '@/datasource/servers';
@@ -144,7 +144,6 @@ oneLinerBio = articles[0]?.user?.oneLinerBio ?? '';
           ]}
         />
         <MediumFeed
-          showTags={false}
           articles={articles}
           staffPicks={staffPicks}
           topics={topics}

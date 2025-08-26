@@ -1,16 +1,6 @@
 
 // INIT constants to be more meaningful
 
-interface UserAnalytics {
- currentStreak: number
- streakData: {
-   [key: string]: { 
-     firstAccess: number,
-     totalTimeSpent: number
-   }
- }
-}
-
 export const calculateLoginStreak = () => {
 //  const updateAnalytics = (sessionState: typeof SESSION_START | typeof SESSION_END) => {
 //    const cached = getCache<UserAnalytics>(ANALYTICS_KEY) || {

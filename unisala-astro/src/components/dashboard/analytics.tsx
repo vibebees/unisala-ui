@@ -189,7 +189,7 @@ const calculateMostActiveDay = (drafts: { [key: string]: { createdAt: number; up
 
         const maxCount = Math.max(...Object.values(dayCount));
         const mostActiveDay = Object.entries(dayCount)
-            .filter(([day, count]) => count === maxCount)
+            .filter(([_day, count]) => count === maxCount)
             .map(([day]) => day)
 
         return {

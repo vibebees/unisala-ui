@@ -67,7 +67,6 @@ describe('Streak Metrics', () => {
 
   // Constants
   const NOW = moment().valueOf();  // Current timestamp
-  const DAY_IN_MS = 24 * 60 * 60 * 1000;
   const YESTERDAY = moment().subtract(1, 'day').valueOf();
   const TWO_DAYS_AGO = moment().subtract(2, 'days').valueOf();
 

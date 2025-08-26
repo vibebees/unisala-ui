@@ -7,7 +7,7 @@ import SingleThread from '@/components/packages/thread/singleThread/index';
 import Comments from '@/components/thread/comments/index.tsx';
 import ThreadHeader from '@/components/layout/thread-header.astro';
 import linkifyHtml from 'linkify-html';
-import { Toaster, toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import ThreadActionTsx from '@/components/thread/actions/upvote';
 import { fetchApi } from '@/utils/api.utility';
 import {userServiceGql} from '@/datasource/servers/index';
@@ -21,7 +21,7 @@ import ThreadAuthor from '@/components/thread/organisms/thread.author.astro';
 // Get slug from URL parameters
 const { slug = "" } = Astro.params;
 const postId = extractIdFromSlug(slug);
-const loadingToastId = toast.loading('Loading...');
+// const loadingToastId = toast.loading('Loading...');
 
 let post = null;
 let error: string = '';
@@ -124,13 +124,13 @@ function extractHeading(text: string): string {
   
   // First, try to extract content from heading tags (h1 to h6)
   const headingMatch = text.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
-  if (headingMatch) {
+  if (headingMatch && headingMatch[1]) {
     return headingMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
   }
 
   // If no heading tags, try to extract the first non-empty paragraph
   const paragraphMatch = text.match(/<p[^>]*>(.*?)<\/p>/i);
-  if (paragraphMatch) {
+  if (paragraphMatch && paragraphMatch[1]) {
     const cleanParagraph = paragraphMatch[1].replace(/<\/?[^>]+(>|$)/g, "").trim();
     if (cleanParagraph) {
       return cleanParagraph.length > 150 ? cleanParagraph.slice(0, 147) + '...' : cleanParagraph;

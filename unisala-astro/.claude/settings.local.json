@@ -4,7 +4,8 @@
       "Bash(rm:*)",
       "Bash(npm run remove-unused:*)",
       "Bash(npm run typecheck:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

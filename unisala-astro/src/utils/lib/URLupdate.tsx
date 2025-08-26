@@ -138,7 +138,7 @@ export const navigator = ( url:string = '') => {
  * @param {string} [separator='-'] - The character used to replace spaces and separate elements (default is hyphen).
  * @returns {string} The transformed URL-friendly string.
  */
-export const transformToUrlFriendly = (topic :string, id:string, separator = '-') => {
+export const transformToUrlFriendly = (topic: string, id: string, separator: string = '-'): string => {
   // Ensure the topic is a string and trim any leading/trailing whitespace
   const cleanTopic = String(topic).trim();
   

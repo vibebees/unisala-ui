@@ -4,8 +4,6 @@ import type { StreakMetrics } from '@/types/metrics';
 
 export type SessionType = 'SESSION_START' | 'SESSION_END';
 
-const DAY_IN_MS = 24 * 60 * 60 * 1000;
-
 export const initializeStreak = (currentTime = Date.now()): StreakMetrics => {
     return {
         lastVisit: currentTime,

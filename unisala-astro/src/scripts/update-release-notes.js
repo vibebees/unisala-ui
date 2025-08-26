@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
 import * as path from 'path';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import * as readline from 'readline';
 
 // Get current directory in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
 
 // Configuration
 const RELEASE_FILE_PATH = path.join(process.cwd(), 'unisala-astro/src/content/releases/1_0.md');
@@ -220,7 +219,7 @@ function updateReleaseNotes(message, files) {
     // Update existing section for today
     updatedContent = content.replace(
       new RegExp(`(## Updates - ${date}[\\s\\S]*?)(##|$)`),
-      (match, section, nextSection) => {
+      (_, section, nextSection) => {
         // Add the new entry to the existing section
         const updatedSection = `${section}\n${entryContent}`;
         return nextSection ? updatedSection + nextSection : updatedSection;

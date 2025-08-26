@@ -260,7 +260,7 @@ export const useAppStore = create<AppStore>()(
         // Notifications
         addNotification: (notificationData) => {
           const notification: AppNotification = {
-            id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            id: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             timestamp: new Date(),
             read: false,
             ...notificationData,

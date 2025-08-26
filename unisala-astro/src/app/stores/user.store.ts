@@ -6,7 +6,7 @@ import type { User, UserAuth } from '@/core/domain/user';
 import type { Result } from '@/core/result';
 import { TransportError } from '@/infrastructure/errors';
 import { getCache, setCache, removeCache } from '@/utils/cache';
-import { UserService } from '@/infrastructure/api/services/user.service';
+// import { UserService } from '@/infrastructure/api/services/user.service';
 
 /**
  * User authentication state
@@ -58,7 +58,7 @@ export const useUserStore = create<UserStore>()(
         error: null,
 
         // Authentication actions
-        login: async (email: string, verificationCode: number) => {
+        login: async (email: string, _verificationCode: number) => {
           set((state) => {
             state.isLoading = true;
             state.error = null;

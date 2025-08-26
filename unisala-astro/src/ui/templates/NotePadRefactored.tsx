@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDraftsStore, useUserStore } from '@/app/stores';
 import { usePostService } from '@/infrastructure/api/service-registry';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
-import type { CreatePostData, Tag } from '@/core/domain/post';
+import type { CreatePostData } from '@/core/domain/post';
 import { PostVisibility } from '@/core/domain/post';
-import { unwrap } from '@/core/result';
 import toast from 'react-hot-toast';
 
 /**
@@ -43,7 +42,7 @@ export const NotePadRefactored: React.FC<NotePadProps> = ({
   const loadDraft = useDraftsStore(state => state.loadDraft);
   const updateTitle = useDraftsStore(state => state.updateCurrentDraftTitle);
   const updateContent = useDraftsStore(state => state.updateCurrentDraftContent);
-  const updateTags = useDraftsStore(state => state.updateCurrentDraftTags);
+  // const updateTags = useDraftsStore(state => state.updateCurrentDraftTags);
   
   // Service layer (clean API abstraction)
   const postService = usePostService();
@@ -88,12 +87,6 @@ export const NotePadRefactored: React.FC<NotePadProps> = ({
     // Auto-save is handled by store subscription in stores/index.ts
   };
 
-  /**
-   * Handle tag updates
-   */
-  const handleTagsChange = (newTags: Tag[]) => {
-    updateTags(newTags);
-  };
 
   /**
    * Publish the current draft

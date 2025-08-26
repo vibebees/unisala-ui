@@ -1,4 +1,4 @@
-export const Avatar = ({ profilePic, username }: { profilePic: string, username: string }) => (
+export const Avatar = ({ profilePic: _profilePic, username: _username }: { profilePic: string, username: string }) => (
   <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
     <svg
       className="absolute w-12 h-12 text-gray-400 -left-1"

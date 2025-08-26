@@ -3,9 +3,20 @@ import PageHeader from "@/components/page-header.astro";
 import { Badge } from "@/components/ui/badge";
 import MainLayout from "@/layouts/main-layout.astro";
 import { getCollection } from "astro:content";
-import HeroLanding from "@/components/sections/hero-landing.astro"
+// import HeroLanding from "@/components/sections/hero-landing.astro"
 const posts = await getCollection("releases");
 posts.sort((a, b) => +b.data.date - +a.data.date);
+
+// Pre-render all posts
+const renderedPosts = await Promise.all(
+  posts.map(async (post: any) => {
+    const { Content } = await post.render();
+    return {
+      ...post,
+      Content
+    };
+  })
+);
 
 ---
 <MainLayout title="Changelog">
@@ -20,12 +31,12 @@ posts.sort((a, b) => +b.data.date - +a.data.date);
       </script>
       {
 
-        posts.map((post) => (
+        renderedPosts.map((post) => (
           <li class="flex flex-col max-md:gap-y-4 md:flex-row w-full">
             <div class="md:basis-32 lg:basis-56 shrink-0 grow-0">
               <div class="md:sticky md:top-24 w-auto mr-6">
                 <a
-                  href={`/releases/${post.slug}`}
+                  href={`/releases/${post.id}`}
                   class="flex flex-col gap-y-2 pb-4"
                 >
                   <Badge
@@ -43,9 +54,7 @@ posts.sort((a, b) => +b.data.date - +a.data.date);
             </div>
 
             <div class="prose dark:prose-invert prose-img:rounded-3xl max-w-none w-full pb-24">
-              {post.render().then(({ Content }) => (
-                <Content />
-              ))}
+              <post.Content />
             </div>
           </li>
         ))

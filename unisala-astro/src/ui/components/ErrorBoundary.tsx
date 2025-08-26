@@ -1,6 +1,4 @@
 import React, { Component, type ReactNode } from 'react';
-import type { DomainError } from '@/core/errors';
-import type { TransportError } from '@/infrastructure/errors';
 
 interface ErrorBoundaryState {
   hasError: boolean;

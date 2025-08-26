@@ -1,18 +1,16 @@
 ---
 import MainLayout from '@/layouts/main-layout.astro';
 // import SearchResult from '@/components/feed/clientfeed.tsx';
-import SearchCarousel from '@/components/ui/carousel';
 import SearchResult from '@/components/search/index';
 
-import { fetchApi } from '@/utils/api.utility';
-import { userServiceGql } from '@/datasource/servers';
+// import { userServiceGql } from '@/datasource/servers';
 export const prerender = false;
-const { slug, query } = Astro.params;
-const searchQuery = Astro.url.searchParams.get('q') || query || '';
+const { slug: _slug, query: _query } = Astro.params;
+// const searchQuery = Astro.url.searchParams.get('q') || query || '';
 
-let articles: never[] = [];
-let staffPicks: never[] = [];
-let topics: never[] = [];
+// let articles: never[] = [];
+// let staffPicks: never[] = [];
+// let topics: never[] = [];
 let error = '';
 
 try {
@@ -24,9 +22,9 @@ try {
   error = e instanceof Error ? e.message : String(e);
 }
 
-const carouselItems = [
-  { image: 'https://d2wpk2fhu8mz8q.cloudfront.net/5f843ea9-7660-4adc-8937-c855061df9a2' },
-];
+// const carouselItems = [
+//   { image: 'https://d2wpk2fhu8mz8q.cloudfront.net/5f843ea9-7660-4adc-8937-c855061df9a2' },
+// ];
 ---
 
 <MainLayout title='Unisala Search'>

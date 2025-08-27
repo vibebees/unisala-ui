@@ -23,7 +23,7 @@ const {
 } = Astro.props;
 ---
 
-<MainLayout title={title} description={description}>
+<MainLayout title={title} {...(description !== undefined ? { description } : {})}>
   <StepIndicator step={step} client:load />
   <div class="card">
     <div class={clsx("image-section max-md:hidden", className)}>

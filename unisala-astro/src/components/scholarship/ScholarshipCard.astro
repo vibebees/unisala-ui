@@ -284,7 +284,7 @@ const { scholarship } = Astro.props as Props;
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
         const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
-          .scholarshipId;
+          ['scholarshipId'];
 
         sendGAEvent("scholarship_card_expand", {
           category: "Scholarship",
@@ -298,7 +298,7 @@ const { scholarship } = Astro.props as Props;
       btn.addEventListener("click", () => {
         const scholarshipCard = btn.closest(".scholarship-card");
         const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
-          .scholarshipId;
+          ['scholarshipId'];
         const scholarshipName = (
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
@@ -318,10 +318,10 @@ const { scholarship } = Astro.props as Props;
           (iframeWrappers[index] as HTMLIFrameElement).style.display = "flex";
           (iframes[index] as HTMLIFrameElement).src = scholarshipUrl;
           (externalLinks[index] as HTMLAnchorElement).href = scholarshipUrl;
-          loadingOverlays[index].classList.remove("deactive");
+          loadingOverlays[index]?.classList.remove("deactive");
           const scholarshipCard = btn.closest(".scholarship-card");
           const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
-            .scholarshipId;
+            ['scholarshipId'];
           const scholarshipName = (
             scholarshipCard as HTMLDivElement
           ).querySelector(".title")?.textContent;
@@ -343,7 +343,7 @@ const { scholarship } = Astro.props as Props;
 
         const scholarshipCard = btn.closest(".scholarship-card");
         const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
-          .scholarshipId;
+          ['scholarshipId'];
         const scholarshipName = (
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
@@ -361,7 +361,7 @@ const { scholarship } = Astro.props as Props;
       link.addEventListener("click", (e) => {
         const scholarshipCard = link.closest(".scholarship-card");
         const scholarshipId = (scholarshipCard as HTMLDivElement).dataset
-          .scholarshipId;
+          ['scholarshipId'];
         const scholarshipName = (
           scholarshipCard as HTMLDivElement
         ).querySelector(".title")?.textContent;
@@ -377,7 +377,7 @@ const { scholarship } = Astro.props as Props;
 
     iframes.forEach((iframe, index) => {
       iframe.addEventListener("load", () => {
-        loadingOverlays[index].classList.add("deactive");
+        loadingOverlays[index]?.classList.add("deactive");
       });
     });
   });

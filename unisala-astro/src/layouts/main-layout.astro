@@ -20,16 +20,14 @@ type Props = {
 
 const { title, description, mainClass } = Astro.props;
 
-const currentEnv = import.meta.env.ASTRO_ENV || "development";
-const clarityId = import.meta.env.CLARITY_ID || "lc6yzoxipb";
-const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
+const currentEnv = import.meta.env['ASTRO_ENV'] || "development";
+const clarityId = import.meta.env['CLARITY_ID'] || "lc6yzoxipb";
+const gaId = import.meta.env['GA_ID'] || "G-MD5HNN6SQS";
 ---
 
-<BaseLayout title={title} description={description}>
-  <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-  
-  ></script>
-  <script define:vars={{ gaId }}>
+<BaseLayout title={title} {...(description !== undefined ? { description } : {})}>
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+  <script is:inline define:vars={{ gaId }}>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
       dataLayer.push(arguments);
@@ -37,7 +35,7 @@ const gaId = import.meta.env.GA_ID || "G-MD5HNN6SQS";
     gtag("js", new Date());
     gtag("config", gaId);
   </script>
-  <script define:vars={{ clarityId }}>
+  <script is:inline define:vars={{ clarityId }}>
     // Only load Clarity if we have an ID for the current environment
     if (clarityId) {
       (function (c, l, a, r, i, t, y) {

@@ -21,11 +21,11 @@ const { title, description, bodyClass, ogImage, ogType, author, publishedTime } 
   <head>
     <BaseHead 
       title={title} 
-      description={description} 
-      image={ogImage}
-      ogType={ogType}
-      author={author}
-      publishedTime={publishedTime}
+      {...(description !== undefined ? { description } : {})}
+      {...(ogImage !== undefined ? { image: ogImage } : {})}
+      {...(ogType !== undefined ? { ogType } : {})}
+      {...(author !== undefined ? { author } : {})}
+      {...(publishedTime !== undefined ? { publishedTime } : {})}
     />
     
   </head>

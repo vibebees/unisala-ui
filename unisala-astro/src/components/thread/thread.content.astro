@@ -105,7 +105,7 @@ try {
 
 function extractHeading(text: string) {
   const headingMatch = text.match(/<h\d[^>]*>(.*?)<\/h\d>/i);
-  if (headingMatch) return headingMatch[1].trim();
+  if (headingMatch && headingMatch[1]) return headingMatch[1].trim();
 
   let cleanText = text
     .replace(/<[^>]*>/g, '')

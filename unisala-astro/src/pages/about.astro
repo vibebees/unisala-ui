@@ -45,97 +45,115 @@ import { Icon } from "astro-icon/components";
           <div class="grid grid-cols-4 items-center gap-4 md:gap-6">
             {/* First Column - Aspiration */}
             <div class="space-y-4 md:space-y-6">
-              <Image
-                class="h-full w-auto object-cover overflow-hidden rounded-xl"
-                src={hobbies[0].image}
-                alt={hobbies[0].alt}
-                width={800}
-                height={1226}
-                loading="eager"
-              />
-              <div class="h-52 overflow-hidden rounded-xl">
+              {hobbies[0] && (
                 <Image
-                  class="w-full h-full object-cover"
-                  src={hobbies[1].image}
-                  alt={hobbies[1].alt}
+                  class="h-full w-auto object-cover overflow-hidden rounded-xl"
+                  src={hobbies[0].image}
+                  alt={hobbies[0].alt}
                   width={800}
-                  height={1334}
+                  height={1226}
+                  loading="eager"
                 />
+              )}
+              <div class="h-52 overflow-hidden rounded-xl">
+                {hobbies[1] && (
+                  <Image
+                    class="w-full h-full object-cover"
+                    src={hobbies[1].image}
+                    alt={hobbies[1].alt}
+                    width={800}
+                    height={1334}
+                  />
+                )}
               </div>
             </div>
 
             {/* Second Column - Learning and Growth */}
             <div class="space-y-4 md:space-y-6">
               <div class="h-48 overflow-hidden rounded-xl">
+                {hobbies[2] && (
+                  <Image
+                    class="w-full h-full object-cover"
+                    src={hobbies[2].image}
+                    alt={hobbies[2].alt}
+                    width={800}
+                    height={983}
+                    loading="eager"
+                  />
+                )}
+              </div>
+              {hobbies[3] && (
                 <Image
-                  class="w-full h-full object-cover"
-                  src={hobbies[2].image}
-                  alt={hobbies[2].alt}
+                  class="rounded-xl"
+                  src={hobbies[3].image}
+                  alt={hobbies[3].alt}
                   width={800}
-                  height={983}
+                  height={1108}
                   loading="eager"
                 />
-              </div>
-              <Image
-                class="rounded-xl"
-                src={hobbies[3].image}
-                alt={hobbies[3].alt}
-                width={800}
-                height={1108}
-                loading="eager"
-              />
+              )}
               <div class="relative h-48 overflow-hidden rounded-xl">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={hobbies[4].image}
-                  alt={hobbies[4].alt}
-                  width={1260}
-                  height={750}
-                />
+                {hobbies[4] && (
+                  <Image
+                    class="w-full h-full object-cover"
+                    src={hobbies[4].image}
+                    alt={hobbies[4].alt}
+                    width={1260}
+                    height={750}
+                  />
+                )}
               </div>
             </div>
 
             {/* Third Column - Collaboration and Momentum */}
             <div class="space-y-4 md:space-y-6">
               <div class="h-56 overflow-hidden rounded-xl">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={hobbies[5].image}
-                  alt={hobbies[5].alt}
-                  width={800}
-                  height={1334}
-                  loading="eager"
-                />
+                {hobbies[5] && (
+                  <Image
+                    class="w-full h-full object-cover"
+                    src={hobbies[5].image}
+                    alt={hobbies[5].alt}
+                    width={800}
+                    height={1334}
+                    loading="eager"
+                  />
+                )}
               </div>
               <div class="h-80 w-full overflow-hidden rounded-xl xl:h-[28rem]">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={hobbies[6].image}
-                  alt={hobbies[6].alt}
-                  width={801}
-                  height={2477}
-                />
+                {hobbies[6] && (
+                  <Image
+                    class="w-full h-full object-cover"
+                    src={hobbies[6].image}
+                    alt={hobbies[6].alt}
+                    width={801}
+                    height={2477}
+                  />
+                )}
               </div>
             </div>
 
             {/* Fourth Column - Transformation and Achievement */}
             <div class="space-y-4 md:space-y-6">
               <div class="overflow-hidden rounded-xl bg-white">
-                <Image
-                  src={hobbies[7].image}
-                  alt={hobbies[7].alt}
-                  width={800}
-                  height={900}
-                  loading="eager"
-                />
+                {hobbies[7] && (
+                  <Image
+                    src={hobbies[7].image}
+                    alt={hobbies[7].alt}
+                    width={800}
+                    height={900}
+                    loading="eager"
+                  />
+                )}
               </div>
               <div class="overflow-hidden rounded-xl bg-white">
-                <Image
-                  src={hobbies[8].image}
-                  alt={hobbies[8].alt}
-                  width={800}
-                  height={900}
-                />
+                {hobbies[8] && (
+                  <Image
+                    src={hobbies[8].image}
+                    alt={hobbies[8].alt}
+                    width={800}
+                    height={900}
+                  />
+                )}
               </div>
             </div>
           </div>

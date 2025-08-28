@@ -20,14 +20,20 @@ type Props = {
 
 const { title, description, mainClass } = Astro.props;
 
-const currentEnv = import.meta.env['ASTRO_ENV'] || "development";
-const clarityId = import.meta.env['CLARITY_ID'] || "lc6yzoxipb";
-const gaId = import.meta.env['GA_ID'] || "G-MD5HNN6SQS";
+// Environment variables - using hardcoded values to avoid esbuild parsing issues
+const currentEnv = "development";
+const clarityId = "lc6yzoxipb";  
+const gaId = "G-MD5HNN6SQS";
 ---
 
 <BaseLayout title={title} {...(description !== undefined ? { description } : {})}>
-  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
   <script is:inline define:vars={{ gaId }}>
+    // Load Google Analytics
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+    document.head.appendChild(script);
+    
     window.dataLayer = window.dataLayer || [];
     function gtag() {
       dataLayer.push(arguments);
